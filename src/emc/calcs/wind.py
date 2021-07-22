@@ -18,9 +18,8 @@ def uv_to_speed(u, v, direction=False):
     -------
     Wind speed (and direction if direction=True)
     """
-    if isinstance(u, list) or isinstance(v, list):
-        u = np.array(u)
-        v = np.array(v)
+    u = np.array(u)
+    v = np.array(v)
 
     wdir = (270 - np.rad2deg(np.arctan2(v, u))) % 360
     wspd = np.sqrt(u * u + v * v)
@@ -42,9 +41,8 @@ def spddir_to_uv(wspd, wdir):
     -------
     u and v wind components
     """
-    if isinstance(wspd, list) or isinstance(wdir, list):
-        wspd = np.array(wspd, dtype=float)
-        wdir = np.array(wdir, dtype=float)
+    wspd = np.array(wspd, dtype=float)
+    wdir = np.array(wdir, dtype=float)
 
     rad = 4.0 * np.arctan(1) / 180.
     u = -wspd * np.sin(rad * wdir)
