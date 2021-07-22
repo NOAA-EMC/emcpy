@@ -62,10 +62,14 @@ def mstats(x):
         print('              Mean: %f + %fi' % (OUT.Mean.real, OUT.Mean.imag))
         print('               Max: %f + %fi' % (OUT.Max.real, OUT.Max.imag))
         print('               Min: %f + %fi' % (OUT.Min.real, OUT.Min.imag))
-        print('            Median: %f + %fi' % (OUT.Median.real, OUT.Median.imag))
-        print('             StDev: %f + %fi' % (OUT.StDev.real, OUT.StDev.imag))
-        print('           MeanAbs: %f + %fi' % (OUT.MeanAbs.real, OUT.MeanAbs.imag))
-        print('            MinAbs: %f + %fi' % (OUT.MinAbs.real, OUT.MinAbs.imag))
+        print('            Median: %f + %fi' %
+              (OUT.Median.real, OUT.Median.imag))
+        print('             StDev: %f + %fi' %
+              (OUT.StDev.real, OUT.StDev.imag))
+        print('           MeanAbs: %f + %fi' %
+              (OUT.MeanAbs.real, OUT.MeanAbs.imag))
+        print('            MinAbs: %f + %fi' %
+              (OUT.MinAbs.real, OUT.MinAbs.imag))
     print('          FracZero: %f' % (OUT.FracZero))
     print('           FracNaN: %f' % (OUT.FracNan))
     print('================================================')
@@ -76,8 +80,9 @@ def mstats(x):
 def lregress(x, y, ci=95.0):
     '''
     lregress : function that computes the linear regression between
-               two variables and returns the regression coefficient and statistical significance
-               for a t-value at a desired confidence interval.
+               two variables and returns the regression coefficient and
+               statistical significance for a t-value at a desired
+               confidence interval.
 
     [rc, sb, ssig] = lregress(x, y, tcrit=0.0)
 
@@ -135,28 +140,30 @@ def ttest(x, y=None, ci=95.0, paired=True, scale=False):
  errorbar - (normalized) errorbar with respect to control
 
     To mask out statistically significant values
-    diffmask = numpy.ma.masked_where(numpy.abs(diffmean)<=errorbar,diffmean).mask
+    diffmask = numpy.ma.masked_where
+               (numpy.abs(diffmean)<=errorbar,diffmean).mask
     '''
 
     nsamp = x.shape[0]
 
-    if y == None:
+    if y is None:
         y = x.copy()
 
     pval = 1.0 - (1.0 - ci / 100.0) / 2.0
     tcrit = _t.ppf(pval, 2*(nsamp-1))
 
-    xmean = _np.nanmean(x,axis=0)
-    ymean = _np.nanmean(y,axis=0)
+    xmean = _np.nanmean(x, axis=0)
+    ymean = _np.nanmean(y, axis=0)
 
     diffmean = ymean - xmean
 
     if paired:
         # paired t-test
-        std_err = _np.sqrt(_np.nanvar(y-x,axis=0,ddof=1) / nsamp)
+        std_err = _np.sqrt(_np.nanvar(y-x, axis=0, ddof=1) / nsamp)
     else:
         # unpaired t-test
-        std_err = _np.sqrt((_np.nanvar(x,axis=0,ddof=1) + _np.nanvar(y,axis=0,ddof=1)) / (nsamp-1.))
+        std_err = _np.sqrt((_np.nanvar(x, axis=0, ddof=1) +
+                           _np.nanvar(y, axis=0, ddof=1)) / (nsamp-1.))
 
     errorbar = tcrit * std_err
 
@@ -178,10 +185,12 @@ def get_weights(lats):
 
 def get_weighted_mean(data, weights, axis=None):
     '''
-    Given the weights for latitudes, computed weighted mean of data in that direction
+    Given the weights for latitudes, compute weighted mean
+    of data in that direction
     Note, data and wght must be same dimension
     Uses numpy.average
     '''
-    assert data.shape == weights.shape, ('data and weights mis-match array size')
+    assert data.shape == weights.shape, (
+        'data and weights mis-match array size')
 
     return _np.average(data, weights=weights, axis=axis)
