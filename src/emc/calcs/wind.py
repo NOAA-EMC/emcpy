@@ -12,7 +12,7 @@ def uv_to_speed(u, v, direction=False):
     ----------
     u, v: array_like
         u (easterly) and v (northerly) wind component.
-    direction: boolean
+    direction: boolean (optional)
     Returns
     -------
     Wind speed (and direction if direction=True)
@@ -28,6 +28,7 @@ def uv_to_speed(u, v, direction=False):
         return wspd, wdir
     else:
         return wspd
+    
 
 def spddir_to_uv(wspd, wdir):
     """
@@ -39,18 +40,19 @@ def spddir_to_uv(wspd, wdir):
     Returns
     -------
     u and v wind components
-    """        
+    """
     if isinstance(wspd, list) or isinstance(wdir, list):
         wspd = np.array(wspd, dtype=float)
         wdir = np.array(wdir, dtype=float)
-        
+    
     rad = 4.0 * np.arctan(1) / 180.
     u = -wspd * np.sin(rad * wdir)
-    v = -wspd * np.cos(rad * wdir)   
-        
+    v = -wspd * np.cos(rad * wdir)
+    
     # If the speed is zero, then u and v should be set to zero (not NaN)
     if wspd == 0:
         u = float(0)
         v = float(0)
     
     return u, v
+
