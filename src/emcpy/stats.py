@@ -140,8 +140,7 @@ def ttest(x, y=None, ci=95.0, paired=True, scale=False):
  errorbar - (normalized) errorbar with respect to control
 
     To mask out statistically significant values
-    diffmask = numpy.ma.masked_where
-               (numpy.abs(diffmean)<=errorbar,diffmean).mask
+    diffmask = numpy.ma.masked_where(numpy.abs(diffmean)<=errorbar,diffmean).mask
     '''
 
     nsamp = x.shape[0]
@@ -163,7 +162,7 @@ def ttest(x, y=None, ci=95.0, paired=True, scale=False):
     else:
         # unpaired t-test
         std_err = _np.sqrt((_np.nanvar(x, axis=0, ddof=1) +
-                           _np.nanvar(y, axis=0, ddof=1)) / (nsamp-1.))
+                            _np.nanvar(y, axis=0, ddof=1)) / (nsamp-1.))
 
     errorbar = tcrit * std_err
 

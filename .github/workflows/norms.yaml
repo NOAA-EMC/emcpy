@@ -20,5 +20,5 @@ jobs:
 
     - name: Run pycodestyle
       run: |
-        cd $GITHUB_WORKSPACE
-        pycodestyle emcpy
+        cd $GITHUB_WORKSPACE/emcpy
+        pycodestyle -v --config ./.pycodestyle .
