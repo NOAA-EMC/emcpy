@@ -1,3 +1,4 @@
+import emcpy.calcs
 import emcpy.utils
 import emcpy.stats
-import emcpy.io
+import emcpy.io.netCDF
