@@ -1,4 +1,4 @@
-# Temperature 
+# Temperature
 def K_to_C(K):
     """Convert Kelvin to Celsius"""
     return K - 273.15
