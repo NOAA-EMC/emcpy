@@ -10,56 +10,83 @@ import numpy as _np
 from netCDF4 import Dataset as _Dataset
 
 
-def variable_exist(fname, vname, debug=False):
+def variable_exist(filename, variable_name):
     '''
-    Check if a variable in a file exists
+    Check if a variable exists in a netCDF file
+
+    Parameters
+    ----------
+    `filename` : netCDF filename
+
+    `variable_name` : variable name to check within `filename`
+
+    Returns
+    -------
+    `result` : `True` or `False` if variable is present
     '''
 
     result = False
 
     try:
-        nc = _Dataset(fname, 'r')
+        nc = _Dataset(filename, 'r')
     except IOError:
-        raise IOError('Unable to open %s' % fname)
+        raise IOError(f'Unable to open {filename}')
 
-    if (vname in list(nc.variables.keys())):
+    if variable_name in list(nc.variables.keys()):
         result = True
 
     try:
         nc.close()
     except IOError:
-        raise IOError('Unable to close %s' % fname)
+        raise IOError(f'Unable to close {filename}')
 
     return result
 
 
-def read_netCDF_var(fname, vname, oneD=False, ftime=-1, flevel=-1):
+def read_netCDF_var(filename, variable_name, oneD=False, ftime=-1, flevel=-1):
     '''
     Read a variable from a netCDF file
+
+    Parameters
+    ----------
+    `filename` : netCDF filename
+
+    `variable_name` : variable name to check within `filename`
+
+    `oneD` : Is `variable_name` a one-dimensional variable?
+
+    `ftime` : time index range to retrieve data for
+    `flevel` : level index range to retrieve data for
+
+    Returns
+    -------
+    `result` : data for `variable_name`
+
     '''
     try:
-        nc = _Dataset(fname, 'r')
+        nc = _Dataset(filename, 'r')
     except IOError:
-        raise IOError('Unable to open %s' % fname)
+        raise IOError(f'Unable to open {filename}')
 
-    if (not variable_exist(fname, vname)):
-        raise Execption('variable %s does not exist in %s') % (vname, fname)
+    if not variable_exist(filename, variable_name):
+        raise Execption(f'netCDF: variable {variable_name} does not exist in {filename}')
 
-    if (oneD):
-        var = nc.variables[vname][:]
+    if oneD:
+        var = nc.variables[variable_name][:]
     else:
-        if ((ftime == -1) and (flevel == -1)):
-            var = nc.variables[vname][:, :]
-        elif ((ftime == -1) and (flevel != -1)):
-            var = nc.variables[vname][flevel, :, :]
-        elif ((ftime != -1) and (flevel == -1)):
-            var = nc.variables[vname][ftime, :, :]
-        elif ((ftime != -1) and (flevel != -1)):
-            var = nc.variables[vname][ftime, flevel, :, :]
+        if (ftime == -1) and (flevel == -1):
+            var = nc.variables[variable_name][:, :]
+        elif (ftime == -1) and (flevel != -1):
+            var = nc.variables[variable_name][flevel, :, :]
+        elif (ftime != -1) and (flevel == -1):
+            var = nc.variables[variable_name][ftime, :, :]
+        elif (ftime != -1) and (flevel != -1):
+            var = nc.variables[variable_name][ftime, flevel, :, :]
 
     try:
         nc.close()
     except IOError:
-        raise IOError('Unable to close %s' % fname)
+        raise IOError(f'Unable to close {filename}')
 
-    return _np.squeeze(var)
+    result = _np.squeeze(var)
+    return result
