@@ -119,6 +119,8 @@ def spatial(latitude, longitude, data, domain='global', cmap='viridis',
     Optional:
     cmap : colormap (str)
            (https://matplotlib.org/stable/gallery/color/colormap_reference.html)
+    markersize : marker size for 1D data
+    grid : boolean if grid is desired
     vmin : minumum value of data
     vmax : maximum value of data
     title : plot title (str)
