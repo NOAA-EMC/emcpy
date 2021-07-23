@@ -73,7 +73,7 @@ def _spatial_scatter(fig, ax, longitude, latitude, data, plotopts):
     """
     Plot 1-dimensional data on a map as scatter.
     """
-    cs = plt.scatter(longitude, latitude, c=data, s=plotopts['marker size'],
+    cs = plt.scatter(latitude, longitude, c=data, s=plotopts['marker size'],
                      vmin=plotopts['vmin'], vmax=plotopts['vmax'],
                      cmap=plotopts['cmap'], transform=ccrs.PlateCarree())
 
