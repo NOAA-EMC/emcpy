@@ -1,26 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.linear_model import LinearRegression
-from scipy.interpolate import interpn
 from matplotlib.colors import Normalize
+from emcpy.stats import get_linear_regression
 
 __all__ = ['scatter']
-
-
-def _get_linear_regression(data1, data2):
-    """
-    Calculate linear regression between two sets of data.
-    """
-    x = np.array(data1).reshape((-1, 1))
-    y = np.array(data2)
-    model = LinearRegression().fit(x, y)
-    r_sq = model.score(x, y)
-    intercept = model.intercept_
-    slope = model.coef_[0]
-    # This is the same as if you calculated y_pred
-    # by y_pred = slope * x + intercept
-    y_pred = model.predict(x)
-    return y_pred, r_sq, intercept, slope
 
 
 def _density_scatter(x, y, ax=None, fig=None, sort=True, bins=20, **kwargs):
@@ -57,8 +40,8 @@ def _gen_scatter(x, y, plotopts):
         plt.scatter(x, y, s=4, color=plotopts['color'],
                     label=f'n={np.count_nonzero(~np.isnan(x))}')
 
-    if kwargs['linear_regression']:
-        y_pred, r_sq, intercept, slope = _get_linear_regression(x, y)
+    if plotopts['linear_regression']:
+        y_pred, r_sq, intercept, slope = get_linear_regression(x, y)
         label = f"y = {slope:.4f}x + {intercept:.4f}\nR\u00b2 : {r_sq:.4f}"
         ax.plot(x, y_pred, color=plotopts['r color'], linewidth=1, label=label)
 
