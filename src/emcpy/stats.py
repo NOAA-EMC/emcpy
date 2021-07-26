@@ -202,8 +202,8 @@ def get_weighted_mean(data, weights, axis=None):
         data: input data array
         weights: input weights
         axis: direction to compute weighted average
-    Return
-    ------
+    Returns
+    -------
         weighted average: data weighted mean by weights
     '''
     assert data.shape == weights.shape, (
@@ -222,19 +222,14 @@ def get_linear_regression(x, y):
 
     Parameters
     ----------
-    y, x : array like
-        Data to calculate linear regression
+        y, x : array like, Data to calculate linear regression
 
     Returns
     -------
-    y_pred : float
-        Predicted y values of from calculation
-    r_sq : float
-        R squared value
-    intercept : float
-        Intercept from slope intercept equation for y_pred
-    slope : float
-        Slope from slope intercept equation for y_pred
+        y_pred : float, Predicted y values of from calculation
+        r_sq : float, R squared value
+        intercept : float, Intercept from slope intercept equation for y_pred
+        slope : float, Slope from slope intercept equation for y_pred
     """
     x = x.reshape((-1, 1))
     model = LinearRegression().fit(x, y)
