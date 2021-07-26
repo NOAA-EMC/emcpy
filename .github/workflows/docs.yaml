@@ -25,14 +25,12 @@ jobs:
 
     - name: Generate documentation
       run: |
-        echo $PWD
-        ls -lR
         pdoc -o docs emcpy
         ls -lR docs/
 
-#    - name: Deploy documentation
-#      uses: JamesIves/github-pages-deploy-action@4.1.4
-#      with:
-#        branch: gh-pages
-#        folder: docs
+    - name: Deploy documentation
+      uses: JamesIves/github-pages-deploy-action@4.1.4
+      with:
+        branch: gh-pages
+        folder: docs
 
