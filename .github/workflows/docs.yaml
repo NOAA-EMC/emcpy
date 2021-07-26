@@ -1,0 +1,40 @@
+name: Build and Deploy Documentation
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  create_documentation:
+    runs-on: ubuntu-latest
+    name: Deploy documentation
+
+    steps:
+
+    - name: Install (upgrade) dependencies
+      run: |
+        pip install --upgrade pip
+        pip install pdoc
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        path: emcpy
+
+    - name: Install emcpy
+      run: |
+        cd $GITHUB_WORKSPACE/emcpy
+        pip install .
+
+    - name: Generate documentation
+      run: |
+        cd $GITHUB_WORKSPACE
+        pdoc -o docs emcpy
+        ls -lR docs/
+
+    - name: Deploy documentation
+      uses: JamesIves/github-pages-deploy-action@4.1.4
+      with:
+        branch: gh-pages
+        folder: $GITHUB_WORKSPACE/docs
+
