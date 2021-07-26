@@ -204,15 +204,22 @@ def get_linear_regression(x, y):
     residual sum of squares between the observed targets
     in the dataset, and the targets predicted by the linear
     approximation.
-    INPUT
-        y, x - data to calculate linear regression (array like)
-    OUTPUT
-        y_pred - predicted y values of from calculation (float)
-        r_sq - r squared value (float)
-        intercept - intercept from slope intercept equation for
-                    y_pred (float)
-        slope - slope from slope intercept equation for y_pred
-                (float)
+
+    Parameters
+    ----------
+    y, x : array like
+        Data to calculate linear regression
+
+    Returns
+    -------
+    y_pred : float
+        Predicted y values of from calculation
+    r_sq : float
+        R squared value
+    intercept : float
+        Intercept from slope intercept equation for y_pred
+    slope : float
+        Slope from slope intercept equation for y_pred
     """
     x = x.reshape((-1, 1))
     model = LinearRegression().fit(x, y)
