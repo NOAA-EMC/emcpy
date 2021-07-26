@@ -80,7 +80,9 @@ def mstats(x):
 
 def lregress(x, y, ci=95.0):
     '''
-    Function that computes the linear regression between two variables and returns the regression coefficient and statistical significance for a t-value at a desired confidence interval.
+    Function that computes the linear regression between two variables and
+    returns the regression coefficient and statistical significance
+    for a t-value at a desired confidence interval.
 
     Parameters
     ----------
