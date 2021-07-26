@@ -2,6 +2,7 @@ import numpy as np
 
 __all__ = ['uv_to_speed', 'spddir_to_uv']
 
+
 def uv_to_speed(u, v, direction=False):
     """
     Calculates the wind speed from u and v components.
