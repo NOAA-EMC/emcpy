@@ -6,7 +6,7 @@ from emcpy.stats import get_linear_regression
 __all__ = ['scatter']
 
 
-def _density_scatter(x, y, ax=None, fig=None, sort=True, bins=20, **kwargs):
+def _density_scatter(x, y, ax=None, sort=True, bins=20, **kwargs):
     """
     Creates scatter plot colored by 2d histogram
     """
@@ -34,7 +34,7 @@ def _gen_scatter(x, y, plotopts):
     ax = fig.add_subplot(111)
 
     if plotopts['density']:
-        ax = _density_scatter(x, y, ax=ax, fig=fig, bins=[100, 100],
+        ax = _density_scatter(x, y, ax=ax, bins=[100, 100],
                               s=4, cmap=plotopts['cmap'])
     else:
         plt.scatter(x, y, s=4, color=plotopts['color'],
