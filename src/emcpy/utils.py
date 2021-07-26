@@ -18,6 +18,14 @@ __all__ = [
 
 
 def float10Power(value):
+    '''
+    Parameters
+    ----------
+        value: value to get the 10^(exponent)
+    Return
+    ------
+        exponent: value expressed as 10^(exponent)
+    '''
     if value == 0:
         return 0
     d = _np.log10(abs(value))
@@ -30,13 +38,22 @@ def float10Power(value):
 
 def roundNumber(value):
     '''
-    Input: Number
-    Output: Number rounded to the nearest 10th.
-    eg.
-    0.01231 => 0.01    0.0164  => 0.02
-    2.3     => 2.0     2.8     => 3.0
-    6.2     => 10
-    59      => 60
+    Round the number to the nearest 10th.
+    Parameters
+    ----------
+        value: Number to be rounded
+    Returns
+    -------
+        rounded_value: Number rounded to nearest 10th
+
+    Examples
+    --------
+        0.01231 => 0.01
+        0.0164  => 0.02
+        2.3     => 2.0
+        2.8     => 3.0
+        6.2     => 10
+        59      => 60
     '''
 
     d = float10Power(value)
@@ -45,50 +62,78 @@ def roundNumber(value):
     return round_value
 
 
-def pickle(fname, data, mode='wb'):
+def pickle(filename, data, mode='wb'):
     '''
-    fname - filename to pickle to
-    data  - data to pickle
-    mode - mode to pickle (default: wb)
+    Pickle `data` into a file
+    Parameters
+    ----------
+        filename: filename to pickle to
+        data: data to pickle
+        mode: mode to pickle (default: wb)
     '''
-    print('pickling ... %s' % fname)
+    print(f'pickling ... {filename}')
     try:
-        _pickle.dump(data, open(fname, mode))
+        _pickle.dump(data, open(filename, mode))
     except _pickle.PicklingError:
         raise
     return
 
 
-def unpickle(fname, mode='rb'):
+def unpickle(filename, mode='rb'):
     '''
-    fname - filename to unpickle to
-    mode - mode to unpickle (default: rb)
+    Parameters
+    ----------
+        filename: filename to unpickle to
+        mode: mode to unpickle (default: rb)
+    Return
+    ------
+        data: unpickled data from filename
     '''
-    print('unpickling ... %s' % fname)
+    print(f'unpickling ... {filename}')
     try:
-        data = _pickle.load(open(fname, mode))
+        data = _pickle.load(open(filename, mode))
     except _pickle.UnpicklingError:
         raise
     return data
 
 
-def writeHDF(fname, vname, data, complevel=0, complib=None, fletcher32=False):
-    print('writing ... %s' % fname)
+def writeHDF(filename, variable_name, data, complevel=0, complib=None, fletcher32=False):
+    '''
+    Parameters
+    ----------
+        filename: HDF5 filename to write to
+        variable_name: name of the variable to write to
+        data: variable data array
+        complevel: compression level (default: 0)
+        complib: compression library to choose from (default: None)
+        fletcher32: compression related option (default: False)
+    '''
+    print(f'writing ... {filename}')
     try:
-        hdf = _pd.HDFStore(fname,
+        hdf = _pd.HDFStore(filename,
                            complevel=complevel, complib=complib,
                            fletcher32=fletcher32)
-        hdf.put(vname, data, format='table', append=True)
+        hdf.put(variable_name, data, format='table', append=True)
         hdf.close()
     except RuntimeError:
         raise
     return
 
 
-def readHDF(fname, vname, **kwargs):
-    print('reading ... %s' % fname)
+def readHDF(filename, variable_name, **kwargs):
+    '''
+    Parameters
+    ----------
+        filename: HDF5 filename to read from
+        variable_name: name of the variable to read from file
+        **kwargs: additional arguments to pandas.read_hdf()
+    Return
+    ------
+        data: data read from filename for variable_name
+    '''
+    print(f'reading ... {filename}')
     try:
-        data = _pd.read_hdf(fname, vname, **kwargs)
+        data = _pd.read_hdf(filename, variable_name, **kwargs)
     except RuntimeError:
         raise
     return data
@@ -96,12 +141,14 @@ def readHDF(fname, vname, **kwargs):
 
 def EmptyDataFrame(columns, names, dtype=None):
     '''
-        Create an empty Multi-index DataFrame
-        Input:
-            columns = 'name of all columns; including indices'
-            names = 'name of index columns'
-        Output:
-            df = Multi-index DataFrame object
+    Create an empty Multi-index DataFrame
+    Parameters
+    ----------
+        columns: name of all columns; including indices
+        names: name of index columns
+    Return
+    ------
+        df = Multi-index DataFrame object
     '''
 
     levels = [[] for i in range(len(names))]
@@ -114,7 +161,11 @@ def EmptyDataFrame(columns, names, dtype=None):
 
 def printcolour(text, colour='red'):
     '''
-        Print the stdout in color
+    Print the input text to stdout in color
+    Parameters
+    ----------
+        text: ascii text
+        color: choice of color for text (default: red)
     '''
 
     colours = {
