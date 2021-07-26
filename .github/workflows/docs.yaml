@@ -1,8 +1,8 @@
 name: Build and Deploy Documentation
 on:
   push:
-    branches:
-      - develop
+#    branches:
+#      - develop
 
 jobs:
   create_documentation:
@@ -18,17 +18,15 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@v2
-      with:
-        path: emcpy
 
     - name: Install emcpy
       run: |
-        cd $GITHUB_WORKSPACE/emcpy
         pip install .
 
     - name: Generate documentation
       run: |
-        cd $GITHUB_WORKSPACE
+        echo $PWD
+        ls -lR
         pdoc -o docs emcpy
         ls -lR docs/
 
