@@ -31,7 +31,6 @@ jobs:
         cd $GITHUB_WORKSPACE
         pdoc -o docs emcpy
         ls -lR docs/
-        echo "$GITHUB_WORKSPACE/docs"
 
     - name: Deploy documentation
       uses: JamesIves/github-pages-deploy-action@4.1.4
