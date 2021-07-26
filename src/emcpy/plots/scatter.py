@@ -49,7 +49,7 @@ def _gen_scatter(x, y, plotopts):
     plt.grid(plotopts['grid'])
     plt.legend(loc='upper left', fontsize=11)
     plt.title(plotopts['title'], loc='left')
-    plt.title(plotopts['cycle'], loc='right', fontweight='semibold')
+    plt.title(plotopts['time title'], loc='right', fontweight='semibold')
     plt.xlabel(plotopts['xlabel'], fontsize=12)
     plt.ylabel(plotopts['ylabel'], fontsize=12)
 
@@ -58,7 +58,7 @@ def _gen_scatter(x, y, plotopts):
 
 def scatter(x, y, linear_regression=True, density=False,
             color='darkgray', cmap='magma', r_color='black',
-            grid=False, title='EMCPy Scatter Plot', cycle=None,
+            grid=False, title='EMCPy Scatter Plot', time_title=None,
             xlabel=None, ylabel=None):
     """
     Returns a figure of a scatter plot given x and y.
@@ -96,7 +96,7 @@ def scatter(x, y, linear_regression=True, density=False,
 
     plotopts = {'linear regression': linear_regression, 'density': density,
                 'color': color, 'cmap': cmap, 'r color': r_color,
-                'grid': grid, 'title': title, 'cycle': cycle,
+                'grid': grid, 'title': title, 'time title': time_title,
                 'xlabel': xlabel, 'ylabel': ylabel}
 
     fig = _gen_scatter(x, y, plotopts)
