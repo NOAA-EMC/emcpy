@@ -4,10 +4,13 @@
 stats.py contains statistics utility functions
 '''
 
-__all__ = ['mstats', 'lregress', 'ttest', 'get_weights', 'get_weighted_mean']
+__all__ = ['mstats', 'lregress', 'ttest', 'get_weights', 'get_weighted_mean',
+           'get_linear_regression']
 
 import numpy as _np
 from scipy.stats import t as _t
+from sklearn.linear_model import LinearRegression
+from scipy.interpolate import interpn
 
 
 def mstats(x):
@@ -193,3 +196,33 @@ def get_weighted_mean(data, weights, axis=None):
         'data and weights mis-match array size')
 
     return _np.average(data, weights=weights, axis=axis)
+
+
+def get_linear_regression(data1, data2):
+    """
+    Calculate linear regression between two sets of data.
+    Fits a linear model with coefficients to minumize the
+    residual sum of squares between the observed targets
+    in the dataset, and the targets predicted by the linear
+    approximation.
+    INPUT
+        data1, data2 - data to calculate linear
+                       regression (array like)
+    OUTPUT
+        y_pred - predicted y values of from calculation (float)
+        r_sq - r squared value (float)
+        intercept - intercept from slope intercept equation for
+                    y_pred (float)
+        slope - slope from slope intercept equation for y_pred
+                (float)
+    """
+    x = np.array(data1).reshape((-1, 1))
+    y = np.array(data2)
+    model = LinearRegression().fit(x, y)
+    r_sq = model.score(x, y)
+    intercept = model.intercept_
+    slope = model.coef_[0]
+    # This is the same as if you calculated y_pred
+    # by y_pred = slope * x + intercept
+    y_pred = model.predict(x)
+    return y_pred, r_sq, intercept, slope
