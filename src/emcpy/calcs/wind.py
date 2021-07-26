@@ -13,12 +13,12 @@ def uv_to_spddir(u, v, direction=False):
     then return zero.
     Parameters
     ----------
-    u, v: array_like
+        u, v: array_like
         u (easterly) and v (northerly) wind component.
-    direction: boolean (optional)
+        direction: boolean (optional)
     Returns
     -------
-    Wind speed (and direction if direction=True)
+        Wind speed (and direction if direction=True)
     """
     u = np.array(u)
     v = np.array(v)
@@ -26,10 +26,7 @@ def uv_to_spddir(u, v, direction=False):
     wdir = (270 - np.rad2deg(np.arctan2(v, u))) % 360
     wspd = np.sqrt(u * u + v * v)
 
-    if direction:
-        return wspd, wdir
-    else:
-        return wspd
+    return wspd, wdir if direction else wspd
 
 
 def spddir_to_uv(wspd, wdir):
@@ -37,11 +34,11 @@ def spddir_to_uv(wspd, wdir):
     Calculate the u and v wind components from wind speed and direction.
     Parameters
     ----------
-    wspd, wdir : array_like
+        wspd, wdir : array_like
         Arrays of wind speed and wind direction (in degrees)
     Returns
     -------
-    u and v wind components
+        u and v wind components
     """
     wspd = np.array(wspd, dtype=float)
     wdir = np.array(wdir, dtype=float)

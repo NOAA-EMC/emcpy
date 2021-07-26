@@ -12,13 +12,14 @@ from scipy.stats import t as _t
 
 def mstats(x):
     '''
-    mstats : function that computes and displays
-             various statistics of a variable
-             A better alternative is scipy.stats.describe()
+    Function that computes and displays
+    various statistics of a variable.
 
-    mstats(x)
+    A better alternative is `scipy.stats.describe()`
 
-        x - variable whose statistics are to be computed and displayed
+    Parameters
+    ----------
+        x : numpy variable whose statistics are to be computed and displayed
     '''
 
     OUT = type('', (), {})
@@ -79,19 +80,21 @@ def mstats(x):
 
 def lregress(x, y, ci=95.0):
     '''
-    lregress : function that computes the linear regression between
-               two variables and returns the regression coefficient and
-               statistical significance for a t-value at a desired
-               confidence interval.
+    Function that computes the linear regression between two variables and
+    returns the regression coefficient and statistical significance
+    for a t-value at a desired confidence interval.
 
-    [rc, sb, ssig] = lregress(x, y, tcrit=0.0)
+    Parameters
+    ----------
+        x : independent variable
+        y : dependent variable
+        ci : confidence interval (default: 95%)
 
-        x - independent variable
-        y - dependent variable
-       ci - confidence interval (default: 95%)
-       rc - linear regression coefficient
-       sb - standard error on the linear regression coefficient
-     ssig - statistical significance of the linear regression coefficient
+    Returns
+    -------
+        rc : linear regression coefficient
+        sb : standard error on the linear regression coefficient
+        ssig : statistical significance of the linear regression coefficient
     '''
 
     # make sure the two samples are of the same size
@@ -117,30 +120,28 @@ def lregress(x, y, ci=95.0):
     # error bar on rc
     eb = tcrit * sb
 
-    if ((_np.abs(rc) - _np.abs(eb)) > 0.0):
-        ssig = True
-    else:
-        ssig = False
+    ssig = True if (_np.abs(rc) - _np.abs(eb)) > 0.0 else False
 
-    return [rc, sb, ssig]
+    return rc, sb, ssig
 
 
 def ttest(x, y=None, ci=95.0, paired=True, scale=False):
     '''
-    Given two samples, perform the Student's t-test and return the errorbar
-    The test assumes the sample size be the same between x and y.
-    INPUT:
-        x - control
-        y - experiment (default: x)
-       ci - confidence interval (default: 95%)
-   paired - paired t-test (default: True)
-    scale - normalize with mean(x) and return as a percentage (default: False)
-   OUTPUT:
- diffmean - (normalized) difference in the sample means
- errorbar - (normalized) errorbar with respect to control
+    Given two samples, perform the Student's t-test and return the errorbar.  The test assumes the sample size be the same between x and y.
+    Parameters
+    ----------
+        x: control
+        y: experiment (default: x)
+        ci: confidence interval (default: 95%)
+        paired: paired t-test (default: True)
+        scale: normalize with mean(x) and return as a percentage (default: False)
+    Returns
+    -------
+        diffmean: (normalized) difference in the sample means
+        errorbar: (normalized) errorbar with respect to control
 
-    To mask out statistically significant values
-    diffmask = numpy.ma.masked_where(numpy.abs(diffmean)<=errorbar,diffmean).mask
+    To mask out statistically significant values:\n
+    `diffmask = numpy.ma.masked_where(numpy.abs(diffmean)<=errorbar,diffmean).mask`
     '''
 
     nsamp = x.shape[0]
@@ -178,6 +179,12 @@ def ttest(x, y=None, ci=95.0, paired=True, scale=False):
 def get_weights(lats):
     '''
     Get weights for latitudes to do weighted mean
+    Parameters
+    ----------
+        lats: Latitudes
+    Return
+    ------
+        weights: weights for latitudes
     '''
     return _np.cos((_np.pi / 180.0) * lats)
 
@@ -186,8 +193,16 @@ def get_weighted_mean(data, weights, axis=None):
     '''
     Given the weights for latitudes, compute weighted mean
     of data in that direction
-    Note, data and wght must be same dimension
-    Uses numpy.average
+    Note, `data` and `weights` must be same dimension
+    Uses `numpy.average`
+    Parameters
+    ----------
+        data: input data array
+        weights: input weights
+        axis: direction to compute weighted average
+    Return
+    ------
+        weighted average: data weighted mean by weights
     '''
     assert data.shape == weights.shape, (
         'data and weights mis-match array size')

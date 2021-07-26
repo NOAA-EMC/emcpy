@@ -16,13 +16,11 @@ def variable_exist(filename, variable_name):
 
     Parameters
     ----------
-    `filename` : netCDF filename
-
-    `variable_name` : variable name to check within `filename`
-
+        filename : netCDF filename
+        variable_name : variable name to check within filename
     Returns
     -------
-    `result` : `True` or `False` if variable is present
+        result : True or False if variable is present
     '''
 
     result = False
@@ -49,19 +47,14 @@ def read_netCDF_var(filename, variable_name, oneD=False, ftime=-1, flevel=-1):
 
     Parameters
     ----------
-    `filename` : netCDF filename
-
-    `variable_name` : variable name to check within `filename`
-
-    `oneD` : Is `variable_name` a one-dimensional variable?
-
-    `ftime` : time index range to retrieve data for
-    `flevel` : level index range to retrieve data for
-
+        filename : netCDF filename
+        variable_name : variable name to check within filename
+        oneD : Is variable_name a one-dimensional variable?
+        ftime : time index range to retrieve data for
+        flevel : level index range to retrieve data for
     Returns
     -------
-    `result` : data for `variable_name`
-
+        result : data for variable_name
     '''
     try:
         nc = _Dataset(filename, 'r')
