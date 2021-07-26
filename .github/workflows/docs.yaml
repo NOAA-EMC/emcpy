@@ -36,5 +36,5 @@ jobs:
       uses: JamesIves/github-pages-deploy-action@4.1.4
       with:
         branch: gh-pages
-        folder: $GITHUB_WORKSPACE/docs
+        folder: docs
 
