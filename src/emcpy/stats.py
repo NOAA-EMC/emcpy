@@ -10,7 +10,6 @@ __all__ = ['mstats', 'lregress', 'ttest', 'get_weights', 'get_weighted_mean',
 import numpy as _np
 from scipy.stats import t as _t
 from sklearn.linear_model import LinearRegression
-from scipy.interpolate import interpn
 
 
 def mstats(x):
