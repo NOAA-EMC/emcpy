@@ -119,7 +119,7 @@ def mm_to_inches(mm):
 
 def inches_to_mm(inches):
     """
-    Convert millimeters to inches
+    Convert inches to millimeters
 
     Parameters
     ----------

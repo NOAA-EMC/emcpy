@@ -1,4 +1,4 @@
-import numpy as _np
+import numpy as np
 
 __all__ = ['uv_to_spddir', 'spddir_to_uv']
 
@@ -20,11 +20,11 @@ def uv_to_spddir(u, v, direction=False):
     -------
         Wind speed (and direction if direction=True)
     """
-    u = _np.array(u)
-    v = _np.array(v)
+    u = np.array(u)
+    v = np.array(v)
 
-    wdir = (270 - _np.rad2deg(_np.arctan2(v, u))) % 360
-    wspd = _np.sqrt(u * u + v * v)
+    wdir = (270 - np.rad2deg(np.arctan2(v, u))) % 360
+    wspd = np.sqrt(u * u + v * v)
 
     return wspd, wdir if direction else wspd
 
@@ -40,12 +40,12 @@ def spddir_to_uv(wspd, wdir):
     -------
         u and v wind components
     """
-    wspd = _np.array(wspd, dtype=float)
-    wdir = _np.array(wdir, dtype=float)
+    wspd = np.array(wspd, dtype=float)
+    wdir = np.array(wdir, dtype=float)
 
-    rad = 4.0 * _np.arctan(1) / 180.
-    u = -wspd * _np.sin(rad * wdir)
-    v = -wspd * _np.cos(rad * wdir)
+    rad = 4.0 * np.arctan(1) / 180.
+    u = -wspd * np.sin(rad * wdir)
+    v = -wspd * np.cos(rad * wdir)
 
     # If the speed is zero, then u and v should be set to zero (not NaN)
     if wspd == 0:
