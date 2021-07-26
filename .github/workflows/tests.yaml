@@ -1,0 +1,36 @@
+name: Run tests
+on: [push, pull_request]
+
+jobs:
+  run_pytests:
+    runs-on: ubuntu-latest
+    name: Install and run tests with pytests
+
+    steps:
+
+    - name: Install (upgrade) dependencies
+      run: |
+        pip install --upgrade pip
+        pip install pytest
+        pip install pdoc
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        path: emcpy
+
+    - name: Install emcpy
+      run: |
+        cd $GITHUB_WORKSPACE/emcpy
+        pip install .
+
+    - name: Run pytests
+      run: |
+        cd $GITHUB_WORKSPACE/emcpy
+        pytest -v src/tests
+
+    - name: Generate documentation
+      run: |
+        cd $GITHUB_WORKSPACE
+        pdoc -o docs emcpy
+        ls -lR docs/
