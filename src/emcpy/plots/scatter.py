@@ -81,8 +81,8 @@ def scatter(x, y, linear_regression=True, density=False,
         Plot grid on scatter plot (default is False)
     title : str, optional
         Plot title (default is 'EMCPy Scatter Plot')
-    cycle : str, optional
-        Data date/cycle (default is None)
+    time_title : str, optional
+        Data date/cycle to be used as title (default is None)
     xlabel : str, optional
         X label on plot (default is None)
     ylabel : str, optional
