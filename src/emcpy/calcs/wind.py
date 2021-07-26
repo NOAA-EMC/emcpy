@@ -1,9 +1,9 @@
 import numpy as np
 
-__all__ = ['uv_to_speed', 'spddir_to_uv']
+__all__ = ['uv_to_spddir', 'spddir_to_uv']
 
 
-def uv_to_speed(u, v, direction=False):
+def uv_to_spddir(u, v, direction=False):
     """
     Calculates the wind speed from u and v components.
     Will calculate direction as well if parameter direction = True.
