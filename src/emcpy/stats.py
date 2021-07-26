@@ -197,7 +197,7 @@ def get_weighted_mean(data, weights, axis=None):
     return _np.average(data, weights=weights, axis=axis)
 
 
-def get_linear_regression(data1, data2):
+def get_linear_regression(x, y):
     """
     Calculate linear regression between two sets of data.
     Fits a linear model with coefficients to minumize the
@@ -205,8 +205,7 @@ def get_linear_regression(data1, data2):
     in the dataset, and the targets predicted by the linear
     approximation.
     INPUT
-        data1, data2 - data to calculate linear
-                       regression (array like)
+        y, x - data to calculate linear regression (array like)
     OUTPUT
         y_pred - predicted y values of from calculation (float)
         r_sq - r squared value (float)
@@ -215,8 +214,7 @@ def get_linear_regression(data1, data2):
         slope - slope from slope intercept equation for y_pred
                 (float)
     """
-    x = np.array(data1).reshape((-1, 1))
-    y = np.array(data2)
+    x = x.reshape((-1, 1))
     model = LinearRegression().fit(x, y)
     r_sq = model.score(x, y)
     intercept = model.intercept_
