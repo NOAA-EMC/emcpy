@@ -141,14 +141,13 @@ def spatial(latitude, longitude, data, domain='global', cmap='viridis',
     fig
         Figure of spatial plot
     """
-
-
     # Make string lowercase
     domain = domain.lower()
 
     # Dictionary of kwargs
-    plotopts = {'cmap': cmap, 'marker size': markersize, 'vmin': roundnumber(vmin),
-                'vmax': roundNumber(vmax), 'grid': grid, 'title': title, 'cycle': cycle,
+    plotopts = {'cmap': cmap, 'marker size': markersize,
+                'vmin': roundnumber(vmin), 'vmax': roundNumber(vmax),
+                'grid': grid, 'title': title, 'cycle': cycle,
                 'cbar label': cbar_label}
 
     # Get domain fig/ax
