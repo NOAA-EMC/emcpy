@@ -110,23 +110,40 @@ def spatial(latitude, longitude, data, domain='global', cmap='viridis',
             cycle=None, cbar_label=None):
     """
     Plot a spatial map of desired data.
+
     Paramaters
     ----------
-    Required:
-    latitude, longitude, data : array type (1D or 2D)
-    domain : domain of map (str)
+    latitude : array type
+        Latitude array for spatial data
+    longitude : array type
+        Longitude array for spatial data
+    data : array type
+        Spatial data to be plotted
+    domain : str
+        Plot domain of map
+    cmap : str, optional
+        Color map of spatial plot (default is 'viridis')
+    markersize : int, optional
+        Marker size for 1D data types (default is 10)
+    grid : bool, optional
+        Plot grid on spatial plot (default is False)
+    vmin : int, optional
+        Minimum value to be displayed on spatial plot (default is data.min())
+    vmax : int, optional
+        Maximum value to be displayed on spatial plot (default is data.max())
+    title : str, optional
+        Plot title (default is 'EMCPy Spatial Plot')
+    cycle : str, optional
+        Data data/cycle (default is None)
+    cbar_label : str, optional
+        Colorbar label (default is None)
 
-    Optional:
-    cmap : colormap (str)
-           (https://matplotlib.org/stable/gallery/color/colormap_reference.html)
-    markersize : marker size for 1D data
-    grid : boolean if grid is desired
-    vmin : minumum value of data
-    vmax : maximum value of data
-    title : plot title (str)
-    cycle : cycle of data (str)
-    cbar_label : colorbar label
+    Returns
+    -------
+    fig
+        Figure of spatial plot
     """
+
 
     # Make string lowercase
     domain = domain.lower()
