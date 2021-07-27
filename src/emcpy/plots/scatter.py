@@ -63,7 +63,7 @@ def scatter(x, y, linear_regression=True, density=False,
     """
     Returns a figure of a scatter plot given x and y.
 
-    Parameters
+    Parameters:
         x, y : (array type) The data required to create scatter plot
         linear_regression : (bool, optional, default=True) To perform a linear regression and plot the line on the figure
         density : (bool, optional, default=False) Plot a density scatter plot
@@ -76,7 +76,7 @@ def scatter(x, y, linear_regression=True, density=False,
         xlabel : (str, optional, default=None) X label on plot
         ylabel : (str, optional, default=None) Y label on plot
 
-    Returns
+    Returns:
         fig : (matplotlib figure object) Figure of the scatter plot
     """
 
