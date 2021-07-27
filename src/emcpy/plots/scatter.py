@@ -63,35 +63,22 @@ def scatter(x, y, linear_regression=True, density=False,
     """
     Returns a figure of a scatter plot given x and y.
 
-    Parameters
-    ----------
-    x, y : array type
-        The data required to create scatter plot
-    linear_regression : bool, optional
-        (default is True)
-    density : bool, optional
-        Plot a density scatter plot if True (default is False)
-    color : str, optional
-        Color of scatter plot dots (default is 'darkgray')
-    cmap : str, optional
-        Color map of density scatter plot (default is 'magma')
-    r_color : str, optional
-        Color of regression line (default is 'black')
-    grid : bool, optional
-        Plot grid on scatter plot (default is False)
-    title : str, optional
-        Plot title (default is 'EMCPy Scatter Plot')
-    time_title : str, optional
-        Data date/cycle to be used as title (default is None)
-    xlabel : str, optional
-        X label on plot (default is None)
-    ylabel : str, optional
-        Y label on plot (default is None)
+    Args:
+        x, y : (array type) The data required to create scatter plot
+        linear_regression : (bool, optional, default=True) To perform a linear regression and plot the line on the figure
+        density : (bool, optional, default=False) Plot a density scatter plot
+        color : (str, optional, default='darkgray') Color of scatter plot dots
+        cmap : (str, optional, default='magma') Color map of density scatter plot
+        r_color : (str, optional, default='black') Color of regression line when linear_regression=True
+        grid : (bool, optional, default=False) Plot grid on scatter plot
+        title : (str, optional, default='EmcPy Scatter Plot') Title to add to plot
+        time_title : (str, optional, default=None) Secondary title for date/cycle to add to plot
+        xlabel : (str, optional, default=None) X label on plot
+        ylabel : (str, optional, default=None) Y label on plot
 
-    Returns
-    -------
-    fig
-        Figure of the scatter plot
+    Returns:
+        A matplotlib figure object of the scatter plot
+
     """
 
     plotopts = {'linear_regression': linear_regression, 'density': density,
