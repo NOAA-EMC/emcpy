@@ -67,9 +67,9 @@ def pickle(filename, data, mode='wb'):
     Pickle `data` into a file
     Parameters
     ----------
-        filename: filename to pickle to
-        data: data to pickle
-        mode: mode to pickle (default: wb)
+        filename: (str) filename to pickle to
+        data: (object) data to pickle
+        mode: (str, optional, default='wb') mode to pickle
     '''
     print(f'pickling ... {filename}')
     try:
@@ -83,11 +83,11 @@ def unpickle(filename, mode='rb'):
     '''
     Parameters
     ----------
-        filename: filename to unpickle to
-        mode: mode to unpickle (default: rb)
+        filename: (str) filename to unpickle to
+        mode: (str, optional, default='rb') mode to unpickle
     Return
     ------
-        data: unpickled data from filename
+        data: (object) unpickled data from filename
     '''
     print(f'unpickling ... {filename}')
     try:
@@ -101,12 +101,12 @@ def writeHDF(filename, variable_name, data, complevel=0, complib=None, fletcher3
     '''
     Parameters
     ----------
-        filename: HDF5 filename to write to
-        variable_name: name of the variable to write to
-        data: variable data array
-        complevel: compression level (default: 0)
-        complib: compression library to choose from (default: None)
-        fletcher32: compression related option (default: False)
+        filename: (str) HDF5 filename to write to
+        variable_name: (str) name of the variable to write to
+        data: (array like) variable data array
+        complevel: (int, optional, default=0) compression level
+        complib: (str, optional, default=None) compression library to choose from
+        fletcher32: (bool, optional, default=False) compression related option
     '''
     print(f'writing ... {filename}')
     try:
@@ -124,12 +124,12 @@ def readHDF(filename, variable_name, **kwargs):
     '''
     Parameters
     ----------
-        filename: HDF5 filename to read from
-        variable_name: name of the variable to read from file
+        filename: (string) HDF5 filename to read from
+        variable_name: (string) name of the variable to read from file
         **kwargs: additional arguments to pandas.read_hdf()
     Return
     ------
-        data: data read from filename for variable_name
+        data: (Pandas DataFrame) data read from filename for variable_name
     '''
     print(f'reading ... {filename}')
     try:
@@ -144,11 +144,11 @@ def EmptyDataFrame(columns, names, dtype=None):
     Create an empty Multi-index DataFrame
     Parameters
     ----------
-        columns: name of all columns; including indices
-        names: name of index columns
+        columns: (list of strings) name of all columns; including indices
+        names: (list of strings) name of index columns
     Return
     ------
-        df = Multi-index DataFrame object
+        df = (Pandas DataFrame) Multi-index DataFrame object
     '''
 
     levels = [[] for i in range(len(names))]
@@ -164,8 +164,8 @@ def printcolour(text, colour='red'):
     Print the input text to stdout in color
     Parameters
     ----------
-        text: ascii text
-        color: choice of color for text (default: red)
+        text: (str) ascii text
+        color: (str, optional, default='red') choice of color for text
     '''
 
     colours = {

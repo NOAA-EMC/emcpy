@@ -9,10 +9,10 @@ def K_to_C(K):
 
     Parameters
     ----------
-        K : temperature in kelvin
+        K : (float, or array of floats) temperature in kelvin
     Returns
     -------
-        C : temperature in degrees celsius
+        C : (float, or array of floats) temperature in degrees celsius
     """
     return K - 273.15
 
@@ -23,10 +23,10 @@ def K_to_F(K):
 
     Parameters
     ----------
-        K : temperature in kelvin
+        K : (float, or array of floats) temperature in kelvin
     Returns
     -------
-        F : temperature in degrees fahrenheit
+        F : (float, or array of floats) temperature in degrees fahrenheit
     """
     return (K-273.15)*9/5.+32
 
@@ -37,10 +37,10 @@ def C_to_K(T_C):
 
     Parameters
     ----------
-        T_C : temperature in degrees celsius
+        T_C : (float, or array of floats) temperature in degrees celsius
     Returns
     -------
-        K : temperature in kelvin
+        K : (float, or array of floats) temperature in kelvin
     """
     return T_C + 273.15
 
@@ -51,10 +51,10 @@ def C_to_F(C):
 
     Parameters
     ----------
-        C : temperature in degrees celsius
+        C : (float, or array of floats) temperature in degrees celsius
     Returns
     -------
-        F : temperature in degrees fahrenheit
+        F : (float, or array of floats) temperature in degrees fahrenheit
     """
     return C*9/5.+32
 
@@ -65,10 +65,10 @@ def F_to_C(F):
 
     Parameters
     ----------
-        F : temperature in degrees fahrenheit
+        F : (float, or array of floats) temperature in degrees fahrenheit
     Returns
     -------
-        C : temperature in degrees celsius
+        C : (float, or array of floats) temperature in degrees celsius
     """
     return (F-32) * 5/9
 
@@ -80,10 +80,10 @@ def mps_to_MPH(mps):
 
     Parameters
     ----------
-        mps : speed in meters per second
+        mps : (float, or array of floats) speed in meters per second
     Returns
     -------
-        MPH : speed in miles per hour
+        MPH : (float, or array of floats) speed in miles per hour
     """
     return mps * 2.2369
 
@@ -94,10 +94,10 @@ def MPH_to_mps(MPH):
 
     Parameters
     ----------
-        MPH : speed in miles per hour
+        MPH : (float, or array of floats) speed in miles per hour
     Returns
     -------
-        mps : speed in meters per second
+        mps : (float, or array of floats) speed in meters per second
     """
     return MPH / 2.2369
 
@@ -109,10 +109,10 @@ def mm_to_inches(mm):
 
     Parameters
     ----------
-        mm : length in millimeters
+        mm : (float, or array of floats) length in millimeters
     Returns
     -------
-        inches : length in inches
+        inches : (float, or array of floats) length in inches
     """
     return mm * 0.0394
 
@@ -123,9 +123,9 @@ def inches_to_mm(inches):
 
     Parameters
     ----------
-        inches : length in inches
+        inches : (float, or array of floats) length in inches
     Returns
     -------
-        mm : length in millimeters
+        mm : (float, or array of floats) length in millimeters
     """
     return inches / 0.0394

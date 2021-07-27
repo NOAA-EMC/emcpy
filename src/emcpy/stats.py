@@ -21,7 +21,7 @@ def mstats(x):
 
     Parameters
     ----------
-        x : numpy variable whose statistics are to be computed and displayed
+        x : (numpy array) numpy variable whose statistics are to be computed and displayed
     '''
 
     OUT = type('', (), {})
@@ -88,15 +88,15 @@ def lregress(x, y, ci=95.0):
 
     Parameters
     ----------
-        x : independent variable
-        y : dependent variable
-        ci : confidence interval (default: 95%)
+        x : (array like) independent variable
+        y : (array like) dependent variable
+        ci : (float, optional, default=95) confidence interval percentage
 
     Returns
     -------
-        rc : linear regression coefficient
-        sb : standard error on the linear regression coefficient
-        ssig : statistical significance of the linear regression coefficient
+        rc : (float) linear regression coefficient
+        sb : (float) standard error on the linear regression coefficient
+        ssig : (bool) statistical significance of the linear regression coefficient
     '''
 
     # make sure the two samples are of the same size
@@ -132,15 +132,15 @@ def ttest(x, y=None, ci=95.0, paired=True, scale=False):
     Given two samples, perform the Student's t-test and return the errorbar.  The test assumes the sample size be the same between x and y.
     Parameters
     ----------
-        x: control
-        y: experiment (default: x)
-        ci: confidence interval (default: 95%)
-        paired: paired t-test (default: True)
-        scale: normalize with mean(x) and return as a percentage (default: False)
+        x: (numpy array) control
+        y: (numpy array, optional, default=x )experiment
+        ci: (float, optional, default=95) confidence interval percentage
+        paired: (bool, optional, default=True) paired t-test
+        scale: (bool, optional, default=False) normalize with mean(x) and return as a percentage
     Returns
     -------
-        diffmean: (normalized) difference in the sample means
-        errorbar: (normalized) errorbar with respect to control
+        diffmean: (numpy array) (normalized) difference in the sample means
+        errorbar: (numpy array) (normalized) errorbar with respect to control
 
     To mask out statistically significant values:\n
     `diffmask = numpy.ma.masked_where(numpy.abs(diffmean)<=errorbar,diffmean).mask`
@@ -183,10 +183,10 @@ def get_weights(lats):
     Get weights for latitudes to do weighted mean
     Parameters
     ----------
-        lats: Latitudes
+        lats: (array like) Latitudes
     Return
     ------
-        weights: weights for latitudes
+        weights: (numpy array) weights for latitudes
     '''
     return _np.cos((_np.pi / 180.0) * lats)
 
@@ -199,12 +199,12 @@ def get_weighted_mean(data, weights, axis=None):
     Uses `numpy.average`
     Parameters
     ----------
-        data: input data array
-        weights: input weights
-        axis: direction to compute weighted average
+        data: (numpy array) input data array
+        weights: (numpy array) input weights
+        axis: (int) direction to compute weighted average
     Returns
     -------
-        weighted average: data weighted mean by weights
+        weighted average: (numpy array) data weighted mean by weights
     '''
     assert data.shape == weights.shape, (
         'data and weights mis-match array size')
@@ -222,14 +222,14 @@ def get_linear_regression(x, y):
 
     Parameters
     ----------
-        y, x : array like, Data to calculate linear regression
+        y, x : (array like) Data to calculate linear regression
 
     Returns
     -------
-        y_pred : float, Predicted y values of from calculation
-        r_sq : float, R squared value
-        intercept : float, Intercept from slope intercept equation for y_pred
-        slope : float, Slope from slope intercept equation for y_pred
+        y_pred : (float) Predicted y values of from calculation
+        r_sq : (float) R squared value
+        intercept : (float) Intercept from slope intercept equation for y_pred
+        slope : (float) Slope from slope intercept equation for y_pred
     """
     x = x.reshape((-1, 1))
     model = LinearRegression().fit(x, y)
