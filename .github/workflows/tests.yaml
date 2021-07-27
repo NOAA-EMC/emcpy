@@ -8,6 +8,11 @@ jobs:
 
     steps:
 
+    - name: Install ubuntu dependencies
+      run: |
+        apt-get install libproj-dev proj-data proj-bin
+        apt-get install libgeos-dev  
+
     - name: Install (upgrade) dependencies
       run: |
         pip install --upgrade pip
