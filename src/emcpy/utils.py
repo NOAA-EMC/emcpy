@@ -19,12 +19,10 @@ __all__ = [
 
 def float10Power(value):
     '''
-    Parameters
-    ----------
+    Args:
         value: value to get the 10^(exponent)
-    Return
-    ------
-        exponent: value expressed as 10^(exponent)
+    Returns:
+        The input value expressed as 10^(exponent).
     '''
     if value == 0:
         return 0
@@ -39,12 +37,10 @@ def float10Power(value):
 def roundNumber(value):
     '''
     Round the number to the nearest 10th.
-    Parameters
-    ----------
+    Args:
         value: Number to be rounded
-    Returns
-    -------
-        rounded_value: Number rounded to nearest 10th
+    Returns:
+        The input value rounded to nearest 10th
 
     Examples
     --------
@@ -65,8 +61,7 @@ def roundNumber(value):
 def pickle(filename, data, mode='wb'):
     '''
     Pickle `data` into a file
-    Parameters
-    ----------
+    Args:
         filename: (str) filename to pickle to
         data: (object) data to pickle
         mode: (str, optional, default='wb') mode to pickle
@@ -81,13 +76,11 @@ def pickle(filename, data, mode='wb'):
 
 def unpickle(filename, mode='rb'):
     '''
-    Parameters
-    ----------
+    Args:
         filename: (str) filename to unpickle to
         mode: (str, optional, default='rb') mode to unpickle
-    Return
-    ------
-        data: (object) unpickled data from filename
+    Returns:
+        The unpickled data from filename
     '''
     print(f'unpickling ... {filename}')
     try:
@@ -99,8 +92,7 @@ def unpickle(filename, mode='rb'):
 
 def writeHDF(filename, variable_name, data, complevel=0, complib=None, fletcher32=False):
     '''
-    Parameters
-    ----------
+    Args:
         filename: (str) HDF5 filename to write to
         variable_name: (str) name of the variable to write to
         data: (array like) variable data array
@@ -122,14 +114,12 @@ def writeHDF(filename, variable_name, data, complevel=0, complib=None, fletcher3
 
 def readHDF(filename, variable_name, **kwargs):
     '''
-    Parameters
-    ----------
+    Args:
         filename: (string) HDF5 filename to read from
         variable_name: (string) name of the variable to read from file
         **kwargs: additional arguments to pandas.read_hdf()
-    Return
-    ------
-        data: (Pandas DataFrame) data read from filename for variable_name
+    Returns:
+        A Pandas DataFrame of data read from filename for variable_name
     '''
     print(f'reading ... {filename}')
     try:
@@ -142,13 +132,11 @@ def readHDF(filename, variable_name, **kwargs):
 def EmptyDataFrame(columns, names, dtype=None):
     '''
     Create an empty Multi-index DataFrame
-    Parameters
-    ----------
+    Args:
         columns: (list of strings) name of all columns; including indices
         names: (list of strings) name of index columns
-    Return
-    ------
-        df = (Pandas DataFrame) Multi-index DataFrame object
+    Returns:
+        A Multi-index Pandas DataFrame object
     '''
 
     levels = [[] for i in range(len(names))]
@@ -162,8 +150,7 @@ def EmptyDataFrame(columns, names, dtype=None):
 def printcolour(text, colour='red'):
     '''
     Print the input text to stdout in color
-    Parameters
-    ----------
+    Args:
         text: (str) ascii text
         color: (str, optional, default='red') choice of color for text
     '''
