@@ -103,6 +103,5 @@ def get_domain(fig, domain):
     try:
         return map_domains[domain](fig)
     except KeyError:
-        raise TypeError(f'{domain} is not a valid domain. Current ' +
-                        'domains supported are:\n' +
-                        'global | conus | north america | europe')
+        raise TypeError(f'{domain} is not a valid domain. Current domains ' +
+                        f'supported are:\n {[d for d in map_domains.keys()]}')
