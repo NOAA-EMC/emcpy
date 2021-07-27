@@ -11,7 +11,7 @@ jobs:
     - name: Install ubuntu dependencies
       run: |
         sudo apt-get install libproj-dev proj-data proj-bin
-        sudo apt-get install libgeos-dev musl-dev
+        sudo apt-get install libgeos-dev musl-dev libc-dev
 
     - name: Install (upgrade) dependencies
       run: |
