@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 __all__ = ['get_domain']
 
 
-def _global():
+def _global(fig):
     """
     Return ax on global domain.
     """
@@ -24,7 +24,7 @@ def _global():
     return ax
 
 
-def _north_america():
+def _north_america(fig):
     """
     Return ax on CONUS domain.
     """
@@ -43,7 +43,7 @@ def _north_america():
     return ax
 
 
-def _conus():
+def _conus(fig):
     """
     Return ax on CONUS domain.
     """
@@ -62,7 +62,7 @@ def _conus():
     return ax
 
 
-def _europe():
+def _europe(fig):
     """
     Returns ax on Europe domain.
     """
@@ -78,16 +78,17 @@ def _europe():
     ax.xaxis.set_major_formatter(lon_formatter)
     ax.yaxis.set_major_formatter(lat_formatter)
 
+    return ax
 
-def get_domain(domain):
+
+def get_domain(fig, domain):
     """
     Factory function to grab correct ax based on inputted domain.
-    Parameters
-    ----------
+    Args:
+        fig : matplotlib figure object
         domain : (str) domain to be plotted on map
 
-    Returns
-    -------
+    Returns:
         ax : axis used to plot map on a figure
     """
     domain = domain.lower()
@@ -100,7 +101,7 @@ def get_domain(domain):
     }
 
     try:
-        return map_domains[domain]()
+        return map_domains[domain](fig)
     except KeyError:
         raise TypeError(f'{domain} is not a valid domain. Current ' +
                         'domains supported are:\n' +
