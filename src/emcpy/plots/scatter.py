@@ -94,7 +94,7 @@ def scatter(x, y, linear_regression=True, density=False,
         Figure of the scatter plot
     """
 
-    plotopts = {'linear regression': linear_regression, 'density': density,
+    plotopts = {'linear_regression': linear_regression, 'density': density,
                 'color': color, 'cmap': cmap, 'r color': r_color,
                 'grid': grid, 'title': title, 'time title': time_title,
                 'xlabel': xlabel, 'ylabel': ylabel}
