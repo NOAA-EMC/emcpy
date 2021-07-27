@@ -25,7 +25,7 @@ jobs:
 
     - name: Generate documentation
       run: |
-        pdoc -o docs emcpy
+        pdoc --docformat "google" -o docs emcpy
         ls -lR docs/
 
     - name: Deploy documentation
@@ -33,4 +33,3 @@ jobs:
       with:
         branch: gh-pages
         folder: docs
-

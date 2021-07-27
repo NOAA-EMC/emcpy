@@ -32,5 +32,11 @@ jobs:
     - name: Generate documentation
       run: |
         cd $GITHUB_WORKSPACE
-        pdoc -o docs emcpy
+        pdoc --docformat "google" -o docs emcpy
         ls -lR docs/
+
+    - name: Upload documentation
+      uses: actions/upload-artifact@v2
+      with:
+        name: docs
+        path: docs

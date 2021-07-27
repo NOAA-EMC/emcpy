@@ -11,14 +11,12 @@ def uv_to_spddir(u, v, direction=False):
     Takes into account the wind direction coordinates is different than
     the trig unit circle coordinate. If the wind direction is 360,
     then return zero.
-    Parameters
-    ----------
-        u, v: array_like
-        u (easterly) and v (northerly) wind component.
-        direction: boolean (optional)
-    Returns
-    -------
-        Wind speed (and direction if direction=True)
+    Args:
+        u : (array like) u (easterly) wind component
+        v : (array like) v (northerly) wind component
+        direction: (bool, optional, default=False)
+    Returns:
+        An array of wind speed (and an array of wind direction if direction=True)
     """
     u = np.array(u)
     v = np.array(v)
@@ -32,13 +30,11 @@ def uv_to_spddir(u, v, direction=False):
 def spddir_to_uv(wspd, wdir):
     """
     Calculate the u and v wind components from wind speed and direction.
-    Parameters
-    ----------
-        wspd, wdir : array_like
-        Arrays of wind speed and wind direction (in degrees)
-    Returns
-    -------
-        u and v wind components
+    Args:
+        wspd : (array like) wind speed
+        wdir : (array like) wind direction in degrees
+    Returns:
+        The u,v wind vector components.
     """
     wspd = np.array(wspd, dtype=float)
     wdir = np.array(wdir, dtype=float)
