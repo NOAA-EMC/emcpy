@@ -1,2 +1,2 @@
 from .scatter import scatter
-from .map2d import map2d
+from .mapping import map2d
