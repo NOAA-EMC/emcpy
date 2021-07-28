@@ -14,7 +14,7 @@ def _map_scatter(latitude, longitude, data, domain, plotmap, plotopts):
     fig = plt.figure(figsize=plotopts['figsize'])
 
     if plotmap:
-        ax = get_domain(fig, domain)
+        ax = domains.get_domain(fig, domain)
         cs = plt.scatter(longitude, latitude, c=data,
                          s=plotopts['marker size'], vmin=plotopts['vmin'],
                          vmax=plotopts['vmax'], cmap=plotopts['cmap'],
@@ -49,7 +49,7 @@ def _map_pcolormesh(latitude, longitude, data, domain, plotmap, plotopts):
     fig = plt.figure(figsize=plotopts['figsize'])
 
     if plotmap:
-        ax = get_domain(fig, domain)
+        ax = domains.get_domain(fig, domain)
         cs = ax.pcolormesh(longitude, latitude, data, cmap=plotopts['cmap'],
                            vmin=plotopts['vmin'], vmax=plotopts['vmax'],
                            transform=ccrs.PlateCarree())
