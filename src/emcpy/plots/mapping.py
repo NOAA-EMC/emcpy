@@ -14,21 +14,28 @@ def _map_scatter(latitude, longitude, data, domain, plotmap, plotopts):
     fig = plt.figure(figsize=plotopts['figsize'])
 
     if plotmap:
-        ax = domains.get_domain(fig, domain)
+        ax = get_domain(fig, domain)
         cs = plt.scatter(longitude, latitude, c=data,
                          s=plotopts['marker size'], vmin=plotopts['vmin'],
                          vmax=plotopts['vmax'], cmap=plotopts['cmap'],
                          transform=ccrs.PlateCarree())
+        if plotopts['grid']:
+            ax.gridlines(crs=ccrs.PlateCarree())
+
     else:
         ax = fig.add_subplot()
         cs = plt.scatter(longitude, latitude, c=data,
                          s=plotopts['marker size'], vmin=plotopts['vmin'],
                          vmax=plotopts['vmax'], cmap=plotopts['cmap'])
+        plt.grid(plotopts['grid'])
 
-    cb = plt.colorbar(cs, shrink=0.5, pad=.03, extend='both')
+    cax = fig.add_axes([ax.get_position().x1 + 0.02,
+                        ax.get_position().y0, 0.025,
+                        ax.get_position().height])
+    
+    cb = plt.colorbar(cs, extend='both', cax=cax)
     cb.set_label(plotopts['cbar label'])
 
-    plt.grid(plotopts['grid'])
     plt.title(plotopts['title'], loc='left')
     plt.title(plotopts['time title'], loc='right', fontweight='semibold')
 
@@ -42,19 +49,26 @@ def _map_pcolormesh(latitude, longitude, data, domain, plotmap, plotopts):
     fig = plt.figure(figsize=plotopts['figsize'])
 
     if plotmap:
-        ax = domains.get_domain(fig, domain)
+        ax = get_domain(fig, domain)
         cs = ax.pcolormesh(longitude, latitude, data, cmap=plotopts['cmap'],
                            vmin=plotopts['vmin'], vmax=plotopts['vmax'],
                            transform=ccrs.PlateCarree())
+        if plotopts['grid']:
+            ax.gridlines(crs=ccrs.PlateCarree())
+
     else:
         ax = fig.add_subplot()
         cs = plt.pcolormesh(longitude, latitude, data, cmap=plotopts['cmap'],
                             vmin=plotopts['vmin'], vmax=plotopts['vmax'])
+        plt.grid(plotopts['grid'])
 
-    cb = plt.colorbar(cs, shrink=0.5, pad=.03, extend='both')
+    cax = fig.add_axes([ax.get_position().x1 + 0.02,
+                        ax.get_position().y0, 0.025,
+                        ax.get_position().height])
+    
+    cb = plt.colorbar(cs, extend='both', cax=cax)
     cb.set_label(plotopts['cbar label'])
 
-    plt.grid(plotopts['grid'])
     plt.title(plotopts['title'], loc='left')
     plt.title(plotopts['time title'], loc='right', fontweight='semibold')
 
