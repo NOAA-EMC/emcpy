@@ -36,8 +36,8 @@ def _map_scatter(latitude, longitude, data, domain, plotmap, plotopts):
     cb = plt.colorbar(cs, extend='both', cax=cax)
     cb.set_label(plotopts['cbar label'])
 
-    plt.title(plotopts['title'], loc='left')
-    plt.title(plotopts['time title'], loc='right', fontweight='semibold')
+    ax.set_title(plotopts['title'], loc='left')
+    ax.set_title(plotopts['time title'], loc='right', fontweight='semibold')
 
     return fig
 
@@ -69,8 +69,8 @@ def _map_pcolormesh(latitude, longitude, data, domain, plotmap, plotopts):
     cb = plt.colorbar(cs, extend='both', cax=cax)
     cb.set_label(plotopts['cbar label'])
 
-    plt.title(plotopts['title'], loc='left')
-    plt.title(plotopts['time title'], loc='right', fontweight='semibold')
+    ax.set_title(plotopts['title'], loc='left')
+    ax.set_title(plotopts['time title'], loc='right', fontweight='semibold')
 
     return fig
 
