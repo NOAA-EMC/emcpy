@@ -4,7 +4,7 @@ import cartopy.crs as ccrs
 from emcpy.utils import roundNumber
 from emcpy.plots import domains
 
-__all__ = ['spatial']
+__all__ = ['map2d']
 
 
 def _map_scatter(latitude, longitude, data, domain, plotmap, plotopts):
