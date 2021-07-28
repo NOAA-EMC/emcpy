@@ -32,7 +32,7 @@ def _map_scatter(latitude, longitude, data, domain, plotmap, plotopts):
     cax = fig.add_axes([ax.get_position().x1 + 0.02,
                         ax.get_position().y0, 0.025,
                         ax.get_position().height])
-    
+
     cb = plt.colorbar(cs, extend='both', cax=cax)
     cb.set_label(plotopts['cbar label'])
 
@@ -65,7 +65,7 @@ def _map_pcolormesh(latitude, longitude, data, domain, plotmap, plotopts):
     cax = fig.add_axes([ax.get_position().x1 + 0.02,
                         ax.get_position().y0, 0.025,
                         ax.get_position().height])
-    
+
     cb = plt.colorbar(cs, extend='both', cax=cax)
     cb.set_label(plotopts['cbar label'])
 
