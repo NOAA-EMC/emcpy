@@ -1,6 +1,7 @@
 import emcpy.plots
 import numpy as np
 
+
 def test_plot_scatter():
     # create random x and y data
     x_data = np.random.rand(100)
@@ -13,6 +14,7 @@ def test_plot_scatter():
                               )
     # save figure as PNG
     fig.savefig('test_plot_scatter.png')
+
 
 def test_plot_map2d_scatter_conus():
     # generate a diagonal line across the US
@@ -31,11 +33,12 @@ def test_plot_map2d_scatter_conus():
     fig.savefig('test_plot_map2d_scatter_conus.png',
                 bbox_inches='tight', pad_inches=0.1)
 
+
 def test_plot_map2d_pcolormesh_global():
     # create some lat, lon values
     lat, lon = np.mgrid[30:55:1, 235:290:1]
     # create some temperature values
-    data2d = np.random.randint(low=270, high=310, size=(25,55))
+    data2d = np.random.randint(low=270, high=310, size=(25, 55))
     # generate plot of 2D data on a map
     fig = emcpy.plots.map2d(lat, lon, data2d, domain='global',
                             grid=True, title='Test Global 2D Data',
@@ -46,11 +49,12 @@ def test_plot_map2d_pcolormesh_global():
     fig.savefig('test_plot_pcolormesh_global.png',
                 bbox_inches='tight', pad_inches=0.1)
 
+
 def test_plot_map2d_pcolormesh_nomap():
     # create some lat, lon values
     lat, lon = np.mgrid[30:55:1, 235:290:1]
     # create some temperature values
-    data2d = np.random.randint(low=270, high=310, size=(25,55))
+    data2d = np.random.randint(low=270, high=310, size=(25, 55))
     # generate plot of 2D data on a map
     fig = emcpy.plots.map2d(lat, lon, data2d, domain='global', plotmap=False,
                             grid=True, title='Test No Map Projection 2D Data',
