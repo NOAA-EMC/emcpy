@@ -11,6 +11,12 @@ jobs:
 
     steps:
 
+    - name: Install ubuntu dependencies
+      run: |
+        sudo apt-get install libproj-dev proj-data proj-bin
+        sudo apt-get install libgeos-dev musl-dev libc-dev
+        sudo ln -s /usr/lib/x86_64-linux-musl/libc.so /lib/libc.musl-x86_64.so.1
+
     - name: Install (upgrade) dependencies
       run: |
         pip install --upgrade pip
@@ -25,7 +31,7 @@ jobs:
 
     - name: Generate documentation
       run: |
-        pdoc -o docs emcpy
+        pdoc --docformat "google" -o docs emcpy
         ls -lR docs/
 
     - name: Deploy documentation
@@ -33,4 +39,3 @@ jobs:
       with:
         branch: gh-pages
         folder: docs
-

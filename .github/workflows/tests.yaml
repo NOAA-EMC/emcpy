@@ -11,13 +11,15 @@ jobs:
     - name: Install ubuntu dependencies
       run: |
         sudo apt-get install libproj-dev proj-data proj-bin
-        sudo apt-get install libgeos-dev  
+        sudo apt-get install libgeos-dev musl-dev libc-dev
+        sudo ln -s /usr/lib/x86_64-linux-musl/libc.so /lib/libc.musl-x86_64.so.1
 
     - name: Install (upgrade) dependencies
       run: |
         pip install --upgrade pip
         pip install pytest
         pip install pdoc
+        pip install Shapely
 
     - name: Checkout
       uses: actions/checkout@v2
@@ -37,5 +39,11 @@ jobs:
     - name: Generate documentation
       run: |
         cd $GITHUB_WORKSPACE
-        pdoc -o docs emcpy
+        pdoc --docformat "google" -o docs emcpy
         ls -lR docs/
+
+    - name: Upload documentation
+      uses: actions/upload-artifact@v2
+      with:
+        name: docs
+        path: docs
