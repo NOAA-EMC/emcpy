@@ -11,8 +11,7 @@ class Domain:
             "global": self._global,
             "conus": self._conus,
             "north america": self._north_america,
-            "europe": self._europe
-            }
+            "europe": self._europe}
 
         map_domains[domain]()
 
@@ -75,8 +74,7 @@ class MapProjection:
             "plcarr": self._platecarree,
             "mill": self._miller,
             "npstere": self._npstereo,
-            "spstere": self._spstereo
-            }
+            "spstere": self._spstereo}
 
         try:
             map_projections[projection]()
