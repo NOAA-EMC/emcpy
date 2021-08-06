@@ -59,7 +59,7 @@ class Domain:
         self.extent = (-12.5, 40, 30, 70)
         self.xticks = dd.get('xticks', (-10, 0, 10, 20, 30, 40))
         self.yticks = dd.get('yticks', (30, 40, 50, 60, 70))
-        
+
     def _custom(self, dd=dict()):
         """
         Sets extent, longitude xticks, and latitude yticks
