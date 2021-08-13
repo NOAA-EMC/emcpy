@@ -4,14 +4,23 @@ import cartopy.crs as ccrs
 class Domain:
 
     def __init__(self, domain='global', dd=dict()):
+        """
+        Class constructor that stores extent, xticks, and
+        yticks for the domain given.
 
+        Args:
+            domain : (str; default='global') domain name to grab info
+            dd : (dict) dictionary to add custom xticks, yticks
+        """
         domain = domain.lower()
 
         map_domains = {
             "global": self._global,
             "conus": self._conus,
             "north america": self._north_america,
-            "europe": self._europe}
+            "europe": self._europe,
+            "custom": self._custom
+        }
 
         try:
             map_domains[domain](dd=dd)
@@ -73,9 +82,20 @@ class Domain:
 class MapProjection:
 
     def __init__(self, projection='plcarr',
-                 cenlon=0,
-                 cenlat=0,
+                 cenlon=None,
+                 cenlat=None,
                  globe=None):
+        """
+        Class constructor that stores projection cartopy object
+        for the projection given.
+
+        Args:
+            projection : (str; default='plcarr') projection name to grab info
+            cenlon : (int, float; default=None) central longitude
+            cenlat : (int, float; default=None) central latitude
+            globe : (default=None) if ommited, creates a globe for map
+        """
+        self.str_projection = projection
 
         self.cenlon = cenlon
         self.cenlat = cenlat
@@ -85,22 +105,30 @@ class MapProjection:
             "plcarr": self._platecarree,
             "mill": self._miller,
             "npstere": self._npstereo,
-            "spstere": self._spstereo}
+            "spstere": self._spstereo
+        }
 
         try:
             map_projections[projection]()
         except KeyError:
-            raise TypeError(f'{domain} is not a valid domain.' +
-                            'Current domains supported are:\n' +
+            raise TypeError(f'{projection} is not a valid projection.' +
+                            'Current projections supported are:\n' +
                             f'{" | ".join(map_projections.keys())}"')
+
+    def __str__(self):
+        return self.str_projection
 
     def _platecarree(self):
         """Creates projection using PlateCarree from Cartopy."""
+        self.cenlon = 0 if self.cenlon is None else self.cenlon
+
         self.projection = ccrs.PlateCarree(central_longitude=self.cenlon,
                                            globe=self.globe)
 
     def _miller(self):
         """Creates projection using Miller from Cartopy."""
+        self.cenlon = 0 if self.cenlon is None else self.cenlon
+
         self.projection = ccrs.Miller(central_longitude=self.cenlon,
                                       globe=self.globe)
 
@@ -109,10 +137,10 @@ class MapProjection:
         Creates projection using Orthographic from Cartopy and
         orients it from central latitude 90 degrees.
         """
-        self.cenlat = 90 if self.cenlat == 0 else self.cenlat
+        self.cenlon = -90 if self.cenlon is None else self.cenlon
 
-        self.projection = ccrs.Orthographic(central_longtiude=self.cenlon,
-                                            central_latitude=self.cenlat,
+        self.projection = ccrs.Orthographic(central_longitude=self.cenlon,
+                                            central_latitude=90,
                                             globe=self.globe)
 
     def _spstereo(self):
@@ -120,8 +148,8 @@ class MapProjection:
         Creates projection using Orthographic from Cartopy and
         orients it from central latitude -90 degrees.
         """
-        self.cenlat = -90 if self.cenlat == 0 else self.cenlat
+        self.cenlon = 0 if self.cenlon is None else self.cenlon
 
-        self.projection = ccrs.Orthographic(central_longtiude=self.cenlon,
-                                            central_latitude=self.cenlat,
+        self.projection = ccrs.Orthographic(central_longitude=self.cenlon,
+                                            central_latitude=-90,
                                             globe=self.globe)
