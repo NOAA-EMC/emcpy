@@ -1,7 +1,5 @@
 class MapScatter:
 
-    plottype = 'map_scatter'
-
     def __init__(self, latitude, longitude, data):
         """
         Constructor for MapScatter.
@@ -11,6 +9,7 @@ class MapScatter:
             longitude : (array type) Longitude data
             data : (array type) data to be plotted
         """
+        self.plottype = 'map_scatter'
 
         self.latitude = latitude
         self.longitude = longitude
@@ -28,8 +27,6 @@ class MapScatter:
 
 class MapGridded:
 
-    plottype = 'map_gridded'
-
     def __init__(self, latitude, longitude, data):
         """
         Constructor for MapGridded.
@@ -39,6 +36,7 @@ class MapGridded:
             longitude : (array type) Longitude data
             data : (array type) data to be plotted
         """
+        self.plottype = 'map_gridded'
 
         self.latitude = latitude
         self.longitude = longitude
@@ -53,8 +51,6 @@ class MapGridded:
 
 class MapContour:
 
-    plottype = 'map_contour'
-
     def __init__(self, latitude, longitude, data):
         """
         Constructor for MapScatter.
@@ -64,6 +60,7 @@ class MapContour:
             longitude : (array type) Longitude data
             data : (array type) data to be plotted
         """
+        self.plottype = 'map_contour'
 
         self.latitude = latitude
         self.longitude = longitude
