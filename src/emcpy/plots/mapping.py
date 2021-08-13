@@ -1,20 +1,35 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
+import cartopy.feature as cfeature
+from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 from emcpy.utils import roundNumber
-from emcpy.plots import domains
+from emcpy.plots import map_tools
 
 __all__ = ['map2d']
 
 
-def _map_scatter(latitude, longitude, data, domain, plotmap, plotopts):
+def _map_scatter(latitude, longitude, data, domain, projection,
+                 plotmap, plotopts):
     """
     Plot 1-dimensional data as scatter.
     """
     fig = plt.figure(figsize=plotopts['figsize'])
 
     if plotmap:
-        ax = domains.get_domain(fig, domain)
+        domain = map_tools.Domain(domain)
+        proj = map_tools.MapProjection(projection)
+
+        ax = fig.add_subplot(1, 1, 1, projection=proj.projection)
+        ax.add_feature(cfeature.GSHHSFeature(scale='auto'))
+        ax.set_extent(domain.extent)
+        ax.set_xticks(domain.xticks, crs=proj.projection)
+        ax.set_yticks(domain.yticks, crs=proj.projection)
+        lon_formatter = LongitudeFormatter(zero_direction_label=False)
+        lat_formatter = LatitudeFormatter()
+        ax.xaxis.set_major_formatter(lon_formatter)
+        ax.yaxis.set_major_formatter(lat_formatter)
+
         cs = plt.scatter(longitude, latitude, c=data,
                          s=plotopts['marker size'], vmin=plotopts['vmin'],
                          vmax=plotopts['vmax'], cmap=plotopts['cmap'],
@@ -42,14 +57,27 @@ def _map_scatter(latitude, longitude, data, domain, plotmap, plotopts):
     return fig
 
 
-def _map_pcolormesh(latitude, longitude, data, domain, plotmap, plotopts):
+def _map_pcolormesh(latitude, longitude, data, domain, projection,
+                    plotmap, plotopts):
     """
     Plot 2-dimensional data on a map as pcolormesh.
     """
     fig = plt.figure(figsize=plotopts['figsize'])
 
     if plotmap:
-        ax = domains.get_domain(fig, domain)
+        domain = map_tools.Domain(domain)
+        proj = map_tools.MapProjection(projection)
+
+        ax = fig.add_subplot(1, 1, 1, projection=proj.projection)
+        ax.add_feature(cfeature.GSHHSFeature(scale='auto'))
+        ax.set_extent(domain.extent)
+        ax.set_xticks(domain.xticks, crs=proj.projection)
+        ax.set_yticks(domain.yticks, crs=proj.projection)
+        lon_formatter = LongitudeFormatter(zero_direction_label=False)
+        lat_formatter = LatitudeFormatter()
+        ax.xaxis.set_major_formatter(lon_formatter)
+        ax.yaxis.set_major_formatter(lat_formatter)
+
         cs = ax.pcolormesh(longitude, latitude, data, cmap=plotopts['cmap'],
                            vmin=plotopts['vmin'], vmax=plotopts['vmax'],
                            transform=ccrs.PlateCarree())
@@ -75,10 +103,10 @@ def _map_pcolormesh(latitude, longitude, data, domain, plotmap, plotopts):
     return fig
 
 
-def map2d(latitude, longitude, data, domain='global', plotmap=True,
-          figsize=(10, 8), cmap='viridis', markersize=10, grid=False,
-          vmin=None, vmax=None, title='EMCPy Map Plot', time_title=None,
-          cbar_label=None):
+def map2d(latitude, longitude, data, domain='global', projection='plcarr',
+          plotmap=True, figsize=(10, 8), cmap='viridis', markersize=10,
+          grid=False, vmin=None, vmax=None, title='EMCPy Map Plot',
+          time_title=None, cbar_label=None):
     """
     Plot a spatial map of desired data.
 
@@ -119,10 +147,10 @@ def map2d(latitude, longitude, data, domain='global', plotmap=True,
     # Plot scatter for 1D data; pcolormesh for 2D data
     if len(data.shape) == 1:
         fig = _map_scatter(latitude, longitude, data, domain,
-                           plotmap, plotopts)
+                           projection, plotmap, plotopts)
     elif len(data.shape) == 2:
         fig = _map_pcolormesh(latitude, longitude, data, domain,
-                              plotmap, plotopts)
+                              projection, plotmap, plotopts)
     else:
         raise TypeError('Data is not 1D or 2D. Please enter correct ' +
                         'dimension data.')
