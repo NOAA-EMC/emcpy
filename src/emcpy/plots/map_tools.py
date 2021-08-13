@@ -74,9 +74,14 @@ class Domain:
         Sets extent, longitude xticks, and latitude yticks
         for a Custom domain.
         """
-        self.extent = dd.extent
-        self.xticks = dd.xticks
-        self.yticks = dd.yticks
+        try:
+            self.extent = dd.extent
+            self.xticks = dd.xticks
+            self.yticks = dd.yticks
+        except AttributeError:
+            raise TypeError("Custom domain requires input dictionary" +
+                            "with keys: 'extent', 'xticks', 'yticks' as" +
+                            "tuples".)
 
 
 class MapProjection:
