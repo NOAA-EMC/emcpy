@@ -81,7 +81,7 @@ class Domain:
         except AttributeError:
             raise TypeError("Custom domain requires input dictionary" +
                             "with keys: 'extent', 'xticks', 'yticks' as" +
-                            "tuples".)
+                            "tuples.")
 
 
 class MapProjection:
