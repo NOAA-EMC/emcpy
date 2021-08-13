@@ -76,4 +76,3 @@ class MapContour:
         self.vmax = None
         self.alpha = None
         self.colorbar = False
-
