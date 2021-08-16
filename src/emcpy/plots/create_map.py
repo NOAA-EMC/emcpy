@@ -22,8 +22,9 @@ class CreateMap:
 
         Args:
             fig : (matplotlib.figure) Figure object to plot on
-            domain : (object) domain from emcpy Domain()
-            projection : (object) projection from emcpy MapProjection()
+            domain : (object) domain from emcpy.plots.map_tools.Domain()
+            projection : (object) projection from emcpy
+                         emcpy.plots.map_tools.MapProjection()
         """
 
         self.fig = fig
@@ -43,7 +44,7 @@ class CreateMap:
 
     def add_features(self, feature_list=['coastlines']):
         """
-        Add map features onto map.
+        Add features onto map.
 
         Args:
             feature_list : (array-like, default=['coastlines']) List of cartopy
@@ -73,7 +74,7 @@ class CreateMap:
 
     def draw_data(self, plot_list=list()):
         """
-        Plots data layer onto map.
+        Add data layer onto map.
 
         Args:
             plot_list : (array-like) List of map plot objects from emcpy
@@ -158,7 +159,7 @@ class CreateMap:
                   color='k',
                   va='baseline'):
         """
-        Plots title to map axes.
+        Adds title to map axes.
 
         Args:
             label : (str) Text to use for title
@@ -179,7 +180,7 @@ class CreateMap:
                    fontweight='normal',
                    color='k'):
         """
-        Plots x label to map axes.
+        Adds x label to map axes.
 
         Args:
             xlabel : (str) Text to use for x label
@@ -198,7 +199,7 @@ class CreateMap:
                    fontweight='normal',
                    color='k'):
         """
-        Plots y label to map axes.
+        Adds y label to map axes.
 
         Args:
             ylabel : (str) Text to use for y label
@@ -213,13 +214,17 @@ class CreateMap:
 
     def add_colorbar(self, label=None, label_fontsize=12, extend='neither'):
         """
-        Creates new axes and plots colorbar to figure.
+        Creates new axes and adds colorbar to figure.
 
         Args:
             label : (str; default=None) Colorbar label
             label_fontsize : (int; default=12) Colorbar label font size
             extend : (str; default='neither') Extends min/max side of colorbar
         """
+        # 'cs' is saved as an attribute if colorbar is True in plotting
+        # object. If 'cs' exists, it will create a colorbar for the data
+        # saved to the variable. 'cs' can be overwritten if plotting
+        # multiple layers and with colorbar set to True.
         if 'cs' in dir(self):
             cax = self.fig.add_axes([self.ax.get_position().x1 + 0.02,
                                      self.ax.get_position().y0, 0.025,
@@ -238,7 +243,7 @@ class CreateMap:
                  alpha=None,
                  linestyle='-'):
         """
-        Plots gridlines on map axes.
+        Adds gridlines on map axes.
 
         Args:
             linewidth : (int; default=1) Line thickness
@@ -263,32 +268,29 @@ class CreateMap:
         """
         self.ax.add_feature(cfeature.GSHHSFeature(scale='auto'))
 
+        # Will uncomment when we can get cfeatures to work
         # self.ax.add_feature(cfeature.COASTLINE)
 
     def _add_borders(self):
         """
         Add country borders to map axes.
         """
-        return
-        # self.ax.add_feature(cfeature.BORDERS)
+        self.ax.add_feature(cfeature.BORDERS)
 
     def _add_states(self):
         """
         Add state borders to map axes.
         """
-        return
-        # self.ax.add_feature(cfeature.STATES)
+        self.ax.add_feature(cfeature.STATES)
 
     def _add_lakes(self):
         """
         Add lakes to map axes.
         """
-        return
-        # self.ax.add_feature(cfeature.LAKES)
+        self.ax.add_feature(cfeature.LAKES)
 
     def _add_rivers(self):
         """
         Add rivers to map axes.
         """
-        return
-        # self.ax.add_feature(sfeature.RIVERS)
+        self.ax.add_feature(sfeature.RIVERS)
