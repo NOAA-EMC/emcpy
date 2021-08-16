@@ -3,7 +3,7 @@ import cartopy.feature as cfeature
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
-from map_tools import Domain, MapProjection
+from emcpy.plots.map_tools import Domain, MapProjection
 
 
 __all__ = ['CreateMap']
@@ -14,7 +14,7 @@ class CreateMap:
     Creates a map axes on a figure to plot data.
     """
 
-    def __init__(self, fig=plt.figure(figsize=(12,8)),
+    def __init__(self, fig=plt.figure(figsize=(12, 8)),
                  domain=Domain('global'),
                  projection=MapProjection('plcarr')):
         """
