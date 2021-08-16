@@ -1,6 +1,8 @@
-import emcpy.plots
 import numpy as np
+import matplotlib.pyplot as plt
+from emcpy.plots import CreateMap
 from emcpy.plots.map_tools import Domain, MapProjection
+from emcpy.plots.map_plots import MapScatter, MapGridded
 
 
 def test_plot_global_map_no_features():

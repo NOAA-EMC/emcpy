@@ -30,6 +30,7 @@ class CreateMap:
         self.fig = fig
         self.domain = domain
         self.projection = projection
+        ax = fig.add_subplot(1, 1, 1, projection=projection.projection)
 
         if projection.__str__() not in ['npstere', 'spstere']:
             ax.set_extent(domain.extent)
