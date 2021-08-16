@@ -6,8 +6,7 @@ from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 from map_tools import Domain, MapProjection
 
 
-__all__ = ['__init__', 'add_features', 'draw_data', 'add_title', 'add_xlabel',
-           'add_ylabel', 'add_colorbar', 'add_grid', 'return_figure']
+__all__ = ['CreateMap']
 
 
 class CreateMap:
@@ -15,7 +14,7 @@ class CreateMap:
     Creates a map axes on a figure to plot data.
     """
 
-    def __init__(self, fig=None,
+    def __init__(self, fig=plt.figure(figsize=(12,8)),
                  domain=Domain('global'),
                  projection=MapProjection('plcarr')):
         """
