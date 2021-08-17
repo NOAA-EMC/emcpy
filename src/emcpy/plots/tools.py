@@ -16,43 +16,43 @@ class ColorbarPreset:
         cbar_d = {
             'brightness temperature': {
                 'diff': {
-                    'vmax': -5,
-                    'vmin': 5,
+                    'vmax': 5,
+                    'vmin': -5,
                     'cmap': 'coolwarm'
                 },
                 'magnitude': {
                     'vmax': 320,
-                    'vmin': 200,
+                    'vmin': 220,
                     'cmap': 'rainbow'
                 }
             },
             'specific humidity': {
                 'diff': {
-                    'vmin': 0.005,
                     'vmax': 0.005,
+                    'vmin': -0.005,
                     'cmap': 'coolwarm'
                 },
                 'magnitude': {
-                    'vmin': 0,
                     'vmax': 0.025,
+                    'vmin': 0,
                     'cmap': 'YlGnBu'
                 }
             },
             'temperature': {
                 'diff': {
-                    'vmax': -5,
-                    'vmin': 5,
+                    'vmax': 5,
+                    'vmin': -5,
                     'cmap': 'coolwarm'
                 },
                 'magnitude': {
                     'vmax': 320,
-                    'vmin': 200,
+                    'vmin': 220,
                     'cmap': 'rainbow'}
             },
             'wind speed': {
                 'diff': {
-                    'vmax': -5,
-                    'vmin': 5,
+                    'vmax': 5,
+                    'vmin': -5,
                     'cmap': 'coolwarm'
                 },
                 'magnitude': {
@@ -63,8 +63,8 @@ class ColorbarPreset:
             },
             'wind': {
                 'diff': {
-                    'vmax': -5,
-                    'vmin': 5,
+                    'vmax': 5,
+                    'vmin': -5,
                     'cmap': 'coolwarm'
                 },
                 'magnitude': {
