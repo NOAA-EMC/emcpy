@@ -10,7 +10,7 @@ vardict = {
         'contour interval': 5,
         'diff range': [-5, 5],
         'diff contour interval': 0.5,
-        'cmap':  'rainbow'
+        'cmap': 'rainbow'
     },
     'specific humidity': {
         'name': 'specific humidity',
