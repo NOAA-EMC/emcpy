@@ -32,7 +32,7 @@ class CreateMap:
         self.projection = projection
         ax = fig.add_subplot(1, 1, 1, projection=projection.projection)
 
-        if projection.__str__() not in ['npstere', 'spstere']:
+        if str(projection) not in ['npstere', 'spstere']:
             ax.set_extent(domain.extent)
             ax.set_xticks(domain.xticks, crs=ccrs.PlateCarree())
             ax.set_yticks(domain.yticks, crs=ccrs.PlateCarree())
