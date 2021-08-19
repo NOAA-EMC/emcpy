@@ -10,7 +10,7 @@ def test_plot_global_map_no_features():
     # PlateCarree projection and no coastlines
     mymap = CreateMap(fig=plt.figure(figsize=(12, 8)),
                       domain=Domain('global'),
-                      projection=MapProjection('plcarr'))
+                      proj_obj=MapProjection('plcarr'))
 
     # return the figure from the map object
     fig = mymap.return_figure()
@@ -24,7 +24,7 @@ def test_plot_global_map_coastlines():
     # PlateCarree projection and coastlines
     mymap = CreateMap(fig=plt.figure(figsize=(12, 8)),
                       domain=Domain('global'),
-                      projection=MapProjection('plcarr'))
+                      proj_obj=MapProjection('plcarr'))
     # Add coastlines
     mymap.add_features(['coastlines'])
     # Add x and y labels
@@ -41,7 +41,7 @@ def test_plot_map_scatter_conus():
     # Create scatter plot on CONUS domian
     mymap = CreateMap(fig=plt.figure(figsize=(12, 8)),
                       domain=Domain('conus'),
-                      projection=MapProjection('plcarr'))
+                      proj_obj=MapProjection('plcarr'))
     # Add coastlines
     mymap.add_features(['coastlines'])
 
@@ -74,7 +74,7 @@ def test_plot_map_gridded_global():
     # Create 2d gridded plot on global domian
     mymap = CreateMap(fig=plt.figure(figsize=(12, 8)),
                       domain=Domain('global'),
-                      projection=MapProjection('plcarr'))
+                      proj_obj=MapProjection('plcarr'))
     mymap.add_features(['coastlines'])
 
     # Create random gridded data
@@ -104,7 +104,7 @@ def test_plot_map_multidata_conus():
     # Plot scatter and gridded data on CONUS domain
     mymap = CreateMap(fig=plt.figure(figsize=(12, 8)),
                       domain=Domain('conus'),
-                      projection=MapProjection('plcarr'))
+                      proj_obj=MapProjection('plcarr'))
     mymap.add_features(['coastlines'])
 
     # Create random gridded data

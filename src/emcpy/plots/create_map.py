@@ -16,7 +16,7 @@ class CreateMap:
 
     def __init__(self, fig=plt.figure(figsize=(12, 8)),
                  domain=Domain('global'),
-                 projection=MapProjection('plcarr')):
+                 proj_obj=MapProjection('plcarr')):
         """
         CreateMap constructor
 
@@ -29,10 +29,10 @@ class CreateMap:
 
         self.fig = fig
         self.domain = domain
-        self.projection = projection
-        ax = fig.add_subplot(1, 1, 1, projection=projection.projection)
+        self.proj_obj = proj_obj
+        ax = fig.add_subplot(1, 1, 1, projection=proj_obj.projection)
 
-        if str(projection) not in ['npstere', 'spstere']:
+        if str(proj_obj) not in ['npstere', 'spstere']:
             ax.set_extent(domain.extent)
             ax.set_xticks(domain.xticks, crs=ccrs.PlateCarree())
             ax.set_yticks(domain.yticks, crs=ccrs.PlateCarree())
@@ -108,7 +108,7 @@ class CreateMap:
                              marker=plot.marker,
                              vmin=plot.vmin,
                              vmax=plot.vmax,
-                             transform=self.projection.projection)
+                             transform=self.proj_obj.projection)
         if plot.colorbar:
             self.cs = cs
 
@@ -124,7 +124,7 @@ class CreateMap:
                                 vmin=plot.vmin,
                                 vmax=plot.vmax,
                                 alpha=plot.alpha,
-                                transform=self.projection.projection)
+                                transform=self.proj_obj.projection)
 
         if plot.colorbar:
             self.cs = cs
@@ -145,7 +145,7 @@ class CreateMap:
                              vmin=plot.vmin,
                              vmax=plot.vmax,
                              alpha=plot.alpha,
-                             transform=self.projection.projection)
+                             transform=self.proj_obj.projection)
 
         if plot.clabel:
             plt.clabel(cs, levels=plot.levels, use_clabeltext=True)
@@ -253,7 +253,7 @@ class CreateMap:
                     between 0 (transparent) and 1 (opaque)
             linestyle : (str; default='-') Line style
         """
-        self.ax.gridlines(crs=self.projection.projection, linewidth=linewidth,
+        self.ax.gridlines(crs=ccrs.PlateCarree(), linewidth=linewidth,
                           color=color, alpha=alpha, linestyle=linestyle)
 
     def return_figure(self):
