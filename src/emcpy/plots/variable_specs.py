@@ -64,7 +64,7 @@ vardict = {
         'range': [220, 320],
         'contour interval': 5,
         'diff range': [-5, 5],
-        'diff contour inte rval': 0.5,
+        'diff contour interval': 0.5,
         'cmap': 'rainbow'
     }
 }
