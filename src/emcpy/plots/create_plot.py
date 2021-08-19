@@ -334,3 +334,10 @@ class CreatePlot:
         else:
             raise TypeError('Data being plotted has no color series ' +
                             'to plot. Make sure data requres a colorbar.')
+
+    def return_figure(self):
+        """
+        Returns the figure created.
+        """
+
+        return self.fig
