@@ -5,6 +5,9 @@ from scipy.interpolate import interpn
 from emcpy.stats import get_linear_regression
 
 
+__all__ = ['CreatePlot']
+
+
 class CreatePlot:
 
     def __init__(self, figsize=(8, 6)):

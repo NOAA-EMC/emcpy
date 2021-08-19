@@ -1,6 +1,9 @@
 import numpy as np
 
 
+__all__ = ['Scatter', 'Histogram', 'LinePlot']
+
+
 class Scatter:
 
     def __init__(self, x, y):
