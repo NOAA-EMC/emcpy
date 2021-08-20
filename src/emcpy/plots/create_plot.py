@@ -38,7 +38,8 @@ class CreatePlot:
 
     def _density_scatter(self, plotobj):
         """
-        Creates scatter plot colored by 2d histogram
+        Uses Scatter Object to plot density scatter colored by
+        2d histogram.
         """
         data, x_e, y_e = np.histogram2d(plotobj.x, plotobj.y,
                                         bins=plotobj.bins,
@@ -64,7 +65,7 @@ class CreatePlot:
 
     def _scatter(self, plotobj):
         """
-        Plots Scatter object on plot axis.
+        Uses Scatter object to plot on axis.
         """
         self.fig = plt.figure(figsize=self.figsize)
         self.ax = self.fig.add_subplot(111)
@@ -96,6 +97,9 @@ class CreatePlot:
                          linewidth=plotobj.lr_linewidth, label=label)
 
     def _histogram(self, plotobj):
+        """
+        Uses Histogram object to plot on axis.
+        """
 
         self.fig = plt.figure(figsize=self.figsize)
         self.ax = self.fig.add_subplot(111)
@@ -118,6 +122,9 @@ class CreatePlot:
                      alpha=plotobj.alpha)
 
     def _lineplot(self, plotobj):
+        """
+        Uses LinePlot object to plot on axis.
+        """
 
         self.fig = plt.figure(figsize=self.figsize)
         self.ax = self.fig.add_subplot(111)
@@ -139,7 +146,7 @@ class CreatePlot:
                   color='k',
                   va='baseline'):
         """
-        Plots title to map axes.
+        Adds title to plot.
 
         Args:
             label : (str) Text to use for title
@@ -160,7 +167,7 @@ class CreatePlot:
                    fontweight='normal',
                    color='k'):
         """
-        Plots x label to map axes.
+        Adds x label to plot.
 
         Args:
             xlabel : (str) Text to use for x label
@@ -179,7 +186,7 @@ class CreatePlot:
                    fontweight='normal',
                    color='k'):
         """
-        Plots y label to map axes.
+        Adds y label to plot.
 
         Args:
             ylabel : (str) Text to use for y label
@@ -195,7 +202,7 @@ class CreatePlot:
     def add_legend(self, loc='upper left',
                    fontsize='medium'):
         """
-        Plots legend to plot.
+        Adds legend to plot.
         """
 
         self.ax.legend(loc=loc, fontsize=fontsize)
@@ -206,7 +213,7 @@ class CreatePlot:
                  alpha=None,
                  linestyle='-'):
         """
-        Plots gridlines on map axes.
+        Plots gridlines on plot.
 
         Args:
             linewidth : (int; default=1) Line thickness
