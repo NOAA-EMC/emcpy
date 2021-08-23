@@ -23,7 +23,7 @@ vardict = {
         'diff contour interval': 0.001,
         'cmap': 'YlGnBu'
     },
-    'ugrd': {
+    'u': {
         'name': 'horizontal wind',
         'short name': 'ugrd',
         'variable type': 'conventional',
@@ -34,7 +34,7 @@ vardict = {
         'diff contour interval': 0.5,
         'cmap': 'PuOr'
     },
-    'vgrd': {
+    'v': {
         'name': 'meridional wind',
         'short name': 'vgrd',
         'variable type': 'conventional',
