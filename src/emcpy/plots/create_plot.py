@@ -70,9 +70,8 @@ class CreatePlot:
         self.fig = plt.figure(figsize=self.figsize)
         self.ax = self.fig.add_subplot(111)
 
-        # checks to see if density has been added as an attribute
-        # to the plotting object and if it's True
-        if 'density' in dir(plotobj) and plotobj.density:
+        # checks to see if density attribute is True
+        if plotobj.density:
             self._density_scatter(plotobj)
 
         else:
@@ -87,9 +86,8 @@ class CreatePlot:
                                 edgecolors=plotobj.edgecolors,
                                 label=plotobj.label)
 
-        # checks to see if linear regression has been added as an attribute
-        # to the plotting object and if it's True
-        if 'linear_regression' in dir(plotobj) and plotobj.linear_regression:
+        # checks to see if linear regression attribute is True
+        if plotobj.linear_regression:
             y_pred, r_sq, intercept, slope = get_linear_regression(plotobj.x,
                                                                    plotobj.y)
             label = f"y = {slope:.4f}x + {intercept:.4f}\nR\u00b2 : {r_sq:.4f}"

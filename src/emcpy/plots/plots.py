@@ -29,6 +29,8 @@ class Scatter:
         self.linewidths = 1.5
         self.edgecolors = None
         self.label = f'n={np.count_nonzero(~np.isnan(x))}'
+        self.linear_regression = False
+        self.density = False
 
     def add_linear_regression(self):
         """
