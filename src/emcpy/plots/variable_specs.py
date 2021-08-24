@@ -24,7 +24,7 @@ vardict = {
         'cmap': 'YlGnBu'
     },
     'u': {
-        'name': 'horizontal wind',
+        'name': 'zonal wind',
         'short name': 'u',
         'variable type': 'conventional',
         'units': 'm/s',
