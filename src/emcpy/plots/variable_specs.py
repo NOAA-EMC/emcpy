@@ -25,7 +25,7 @@ vardict = {
     },
     'u': {
         'name': 'horizontal wind',
-        'short name': 'ugrd',
+        'short name': 'u',
         'variable type': 'conventional',
         'units': 'm/s',
         'range': [-50, 50],
@@ -36,7 +36,7 @@ vardict = {
     },
     'v': {
         'name': 'meridional wind',
-        'short name': 'vgrd',
+        'short name': 'v',
         'variable type': 'conventional',
         'units': 'm/s',
         'range': [-50, 50],
