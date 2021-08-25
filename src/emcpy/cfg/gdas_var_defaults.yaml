@@ -11,8 +11,8 @@ brightness temperature:
 specific humidity:
   cmap: YlGnBu
   contour interval: 0.0025
-  diff contour interval: 0.001
-  diff range: [-0.005, 0.005]
+  diff contour interval: 0.0001
+  diff range: [-0.0005, 0.0005]
   name: specific humidity
   range: [0, 0.03]
   short name: q
@@ -26,6 +26,16 @@ temperature:
   name: temperature
   range: [220, 320]
   short name: t
+  units: K
+  variable type: conventional
+virtual temperature:
+  cmap: rainbow
+  contour interval: 5
+  diff contour interval: 0.5
+  diff range: [-5, 5]
+  name: virtual temperature
+  range: [250, 350]
+  short name: tv
   units: K
   variable type: conventional
 u:
@@ -57,4 +67,24 @@ wind speed:
   range: [0, 75]
   short name: wndspd
   units: m/s
+  variable type: conventional
+integrated layer ozone in air:
+  cmap: YlGnBu
+  contour interval: 20
+  diff contour interval: 1
+  diff range: [-5, 5]
+  name: integrated layer ozone in air
+  range: [0, 500]
+  short name: o3
+  units: DU
+  variable type: ozone
+surface pressure:
+  cmap: rainbow
+  contour interval: 400
+  diff contour interval: 50
+  diff range: [-500, 500]
+  name: surface pressure
+  range: [70000, 105000]
+  short name: ps
+  units: Pa
   variable type: conventional
