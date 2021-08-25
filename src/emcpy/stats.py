@@ -12,7 +12,7 @@ from scipy.stats import t as _t
 from sklearn.linear_model import LinearRegression
 
 
-def mstats(x):
+def mstats(x, verbose=True):
     '''
     Function that computes and displays
     various statistics of a variable.
@@ -20,7 +20,12 @@ def mstats(x):
     A better alternative is `scipy.stats.describe()`
 
     Args:
-        x : (numpy array) numpy variable whose statistics are to be computed and displayed
+        x : (numpy array) numpy variable whose statistics are to
+            be computed and displayed
+        verbose : (boolean, default=True) Prints statistics if True
+
+    Returns:
+        OUT : (object) returns if verbose=False
     '''
 
     OUT = type('', (), {})
@@ -46,37 +51,45 @@ def mstats(x):
     OUT.FracZero = len(xf[xf == 0.0]) / OUT.NAnalyzedElements
     OUT.FracNan = OUT.Nnans / OUT.NElements
 
-    print('================= m s t a t s ==================')
-    print('        MatrixSize: %s' % (str(OUT.MatrixSize)))
-    print('         NElements: %d' % (OUT.NElements))
-    print(' NAnalyzedElements: %d' % (OUT.NAnalyzedElements))
-    if datatype in ['int', 'int8', 'int16', 'int32', 'int64',
-                    'uint8', 'uint16', 'uint32', 'uint64',
-                    'float', 'float16', 'float32', 'float64']:
-        print('              Mean: %f' % (OUT.Mean))
-        print('               Max: %f' % (OUT.Max))
-        print('               Min: %f' % (OUT.Min))
-        print('            Median: %f' % (OUT.Median))
-        print('             StDev: %f' % (OUT.StDev))
-        print('           MeanAbs: %f' % (OUT.MeanAbs))
-        print('            MinAbs: %f' % (OUT.MinAbs))
-    if datatype in ['complex', 'complex64', 'complex128']:
-        print('              Mean: %f + %fi' % (OUT.Mean.real, OUT.Mean.imag))
-        print('               Max: %f + %fi' % (OUT.Max.real, OUT.Max.imag))
-        print('               Min: %f + %fi' % (OUT.Min.real, OUT.Min.imag))
-        print('            Median: %f + %fi' %
-              (OUT.Median.real, OUT.Median.imag))
-        print('             StDev: %f + %fi' %
-              (OUT.StDev.real, OUT.StDev.imag))
-        print('           MeanAbs: %f + %fi' %
-              (OUT.MeanAbs.real, OUT.MeanAbs.imag))
-        print('            MinAbs: %f + %fi' %
-              (OUT.MinAbs.real, OUT.MinAbs.imag))
-    print('          FracZero: %f' % (OUT.FracZero))
-    print('           FracNaN: %f' % (OUT.FracNan))
-    print('================================================')
+    if verbose:
+        print('================= m s t a t s ==================')
+        print('        MatrixSize: %s' % (str(OUT.MatrixSize)))
+        print('         NElements: %d' % (OUT.NElements))
+        print(' NAnalyzedElements: %d' % (OUT.NAnalyzedElements))
+        if datatype in ['int', 'int8', 'int16', 'int32', 'int64',
+                        'uint8', 'uint16', 'uint32', 'uint64',
+                        'float', 'float16', 'float32', 'float64']:
+            print('              Mean: %f' % (OUT.Mean))
+            print('               Max: %f' % (OUT.Max))
+            print('               Min: %f' % (OUT.Min))
+            print('            Median: %f' % (OUT.Median))
+            print('             StDev: %f' % (OUT.StDev))
+            print('           MeanAbs: %f' % (OUT.MeanAbs))
+            print('            MinAbs: %f' % (OUT.MinAbs))
+        if datatype in ['complex', 'complex64', 'complex128']:
+            print('              Mean: %f + %fi' % (OUT.Mean.real,
+                                                    OUT.Mean.imag))
+            print('               Max: %f + %fi' % (OUT.Max.real,
+                                                    OUT.Max.imag))
+            print('               Min: %f + %fi' % (OUT.Min.real,
+                                                    OUT.Min.imag))
+            print('            Median: %f + %fi' %
+                  (OUT.Median.real, OUT.Median.imag))
+            print('             StDev: %f + %fi' %
+                  (OUT.StDev.real, OUT.StDev.imag))
+            print('           MeanAbs: %f + %fi' %
+                  (OUT.MeanAbs.real, OUT.MeanAbs.imag))
+            print('            MinAbs: %f + %fi' %
+                  (OUT.MinAbs.real, OUT.MinAbs.imag))
+        print('          FracZero: %f' % (OUT.FracZero))
+        print('           FracNaN: %f' % (OUT.FracNan))
+        print('================================================')
 
-    return
+        return
+
+    else:
+
+        return OUT
 
 
 def lregress(x, y, ci=95.0):
@@ -93,7 +106,8 @@ def lregress(x, y, ci=95.0):
     Returns:
         The linear regression coefficient (float),
         the standard error on the linear regression coefficient (float),
-        and the statistical signficance of the linear regression coefficient (bool).
+        and the statistical signficance of the linear regression
+        coefficient (bool).
     '''
 
     # make sure the two samples are of the same size
@@ -126,19 +140,23 @@ def lregress(x, y, ci=95.0):
 
 def ttest(x, y=None, ci=95.0, paired=True, scale=False):
     '''
-    Given two samples, perform the Student's t-test and return the errorbar.  The test assumes the sample size be the same between x and y.
+    Given two samples, perform the Student's t-test and return the errorbar.
+    The test assumes the sample size be the same between x and y.
     Args:
         x: (numpy array) control
         y: (numpy array, optional, default=x )experiment
         ci: (float, optional, default=95) confidence interval percentage
         paired: (bool, optional, default=True) paired t-test
-        scale: (bool, optional, default=False) normalize with mean(x) and return as a percentage
+        scale: (bool, optional, default=False) normalize with mean(x) and
+               return as a percentage
+
     Returns:
         The (normalized) difference in the sample means and
         the (normalized) errorbar with respect to control.
 
     To mask out statistically significant values:\n
-    `diffmask = numpy.ma.masked_where(numpy.abs(diffmean)<=errorbar,diffmean).mask`
+    `diffmask = numpy.ma.masked_where(numpy.abs(diffmean)
+                                      <=errorbar,diffmean).mask`
     '''
 
     nsamp = x.shape[0]
@@ -216,8 +234,9 @@ def get_linear_regression(x, y):
 
     Returns:
         The predicted y values from calculation,
-        the R squared value, the intercept of the line, and the slope of the line
-        from the equation for the predicted y values.
+        the R squared value, the intercept of the line, and the
+        slope of the line from the equation for the predicted
+        y values.
     """
     x = x.reshape((-1, 1))
     model = LinearRegression().fit(x, y)
