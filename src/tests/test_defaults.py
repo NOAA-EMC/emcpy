@@ -7,4 +7,7 @@ def test_defaults_gdas_variable_specs():
     # temperature
     varspecs = VariableSpecs(variable='temperature',
                              eval_type='magnitude')
-    print(varspecs)
+    print(varspecs.name)
+    print(varspecs.sname)
+    print(varspecs.type)
+    print(varspecs.range)

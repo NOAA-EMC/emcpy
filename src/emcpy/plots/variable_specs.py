@@ -17,7 +17,7 @@ class VariableSpecs:
 
         # read YAML into dictionary
         with open(var_yaml) as yamlfile:
-            vardict = yaml.load(yamlfile, loader=yaml.FullLoader)
+            vardict = yaml.load(yamlfile, Loader=yaml.FullLoader)
 
         if variable not in vardict.keys():
             raise ValueError(f'{variable} is not a valid variable. ' +
