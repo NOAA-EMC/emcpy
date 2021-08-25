@@ -1,78 +1,23 @@
 import numpy as np
-
-vardict = {
-    'temperature': {
-        'name': 'temperature',
-        'short name': 't',
-        'variable type': 'conventional',
-        'units': 'K',
-        'range': [220, 320],
-        'contour interval': 5,
-        'diff range': [-5, 5],
-        'diff contour interval': 0.5,
-        'cmap': 'rainbow'
-    },
-    'specific humidity': {
-        'name': 'specific humidity',
-        'short name': 'q',
-        'variable type': 'conventional',
-        'units': 'kg/kg',
-        'range': [0, 0.030],
-        'contour interval': 0.0025,
-        'diff range': [-0.005, 0.005],
-        'diff contour interval': 0.001,
-        'cmap': 'YlGnBu'
-    },
-    'u': {
-        'name': 'zonal wind',
-        'short name': 'u',
-        'variable type': 'conventional',
-        'units': 'm/s',
-        'range': [-50, 50],
-        'contour interval': 5,
-        'diff range': [-5, 5],
-        'diff contour interval': 0.5,
-        'cmap': 'PuOr'
-    },
-    'v': {
-        'name': 'meridional wind',
-        'short name': 'v',
-        'variable type': 'conventional',
-        'units': 'm/s',
-        'range': [-50, 50],
-        'contour interval': 5,
-        'diff range': [-5, 5],
-        'diff contour interval': 0.5,
-        'cmap': 'PuOr'
-    },
-    'wind speed': {
-        'name': 'wind speed',
-        'short name': 'wndspd',
-        'variable type': 'conventional',
-        'units': 'm/s',
-        'range': [0, 75],
-        'contour interval': 5,
-        'diff range': [-5, 5],
-        'diff contour interval': 0.5,
-        'cmap': 'viridis'
-    },
-    'brightness temperature': {
-        'name': 'brightness temperature',
-        'short name': 'bt',
-        'variable type': 'radiance',
-        'units': 'K',
-        'range': [220, 320],
-        'contour interval': 5,
-        'diff range': [-5, 5],
-        'diff contour interval': 0.5,
-        'cmap': 'rainbow'
-    }
-}
+import yaml
+from pathlib import Path
+import os
 
 
 class VariableSpecs:
 
-    def __init__(self, variable, eval_type):
+    def __init__(self, variable, eval_type, var_yaml=None):
+
+        # find default YAML if not specified
+        if not var_yaml:
+            _emcpy_dir = Path(__file__).parent.parent.absolute()
+            var_yaml = os.path.join(_emcpy_dir,
+                                    'cfg',
+                                    'gdas_var_defaults.yaml')
+
+        # read YAML into dictionary
+        with open(var_yaml) as yamlfile:
+            vardict = yaml.load(yamlfile, loader=yaml.FullLoader)
 
         if variable not in vardict.keys():
             raise ValueError(f'{variable} is not a valid variable. ' +
