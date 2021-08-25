@@ -13,7 +13,7 @@ class VariableSpecs:
             _emcpy_dir = Path(__file__).parent.parent.absolute()
             var_yaml = os.path.join(_emcpy_dir,
                                     'cfg',
-                                    'gdas_var_defaults.yaml')
+                                    'var_defaults.yaml')
 
         # read YAML into dictionary
         with open(var_yaml) as yamlfile:
