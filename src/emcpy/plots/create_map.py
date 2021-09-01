@@ -271,8 +271,8 @@ class CreateMap:
             outstr = outstr + f'  {key}: {value}'
         # annotate this just underneath the figure on the right side
         self.ax.annotate(outstr, xy=(1, -0.05), xycoords='axes fraction',
-                          fontsize=fontsize, horizontalalignment='right',
-                          verticalalignment='top')
+                         fontsize=fontsize, horizontalalignment='right',
+                         verticalalignment='top')
 
     def return_figure(self):
         """

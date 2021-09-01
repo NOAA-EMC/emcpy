@@ -69,7 +69,7 @@ def test_plot_map_scatter_conus():
         'nobs': len(np.linspace(200, 300, 30)),
         'vmin': 200,
         'vmax': 300,
-        }
+    }
     mymap.add_stats_dict(stats_dict=stats_dict)
 
     # return the figure from the map object
