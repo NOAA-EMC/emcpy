@@ -315,12 +315,14 @@ class CreatePlot:
                              'len of yticks. Set yticks appropriately ' +
                              'or change labels to be len of yticks.')
 
-    def add_colorbar(self, label=None, label_fontsize=12, extend='neither'):
+    def add_colorbar(self, label=None, orientation='horizontal',
+                     label_fontsize=12, extend='neither'):
         """
         Creates new axes and adds colorbar to figure.
 
         Args:
             label : (str; default=None) Colorbar label
+            orientation  : (str; default='horizontal') colorbar orientation
             label_fontsize : (int; default=12) Colorbar label font size
             extend : (str; default='neither') Extends min/max side of colorbar
         """
@@ -328,17 +330,30 @@ class CreatePlot:
         # object. If 'cs' exists, it will create a colorbar for the data
         # saved to the variable. 'cs' can be overwritten if plotting
         # multiple layers and with colorbar set to True.
-        if 'cs' in dir(self):
-            cax = self.fig.add_axes([self.ax.get_position().x1 + 0.02,
-                                     self.ax.get_position().y0, 0.025,
-                                     self.ax.get_position().height])
 
-            cb = plt.colorbar(self.cs, extend=extend, cax=cax)
+        from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+
+        if 'cs' in dir(self):
+            if orientation == 'horizontal':
+                axins = inset_axes(self.ax,
+                                   width="95%",
+                                   height="5%",
+                                   loc='lower center',
+                                   borderpad=-8)
+            else:
+                axins = inset_axes(self.ax,
+                                   width="2.5%",
+                                   height="95%",
+                                   loc='right',
+                                   borderpad=-4)
+
+            cb = self.fig.colorbar(self.cs, extend=extend, cax=axins,
+                                   orientation=orientation)
             cb.set_label(label, fontsize=label_fontsize)
 
         else:
-            raise TypeError('Data being plotted has no color series ' +
-                            'to plot. Make sure data requres a colorbar.')
+            raise TypeError('Data object has colorbar set to False.' +
+                            'Set obj.colorbar=True')
 
     def return_figure(self):
         """
