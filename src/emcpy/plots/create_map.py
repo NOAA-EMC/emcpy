@@ -271,7 +271,7 @@ class CreateMap:
         self.ax.gridlines(crs=ccrs.PlateCarree(), linewidth=linewidth,
                           color=color, alpha=alpha, linestyle=linestyle)
 
-    def add_stats_dict(self, stats_dict={'Stats': 'None'}, fontsize=10):
+    def add_stats_dict(self, stats_dict={'Stats': 'None'}, fontsize=12):
         """
         Annotate statistics to the figure. For a given dictionary, stats_dict,
         each key and value will be annotated in order.
