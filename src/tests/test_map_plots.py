@@ -63,6 +63,15 @@ def test_plot_map_scatter_conus():
                     fontsize=20)
     mymap.add_xlabel(xlabel='longitude')
     mymap.add_ylabel(ylabel='latitude')
+
+    # annotate some stats
+    stats_dict = {
+        'nobs': len(np.linspace(200, 300, 30)),
+        'vmin': 200,
+        'vmax': 300,
+    }
+    mymap.add_stats_dict(stats_dict=stats_dict)
+
     # return the figure from the map object
     fig = mymap.return_figure()
 
