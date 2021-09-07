@@ -283,10 +283,10 @@ class CreateMap:
         # loop through the dictionary and create the sting to annotate
         outstr = ''
         for key, value in stats_dict.items():
-            outstr = outstr + f'  {key}: {value}'
+            outstr = outstr + f'    {key}: {value}'
         # annotate this just underneath the figure on the right side
-        self.ax.annotate(outstr, xy=(1, -0.05), xycoords='axes fraction',
-                         fontsize=fontsize, horizontalalignment='right',
+        self.ax.annotate(outstr, xy=(0.5, -0.1), xycoords='axes fraction',
+                         fontsize=fontsize, horizontalalignment='center',
                          verticalalignment='top')
 
     def return_figure(self):
