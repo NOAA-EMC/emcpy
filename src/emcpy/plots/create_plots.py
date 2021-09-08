@@ -9,7 +9,7 @@ from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 from emcpy.plots.map_tools import Domain, MapProjection
 from emcpy.stats import get_linear_regression
 
-__all__ = ['EMCPyPlots', 'CreatePlot', 'CreateMap']
+__all__ = ['CreatePlot', 'CreateMap']
 
 
 class EMCPyPlots:
@@ -22,7 +22,7 @@ class EMCPyPlots:
                   fontsize=12,
                   fontweight='normal',
                   color='k',
-                  va='baseline'):
+                  verticalalignment='baseline'):
         """
         Adds title to map axes.
 
@@ -37,7 +37,7 @@ class EMCPyPlots:
 
         self.ax.set_title(label, loc=loc, fontsize=fontsize,
                           fontweight=fontweight, color=color,
-                          verticalalignment=va)
+                          verticalalignment=verticalalignment)
 
     def add_xlabel(self, xlabel,
                    loc='center',
