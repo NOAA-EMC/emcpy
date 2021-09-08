@@ -14,7 +14,16 @@ __all__ = ['CreatePlot', 'CreateMap']
 
 class EMCPyPlots:
 
-    def __init__(self):
+    def __init__(self, figsize):
+        """
+        EMCPyPlots Constructor.
+
+        Args:
+            figsize : (tuple) Figure dimension size
+        """
+
+        self.fig = plt.figure(figsize=figsize)
+
         return
 
     def add_title(self, label,
@@ -145,10 +154,20 @@ class EMCPyPlots:
 
 
 class CreatePlot(EMCPyPlots):
+    """
+    Creates a figure to plot data as a scatter plot,
+    histogram, or line plot.
+    """
 
     def __init__(self, figsize=(8, 6)):
+        """
+        CreatePlot constructor.
 
-        self.figsize = figsize
+        Args:
+            figsize : (tuple; default=(8,6)) Figure dimension size
+        """
+
+        super().__init__(figsize)
 
     def draw_data(self, plot_list):
         """
@@ -203,7 +222,6 @@ class CreatePlot(EMCPyPlots):
         """
         Uses Scatter object to plot on axis.
         """
-        self.fig = plt.figure(figsize=self.figsize)
         self.ax = self.fig.add_subplot(111)
 
         # checks to see if density attribute is True
@@ -235,7 +253,6 @@ class CreatePlot(EMCPyPlots):
         Uses Histogram object to plot on axis.
         """
 
-        self.fig = plt.figure(figsize=self.figsize)
         self.ax = self.fig.add_subplot(111)
 
         self.ax.hist(plotobj.data,
@@ -260,7 +277,6 @@ class CreatePlot(EMCPyPlots):
         Uses LinePlot object to plot on axis.
         """
 
-        self.fig = plt.figure(figsize=self.figsize)
         self.ax = self.fig.add_subplot(111)
 
         self.ax.plot(plotobj.x,
@@ -397,23 +413,24 @@ class CreateMap(EMCPyPlots):
     Creates a map axes on a figure to plot data.
     """
 
-    def __init__(self, fig=plt.figure(figsize=(12, 8)),
+    def __init__(self, figsize=(12, 8),
                  domain=Domain('global'),
                  proj_obj=MapProjection('plcarr')):
         """
         CreateMap constructor
 
         Args:
-            fig : (matplotlib.figure) Figure object to plot on
+            figsize : (tuple; default=(12,8)) Figure dimension size
             domain : (object) domain from emcpy.plots.map_tools.Domain()
             projection : (object) projection from emcpy
                          emcpy.plots.map_tools.MapProjection()
         """
 
-        self.fig = fig
+        super().__init__(figsize)
+
         self.domain = domain
         self.proj_obj = proj_obj
-        ax = fig.add_subplot(1, 1, 1, projection=proj_obj.projection)
+        ax = self.fig.add_subplot(1, 1, 1, projection=proj_obj.projection)
 
         if str(proj_obj) not in ['npstere', 'spstere']:
             ax.set_extent(domain.extent)
