@@ -41,7 +41,8 @@ class EMCPyPlots:
             fontsize : (int; default=12) Text font size
             fontweight : (str; default='normal') Text font weight
             color : (str; default='k') Text font color
-            va : (str; default='baseline') Vertical alignment of text
+            verticalalignment : (str; default='baseline') Vertical
+                                alignment of text
         """
 
         self.ax.set_title(label, loc=loc, fontsize=fontsize,
@@ -144,6 +145,27 @@ class EMCPyPlots:
         self.ax.annotate(outstr, xy=(0.5, -0.1), xycoords='axes fraction',
                          fontsize=fontsize, horizontalalignment='center',
                          verticalalignment='top')
+
+    def add_text(self, xloc, yloc, text, fontsize=12,
+                 fontweight='normal', color='k', alpha=1.,
+                 horizontalalignment='center'):
+        """
+        Add text to a figure.
+
+        Args:
+            xloc : (int/float) x location on axis
+            yloc : (int/float) y location on axis
+            text : (str) Text to plot on figure
+            fontsize : (int; default=12) Text font size
+            fontweight : (str; default='normal') Text font weight
+            color : (str; default='k') Text font color
+            alpha : (float; default=1.) alpha of text
+            horizontalalignment : (str; default='baseline') Vertical
+                                alignment of text
+        """
+        self.ax.text(xloc, yloc, text, fontsize=fontsize,
+                     fontweight=fontweight, color=color,
+                     alpha=alpha, ha=horizontalalignment)
 
     def return_figure(self):
         """
