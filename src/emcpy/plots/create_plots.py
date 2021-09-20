@@ -190,6 +190,7 @@ class CreatePlot(EMCPyPlots):
         """
 
         super().__init__(figsize)
+        self.ax = self.fig.add_subplot(111)
 
     def draw_data(self, plot_list):
         """
@@ -244,7 +245,6 @@ class CreatePlot(EMCPyPlots):
         """
         Uses Scatter object to plot on axis.
         """
-        self.ax = self.fig.add_subplot(111)
 
         # checks to see if density attribute is True
         if plotobj.density:
@@ -275,8 +275,6 @@ class CreatePlot(EMCPyPlots):
         Uses Histogram object to plot on axis.
         """
 
-        self.ax = self.fig.add_subplot(111)
-
         self.ax.hist(plotobj.data,
                      bins=plotobj.bins,
                      range=plotobj.range,
@@ -298,8 +296,6 @@ class CreatePlot(EMCPyPlots):
         """
         Uses LinePlot object to plot on axis.
         """
-
-        self.ax = self.fig.add_subplot(111)
 
         self.ax.plot(plotobj.x,
                      plotobj.y,
