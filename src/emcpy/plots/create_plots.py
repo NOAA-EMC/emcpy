@@ -127,7 +127,8 @@ class EMCPyPlots:
             raise TypeError('Data object has colorbar set to False.' +
                             'Set obj.colorbar=True')
 
-    def add_stats_dict(self, stats_dict={'Stats': 'None'}, fontsize=12):
+    def add_stats_dict(self, stats_dict={'Stats': 'None'}, xloc=0.5,
+                       yloc=-0.1, fontsize=12):
         """
         Annotate statistics to the figure. For a given dictionary, stats_dict,
         each key and value will be annotated in order.
@@ -135,6 +136,8 @@ class EMCPyPlots:
         Args:
             stats_dict : (dict; default={'Stats': 'None'}) dict of values
                          to be annotated
+            xloc : (float; default=0.5) location of text on x-axis
+            yloc : (float; default=-0.1) location of text on y-axis
             fontsize : (int; default=10) Annotated text font size
         """
         # loop through the dictionary and create the sting to annotate
@@ -142,7 +145,7 @@ class EMCPyPlots:
         for key, value in stats_dict.items():
             outstr = outstr + f'    {key}: {value}'
         # annotate this just underneath the figure on the right side
-        self.ax.annotate(outstr, xy=(0.5, -0.1), xycoords='axes fraction',
+        self.ax.annotate(outstr, xy=(xloc, yloc), xycoords='axes fraction',
                          fontsize=fontsize, horizontalalignment='center',
                          verticalalignment='top')
 
