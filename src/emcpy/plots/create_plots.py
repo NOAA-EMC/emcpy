@@ -208,7 +208,7 @@ class CreatePlot(EMCPyPlots):
             'histogram': self._histogram,
             'line_plot': self._lineplot,
             'vertical_line': self._verticalline,
-            'horizontal_line' self._horizontalline
+            'horizontal_line': self._horizontalline
         }
 
         for obj in plot_list:
