@@ -105,3 +105,45 @@ class LinePlot:
         self.markersize = None
         self.alpha = None
         self.label = None
+
+
+class VerticalLine:
+
+    def __init__(self, x):
+        """
+        Constructor for VerticalLine
+
+        Args:
+            x : (int/float) x-value where vertical line
+                is to be plotted
+        """
+
+        self.plottype = 'vertical_line'
+
+        self.x = x
+
+        self.color = 'black'
+        self.linestyle = '-'
+        self.linewidth = 1.5
+        self.label = None
+
+
+class HorizontalLine:
+
+    def __init__(self, y):
+        """
+        Constructor for HorizontalLine
+
+        Args:
+            y : (int/float) y-value where horizontal
+                line is to be plotted
+        """
+
+        self.plottype = 'horizontal_line'
+
+        self.y = y
+
+        self.color = 'black'
+        self.linestyle = '-'
+        self.linewidth = 1.5
+        self.label = None
