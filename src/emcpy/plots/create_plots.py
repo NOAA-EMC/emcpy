@@ -206,7 +206,9 @@ class CreatePlot(EMCPyPlots):
         plot_dict = {
             'scatter': self._scatter,
             'histogram': self._histogram,
-            'line_plot': self._lineplot
+            'line_plot': self._lineplot,
+            'vertical_line': self._verticalline,
+            'horizontal_line' self._horizontalline
         }
 
         for obj in plot_list:
@@ -309,6 +311,28 @@ class CreatePlot(EMCPyPlots):
                      markersize=plotobj.markersize,
                      alpha=plotobj.alpha,
                      label=plotobj.label)
+
+    def _verticalline(self, plotobj):
+        """
+        Uses VerticalLine object to plot on axis.
+        """
+
+        self.ax.axvline(plotobj.x,
+                        color=plotobj.color,
+                        linestyle=plotobj.linestyle,
+                        linewidth=plotobj.linewidth,
+                        label=plotobj.label)
+
+    def _horizontalline(self, plotobj):
+        """
+        Uses HorizontalLine object to plot on axis.
+        """
+
+        self.ax.axhline(plotobj.y,
+                        color=plotobj.color,
+                        linestyle=plotobj.linestyle,
+                        linewidth=plotobj.linewidth,
+                        label=plotobj.label)
 
     def add_legend(self, loc='upper left',
                    fontsize='medium'):
