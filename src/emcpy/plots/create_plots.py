@@ -452,6 +452,31 @@ class CreatePlot(EMCPyPlots):
                              'len of yticks. Set yticks appropriately ' +
                              'or change labels to be len of yticks.')
 
+    def invert_xaxis(self):
+        """
+        Invert the x axis
+        """
+        self.ax.invert_xaxis()
+
+    def invert_yaxis(self):
+        """
+        Invert the y axis
+        """
+        self.ax.invert_yaxis()
+
+    def set_yscale(self, scale):
+        """
+        Sets the y axis scale to 'log', 'linear', 'symlog', or 'logit'
+
+        Args:
+            scale : (str) scale type 'log', 'linear', 'symlog', or 'logit'
+        """
+        valid_scales = ['log', 'linear', 'symlog', 'logit']
+        if scale not in valid_scales:
+            raise ValueError(f'requested scale {scale} is invalid. Valid choices are: {" | ".join(valid_scales)}')
+
+        self.ax.set_yscale(scale) 
+
 
 class CreateMap(EMCPyPlots):
     """
