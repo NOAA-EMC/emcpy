@@ -475,7 +475,7 @@ class CreatePlot(EMCPyPlots):
         if scale not in valid_scales:
             raise ValueError(f'requested scale {scale} is invalid. Valid choices are: {" | ".join(valid_scales)}')
 
-        self.ax.set_yscale(scale) 
+        self.ax.set_yscale(scale)
 
 
 class CreateMap(EMCPyPlots):
