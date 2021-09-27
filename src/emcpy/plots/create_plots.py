@@ -501,7 +501,6 @@ class CreatePlot(EMCPyPlots):
 
         self.ax.set_yscale(scale)
 
-
 class CreateMap(EMCPyPlots):
     """
     Creates a map axes on a figure to plot data.
