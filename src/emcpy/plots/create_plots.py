@@ -1,6 +1,9 @@
 import numpy as np
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
+#import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from matplotlib.colors import Normalize
@@ -194,8 +197,10 @@ class CreatePlot(EMCPyPlots):
 
         super().__init__(figsize)
         self.ax = self.fig.add_subplot(111)
+        self.shared_ax = None
+        self.shared_ay = None
 
-    def draw_data(self, plot_list):
+    def draw_data(self, plot_list, use_shared_ax=False, use_shared_ay=False):
         """
         Add data layer onto figure.
 
@@ -213,13 +218,13 @@ class CreatePlot(EMCPyPlots):
 
         for obj in plot_list:
             try:
-                plot_dict[obj.plottype](obj)
+                plot_dict[obj.plottype](obj, use_shared_ax, use_shared_ay)
             except KeyError:
                 raise TypeError(f'{obj} is not a valid plot type.' +
                                 'Current plot types supported are:\n' +
                                 f'{" | ".join(feature_dict.keys())}"')
 
-    def _density_scatter(self, plotobj):
+    def _density_scatter(self, plotobj, use_shared_ax, use_shared_ay):
         """
         Uses Scatter Object to plot density scatter colored by
         2d histogram.
@@ -246,14 +251,14 @@ class CreatePlot(EMCPyPlots):
         if plotobj.colorbar:
             self.cs = cs
 
-    def _scatter(self, plotobj):
+    def _scatter(self, plotobj, use_shared_ax=False, use_shared_ay=False):
         """
         Uses Scatter object to plot on axis.
         """
 
         # checks to see if density attribute is True
         if plotobj.density:
-            self._density_scatter(plotobj)
+            self._density_scatter(plotobj, use_shared_ax, use_shared_ay)
 
         else:
             s = self.ax.scatter(plotobj.x, plotobj.y,
@@ -275,12 +280,13 @@ class CreatePlot(EMCPyPlots):
             self.ax.plot(plotobj.x, y_pred, color=plotobj.lr_color,
                          linewidth=plotobj.lr_linewidth, label=label)
 
-    def _histogram(self, plotobj):
+    def _histogram(self, plotobj, use_shared_ax=False, use_shared_ay=False):
         """
         Uses Histogram object to plot on axis.
         """
 
-        self.ax.hist(plotobj.data,
+        axis = self._determine_axis(use_shared_ax, use_shared_ay)
+        axis.hist(plotobj.data,
                      bins=plotobj.bins,
                      range=plotobj.range,
                      density=plotobj.density,
@@ -297,12 +303,13 @@ class CreatePlot(EMCPyPlots):
                      stacked=plotobj.stacked,
                      alpha=plotobj.alpha)
 
-    def _lineplot(self, plotobj):
+    def _lineplot(self, plotobj, use_shared_ax=False, use_shared_ay=False):
         """
         Uses LinePlot object to plot on axis.
         """
+        axis = self._determine_axis(use_shared_ax, use_shared_ay)
 
-        self.ax.plot(plotobj.x,
+        axis.plot(plotobj.x,
                      plotobj.y,
                      color=plotobj.color,
                      linestyle=plotobj.linestyle,
@@ -312,27 +319,43 @@ class CreatePlot(EMCPyPlots):
                      alpha=plotobj.alpha,
                      label=plotobj.label)
 
-    def _verticalline(self, plotobj):
+    def _verticalline(self, plotobj, use_shared_ax=False, use_shared_ay=False):
         """
         Uses VerticalLine object to plot on axis.
         """
 
-        self.ax.axvline(plotobj.x,
+        axis = self._determine_axis(use_shared_ax, use_shared_ay)
+        axis.axvline(plotobj.x,
                         color=plotobj.color,
                         linestyle=plotobj.linestyle,
                         linewidth=plotobj.linewidth,
                         label=plotobj.label)
 
-    def _horizontalline(self, plotobj):
+    def _horizontalline(self, plotobj, use_shared_ax=False, use_shared_ay=False):
         """
         Uses HorizontalLine object to plot on axis.
         """
 
-        self.ax.axhline(plotobj.y,
+        axis = self._determine_axis(use_shared_ax, use_shared_ay)
+        axis.axhline(plotobj.y,
                         color=plotobj.color,
                         linestyle=plotobj.linestyle,
                         linewidth=plotobj.linewidth,
                         label=plotobj.label)
+
+    def _determine_axis(self, use_shared_ax, use_shared_ay):
+        axis = self.ax
+
+        if use_shared_ax:
+           if self.shared_ax is None:
+               self.shared_ax = self.ax.twinx()
+           axis = self.shared_ax
+        elif use_shared_ay:
+           if self.shared_ay is None:
+               self.shared_ay = self.ax.twiny()
+           axis = self.shared_ay
+
+        return axis
 
     def add_legend(self, loc='upper left',
                    fontsize='medium'):
@@ -451,6 +474,7 @@ class CreatePlot(EMCPyPlots):
             raise ValueError('Len of ytick labels does not equal ' +
                              'len of yticks. Set yticks appropriately ' +
                              'or change labels to be len of yticks.')
+
 
     def invert_xaxis(self):
         """
