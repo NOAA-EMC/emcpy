@@ -347,13 +347,13 @@ class CreatePlot(EMCPyPlots):
         axis = self.ax
 
         if use_shared_ax:
-           if self.shared_ax is None:
-               self.shared_ax = self.ax.twinx()
-           axis = self.shared_ax
+            if self.shared_ax is None:
+                self.shared_ax = self.ax.twinx()
+            axis = self.shared_ax
         elif use_shared_ay:
-           if self.shared_ay is None:
-               self.shared_ay = self.ax.twiny()
-           axis = self.shared_ay
+            if self.shared_ay is None:
+                self.shared_ay = self.ax.twiny()
+            axis = self.shared_ay
 
         return axis
 
