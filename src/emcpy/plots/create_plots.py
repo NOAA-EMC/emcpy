@@ -326,7 +326,7 @@ class CreatePlot(EMCPyPlots):
         Uses VerticalLine object to plot on axis.
         """
 
-        axis = self._determine_axis()
+        axis = self._determine_axis(plotobj.plot_ax)
         axis.axvline(plotobj.x,
                         color=plotobj.color,
                         linestyle=plotobj.linestyle,
@@ -338,7 +338,7 @@ class CreatePlot(EMCPyPlots):
         Uses HorizontalLine object to plot on axis.
         """
 
-        axis = self._determine_axis()
+        axis = self._determine_axis(plotobj.plot_ax)
         axis.axhline(plotobj.y,
                         color=plotobj.color,
                         linestyle=plotobj.linestyle,
