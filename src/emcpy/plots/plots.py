@@ -13,9 +13,15 @@ class BasePlot:
         return
 
     def use_shared_ax(self):
+        """
+        Set object to plot on shared ax axis
+        """
         self.plot_ax = 'shared_ax'
 
     def use_shared_ay(self):
+        """
+        Set object to plot on shared ay axis
+        """
         self.plot_ax = 'shared_ay'
 
 class Scatter(BasePlot):

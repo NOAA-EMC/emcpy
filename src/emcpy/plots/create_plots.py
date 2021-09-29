@@ -1,9 +1,6 @@
 import numpy as np
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
-#import matplotlib.pyplot as plt
-import matplotlib
-matplotlib.use('agg')
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from matplotlib.colors import Normalize
@@ -57,7 +54,8 @@ class EMCPyPlots:
                    loc='center',
                    fontsize=12,
                    fontweight='normal',
-                   color='k'):
+                   color='k',
+                   xaxis='primary'):
         """
         Adds x label to map axes.
 
@@ -67,16 +65,26 @@ class EMCPyPlots:
             fontsize : (int; default=12) Text font size
             fontweight : (str; default='normal') Text font weight
             color : (str; default='k') Text font color
+            xaxis : (str; default='primary') choices are primary
+                    or secondary if shared_ay exists. 
         """
+  
+        axis = self.ax
+        if xaxis == 'secondary':
+            if self.shared_ay is None:
+                raise ValueError('Unable to add x label.  Secondary ' + 
+                             'x axis does not exist.')
+            axis = self.shared_ay
 
-        self.ax.set_xlabel(xlabel=xlabel, loc=loc, fontsize=fontsize,
+        axis.set_xlabel(xlabel=xlabel, loc=loc, fontsize=fontsize,
                            fontweight=fontweight, color=color)
 
     def add_ylabel(self, ylabel,
                    loc='center',
                    fontsize=12,
                    fontweight='normal',
-                   color='k'):
+                   color='k',
+                   yaxis='primary'):
         """
         Adds y label to map axes.
 
@@ -86,9 +94,18 @@ class EMCPyPlots:
             fontsize : (int; default=12) Text font size
             fontweight : (str; default='normal') Text font weight
             color : (str; default='k') Text font color
+            yaxis : (str; default='primary') choices are primary
+                    or secondary if shared_ax exists. 
         """
 
-        self.ax.set_ylabel(ylabel=ylabel, loc=loc, fontsize=fontsize,
+        axis = self.ax
+        if yaxis == 'secondary':
+            if self.shared_ax is None:
+                raise ValueError('Unable to add y label.  Secondary ' + 
+                             'y axis does not exist.')
+            axis = self.shared_ax
+
+        axis.set_ylabel(ylabel=ylabel, loc=loc, fontsize=fontsize,
                            fontweight=fontweight, color=color)
 
     def add_colorbar(self, label=None, orientation='horizontal',
@@ -507,6 +524,7 @@ class CreatePlot(EMCPyPlots):
             raise ValueError(f'requested scale {scale} is invalid. Valid choices are: {" | ".join(valid_scales)}')
 
         self.ax.set_yscale(scale)
+
 
 class CreateMap(EMCPyPlots):
     """
