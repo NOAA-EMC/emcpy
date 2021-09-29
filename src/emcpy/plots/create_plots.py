@@ -65,18 +65,18 @@ class EMCPyPlots:
             fontweight : (str; default='normal') Text font weight
             color : (str; default='k') Text font color
             xaxis : (str; default='primary') choices are primary
-                    or secondary if shared_ay exists. 
+                    or secondary if shared_ay exists.
         """
-  
+
         axis = self.ax
         if xaxis == 'secondary':
             if self.shared_ay is None:
-                raise ValueError('Unable to add x label.  Secondary ' + 
-                             'x axis does not exist.')
+                raise ValueError('Unable to add x label.  Secondary ' +
+                                 'x axis does not exist.')
             axis = self.shared_ay
 
         axis.set_xlabel(xlabel=xlabel, loc=loc, fontsize=fontsize,
-                           fontweight=fontweight, color=color)
+                        fontweight=fontweight, color=color)
 
     def add_ylabel(self, ylabel,
                    loc='center',
@@ -94,18 +94,18 @@ class EMCPyPlots:
             fontweight : (str; default='normal') Text font weight
             color : (str; default='k') Text font color
             yaxis : (str; default='primary') choices are primary
-                    or secondary if shared_ax exists. 
+                    or secondary if shared_ax exists.
         """
 
         axis = self.ax
         if yaxis == 'secondary':
             if self.shared_ax is None:
-                raise ValueError('Unable to add y label.  Secondary ' + 
-                             'y axis does not exist.')
+                raise ValueError('Unable to add y label.  Secondary ' +
+                      'y axis does not exist.')
             axis = self.shared_ax
 
         axis.set_ylabel(ylabel=ylabel, loc=loc, fontsize=fontsize,
-                           fontweight=fontweight, color=color)
+                        fontweight=fontweight, color=color)
 
     def add_colorbar(self, label=None, orientation='horizontal',
                      label_fontsize=12, extend='neither'):
@@ -261,9 +261,9 @@ class CreatePlot(EMCPyPlots):
             x, y, z = plotobj.x[idx], plotobj.y[idx], z[idx]
         axis = self._determine_axis(plotobj.plot_ax)
         cs = axis.scatter(x, y, c=z,
-                             s=plotobj.markersize,
-                             cmap=plotobj.cmap,
-                             label=plotobj.label)
+                          s=plotobj.markersize,
+                          cmap=plotobj.cmap,
+                          label=plotobj.label)
         norm = Normalize(vmin=np.min(z), vmax=np.max(z))
 
         if plotobj.colorbar:
@@ -281,15 +281,15 @@ class CreatePlot(EMCPyPlots):
 
         else:
             s = axis.scatter(plotobj.x, plotobj.y,
-                                s=plotobj.markersize,
-                                color=plotobj.color,
-                                marker=plotobj.marker,
-                                vmin=plotobj.vmin,
-                                vmax=plotobj.vmax,
-                                alpha=plotobj.alpha,
-                                linewidths=plotobj.linewidths,
-                                edgecolors=plotobj.edgecolors,
-                                label=plotobj.label)
+                             s=plotobj.markersize,
+                             color=plotobj.color,
+                             marker=plotobj.marker,
+                             vmin=plotobj.vmin,
+                             vmax=plotobj.vmax,
+                             alpha=plotobj.alpha,
+                             linewidths=plotobj.linewidths,
+                             edgecolors=plotobj.edgecolors,
+                             label=plotobj.label)
 
         # checks to see if linear regression attribute is True
         if plotobj.linear_regression:
@@ -297,7 +297,7 @@ class CreatePlot(EMCPyPlots):
                                                                    plotobj.y)
             label = f"y = {slope:.4f}x + {intercept:.4f}\nR\u00b2 : {r_sq:.4f}"
             axis.plot(plotobj.x, y_pred, color=plotobj.lr_color,
-                         linewidth=plotobj.lr_linewidth, label=label)
+                      linewidth=plotobj.lr_linewidth, label=label)
 
     def _histogram(self, plotobj):
         """
@@ -306,21 +306,21 @@ class CreatePlot(EMCPyPlots):
 
         axis = self._determine_axis(plotobj.plot_ax)
         axis.hist(plotobj.data,
-                     bins=plotobj.bins,
-                     range=plotobj.range,
-                     density=plotobj.density,
-                     weights=plotobj.weights,
-                     cumulative=plotobj.cumulative,
-                     bottom=plotobj.bottom,
-                     histtype=plotobj.histtype,
-                     align=plotobj.align,
-                     orientation=plotobj.orientation,
-                     rwidth=plotobj.rwidth,
-                     log=plotobj.log,
-                     color=plotobj.color,
-                     label=plotobj.label,
-                     stacked=plotobj.stacked,
-                     alpha=plotobj.alpha)
+                  bins=plotobj.bins,
+                  range=plotobj.range,
+                  density=plotobj.density,
+                  weights=plotobj.weights,
+                  cumulative=plotobj.cumulative,
+                  bottom=plotobj.bottom,
+                  histtype=plotobj.histtype,
+                  align=plotobj.align,
+                  orientation=plotobj.orientation,
+                  rwidth=plotobj.rwidth,
+                  log=plotobj.log,
+                  color=plotobj.color,
+                  label=plotobj.label,
+                  stacked=plotobj.stacked,
+                  alpha=plotobj.alpha)
 
     def _lineplot(self, plotobj):
         """
@@ -328,14 +328,14 @@ class CreatePlot(EMCPyPlots):
         """
         axis = self._determine_axis(plotobj.plot_ax)
         axis.plot(plotobj.x,
-                     plotobj.y,
-                     color=plotobj.color,
-                     linestyle=plotobj.linestyle,
-                     linewidth=plotobj.linewidth,
-                     marker=plotobj.marker,
-                     markersize=plotobj.markersize,
-                     alpha=plotobj.alpha,
-                     label=plotobj.label)
+                  plotobj.y,
+                  color=plotobj.color,
+                  linestyle=plotobj.linestyle,
+                  linewidth=plotobj.linewidth,
+                  marker=plotobj.marker,
+                  markersize=plotobj.markersize,
+                  alpha=plotobj.alpha,
+                  label=plotobj.label)
 
     def _verticalline(self, plotobj):
         """
@@ -344,10 +344,10 @@ class CreatePlot(EMCPyPlots):
 
         axis = self._determine_axis(plotobj.plot_ax)
         axis.axvline(plotobj.x,
-                        color=plotobj.color,
-                        linestyle=plotobj.linestyle,
-                        linewidth=plotobj.linewidth,
-                        label=plotobj.label)
+                     color=plotobj.color,
+                     linestyle=plotobj.linestyle,
+                     linewidth=plotobj.linewidth,
+                     label=plotobj.label)
 
     def _horizontalline(self, plotobj):
         """
@@ -356,14 +356,14 @@ class CreatePlot(EMCPyPlots):
 
         axis = self._determine_axis(plotobj.plot_ax)
         axis.axhline(plotobj.y,
-                        color=plotobj.color,
-                        linestyle=plotobj.linestyle,
-                        linewidth=plotobj.linewidth,
-                        label=plotobj.label)
+                     color=plotobj.color,
+                     linestyle=plotobj.linestyle,
+                     linewidth=plotobj.linewidth,
+                     label=plotobj.label)
 
     def _determine_axis(self, requested_axis):
         """
-        Determine which axis to use for plotting.  Default is self.ax. 
+        Determine which axis to use for plotting.  Default is self.ax.
         Return:
             correct axis for plotting
         """
@@ -378,7 +378,6 @@ class CreatePlot(EMCPyPlots):
         else:
             axis = self.ax
 
-        print( f'returning axis as {axis}')
         return axis
 
     def add_legend(self, loc='upper left',

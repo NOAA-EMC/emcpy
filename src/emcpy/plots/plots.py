@@ -24,6 +24,7 @@ class BasePlot:
         """
         self.plot_ax = 'shared_ay'
 
+
 class Scatter(BasePlot):
 
     def __init__(self, x, y):
@@ -52,7 +53,7 @@ class Scatter(BasePlot):
         self.label = f'n={np.count_nonzero(~np.isnan(x))}'
         self.linear_regression = False
         self.density = False
-        
+
     def add_linear_regression(self):
         """
         Include linear regression line info as attributes.
