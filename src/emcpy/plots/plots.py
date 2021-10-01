@@ -4,7 +4,28 @@ import numpy as np
 __all__ = ['Scatter', 'Histogram', 'LinePlot']
 
 
-class Scatter:
+class BasePlot:
+    def __init__(self):
+        """
+        BasePlot Constructor.
+        """
+        self.plot_ax = 'ax'
+        return
+
+    def use_shared_ax(self):
+        """
+        Set object to plot on shared ax axis
+        """
+        self.plot_ax = 'shared_ax'
+
+    def use_shared_ay(self):
+        """
+        Set object to plot on shared ay axis
+        """
+        self.plot_ax = 'shared_ay'
+
+
+class Scatter(BasePlot):
 
     def __init__(self, x, y):
         """
@@ -15,6 +36,7 @@ class Scatter:
             y : (array type)
         """
 
+        super().__init__()
         self.plottype = 'scatter'
 
         self.x = x
@@ -51,7 +73,7 @@ class Scatter:
         self.bins = [100, 100]
 
 
-class Histogram:
+class Histogram(BasePlot):
 
     def __init__(self, data):
         """
@@ -61,6 +83,7 @@ class Histogram:
             data : (array type)
         """
 
+        super().__init__()
         self.plottype = 'histogram'
 
         self.data = data
@@ -82,17 +105,17 @@ class Histogram:
         self.alpha = None
 
 
-class LinePlot:
+class LinePlot(BasePlot):
 
     def __init__(self, x, y):
         """
-        Constructor for Scatter.
+        Constructor for LinePlot.
 
         Args:
             x : (array type)
             y : (array type)
         """
-
+        super().__init__()
         self.plottype = 'line_plot'
 
         self.x = x
@@ -107,7 +130,7 @@ class LinePlot:
         self.label = None
 
 
-class VerticalLine:
+class VerticalLine(BasePlot):
 
     def __init__(self, x):
         """
@@ -118,6 +141,7 @@ class VerticalLine:
                 is to be plotted
         """
 
+        super().__init__()
         self.plottype = 'vertical_line'
 
         self.x = x
@@ -128,7 +152,7 @@ class VerticalLine:
         self.label = None
 
 
-class HorizontalLine:
+class HorizontalLine(BasePlot):
 
     def __init__(self, y):
         """
@@ -139,6 +163,7 @@ class HorizontalLine:
                 line is to be plotted
         """
 
+        super().__init__()
         self.plottype = 'horizontal_line'
 
         self.y = y
