@@ -53,9 +53,6 @@ class Domain:
         self.yticks = dd.get('yticks', (-90, -60, -30, 0,
                                         30, 60, 90))
 
-        self.cenlon = dd.get('cenlon', 0)
-        self.cenlat = dd.get('cenlat', 0)
-
     def _north_america(self, dd=dict()):
         """
         Sets extent, longitude xticks, and latitude yticks
@@ -348,8 +345,11 @@ class MapProjection:
 
     def _lambertconformal(self):
         """Creates projection using Lambert Conformal from Cartopy."""
-        self.cenlon = 0 if self.cenlon is None else self.cenlon
-        self.cenlat = 0 if self.cenlat is None else self.cenlat
+
+        if self.cenlon is None or self.cenlat is None:
+            raise TypeError("Need 'cenlon' and cenlat to plot Lambert "
+                            "Conformal projection. This projection also "
+                            "does not work for a global domain.")
 
         self.projection = ccrs.LambertConformal(central_longitude=self.cenlon,
                                                 central_latitude=self.cenlat)
