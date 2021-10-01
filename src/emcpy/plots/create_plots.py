@@ -53,8 +53,7 @@ class EMCPyPlots:
                    loc='center',
                    fontsize=12,
                    fontweight='normal',
-                   color='k',
-                   xaxis='primary'):
+                   color='k'):
         """
         Adds x label to map axes.
 
@@ -64,26 +63,16 @@ class EMCPyPlots:
             fontsize : (int; default=12) Text font size
             fontweight : (str; default='normal') Text font weight
             color : (str; default='k') Text font color
-            xaxis : (str; default='primary') choices are primary
-                    or secondary if shared_ay exists.
         """
 
-        axis = self.ax
-        if xaxis == 'secondary':
-            if self.shared_ay is None:
-                raise ValueError('Unable to add x label.  Secondary ' +
-                                 'x axis does not exist.')
-            axis = self.shared_ay
-
-        axis.set_xlabel(xlabel=xlabel, loc=loc, fontsize=fontsize,
-                        fontweight=fontweight, color=color)
+        self.ax.set_xlabel(xlabel=xlabel, loc=loc, fontsize=fontsize,
+                           fontweight=fontweight, color=color)
 
     def add_ylabel(self, ylabel,
                    loc='center',
                    fontsize=12,
                    fontweight='normal',
-                   color='k',
-                   yaxis='primary'):
+                   color='k'):
         """
         Adds y label to map axes.
 
@@ -93,19 +82,10 @@ class EMCPyPlots:
             fontsize : (int; default=12) Text font size
             fontweight : (str; default='normal') Text font weight
             color : (str; default='k') Text font color
-            yaxis : (str; default='primary') choices are primary
-                    or secondary if shared_ax exists.
         """
 
-        axis = self.ax
-        if yaxis == 'secondary':
-            if self.shared_ax is None:
-                raise ValueError('Unable to add y label.  Secondary ' +
-                      'y axis does not exist.')
-            axis = self.shared_ax
-
-        axis.set_ylabel(ylabel=ylabel, loc=loc, fontsize=fontsize,
-                        fontweight=fontweight, color=color)
+        self.ax.set_ylabel(ylabel=ylabel, loc=loc, fontsize=fontsize,
+                           fontweight=fontweight, color=color)
 
     def add_colorbar(self, label=None, orientation='horizontal',
                      label_fontsize=12, extend='neither'):
@@ -214,8 +194,6 @@ class CreatePlot(EMCPyPlots):
 
         super().__init__(figsize)
         self.ax = self.fig.add_subplot(111)
-        self.shared_ax = None
-        self.shared_ay = None
 
     def draw_data(self, plot_list):
         """
@@ -259,11 +237,10 @@ class CreatePlot(EMCPyPlots):
         if plotobj.sort:
             idx = z.argsort()
             x, y, z = plotobj.x[idx], plotobj.y[idx], z[idx]
-        axis = self._determine_axis(plotobj.plot_ax)
-        cs = axis.scatter(x, y, c=z,
-                          s=plotobj.markersize,
-                          cmap=plotobj.cmap,
-                          label=plotobj.label)
+        cs = self.ax.scatter(x, y, c=z,
+                             s=plotobj.markersize,
+                             cmap=plotobj.cmap,
+                             label=plotobj.label)
         norm = Normalize(vmin=np.min(z), vmax=np.max(z))
 
         if plotobj.colorbar:
@@ -273,112 +250,89 @@ class CreatePlot(EMCPyPlots):
         """
         Uses Scatter object to plot on axis.
         """
-        axis = self._determine_axis(plotobj.plot_ax)
 
         # checks to see if density attribute is True
         if plotobj.density:
             self._density_scatter(plotobj)
 
         else:
-            s = axis.scatter(plotobj.x, plotobj.y,
-                             s=plotobj.markersize,
-                             color=plotobj.color,
-                             marker=plotobj.marker,
-                             vmin=plotobj.vmin,
-                             vmax=plotobj.vmax,
-                             alpha=plotobj.alpha,
-                             linewidths=plotobj.linewidths,
-                             edgecolors=plotobj.edgecolors,
-                             label=plotobj.label)
+            s = self.ax.scatter(plotobj.x, plotobj.y,
+                                s=plotobj.markersize,
+                                color=plotobj.color,
+                                marker=plotobj.marker,
+                                vmin=plotobj.vmin,
+                                vmax=plotobj.vmax,
+                                alpha=plotobj.alpha,
+                                linewidths=plotobj.linewidths,
+                                edgecolors=plotobj.edgecolors,
+                                label=plotobj.label)
 
         # checks to see if linear regression attribute is True
         if plotobj.linear_regression:
             y_pred, r_sq, intercept, slope = get_linear_regression(plotobj.x,
                                                                    plotobj.y)
             label = f"y = {slope:.4f}x + {intercept:.4f}\nR\u00b2 : {r_sq:.4f}"
-            axis.plot(plotobj.x, y_pred, color=plotobj.lr_color,
-                      linewidth=plotobj.lr_linewidth, label=label)
+            self.ax.plot(plotobj.x, y_pred, color=plotobj.lr_color,
+                         linewidth=plotobj.lr_linewidth, label=label)
 
     def _histogram(self, plotobj):
         """
         Uses Histogram object to plot on axis.
         """
 
-        axis = self._determine_axis(plotobj.plot_ax)
-        axis.hist(plotobj.data,
-                  bins=plotobj.bins,
-                  range=plotobj.range,
-                  density=plotobj.density,
-                  weights=plotobj.weights,
-                  cumulative=plotobj.cumulative,
-                  bottom=plotobj.bottom,
-                  histtype=plotobj.histtype,
-                  align=plotobj.align,
-                  orientation=plotobj.orientation,
-                  rwidth=plotobj.rwidth,
-                  log=plotobj.log,
-                  color=plotobj.color,
-                  label=plotobj.label,
-                  stacked=plotobj.stacked,
-                  alpha=plotobj.alpha)
+        self.ax.hist(plotobj.data,
+                     bins=plotobj.bins,
+                     range=plotobj.range,
+                     density=plotobj.density,
+                     weights=plotobj.weights,
+                     cumulative=plotobj.cumulative,
+                     bottom=plotobj.bottom,
+                     histtype=plotobj.histtype,
+                     align=plotobj.align,
+                     orientation=plotobj.orientation,
+                     rwidth=plotobj.rwidth,
+                     log=plotobj.log,
+                     color=plotobj.color,
+                     label=plotobj.label,
+                     stacked=plotobj.stacked,
+                     alpha=plotobj.alpha)
 
     def _lineplot(self, plotobj):
         """
         Uses LinePlot object to plot on axis.
         """
-        axis = self._determine_axis(plotobj.plot_ax)
-        axis.plot(plotobj.x,
-                  plotobj.y,
-                  color=plotobj.color,
-                  linestyle=plotobj.linestyle,
-                  linewidth=plotobj.linewidth,
-                  marker=plotobj.marker,
-                  markersize=plotobj.markersize,
-                  alpha=plotobj.alpha,
-                  label=plotobj.label)
+
+        self.ax.plot(plotobj.x,
+                     plotobj.y,
+                     color=plotobj.color,
+                     linestyle=plotobj.linestyle,
+                     linewidth=plotobj.linewidth,
+                     marker=plotobj.marker,
+                     markersize=plotobj.markersize,
+                     alpha=plotobj.alpha,
+                     label=plotobj.label)
 
     def _verticalline(self, plotobj):
         """
         Uses VerticalLine object to plot on axis.
         """
 
-        axis = self._determine_axis(plotobj.plot_ax)
-        axis.axvline(plotobj.x,
-                     color=plotobj.color,
-                     linestyle=plotobj.linestyle,
-                     linewidth=plotobj.linewidth,
-                     label=plotobj.label)
+        self.ax.axvline(plotobj.x,
+                        color=plotobj.color,
+                        linestyle=plotobj.linestyle,
+                        linewidth=plotobj.linewidth,
+                        label=plotobj.label)
 
     def _horizontalline(self, plotobj):
         """
         Uses HorizontalLine object to plot on axis.
         """
 
-        axis = self._determine_axis(plotobj.plot_ax)
-        axis.axhline(plotobj.y,
-                     color=plotobj.color,
-                     linestyle=plotobj.linestyle,
-                     linewidth=plotobj.linewidth,
-                     label=plotobj.label)
-
-    def _determine_axis(self, requested_axis):
-        """
-        Determine which axis to use for plotting.  Default is self.ax.
-        Return:
-            correct axis for plotting
-        """
-        if requested_axis == 'shared_ax':
-            if self.shared_ax is None:
-                self.shared_ax = self.ax.twinx()
-            axis = self.shared_ax
-        elif requested_axis == 'shared_ay':
-            if self.shared_ay is None:
-                self.shared_ay = self.ax.twiny()
-            axis = self.shared_ay
-        else:
-            axis = self.ax
-
-        return axis
+        self.ax.axhline(plotobj.y,
+                        color=plotobj.color,
+                        linestyle=plotobj.linestyle,
+                        linewidth=plotobj.linewidth,
+                        label=plotobj.label)
 
     def add_legend(self, loc='upper left',
                    fontsize='medium'):
@@ -693,7 +647,10 @@ class CreateMap(EMCPyPlots):
         """
         Add coastline to map axes. (Only feature that currently works)
         """
-        self.ax.add_feature(cfeature.COASTLINE)
+        self.ax.add_feature(cfeature.GSHHSFeature(scale='auto'))
+
+        # Will uncomment when we can get cfeatures to work
+        # self.ax.add_feature(cfeature.COASTLINE)
 
     def _add_borders(self):
         """
