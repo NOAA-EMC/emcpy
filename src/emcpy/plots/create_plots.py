@@ -519,7 +519,8 @@ class CreatePlot(EMCPyPlots):
         """
         valid_scales = ['log', 'linear', 'symlog', 'logit']
         if scale not in valid_scales:
-            raise ValueError(f'requested scale {scale} is invalid. Valid choices are: {" | ".join(valid_scales)}')
+            raise ValueError(f'requested scale {scale} is invalid. Valid '
+                             f'choices are: {" | ".join(valid_scales)}')
 
         self.ax.set_yscale(scale)
 
@@ -550,12 +551,13 @@ class CreateMap(EMCPyPlots):
 
         if str(proj_obj) not in ['npstere', 'spstere']:
             ax.set_extent(domain.extent)
-            ax.set_xticks(domain.xticks, crs=ccrs.PlateCarree())
-            ax.set_yticks(domain.yticks, crs=ccrs.PlateCarree())
-            lon_formatter = LongitudeFormatter(zero_direction_label=False)
-            lat_formatter = LatitudeFormatter()
-            ax.xaxis.set_major_formatter(lon_formatter)
-            ax.yaxis.set_major_formatter(lat_formatter)
+            if str(proj_obj) not in ['lamconf']:
+                ax.set_xticks(domain.xticks, crs=ccrs.PlateCarree())
+                ax.set_yticks(domain.yticks, crs=ccrs.PlateCarree())
+                lon_formatter = LongitudeFormatter(zero_direction_label=False)
+                lat_formatter = LatitudeFormatter()
+                ax.xaxis.set_major_formatter(lon_formatter)
+                ax.yaxis.set_major_formatter(lat_formatter)
 
         self.ax = ax
 
