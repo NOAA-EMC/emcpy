@@ -686,8 +686,10 @@ class CreateMap(EMCPyPlots):
                     between 0 (transparent) and 1 (opaque)
             linestyle : (str; default='-') Line style
         """
-        self.ax.gridlines(crs=ccrs.PlateCarree(), linewidth=linewidth,
-                          color=color, alpha=alpha, linestyle=linestyle)
+		self.ax.add_feature(cfeature.GSHHSFeature(scale='auto'))
+
+        # Will uncomment when we can get cfeatures to work
+        # self.ax.add_feature(cfeature.COASTLINE)
 
     def _add_coastlines(self):
         """
