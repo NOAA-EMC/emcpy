@@ -100,21 +100,22 @@ sea surface temperature:
   variable type: conventional
 tc pressure:
   cmap: rainbow
-  contour interval: 4
-  diff contour interval: 0.5
-  diff range: [-5, 5]
+  contour interval: 400
+  diff contour interval: 50
+  diff range: [-500, 500]
   name: tc pressure
-  range: [800, 1050]
+  range: [80000, 105000]
   short name: tcp
-  units: hPa
+  units: Pa
   variable type: conventional
 bending angle:
   cmap: viridis
   contour interval: 0.001
-  diff contour interval: 0.01
-  diff range: [-2, 2]
+  diff contour interval: 0.001
+  diff range: [-0.05, 0.05]
   name: bending angle
-  range: [0, 0.075]
+  range: [-0.001., 0.08]
   short name: gps
   units: rad
   variable type: conventional
+  
