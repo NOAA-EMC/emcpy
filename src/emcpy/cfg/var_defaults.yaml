@@ -110,7 +110,7 @@ tc pressure:
   variable type: conventional
 bending angle:
   cmap: viridis
-  contour interval: 0.0001
+  contour interval: 0.001
   diff contour interval: 0.01
   diff range: [-2, 2]
   name: bending angle
