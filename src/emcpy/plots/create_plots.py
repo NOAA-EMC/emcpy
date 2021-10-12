@@ -101,7 +101,7 @@ class EMCPyPlots:
         if yaxis == 'secondary':
             if self.shared_ax is None:
                 raise ValueError('Unable to add y label.  Secondary ' +
-                      'y axis does not exist.')
+                                 'y axis does not exist.')
             axis = self.shared_ax
 
         axis.set_ylabel(ylabel=ylabel, loc=loc, fontsize=fontsize,
@@ -168,13 +168,13 @@ class EMCPyPlots:
         self.ax.annotate(outstr, xy=(xloc, yloc), xycoords='axes fraction',
                          fontsize=fontsize, horizontalalignment='center',
                          verticalalignment='top')
-    
+
     def add_legend(self, loc='best',
                    fontsize='medium',
                    handlesize=20):
         """
         Adds legend to plot.
-        
+
         Args:
             loc : (str; default='best') location of the legend.
                  Options include: ['upper left', 'upper right',
