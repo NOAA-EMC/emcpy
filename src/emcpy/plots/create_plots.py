@@ -101,7 +101,7 @@ class EMCPyPlots:
         if yaxis == 'secondary':
             if self.shared_ax is None:
                 raise ValueError('Unable to add y label.  Secondary ' +
-                      'y axis does not exist.')
+                                 'y axis does not exist.')
             axis = self.shared_ax
 
         axis.set_ylabel(ylabel=ylabel, loc=loc, fontsize=fontsize,
@@ -168,6 +168,32 @@ class EMCPyPlots:
         self.ax.annotate(outstr, xy=(xloc, yloc), xycoords='axes fraction',
                          fontsize=fontsize, horizontalalignment='center',
                          verticalalignment='top')
+
+    def add_legend(self, loc='best',
+                   fontsize='medium',
+                   handlesize=20):
+        """
+        Adds legend to plot.
+
+        Args:
+            loc : (str; default='best') location of the legend.
+                 Options include: ['upper left', 'upper right',
+                 'lower left', 'lower right', 'upper center',
+                 'lower center', 'center left', 'center right',
+                 'center', 'best']
+            fontsize : (int or str; default='medium') the font
+                size of the legend.
+                Options include ['xx-small', 'x-small', 'small',
+                'medium', 'large', 'x-large', 'xx-large'] or an
+                integer value
+            handlesize : (int; default=20) changes the size of the
+                shape in the legend. ** Does not change size of a
+                line from a lineplot.
+        """
+
+        legend = self.ax.legend(loc=loc, fontsize=fontsize)
+        for i, key in enumerate(legend.legendHandles):
+            legend.legendHandles[i]._sizes = [handlesize]
 
     def add_text(self, xloc, yloc, text, fontsize=12,
                  fontweight='normal', color='k', alpha=1.,
@@ -379,14 +405,6 @@ class CreatePlot(EMCPyPlots):
             axis = self.ax
 
         return axis
-
-    def add_legend(self, loc='upper left',
-                   fontsize='medium'):
-        """
-        Adds legend to plot.
-        """
-
-        self.ax.legend(loc=loc, fontsize=fontsize)
 
     def add_grid(self,
                  linewidth=1,
@@ -617,16 +635,27 @@ class CreateMap(EMCPyPlots):
         """
         Plots MapScatter object on map axes.
         """
-
-        cs = self.ax.scatter(plot.longitude,
-                             plot.latitude,
-                             c=plot.data,
-                             s=plot.markersize,
-                             cmap=plot.cmap,
-                             marker=plot.marker,
-                             vmin=plot.vmin,
-                             vmax=plot.vmax,
-                             transform=self.proj_obj.projection)
+        if plot.data is None:
+            cs = self.ax.scatter(plot.longitude,
+                                 plot.latitude,
+                                 s=plot.markersize,
+                                 color=plot.color,
+                                 marker=plot.marker,
+                                 vmin=plot.vmin,
+                                 vmax=plot.vmax,
+                                 label=plot.label,
+                                 transform=self.proj_obj.projection)
+        else:
+            cs = self.ax.scatter(plot.longitude,
+                                 plot.latitude,
+                                 c=plot.data,
+                                 s=plot.markersize,
+                                 cmap=plot.cmap,
+                                 marker=plot.marker,
+                                 vmin=plot.vmin,
+                                 vmax=plot.vmax,
+                                 label=plot.label,
+                                 transform=self.proj_obj.projection)
         if plot.colorbar:
             self.cs = cs
 

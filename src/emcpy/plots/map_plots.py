@@ -1,13 +1,13 @@
 class MapScatter:
 
-    def __init__(self, latitude, longitude, data):
+    def __init__(self, latitude, longitude, data=None):
         """
         Constructor for MapScatter.
 
         Args:
             latitude : (array type) Latitude data
             longitude : (array type) Longitude data
-            data : (array type) data to be plotted
+            data : (array type; default=None) data to be plotted
         """
         self.plottype = 'map_scatter'
 
@@ -17,12 +17,16 @@ class MapScatter:
 
         self.marker = 'o'
         self.markersize = 5
-        self.cmap = 'viridis'
+        if data is None:
+            self.color = 'tab:blue'
+        else:
+            self.cmap = 'viridis'
         self.edgecolors = None
         self.alpha = None
         self.vmin = None
         self.vmax = None
-        self.colorbar = True
+        self.label = None
+        self.colorbar = False if data is None else True
 
 
 class MapGridded:
