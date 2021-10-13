@@ -169,9 +169,11 @@ class EMCPyPlots:
                          fontsize=fontsize, horizontalalignment='center',
                          verticalalignment='top')
 
-    def add_legend(self, loc='best',
-                   fontsize='medium',
-                   handlesize=20):
+    def add_legend(self, loc='best', ncol=1, fontsize='medium',
+                   labelcolor='black', markersize=20, markerfirst=True,
+                   frameon=True, fancybox=True, shadow=False,
+                   framealpha=0.8, facecolor='inherit', edgecolor='lightgray',
+                   title=None, title_fontsize='medium'):
         """
         Adds legend to plot.
 
@@ -191,9 +193,16 @@ class EMCPyPlots:
                 line from a lineplot.
         """
 
-        legend = self.ax.legend(loc=loc, fontsize=fontsize)
+        legend = self.ax.legend(
+            loc=loc, ncol=ncol, fontsize=fontsize,
+            labelcolor=labelcolor, markerfirst=markerfirst,
+            frameon=frameon, fancybox=fancybox, shadow=shadow,
+            framealpha=framealpha, facecolor=facecolor,
+            edgecolor=edgecolor, title=title,
+            title_fontsize=title_fontsize)
+
         for i, key in enumerate(legend.legendHandles):
-            legend.legendHandles[i]._sizes = [handlesize]
+            legend.legendHandles[i]._sizes = [markersize]
 
     def add_text(self, xloc, yloc, text, fontsize=12,
                  fontweight='normal', color='k', alpha=1.,
