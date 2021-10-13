@@ -169,9 +169,11 @@ class EMCPyPlots:
                          fontsize=fontsize, horizontalalignment='center',
                          verticalalignment='top')
 
-    def add_legend(self, loc='best',
-                   fontsize='medium',
-                   handlesize=20):
+    def add_legend(self, loc='best', ncol=1, fontsize='medium',
+                   labelcolor='black', markersize=20, markerfirst=True,
+                   frameon=True, fancybox=True, shadow=False,
+                   framealpha=0.8, facecolor='inherit', edgecolor='lightgray',
+                   title=None, title_fontsize='medium'):
         """
         Adds legend to plot.
 
@@ -181,19 +183,43 @@ class EMCPyPlots:
                  'lower left', 'lower right', 'upper center',
                  'lower center', 'center left', 'center right',
                  'center', 'best']
+            ncol : (int) number of columsn legend is split into
             fontsize : (int or str; default='medium') the font
                 size of the legend.
                 Options include ['xx-small', 'x-small', 'small',
                 'medium', 'large', 'x-large', 'xx-large'] or an
                 integer value
-            handlesize : (int; default=20) changes the size of the
-                shape in the legend. ** Does not change size of a
-                line from a lineplot.
+            labelcolor : (str; default='black') color of label text
+            markersize : (int; default=20) size of marker in legend
+            markerfirst : (bool; default=True) places marker in front
+                          of label text. If False, label will be first
+            frameon : (bool; default=True) Puts legend on a patch
+            fancybox : (bool; default=True) Applies round edges to patch
+            shadow : (bool; default=False) Draws shadow behind legend
+            framealpha : (float; default=0.8) Alpha transparency of
+                         legend background
+            facecolor : (str; default='inherit') Background color of
+                        legend
+            edgecolor : (str; default='lightgray') Legend's background
+                        edge color
+            title : (str; default=None) Title of legend
+            title_fonstize : (int or str: default='medium') the font of
+                             the legend title.
+                             Options include ['xx-small', 'x-small',
+                             'small', 'medium', 'large', 'x-large',
+                             'xx-large'] or an integer value
         """
 
-        legend = self.ax.legend(loc=loc, fontsize=fontsize)
+        legend = self.ax.legend(
+            loc=loc, ncol=ncol, fontsize=fontsize,
+            labelcolor=labelcolor, markerfirst=markerfirst,
+            frameon=frameon, fancybox=fancybox, shadow=shadow,
+            framealpha=framealpha, facecolor=facecolor,
+            edgecolor=edgecolor, title=title,
+            title_fontsize=title_fontsize)
+
         for i, key in enumerate(legend.legendHandles):
-            legend.legendHandles[i]._sizes = [handlesize]
+            legend.legendHandles[i]._sizes = [markersize]
 
     def add_text(self, xloc, yloc, text, fontsize=12,
                  fontweight='normal', color='k', alpha=1.,
