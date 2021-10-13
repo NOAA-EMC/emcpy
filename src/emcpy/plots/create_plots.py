@@ -183,14 +183,31 @@ class EMCPyPlots:
                  'lower left', 'lower right', 'upper center',
                  'lower center', 'center left', 'center right',
                  'center', 'best']
+            ncol : (int) number of columsn legend is split into
             fontsize : (int or str; default='medium') the font
                 size of the legend.
                 Options include ['xx-small', 'x-small', 'small',
                 'medium', 'large', 'x-large', 'xx-large'] or an
                 integer value
-            handlesize : (int; default=20) changes the size of the
-                shape in the legend. ** Does not change size of a
-                line from a lineplot.
+            labelcolor : (str; default='black') color of label text
+            markersize : (int; default=20) size of marker in legend
+            markerfirst : (bool; default=True) places marker in front
+                          of label text. If False, label will be first
+            frameon : (bool; default=True) Puts legend on a patch
+            fancybox : (bool; default=True) Applies round edges to patch
+            shadow : (bool; default=False) Draws shadow behind legend
+            framealpha : (float; default=0.8) Alpha transparency of
+                         legend background
+            facecolor : (str; default='inherit') Background color of
+                        legend
+            edgecolor : (str; default='lightgray') Legend's background 
+                        edge color
+            title : (str; default=None) Title of legend
+            title_fonstize : (int or str: default='medium') the font of
+                             the legend title.
+                             Options include ['xx-small', 'x-small',
+                             'small', 'medium', 'large', 'x-large',
+                             'xx-large'] or an integer value
         """
 
         legend = self.ax.legend(
