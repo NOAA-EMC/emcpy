@@ -200,7 +200,7 @@ class EMCPyPlots:
                          legend background
             facecolor : (str; default='inherit') Background color of
                         legend
-            edgecolor : (str; default='lightgray') Legend's background 
+            edgecolor : (str; default='lightgray') Legend's background
                         edge color
             title : (str; default=None) Title of legend
             title_fonstize : (int or str: default='medium') the font of
