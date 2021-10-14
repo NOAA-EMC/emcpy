@@ -438,10 +438,10 @@ class CreatePlot(EMCPyPlots):
         return axis
 
     def add_unity(self,
-                 linewidth=1,
-                 color='gray',
-                 alpha=None,
-                 linestyle='-'):
+                  linewidth=1,
+                  color='gray',
+                  alpha=None,
+                  linestyle='-'):
         """
         Plots 1:1 line on plot.
 
