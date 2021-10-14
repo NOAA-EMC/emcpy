@@ -68,9 +68,11 @@ class Scatter(BasePlot):
         """
         self.density = True
         self.sort = True
-        self.cmap = 'magma'
+        self.cmap = 'nipy_spectral_r'
         self.colorbar = True
         self.bins = [100, 100]
+        self.interp = 'linear'
+        self.nsamples = True
 
 
 class Histogram(BasePlot):
