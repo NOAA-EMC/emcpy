@@ -298,12 +298,16 @@ class CreatePlot(EMCPyPlots):
         Uses Scatter Object to plot density scatter colored by
         2d histogram.
         """
-        data, x_e, y_e = np.histogram2d(plotobj.x, plotobj.y,
+        _idx = np.logical_and(~np.isnan(plotobj.x), ~np.isnan(plotobj.y))
+        data, x_e, y_e = np.histogram2d(plotobj.x[_idx], plotobj.y[_idx],
                                         bins=plotobj.bins,
-                                        density=True)
+                                        density=not plotobj.nsamples)
+        if plotobj.nsamples:
+            # compute percentage of total for each bin
+            data = data / np.count_nonzero(_idx) * 100.
         z = interpn((0.5*(x_e[1:] + x_e[:-1]), 0.5*(y_e[1:]+y_e[:-1])),
                     data, np.vstack([plotobj.x, plotobj.y]).T,
-                    method="splinef2d", bounds_error=False)
+                    method=plotobj.interp, bounds_error=False)
         # To be sure to plot all data
         z[np.where(np.isnan(z))] = 0.0
         # Sort the points by density, so that the densest
@@ -316,7 +320,8 @@ class CreatePlot(EMCPyPlots):
                           s=plotobj.markersize,
                           cmap=plotobj.cmap,
                           label=plotobj.label)
-        norm = Normalize(vmin=np.min(z), vmax=np.max(z))
+        # below doing nothing? fix/remove in subsequent PR?
+        # norm = Normalize(vmin=np.min(z), vmax=np.max(z))
 
         if plotobj.colorbar:
             self.cs = cs
@@ -431,6 +436,25 @@ class CreatePlot(EMCPyPlots):
             axis = self.ax
 
         return axis
+
+    def add_unity(self,
+                  linewidth=1,
+                  color='gray',
+                  alpha=None,
+                  linestyle='-'):
+        """
+        Plots 1:1 line on plot.
+
+        Args:
+            linewidth : (int; default=1) Line thickness
+            color : (str; default='gray') Line color
+            alpha : (float; default=None) The alpha value,
+                    between 0 (transparent) and 1 (opaque)
+            linestyle : (str; default='-') Line style
+        """
+        _xy = np.array(self.ax.get_xlim())
+        self.ax.plot(_xy, _xy, linewidth=linewidth, color=color,
+                     alpha=alpha, linestyle=linestyle)
 
     def add_grid(self,
                  linewidth=1,
