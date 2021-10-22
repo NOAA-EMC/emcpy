@@ -1,3 +1,4 @@
+import numpy as np
 import matplotlib.pyplot as plt
 from emcpy.plots import CreateMap
 from emcpy.plots.map_tools import Domain, MapProjection
