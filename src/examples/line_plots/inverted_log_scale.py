@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from emcpy.plots.plots import LinePlot
 from emcpy.plots.create_plots import CreatePlot
 
@@ -28,3 +29,4 @@ myplt.set_yticklabels(labels=ylabels)
 
 # Return matplotlib figure
 fig = myplt.return_figure()
+fig.savefig('inverted_log_scale_line_plot.png')

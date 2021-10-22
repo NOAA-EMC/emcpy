@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from emcpy.plots.plots import Histogram
 from emcpy.plots.create_plots import CreatePlot
 
@@ -23,3 +24,7 @@ myplt.add_title(label='Test Histogram Plot')
 myplt.add_xlabel(xlabel='X Axis Label')
 myplt.add_ylabel(ylabel='Y Axis Label')
 myplt.add_legend()
+
+# Return matplotlib figure
+fig = myplt.return_figure()
+fig.savefig('histogram.png')

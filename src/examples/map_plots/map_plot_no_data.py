@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 from emcpy.plots import CreateMap
 from emcpy.plots.map_tools import Domain, MapProjection
 
@@ -12,3 +13,7 @@ mymap.add_features(['coastlines'])
 # Add x and y labels
 mymap.add_xlabel(xlabel='longitude')
 mymap.add_ylabel(ylabel='latitude')
+
+# Return matplotlib figure
+fig = myplt.return_figure()
+fig.savefig('map_plot_no_data.png')

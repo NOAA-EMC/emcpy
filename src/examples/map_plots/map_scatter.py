@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 from emcpy.plots import CreateMap
 from emcpy.plots.map_tools import Domain, MapProjection
 from emcpy.plots.map_plots import MapScatter
@@ -39,3 +40,7 @@ stats_dict = {
     'vmax': 300,
 }
 mymap.add_stats_dict(stats_dict=stats_dict)
+
+# Return matplotlib figure
+fig = myplt.return_figure()
+fig.savefig('map_scatter.png')

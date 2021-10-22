@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from emcpy.plots.plots import Scatter
 from emcpy.plots.create_plots import CreatePlot
 from emcpy.stats import get_linear_regression
@@ -23,3 +24,7 @@ myplt.add_title(label='Test Scatter Plot')
 myplt.add_xlabel(xlabel='X Axis Label')
 myplt.add_ylabel(ylabel='Y Axis Label')
 myplt.add_legend()
+
+# Return matplotlib figure
+fig = myplt.return_figure()
+fig.savefig('scatter_w_regression.png')

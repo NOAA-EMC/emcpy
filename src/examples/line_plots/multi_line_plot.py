@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from emcpy.plots.plots import LinePlot
 from emcpy.plots.create_plots import CreatePlot
 
@@ -38,3 +39,4 @@ myplt.add_legend()
 
 # Return matplotlib figure
 fig = myplt.return_figure()
+fig.savefig('multi_line_plot.png')

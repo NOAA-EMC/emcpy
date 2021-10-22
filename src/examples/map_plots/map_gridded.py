@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 from emcpy.plots import CreateMap
 from emcpy.plots.map_tools import Domain, MapProjection
 from emcpy.plots.map_plots import MapGridded
@@ -29,3 +30,7 @@ mymap.add_title(label='YYYYMMDDHHMM',
 mymap.add_xlabel(xlabel='longitude')
 mymap.add_ylabel(ylabel='latitude')
 mymap.add_grid()
+
+# Return matplotlib figure
+fig = myplt.return_figure()
+fig.savefig('map_gridded.png')
