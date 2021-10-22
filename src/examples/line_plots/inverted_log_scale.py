@@ -22,5 +22,9 @@ myplt.add_ylabel(ylabel='Y Axis Label')
 myplt.set_yscale('log')
 myplt.invert_yaxis()
 
+# Set new y labels
 ylabels = [0, 50, 100, 500, 1000, 2000]
 myplt.set_yticklabels(labels=ylabels)
+
+# Return matplotlib figure
+fig = myplt.return_figure()
