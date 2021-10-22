@@ -15,5 +15,5 @@ mymap.add_xlabel(xlabel='longitude')
 mymap.add_ylabel(ylabel='latitude')
 
 # Return matplotlib figure
-fig = myplt.return_figure()
+fig = mymap.return_figure()
 fig.savefig('map_plot_no_data.png')

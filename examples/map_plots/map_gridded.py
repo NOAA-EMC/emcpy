@@ -32,5 +32,5 @@ mymap.add_ylabel(ylabel='latitude')
 mymap.add_grid()
 
 # Return matplotlib figure
-fig = myplt.return_figure()
+fig = mymap.return_figure()
 fig.savefig('map_gridded.png')

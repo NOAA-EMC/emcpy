@@ -42,5 +42,5 @@ stats_dict = {
 mymap.add_stats_dict(stats_dict=stats_dict)
 
 # Return matplotlib figure
-fig = myplt.return_figure()
+fig = mymap.return_figure()
 fig.savefig('map_scatter.png')
