@@ -7,7 +7,7 @@ x = [1, 2, 3, 4, 5]
 y = [1, 2, 3, 4, 5]
 
 # Create line plot object
-lp = LinePlot(x1, y1)
+lp = LinePlot(x, y)
 lp.label = 'line'
 
 # Add line plot object to list
