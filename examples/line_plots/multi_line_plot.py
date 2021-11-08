@@ -1,8 +1,5 @@
 import numpy as np
-import matplotlib
-matplotlib.use('agg')
 import matplotlib.pyplot as plt
-#import matplotlib.pyplot as plt
 from emcpy.plots.plots import LinePlot
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 from pprint import pprint
