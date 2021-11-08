@@ -820,10 +820,10 @@ class CreateFigure(Figure):
             plotobj : (CreatePlot) object for bbox transformation.
             loc : (str; default='upper left') location of legend box.
         """
-        coords=self._getcoords(loc)
+        coords = self._getcoords(loc)
         self.legend(loc=loc, bbox_to_anchor=coords, bbox_transform=plotobj.ax.transAxes)
 
-    def _getcoords(self,loc):
+    def _getcoords(self, loc):
         """
         Return the relative coordinate tupal for a given location string.
 
@@ -831,13 +831,13 @@ class CreateFigure(Figure):
             loc : (str; default='upper left') location of legend box.
         """
         return {
-            'upper left'   : (0,1),
-            'upper center' : (0.5,1),
-            'upper right'  : (1,1),
-            'center left'  : (0,0.5),
-            'center'       : (0.5,0.5),
-            'center right' : (1,0.5),
-            'lower left'   : (0,0),
-            'lower center' : (0.5,0),
-            'lower right'  : (1,0)
-        }.get(loc, (0,1))    # upper left is default if loc is not found
+            'upper left': (0, 1),
+            'upper center': (0.5, 1),
+            'upper right': (1, 1),
+            'center left': (0, 0.5),
+            'center': (0.5, 0.5),
+            'center right': (1, 0.5),
+            'lower left': (0, 0),
+            'lower center': (0.5, 0),
+            'lower right': (1, 0)
+        }.get(loc, (0, 1))    # upper left is default if loc is not found
