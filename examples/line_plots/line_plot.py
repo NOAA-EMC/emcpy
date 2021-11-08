@@ -1,5 +1,4 @@
 import numpy as np
-
 import matplotlib.pyplot as plt
 from emcpy.plots.plots import LinePlot
 from emcpy.plots.create_plots import CreatePlot
