@@ -45,4 +45,4 @@ myplt.add_xlabel(xlabel='Secondary X Axis Label', xaxis='secondary')
 
 fig = myplt.return_figure()
 fig.add_legend(plotobj=myplt, loc='upper right')
-fig.savefig('test_line_plot_2_x_axes.png')
+fig.savefig('multi_line_plot.png')
