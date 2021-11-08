@@ -825,7 +825,7 @@ class CreateFigure(Figure):
 
     def _getcoords(self, loc):
         """
-        Return the relative coordinate tupal for a given location string.
+        Return the relative coordinate tuple for a given location string.
 
         Args:
             loc : (str; default='upper left') location of legend box.
