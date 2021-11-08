@@ -3,13 +3,14 @@ import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
+from matplotlib.figure import Figure
 from matplotlib.colors import Normalize
 from scipy.interpolate import interpn
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 from emcpy.plots.map_tools import Domain, MapProjection
 from emcpy.stats import get_linear_regression
 
-__all__ = ['CreatePlot', 'CreateMap']
+__all__ = ['CreatePlot', 'CreateMap', 'CreateFigure']
 
 
 class EMCPyPlots:
@@ -21,8 +22,7 @@ class EMCPyPlots:
         Args:
             figsize : (tuple) Figure dimension size
         """
-
-        self.fig = plt.figure(figsize=figsize)
+        self.fig = plt.figure(figsize=figsize, FigureClass=CreateFigure)
 
         return
 
@@ -263,7 +263,6 @@ class CreatePlot(EMCPyPlots):
         Args:
             figsize : (tuple; default=(8,6)) Figure dimension size
         """
-
         super().__init__(figsize)
         self.ax = self.fig.add_subplot(111)
         self.shared_ax = None
@@ -800,3 +799,45 @@ class CreateMap(EMCPyPlots):
         Add rivers to map axes.
         """
         self.ax.add_feature(sfeature.RIVERS)
+
+
+class CreateFigure(Figure):
+    """
+    Extends class figure for plotted data.
+    """
+
+    def __init__(self, *args, **kwargs):
+        """
+        CreatePlot constructor.
+        """
+        super().__init__(*args, **kwargs)
+
+    def add_legend(self, plotobj, loc='upper left'):
+        """
+        Add a legend to a CreateFigure class object.
+
+        Args:
+            plotobj : (CreatePlot) object for bbox transformation.
+            loc : (str; default='upper left') location of legend box.
+        """
+        coords=self._getcoords(loc)
+        self.legend(loc=loc, bbox_to_anchor=coords, bbox_transform=plotobj.ax.transAxes)
+
+    def _getcoords(self,loc):
+        """
+        Return the relative coordinate tupal for a given location string.
+
+        Args:
+            loc : (str; default='upper left') location of legend box.
+        """
+        return {
+            'upper left'   : (0,1),
+            'upper center' : (0.5,1),
+            'upper right'  : (1,1),
+            'center left'  : (0,0.5),
+            'center'       : (0.5,0.5),
+            'center right' : (1,0.5),
+            'lower left'   : (0,0),
+            'lower center' : (0.5,0),
+            'lower right'  : (1,0)
+        }.get(loc, (0,1))    # upper left is default if loc is not found

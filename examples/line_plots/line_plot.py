@@ -1,5 +1,9 @@
 import numpy as np
+
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from emcpy.plots.plots import LinePlot
 from emcpy.plots.create_plots import CreatePlot
 
@@ -21,8 +25,8 @@ myplt.draw_data(plt_list)
 myplt.add_title(label='Test Line Plot')
 myplt.add_xlabel(xlabel='X Axis Label')
 myplt.add_ylabel(ylabel='Y Axis Label')
-myplt.add_legend()
 
 # Return matplotlib figure
 fig = myplt.return_figure()
+fig.add_legend(plotobj=myplt)
 fig.savefig('line_plot.png')
