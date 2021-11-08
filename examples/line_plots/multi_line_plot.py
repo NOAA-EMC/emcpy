@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from emcpy.plots.plots import LinePlot
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
+
 def _getLineData():
     # generate test data for line plots
 
