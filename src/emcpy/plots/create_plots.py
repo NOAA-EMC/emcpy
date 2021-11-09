@@ -812,16 +812,55 @@ class CreateFigure(Figure):
         """
         super().__init__(*args, **kwargs)
 
-    def add_legend(self, plotobj, loc='upper left'):
+    def add_legend(self, plotobj, loc='upper left', ncol=1, fontsize='medium',
+                   labelcolor='black', markersize=20, markerfirst=True,
+                   frameon=True, fancybox=True, shadow=False,
+                   framealpha=0.8, facecolor='inherit', edgecolor='lightgray',
+                   title=None, title_fontsize='medium'):
         """
         Add a legend to a CreateFigure class object.
 
         Args:
             plotobj : (CreatePlot) object for bbox transformation.
             loc : (str; default='upper left') location of legend box.
+            ncol : (int) number of columsn legend is split into
+            fontsize : (int or str; default='medium') the font
+                size of the legend.
+                Options include ['xx-small', 'x-small', 'small',
+                'medium', 'large', 'x-large', 'xx-large'] or an
+                integer value
+            labelcolor : (str; default='black') color of label text
+            markersize : (int; default=20) size of marker in legend
+            markerfirst : (bool; default=True) places marker in front
+                          of label text. If False, label will be first
+            frameon : (bool; default=True) Puts legend on a patch
+            fancybox : (bool; default=True) Applies round edges to patch
+            shadow : (bool; default=False) Draws shadow behind legend
+            framealpha : (float; default=0.8) Alpha transparency of
+                         legend background
+            facecolor : (str; default='inherit') Background color of
+                        legend
+            edgecolor : (str; default='lightgray') Legend's background
+                        edge color
+            title : (str; default=None) Title of legend
+            title_fonstize : (int or str: default='medium') the font of
+                             the legend title.
+                             Options include ['xx-small', 'x-small',
+                             'small', 'medium', 'large', 'x-large',
+                             'xx-large'] or an integer value
         """
         coords = self._getcoords(loc)
-        self.legend(loc=loc, bbox_to_anchor=coords, bbox_transform=plotobj.ax.transAxes)
+        legend = self.legend(loc=loc, bbox_to_anchor=coords, 
+                    bbox_transform=plotobj.ax.transAxes,
+                    ncol=ncol, fontsize=fontsize,
+                    labelcolor=labelcolor, markerfirst=markerfirst,
+                    frameon=frameon, fancybox=fancybox, shadow=shadow,
+                    framealpha=framealpha, facecolor=facecolor,
+                    edgecolor=edgecolor, title=title,
+                    title_fontsize=title_fontsize)
+
+        for i, key in enumerate(legend.legendHandles):
+            legend.legendHandles[i]._sizes = [markersize]
 
     def _getcoords(self, loc):
         """
