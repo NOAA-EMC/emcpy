@@ -21,8 +21,8 @@ myplt.draw_data(plt_list)
 myplt.add_title(label='Test Line Plot')
 myplt.add_xlabel(xlabel='X Axis Label')
 myplt.add_ylabel(ylabel='Y Axis Label')
-myplt.add_legend()
 
 # Return matplotlib figure
 fig = myplt.return_figure()
+fig.add_legend(plotobj=myplt)
 fig.savefig('line_plot.png')

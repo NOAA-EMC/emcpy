@@ -28,9 +28,9 @@ def test_line_plot():
     myplt.add_title(label='Test Line Plot')
     myplt.add_xlabel(xlabel='X Axis Label')
     myplt.add_ylabel(ylabel='Y Axis Label')
-    myplt.add_legend()
 
     fig = myplt.return_figure()
+    fig.add_legend(plotobj=myplt, loc='upper right')
     fig.savefig('test_line_plot.png')
 
 
@@ -62,7 +62,7 @@ def test_line_plot_2_x_axes():
     myplt.add_xlabel(xlabel='Secondary X Axis Label', xaxis='secondary')
 
     fig = myplt.return_figure()
-    fig.legend(loc="upper right")
+    fig.add_legend(plotobj=myplt, loc="upper right")
     fig.savefig('test_line_plot_2_x_axes.png')
 
 
@@ -94,7 +94,7 @@ def test_line_plot_2_y_axes():
     myplt.add_ylabel(ylabel='Secondary Y Axis Label', yaxis='secondary')
 
     fig = myplt.return_figure()
-    fig.legend(loc="upper right")
+    fig.add_legend(plotobj=myplt, loc='upper right')
     fig.savefig('test_line_plot_2_y_axes.png')
 
 
