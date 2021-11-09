@@ -850,14 +850,14 @@ class CreateFigure(Figure):
                              'xx-large'] or an integer value
         """
         coords = self._getcoords(loc)
-        legend = self.legend(loc=loc, bbox_to_anchor=coords, 
-                    bbox_transform=plotobj.ax.transAxes,
-                    ncol=ncol, fontsize=fontsize,
-                    labelcolor=labelcolor, markerfirst=markerfirst,
-                    frameon=frameon, fancybox=fancybox, shadow=shadow,
-                    framealpha=framealpha, facecolor=facecolor,
-                    edgecolor=edgecolor, title=title,
-                    title_fontsize=title_fontsize)
+        legend = self.legend(loc=loc, bbox_to_anchor=coords,
+                             bbox_transform=plotobj.ax.transAxes,
+                             ncol=ncol, fontsize=fontsize,
+                             labelcolor=labelcolor, markerfirst=markerfirst,
+                             frameon=frameon, fancybox=fancybox, shadow=shadow,
+                             framealpha=framealpha, facecolor=facecolor,
+                             edgecolor=edgecolor, title=title,
+                             title_fontsize=title_fontsize)
 
         for i, key in enumerate(legend.legendHandles):
             legend.legendHandles[i]._sizes = [markersize]
