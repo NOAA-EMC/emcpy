@@ -21,6 +21,7 @@ class MapScatter:
             self.color = 'tab:blue'
         else:
             self.cmap = 'viridis'
+        self.linewidths = 1.5
         self.edgecolors = None
         self.alpha = None
         self.vmin = None
