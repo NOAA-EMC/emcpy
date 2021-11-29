@@ -1,7 +1,8 @@
 import numpy as np
 
 
-__all__ = ['Scatter', 'Histogram', 'LinePlot']
+__all__ = ['Scatter', 'Histogram', 'LinePlot' 'VerticalLine',
+           'HorizontalLine', 'BarPlot' 'HorizontalBar']
 
 
 class BasePlot:
@@ -174,3 +175,67 @@ class HorizontalLine(BasePlot):
         self.linestyle = '-'
         self.linewidth = 1.5
         self.label = None
+
+
+class BarPlot(BasePlot):
+
+    def __init__(self, x, height):
+        """
+        Constructor for BarPlot.
+
+        Args:
+            x : (array type) x coordinate of bars
+            height : (array type) the height(s) of the bars
+        """
+
+        super().__init__()
+        self.plottype = 'bar_plot'
+
+        self.x = x
+        self.height = height
+
+        self.width = 0.8
+        self.bottom = 0
+        self.align = 'center'
+        self.color = 'tab:blue'
+        self.edgecolor = None
+        self.linewidth = 0
+        self.tick_label = None
+        self.xerr = None
+        self.yerr = None
+        self.ecolor = 'black'
+        self.capsize = 0
+        self.error_kw = {}
+        self.log = False
+
+
+class HorizontalBar(BasePlot):
+
+    def __init__(self, y, width):
+        """
+        Constructor to create a horizontal bar plot.
+
+        Args:
+            y : (array type) y coordinate of bars
+            width : (array type) the width(s) of the bars
+        """
+
+        super().__init__()
+        self.plottype = 'horizontal_bar'
+
+        self.y = y
+        self.width = width
+
+        self.height = 0.8
+        self.left = 0
+        self.align = 'center'
+        self.color = 'tab:blue'
+        self.edgecolor = None
+        self.linewidth = 0
+        self.tick_label = None
+        self.xerr = None
+        self.yerr = None
+        self.ecolor = 'black'
+        self.capsize = 0
+        self.error_kw = {}
+        self.log = False

@@ -2,7 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from emcpy.plots.plots import LinePlot, VerticalLine,\
-    Histogram, Scatter, HorizontalLine
+    Histogram, Scatter, HorizontalLine, BarPlot, \
+    HorizontalBar
 from emcpy.plots.create_plots import CreatePlot
 
 
@@ -207,6 +208,48 @@ def test_scatter_plot_2_y_axes():
     fig.savefig('test_scatter_plot_2_y_axes.png')
 
 
+def test_bar_plot():
+    # Create bar plot with error bars
+
+    x_pos, heights, variance = _getBarData()
+
+    bar = BarPlot(x_pos, heights)
+    bar.color = 'tab:red'
+    bar.yerr = variance
+    bar.capsize = 5.
+
+    myplt = CreatePlot()
+    myplt.draw_data([bar])
+
+    myplt.add_xlabel(xlabel='X Axis Label')
+    myplt.add_ylabel(ylabel='Y Axis Label')
+    myplt.add_title("Test Bar Plot")
+
+    fig = myplt.return_figure()
+    fig.savefig('test_bar_plot.png')
+
+
+def test_horizontal_bar_plot():
+    # Create horizontal bar plot
+
+    y_pos, widths, variance = _getBarData()
+
+    bar = HorizontalBar(y_pos, widths)
+    bar.color = 'tab:green'
+    bar.xerr = variance
+    bar.capsize = 5
+
+    myplt = CreatePlot()
+    myplt.draw_data([bar])
+
+    myplt.add_xlabel(xlabel='X Axis Label')
+    myplt.add_ylabel(ylabel='Y Axis Label')
+    myplt.add_title("Test Horizontal Bar Plot")
+
+    fig = myplt.return_figure()
+    fig.savefig('test_horizontal_bar_plot.png')
+
+
 def _getLineData():
     # generate test data for line plots
 
@@ -243,3 +286,15 @@ def _getScatterData():
     y2 = rng.randn(30)
 
     return x1, y1, x2, y2
+
+
+def _getBarData():
+    # generate test data for bar graphs
+
+    x = ['a', 'b', 'c', 'd', 'e', 'f']
+    heights = [5, 6, 15, 22, 24, 8]
+    variance = [1, 2, 7, 4, 2, 3]
+
+    x_pos = [i for i, _ in enumerate(x)]
+
+    return x_pos, heights, variance

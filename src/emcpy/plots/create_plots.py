@@ -281,7 +281,9 @@ class CreatePlot(EMCPyPlots):
             'histogram': self._histogram,
             'line_plot': self._lineplot,
             'vertical_line': self._verticalline,
-            'horizontal_line': self._horizontalline
+            'horizontal_line': self._horizontalline,
+            'bar_plot': self._barplot,
+            'horizontal_bar': self._hbar
         }
 
         for obj in plot_list:
@@ -416,6 +418,50 @@ class CreatePlot(EMCPyPlots):
                      linestyle=plotobj.linestyle,
                      linewidth=plotobj.linewidth,
                      label=plotobj.label)
+
+    def _barplot(self, plotobj):
+        """
+        Uses BarPlot object to plot on axis.
+        """
+
+        axis = self._determine_axis(plotobj.plot_ax)
+
+        axis.bar(plotobj.x,
+                 plotobj.height,
+                 width=plotobj.width,
+                 bottom=plotobj.bottom,
+                 align=plotobj.align,
+                 color=plotobj.color,
+                 edgecolor=plotobj.edgecolor,
+                 linewidth=plotobj.linewidth,
+                 tick_label=plotobj.tick_label,
+                 xerr=plotobj.xerr,
+                 yerr=plotobj.yerr,
+                 ecolor=plotobj.ecolor,
+                 capsize=plotobj.capsize,
+                 error_kw=plotobj.error_kw,
+                 log=plotobj.log)
+
+    def _hbar(self, plotobj):
+        """
+        Uses HorizontalBar object to plot on axis.
+        """
+        axis = self._determine_axis(plotobj.plot_ax)
+        axis.barh(plotobj.y,
+                  plotobj.width,
+                  height=plotobj.height,
+                  left=plotobj.left,
+                  align=plotobj.align,
+                  color=plotobj.color,
+                  edgecolor=plotobj.edgecolor,
+                  linewidth=plotobj.linewidth,
+                  tick_label=plotobj.tick_label,
+                  xerr=plotobj.xerr,
+                  yerr=plotobj.yerr,
+                  ecolor=plotobj.ecolor,
+                  capsize=plotobj.capsize,
+                  error_kw=plotobj.error_kw,
+                  log=plotobj.log)
 
     def _determine_axis(self, requested_axis):
         """
