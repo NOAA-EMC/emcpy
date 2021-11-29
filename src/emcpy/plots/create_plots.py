@@ -425,7 +425,7 @@ class CreatePlot(EMCPyPlots):
         """
 
         axis = self._determine_axis(plotobj.plot_ax)
-        
+
         axis.bar(plotobj.x,
                  plotobj.height,
                  width=plotobj.width,
@@ -448,20 +448,20 @@ class CreatePlot(EMCPyPlots):
         """
         axis = self._determine_axis(plotobj.plot_ax)
         axis.barh(plotobj.y,
-                 plotobj.width,
-                 height=plotobj.height,
-                 left=plotobj.left,
-                 align=plotobj.align,
-                 color=plotobj.color,
-                 edgecolor=plotobj.edgecolor,
-                 linewidth=plotobj.linewidth,
-                 tick_label=plotobj.tick_label,
-                 xerr=plotobj.xerr,
-                 yerr=plotobj.yerr,
-                 ecolor=plotobj.ecolor,
-                 capsize=plotobj.capsize,
-                 error_kw=plotobj.error_kw,
-                 log=plotobj.log)
+                  plotobj.width,
+                  height=plotobj.height,
+                  left=plotobj.left,
+                  align=plotobj.align,
+                  color=plotobj.color,
+                  edgecolor=plotobj.edgecolor,
+                  linewidth=plotobj.linewidth,
+                  tick_label=plotobj.tick_label,
+                  xerr=plotobj.xerr,
+                  yerr=plotobj.yerr,
+                  ecolor=plotobj.ecolor,
+                  capsize=plotobj.capsize,
+                  error_kw=plotobj.error_kw,
+                  log=plotobj.log)
 
     def _determine_axis(self, requested_axis):
         """
