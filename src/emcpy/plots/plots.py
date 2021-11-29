@@ -184,7 +184,7 @@ class BarPlot(BasePlot):
         Constructor for BarPlot.
 
         Args:
-            y : (array type) y coordinate of bars
+            x : (array type) x coordinate of bars
             height : (array type) the height(s) of the bars
         """
 
@@ -205,7 +205,7 @@ class BarPlot(BasePlot):
         self.yerr = None
         self.ecolor = 'black'
         self.capsize = 0
-        self.error_kw = None
+        self.error_kw = {}
         self.log = False
 
 
@@ -237,5 +237,5 @@ class HorizontalBar(BasePlot):
         self.yerr = None
         self.ecolor = 'black'
         self.capsize = 0
-        self.error_kw = None
+        self.error_kw = {}
         self.log = False

@@ -425,6 +425,7 @@ class CreatePlot(EMCPyPlots):
         """
 
         axis = self._determine_axis(plotobj.plot_ax)
+        
         axis.bar(plotobj.x,
                  plotobj.height,
                  width=plotobj.width,
@@ -446,10 +447,10 @@ class CreatePlot(EMCPyPlots):
         Uses HorizontalBar object to plot on axis.
         """
         axis = self._determine_axis(plotobj.plot_ax)
-        axis.bar(plotobj.y,
+        axis.barh(plotobj.y,
                  plotobj.width,
-                 width=plotobj.height,
-                 bottom=plotobj.left,
+                 height=plotobj.height,
+                 left=plotobj.left,
                  align=plotobj.align,
                  color=plotobj.color,
                  edgecolor=plotobj.edgecolor,
