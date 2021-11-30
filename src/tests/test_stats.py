@@ -1,5 +1,5 @@
 from emcpy.stats import mstats, lregress, ttest, get_weights,\
-                 get_linear_regression, bootstrap
+    get_linear_regression, bootstrap
 import numpy as np
 
 
@@ -11,14 +11,14 @@ def test_mstats():
 def test_lregress():
     x = np.array([1, 2, 2, 4, 5, 6, 6, 8, 9, 10], dtype=np.float32())
     y = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], dtype=np.float32())
-    rc, sb, ssig=lregress(x, y, ci=95.0)
+    rc, sb, ssig = lregress(x, y, ci=95.0)
     print(f' rc, sb, ssig = {rc, sb, ssig}')
 
 
 def test_ttest():
     x = np.array([70, 65, 80, 90, 92, 88, 67, 72, 10, 95], dtype=np.float32())
     y = np.array([35, 75, 67, 81, 94, 71, 67, 74, 35, 85], dtype=np.float32())
-    diffmean, errorbar=ttest(x, y, ci=95.0, paired=True, scale=False)
+    diffmean, errorbar = ttest(x, y, ci=95.0, paired=True, scale=False)
     print(f' diffmean, errorbar = {diffmean, errorbar}')
 
 
@@ -27,11 +27,11 @@ def test_get_weights():
     result = get_weights(lats)
     print(f' weighted means: {result}')
 
-
+ 
 def test_get_linear_regression():
     x = np.array([70, 65, 80, 90, 92, 88, 67, 72, 10, 95], dtype=np.float32())
     y = np.array([35, 75, 67, 81, 94, 71, 67, 74, 35, 85], dtype=np.float32())
-    y_pred, r_sq, intercept, slope=get_linear_regression(x, y)
+    y_pred, r_sq, intercept, slope = get_linear_regression(x, y)
 
     print(f'y_pred, r_sq, intercept, slope = {y_pred, r_sq, intercept, slope}')
 
