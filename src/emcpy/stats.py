@@ -279,9 +279,9 @@ def bootstrap(insample, level=.95, estimator='mean', nrepl=10000):
     elif estimator.lower() == 'median':
         deltas = _np.sort(_np.median(boot_dist, axis=1) - _np.median(sample))
 
-    lower_pctile = 100*((1.-level)/2.)
-    upper_pctile=100.-lower_pctile
-    ci_lower=_np.percentile(deltas,lower_pctile)
-    ci_upper=_np.percentile(deltas,upper_pctile)
+    lower_pctile = 100*((1. - level)/2.)
+    upper_pctile = 100. - lower_pctile
+    ci_lower = _np.percentile(deltas, lower_pctile)
+    ci_upper = _np.percentile(deltas, upper_pctile)
 
-    return ci_lower,ci_upper
+    return ci_lower, ci_upper

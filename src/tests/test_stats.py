@@ -9,8 +9,8 @@ def test_mstats():
 
 
 def test_lregress():
-    x = np.array([1,2,2,4,5,6,6,8,9,10], dtype=np.float32())
-    y = np.array([1,2,3,4,5,6,7,8,9,10], dtype=np.float32())
+    x = np.array([1, 2, 2, 4, 5, 6, 6, 8, 9, 10], dtype=np.float32())
+    y = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], dtype=np.float32())
     rc, sb, ssig=lregress(x, y, ci=95.0)
     print(f' rc, sb, ssig = {rc, sb, ssig}')
 
@@ -23,7 +23,7 @@ def test_ttest():
 
 
 def test_get_weights():
-    lats = np.array([90,-90,0,18,-25,-10.3,45.5], dtype=np.float32())
+    lats = np.array([90, -90, 0, 18, -25, -10.3, 45.5], dtype=np.float32())
     result = get_weights(lats)
     print(f' weighted means: {result}')
 
@@ -42,34 +42,3 @@ def test_bootstrap():
     xbar = np.mean(sample_data)
 
     print(f'ci_lower,ci_upper = {xbar+ci_lower, xbar+ci_upper}')
-
-
-#def main():
-#    print('')
-#    print('testing mstats:')
-#    test_mstats()
-#
-#    print('')
-#    print('testing lregress:')
-#    test_lregress()
-#
-#    print('')
-#    print('testing ttest:')
-#    test_ttest()
-#
-#    print('')
-#    print('testing get_weights:')
-#    test_get_weights()
-#
-#    print('')
-#    print('testing get_linear_regression:')
-#    test_get_linear_regression()
-#
-#    print('')
-#    print('testing bootstrap:')
-#    test_bootstrap()
-#
-#
-#if __name__ == "__main__":
-#    main()
-
