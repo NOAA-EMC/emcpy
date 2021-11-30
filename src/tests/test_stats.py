@@ -27,7 +27,7 @@ def test_get_weights():
     result = get_weights(lats)
     print(f' weighted means: {result}')
 
- 
+
 def test_get_linear_regression():
     x = np.array([70, 65, 80, 90, 92, 88, 67, 72, 10, 95], dtype=np.float32())
     y = np.array([35, 75, 67, 81, 94, 71, 67, 74, 35, 85], dtype=np.float32())
