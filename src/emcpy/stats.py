@@ -249,7 +249,7 @@ def get_linear_regression(x, y):
     return y_pred, r_sq, intercept, slope
 
 
-def bootstrap(insample,level=.95,estimator='mean',nrepl=10000):
+def bootstrap(insample, level=.95, estimator='mean', nrepl=10000):
     """
     Generate emprical bootstrap confidence intervals.
     See https://ocw.mit.edu/courses/mathematics/
@@ -257,10 +257,10 @@ def bootstrap(insample,level=.95,estimator='mean',nrepl=10000):
                 readings/MIT18_05S14_Reading24.pdf for more information.
 
     Args:
-        insample: (array like) is the array from which the estimator (u) 
+        insample: (array like) is the array from which the estimator (u)
                   was derived (x_1, x_2,....x_n).
         level: (float, default=0.95) desired confidence level for CI bounds
-        estimator: (char, default='mean') type of statistic obtained from 
+        estimator: (char, default='mean') type of statistic obtained from
                   the sample (mean or median)
         nrepl: (integer, default=1000) number of replicates
 
@@ -269,20 +269,19 @@ def bootstrap(insample,level=.95,estimator='mean',nrepl=10000):
     """
     if any(_np.isnan(insample)):
         print('{:s}').format('bootstrap_ci.py: NaN detected. Dropping NaN(s) input prior to bootstrap...')
-        sample=insample[~_np.isnan(insample)]
+        sample = insample[~_np.isnan(insample)]
     else:
-        sample=insample
+        sample = insample
 
-    boot_dist=[_np.random.choice(sample,_np.size(sample)) for x in _np.arange(nrepl)]
-    if estimator.lower()=='mean':
-        deltas=_np.sort(_np.mean(boot_dist,axis=1)-_np.mean(sample))
-    elif estimator.lower()=='median':
-        deltas=_np.sort(_np.median(boot_dist,axis=1)-_np.median(sample))
+    boot_dist = [_np.random.choice(sample, _np.size(sample)) for x in _np.arange(nrepl)]
+    if estimator.lower() == 'mean':
+        deltas = _np.sort(_np.mean(boot_dist, axis=1) - _np.mean(sample))
+    elif estimator.lower() == 'median':
+        deltas = _np.sort(_np.median(boot_dist, axis=1) - _np.median(sample))
 
-    lower_pctile=100*((1.-level)/2.)
+    lower_pctile = 100*((1.-level)/2.)
     upper_pctile=100.-lower_pctile
     ci_lower=_np.percentile(deltas,lower_pctile)
     ci_upper=_np.percentile(deltas,upper_pctile)
 
     return ci_lower,ci_upper
-
