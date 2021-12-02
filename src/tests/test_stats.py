@@ -45,8 +45,8 @@ def test_bootstrap():
 
 
 def test_calc_bins():
-    sample_data = np.array([0.5, -0.4, -0.7, 0.9, -0.01, 0.02, -0.6, 0.3, -0.9, 0.82, -0.03, 0.41],\
-                  dtype=np.float32())
+    sample_data = np.array([0.5, -0.4, -0.7, 0.9, -0.01, 0.02, -0.6, 0.3, -0.9, 0.82, -0.03, 0.41],
+                           dtype=np.float32())
     eval_type = 'omf'
     bins, binsize = calc_bins(sample_data, eval_type)
 
