@@ -287,14 +287,14 @@ def bootstrap(insample, level=.95, estimator='mean', nrepl=10000):
     return ci_lower, ci_upper
 
 
-def calc_bins(data, eval_type='omf'):
+def calc_bins(data, eval_type='omf', nstd=4):
     """
     Calculate number of bins and binsize for histograms based on data size.
 
     Args:
         data: (array like) histogram data
         eval_type: (str, default 'omf') options are 'omf', 'oma', 'observation', 'hofx'
-
+        nstd: (int, default 4) number of standard deviations used to determine binning range
     Returns:
         bins: (int) number of bins
         binsize: (float) size of bins
@@ -302,11 +302,11 @@ def calc_bins(data, eval_type='omf'):
     binsize = (_np.max(data) - _np.min(data))/_np.sqrt(len(data))
 
     if eval_type.lower() == 'omf' or eval_type.lower() == 'oma':
-        start = 0 - (4 * _np.std(data))
-        stop = 0 + (4 * _np.std(data))
+        start = 0 - (nstd * _np.std(data))
+        stop = 0 + (nstd * _np.std(data))
     else:
-        start = _np.mean(data) - (4 * _np.std(data))
-        stop = _np.mean(data) + (4 * _np.std(data))
+        start = _np.mean(data) - (nstd * _np.std(data))
+        stop = _np.mean(data) + (nstd * _np.std(data))
 
     bins = _np.arange(start, stop, binsize)
     return bins, binsize
