@@ -243,7 +243,7 @@ class EMCPyPlots:
         self.ax.text(xloc, yloc, text, fontsize=fontsize,
                      fontweight=fontweight, color=color,
                      alpha=alpha, ha=horizontalalignment)
-    
+
     def add_logo(self, xloc, yloc, zorder=10, which='noaa/nws',
                  alpha=0.5):
         """
@@ -256,20 +256,20 @@ class EMCPyPlots:
             which : (str; default='noaa/nws') which type of logo
                     to plot. Options include 'noaa', 'nws', or
                     'noaa/nws'
-            alpha : (float; default=0.5) alpha of the image 
+            alpha : (float; default=0.5) alpha of the image
         """
         image_dict = {
             'noaa': 'noaa_logo_75x75.png',
             'nws': 'nws_logo_75x75.png',
             'noaa/nws': 'noaa_nws_logo_150x75.png'
         }
-        
+
         image_path = emcpy.emcpy_directory + '/logos/' + image_dict[which]
         im = image.imread(image_path)
 
         self.ax.figure.figimage(im, xo=xloc, yo=yloc, zorder=zorder,
                                 alpha=alpha)
-        
+
     def return_figure(self):
         """
         Returns the figure created.
