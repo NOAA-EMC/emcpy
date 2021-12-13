@@ -1,6 +1,6 @@
 import setuptools
 setuptools.setup(
-    package_data = {
+    package_data={
         '': ['src/emcpy/logos/*'],
-            }
+        }
 )
