@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import emcpy
 import cartopy.crs as ccrs
@@ -264,7 +265,7 @@ class EMCPyPlots:
             'noaa/nws': 'noaa_nws_logo_150x75.png'
         }
 
-        image_path = emcpy.emcpy_directory + '/logos/' + image_dict[which]
+        image_path = os.path.join(emcpy.emcpy_directory, 'logos', image_dict[which])
         im = image.imread(image_path)
 
         self.ax.figure.figimage(im, xo=xloc, yo=yloc, zorder=zorder,
