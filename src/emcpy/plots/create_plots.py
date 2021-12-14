@@ -1,10 +1,13 @@
+import os
 import numpy as np
+import emcpy
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from matplotlib.figure import Figure
 from matplotlib.colors import Normalize
+import matplotlib.image as image
 from scipy.interpolate import interpn
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 from emcpy.plots.map_tools import Domain, MapProjection
@@ -241,6 +244,32 @@ class EMCPyPlots:
         self.ax.text(xloc, yloc, text, fontsize=fontsize,
                      fontweight=fontweight, color=color,
                      alpha=alpha, ha=horizontalalignment)
+
+    def add_logo(self, xloc, yloc, zorder=10, which='noaa/nws',
+                 alpha=0.5):
+        """
+        Add NOAA/NWS logo. Requires user to adjust x and y locations.
+
+        Args:
+            xloc : (int/float) x location on figure in pixels
+            yloc : (int/float) y location on figure in pixels
+            zorder : (int; default=10) The z order of the logo
+            which : (str; default='noaa/nws') which type of logo
+                    to plot. Options include 'noaa', 'nws', or
+                    'noaa/nws'
+            alpha : (float; default=0.5) alpha of the image
+        """
+        image_dict = {
+            'noaa': 'noaa_logo_75x75.png',
+            'nws': 'nws_logo_75x75.png',
+            'noaa/nws': 'noaa_nws_logo_150x75.png'
+        }
+
+        image_path = os.path.join(emcpy.emcpy_directory, 'logos', image_dict[which])
+        im = image.imread(image_path)
+
+        self.ax.figure.figimage(im, xo=xloc, yo=yloc, zorder=zorder,
+                                alpha=alpha)
 
     def return_figure(self):
         """
