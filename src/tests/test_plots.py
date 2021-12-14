@@ -250,6 +250,33 @@ def test_horizontal_bar_plot():
     fig.savefig('test_horizontal_bar_plot.png')
 
 
+def test_add_logo():
+    # Test adding logos
+    x1, y1, x2, y2, x3, y3 = _getLineData()
+    lp1 = LinePlot(x1, y1)
+    lp1.label = 'line 1'
+
+    lp2 = LinePlot(x2, y2)
+    lp2.color = 'tab:green'
+    lp2.label = 'line 2'
+
+    lp3 = LinePlot(x3, y3)
+    lp3.color = 'tab:red'
+    lp3.label = 'line 3'
+
+    plt_list = [lp1, lp2, lp3]
+    myplt = CreatePlot()
+    myplt.draw_data(plt_list)
+
+    myplt.add_title(label='Test Line Plot')
+    myplt.add_xlabel(xlabel='X Axis Label')
+    myplt.add_ylabel(ylabel='Y Axis Label')
+    myplt.add_logo(400, 50, which='noaa')
+
+    fig = myplt.return_figure()
+    fig.savefig('test_add_logo.png')
+
+
 def _getLineData():
     # generate test data for line plots
 
