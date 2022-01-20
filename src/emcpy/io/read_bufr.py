@@ -1,6 +1,6 @@
 try:
     import ncepbufr
-except:
+except ImportError as error:
     raise ImportError('Attempting to load ncepbufr failed. Please ensure ',
                       '`cmake` and `intel` modules are loaded.')
 import numpy as np
