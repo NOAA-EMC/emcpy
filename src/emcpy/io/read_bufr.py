@@ -1,4 +1,8 @@
-import ncepbufr
+try:
+    import ncepbufr
+except:
+    raise ImportError('Attempting to load ncepbufr failed. Please ensure ',
+                      '`cmake` and `intel` modules are loaded.')
 import numpy as np
 import pandas as pd
 import yaml
