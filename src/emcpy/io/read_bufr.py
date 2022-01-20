@@ -60,7 +60,7 @@ class ReadBUFR:
                 siid = bufr.read_subset('SIID', rep=True).squeeze()
 
                 # Grab only data from input sensor and satellite
-                if sat_id == said and sensor_id == siid:                    
+                if sat_id == said and sensor_id == siid:
                     # Loop through variables
                     for var in self.variables.keys():
                         if var == 'timestamp':
@@ -83,7 +83,7 @@ class ReadBUFR:
         df = pd.DataFrame(df_dict)
 
         return df
-    
+
     def read_aircraft(self):
         """
         Open and read bufr file for aircraft data.
@@ -106,7 +106,7 @@ class ReadBUFR:
                     else:
                         mnemonic = self.variables[var]['mnemonic']
                         data = bufr.read_subset(mnemonic).squeeze()
-                        
+
                     df_dict[var].append(data)
 
         bufr.close()
