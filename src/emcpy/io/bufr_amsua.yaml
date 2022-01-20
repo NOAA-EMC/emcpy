@@ -1,0 +1,36 @@
+radiance:
+  obsdatain: "/scratch1/NCEPDEV/global/glopara/dump/gdas.20211208/00/gdas.t00z.1bamua.tm00.bufr_d"
+  inputs:
+      satellite: metop-b
+      sensor: amsua
+      channels: 1-3
+  variables:
+    timestamp:
+      datetime:
+        year: YEAR
+        month: MNTH
+        day: DAYS
+        hour: HOUR
+        minute: MINU
+    latitude:
+      mnemonic: CLAT
+    longitude:
+      mnemonic: CLON
+    satelliteId:
+      mnemonic: SAID
+    sensorID:
+      mnemonic: SIID
+    channelNumber:
+      mnemonic: CHNM
+    fieldOfViewNumber:
+      mnemonic: FOVN
+    solarZenithAngle:
+      mnemonic: SOZA
+    solarAzimuthAngle:
+      mnemonic: SOLAZI
+    sensorZenithAngle:
+      mnemonic: SAZA
+    sensorAzimuthAngle:
+      mnemonic: BEARAZ
+    brightnessTemperature:
+      mnemonic: TMBR

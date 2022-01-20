@@ -1,0 +1,40 @@
+radiance:
+  obsdatain: "../gdas.t00z.airsev.tm00.bufr_d"
+  inputs:
+      satellite:
+      sensor:
+      channels: 1-10
+  variables:
+    timestamp:
+       datetime:
+        year: YEAR
+        month: MNTH
+        day: DAYS
+        hour: HOUR
+        minute: MINU
+    latitude:
+      mnemonic: CLATH
+    longitude:
+      mnemonic: CLONH
+    satelliteId:
+      mnemonic: SAID
+    sensorID:
+      mnemonic: SIID
+    channelNumber:
+      mnemonic: CHNM
+    centralWavenumber:
+      mnemonic: LOGRCW
+    fieldOfViewNumber:
+      mnemonic: FOVN
+    solarZenithAngle:
+      mnemonic: SOZA
+    solarAzimuthAngle:
+      mnemonic: SOLAZI
+    sensorZenithAngle:
+      mnemonic: SAZA
+    sensorAzimuthAngle:
+      mnemonic: BEARAZ
+    cloudAmount:
+      mnemonic: TOCC
+    brightnessTemperature:
+      mnemonic: TMBR

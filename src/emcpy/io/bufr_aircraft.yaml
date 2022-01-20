@@ -1,0 +1,22 @@
+aircraft:
+  obsdatain: "/scratch1/NCEPDEV/global/glopara/dump/gdas.20211208/00/gdas.t00z.aircft.tm00.bufr_d"
+  variables:
+    timestamp:
+       datetime:
+        year: YEAR
+        month: MNTH
+        day: DAYS
+        hour: HOUR
+        minute: MINU
+    latitude:
+      mnemonic: CLATH
+    longitude:
+      mnemonic: CLONH
+    flightLevel:
+      mnemonic: FLVLST
+    windDirection:
+      mnemonic: WDIR
+    windSpeed:
+      mnemonic: WSPD
+    temperatureDryBulb:
+      mnemonic: TMDB
