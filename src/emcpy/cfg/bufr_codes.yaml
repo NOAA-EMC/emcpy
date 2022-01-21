@@ -2,11 +2,15 @@ satellite:
   metop-a: 4
   metop-b: 3
   metop-c: 5
+  meteosat8: 55
+  meteosat11: 70 
   n15: 206
   n18: 209
   n19: 223
   npp: 224
-  n20:
+  n20: 225
+  dmsp17: 285
+  dmsp18: 286
 sensor:
   amsua: 570
   amsub: 574
@@ -14,3 +18,5 @@ sensor:
   avhrr2: 590
   avhrr3: 591
   avhrr4: 592
+  viirs: 616
+  crirs: 620
