@@ -1,0 +1,5 @@
+module use /scratch1/NCEPDEV/da/Cory.R.Martin/Modulefiles/python/
+module load anaconda/kevin
+module load emcpy/0.1
+
+source /scratch1/NCEPDEV/da/Cory.R.Martin/Python/ln_cartopy.sh

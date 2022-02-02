@@ -1,0 +1,4 @@
+module use /work/noaa/stmp/rmahajan/opt/modulefiles/stack
+module use /work/noaa/da/cmartin/Modulefiles/python
+module load pyvenv/hofxdiag
+module load emcpy/0.1
