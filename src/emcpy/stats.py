@@ -296,17 +296,17 @@ def spectrum_stats(df):
     Args:
         df : (Pandas dataframe) A data frame containing raw radiance information as produced
              by the get_data method of Radiance.
-        
+
     Returns:
         channel_stats : (Pandas dataframe) A data frame containing channel-by-channel statistics
     '''
 
     # Get channel numbers in dataframe
-    sc=df.index.unique(level="Channel")
+    sc = df.index.unique(level="Channel")
 
     # Initialise output dataframe
-    channel_stats = _pd.DataFrame(index = sc,
-        columns = ["count","omf_unadjusted_mean", "omf_adjusted_mean",
+    channel_stats = _pd.DataFrame(index=sc,
+        columns=["count", "omf_unadjusted_mean", "omf_adjusted_mean",
                    "omf_unadjusted_stddev", "omf_adjusted_stddev"])
 
     # Sorting by channel increases efficiency and prevents a warning message
