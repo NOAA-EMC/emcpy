@@ -306,8 +306,8 @@ def spectrum_stats(df):
 
     # Initialise output dataframe
     channel_stats = _pd.DataFrame(index=sc,
-        columns=["count", "omf_unadjusted_mean", "omf_adjusted_mean",
-                   "omf_unadjusted_stddev", "omf_adjusted_stddev"])
+                                  columns=["count", "omf_unadjusted_mean", "omf_adjusted_mean",
+                                           "omf_unadjusted_stddev", "omf_adjusted_stddev"])
 
     # Sorting by channel increases efficiency and prevents a warning message
     dfs = df.sort_index()
