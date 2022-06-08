@@ -268,7 +268,7 @@ def bootstrap(insample, level=.95, estimator='mean', nrepl=10000):
         Lower and upper bounds of confidence intervals
     """
     if any(_np.isnan(insample)):
-        print('{:s}').format('bootstrap_ci.py: NaN detected. Dropping NaN(s) input prior to bootstrap...')
+        print('bootstrap_ci.py: NaN detected. Dropping NaN(s) input prior to bootstrap...')
         sample = insample[~_np.isnan(insample)]
     else:
         sample = insample
@@ -285,3 +285,28 @@ def bootstrap(insample, level=.95, estimator='mean', nrepl=10000):
     ci_upper = _np.percentile(deltas, upper_pctile)
 
     return ci_lower, ci_upper
+
+
+def calc_bins(data, eval_type='omf', nstd=4):
+    """
+    Calculate number of bins and binsize for histograms based on data size.
+
+    Args:
+        data: (array like) histogram data
+        eval_type: (str, default 'omf') options are 'omf', 'oma', 'observation', 'hofx'
+        nstd: (int, default 4) number of standard deviations used to determine binning range
+    Returns:
+        bins: (int) number of bins
+        binsize: (float) size of bins
+    """
+    binsize = (_np.max(data) - _np.min(data))/_np.sqrt(len(data))
+
+    if eval_type.lower() == 'omf' or eval_type.lower() == 'oma':
+        start = 0 - (nstd * _np.std(data))
+        stop = 0 + (nstd * _np.std(data))
+    else:
+        start = _np.mean(data) - (nstd * _np.std(data))
+        stop = _np.mean(data) + (nstd * _np.std(data))
+
+    bins = _np.arange(start, stop, binsize)
+    return bins, binsize
