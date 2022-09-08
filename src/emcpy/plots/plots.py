@@ -131,6 +131,7 @@ class VerticalLine:
         self.linewidth = 1.5
         self.label = None
 
+
 class HorizontalLine:
 
     def __init__(self, y):
@@ -150,6 +151,7 @@ class HorizontalLine:
         self.linestyle = '-'
         self.linewidth = 1.5
         self.label = None
+
 
 class BarPlot:
 
