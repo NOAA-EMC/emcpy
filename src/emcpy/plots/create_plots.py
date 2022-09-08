@@ -14,7 +14,7 @@ from emcpy.stats import get_linear_regression
 __all__ = ['CreateFigure', 'CreatePlot']
 
 
-class CreatePlot():
+class CreatePlot:
     """
     Creates a figure to plot data as a scatter plot,
     histogram, or line plot.
