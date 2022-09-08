@@ -1,309 +1,234 @@
+# This work developed by NOAA/NWS/EMC under the Apache 2.0 license.
 import os
 import numpy as np
-import emcpy
+import matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
-import matplotlib.pyplot as plt
-from matplotlib import rcParams
-from matplotlib.figure import Figure
-from matplotlib.colors import Normalize
-import matplotlib.image as image
 from scipy.interpolate import interpn
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 from emcpy.plots.map_tools import Domain, MapProjection
 from emcpy.stats import get_linear_regression
 
-__all__ = ['CreatePlot', 'CreateMap', 'CreateFigure']
+__all__ = ['CreateFigure', 'CreatePlot']
 
 
-class EMCPyPlots:
-
-    def __init__(self, figsize):
-        """
-        EMCPyPlots Constructor.
-
-        Args:
-            figsize : (tuple) Figure dimension size
-        """
-        self.fig = plt.figure(figsize=figsize, FigureClass=CreateFigure)
-
-        return
-
-    def add_title(self, label,
-                  loc='center',
-                  fontsize=12,
-                  fontweight='normal',
-                  color='k',
-                  verticalalignment='baseline'):
-        """
-        Adds title to map axes.
-
-        Args:
-            label : (str) Text to use for title
-            loc : (str; default='center') Location of title
-            fontsize : (int; default=12) Text font size
-            fontweight : (str; default='normal') Text font weight
-            color : (str; default='k') Text font color
-            verticalalignment : (str; default='baseline') Vertical
-                                alignment of text
-        """
-
-        self.ax.set_title(label, loc=loc, fontsize=fontsize,
-                          fontweight=fontweight, color=color,
-                          verticalalignment=verticalalignment)
-
-    def add_xlabel(self, xlabel,
-                   loc='center',
-                   fontsize=12,
-                   fontweight='normal',
-                   color='k',
-                   xaxis='primary'):
-        """
-        Adds x label to map axes.
-
-        Args:
-            xlabel : (str) Text to use for x label
-            loc : (str; default='center') Location of title
-            fontsize : (int; default=12) Text font size
-            fontweight : (str; default='normal') Text font weight
-            color : (str; default='k') Text font color
-            xaxis : (str; default='primary') choices are primary
-                    or secondary if shared_ay exists.
-        """
-
-        axis = self.ax
-        if xaxis == 'secondary':
-            if self.shared_ay is None:
-                raise ValueError('Unable to add x label.  Secondary ' +
-                                 'x axis does not exist.')
-            axis = self.shared_ay
-
-        axis.set_xlabel(xlabel=xlabel, loc=loc, fontsize=fontsize,
-                        fontweight=fontweight, color=color)
-
-    def add_ylabel(self, ylabel,
-                   loc='center',
-                   fontsize=12,
-                   fontweight='normal',
-                   color='k',
-                   yaxis='primary'):
-        """
-        Adds y label to map axes.
-
-        Args:
-            ylabel : (str) Text to use for y label
-            loc : (str; default='center') Location of title
-            fontsize : (int; default=12) Text font size
-            fontweight : (str; default='normal') Text font weight
-            color : (str; default='k') Text font color
-            yaxis : (str; default='primary') choices are primary
-                    or secondary if shared_ax exists.
-        """
-
-        axis = self.ax
-        if yaxis == 'secondary':
-            if self.shared_ax is None:
-                raise ValueError('Unable to add y label.  Secondary ' +
-                                 'y axis does not exist.')
-            axis = self.shared_ax
-
-        axis.set_ylabel(ylabel=ylabel, loc=loc, fontsize=fontsize,
-                        fontweight=fontweight, color=color)
-
-    def add_colorbar(self, label=None, orientation='horizontal',
-                     label_fontsize=12, extend='neither'):
-        """
-        Creates new axes and adds colorbar to figure.
-
-        Args:
-            label : (str; default=None) Colorbar label
-            orientation  : (str; default='horizontal') colorbar orientation
-            label_fontsize : (int; default=12) Colorbar label font size
-            extend : (str; default='neither') Extends min/max side of colorbar
-        """
-        # 'cs' is saved as an attribute if colorbar is True in plotting
-        # object. If 'cs' exists, it will create a colorbar for the data
-        # saved to the variable. 'cs' can be overwritten if plotting
-        # multiple layers and with colorbar set to True.
-
-        from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-
-        if 'cs' in dir(self):
-            if orientation == 'horizontal':
-                axins = inset_axes(self.ax,
-                                   width="95%",
-                                   height="5%",
-                                   loc='lower center',
-                                   borderpad=-8)
-            else:
-                axins = inset_axes(self.ax,
-                                   width="2.5%",
-                                   height="95%",
-                                   loc='right',
-                                   borderpad=-4)
-
-            cb = self.fig.colorbar(self.cs, extend=extend, cax=axins,
-                                   orientation=orientation)
-            cb.set_label(label, fontsize=label_fontsize)
-
-        else:
-            raise TypeError('Data object has colorbar set to False.' +
-                            'Set obj.colorbar=True')
-
-    def add_stats_dict(self, stats_dict={'Stats': 'None'}, xloc=0.5,
-                       yloc=-0.1, fontsize=12):
-        """
-        Annotate statistics to the figure. For a given dictionary, stats_dict,
-        each key and value will be annotated in order.
-
-        Args:
-            stats_dict : (dict; default={'Stats': 'None'}) dict of values
-                         to be annotated
-            xloc : (float; default=0.5) location of text on x-axis
-            yloc : (float; default=-0.1) location of text on y-axis
-            fontsize : (int; default=10) Annotated text font size
-        """
-        # loop through the dictionary and create the sting to annotate
-        outstr = ''
-        for key, value in stats_dict.items():
-            outstr = outstr + f'    {key}: {value}'
-        # annotate this just underneath the figure on the right side
-        self.ax.annotate(outstr, xy=(xloc, yloc), xycoords='axes fraction',
-                         fontsize=fontsize, horizontalalignment='center',
-                         verticalalignment='top')
-
-    def add_legend(self, loc='best', ncol=1, fontsize='medium',
-                   labelcolor='black', markersize=20, markerfirst=True,
-                   frameon=True, fancybox=True, shadow=False,
-                   framealpha=0.8, facecolor='inherit', edgecolor='lightgray',
-                   title=None, title_fontsize='medium'):
-        """
-        Adds legend to plot.
-
-        Args:
-            loc : (str; default='best') location of the legend.
-                 Options include: ['upper left', 'upper right',
-                 'lower left', 'lower right', 'upper center',
-                 'lower center', 'center left', 'center right',
-                 'center', 'best']
-            ncol : (int) number of columsn legend is split into
-            fontsize : (int or str; default='medium') the font
-                size of the legend.
-                Options include ['xx-small', 'x-small', 'small',
-                'medium', 'large', 'x-large', 'xx-large'] or an
-                integer value
-            labelcolor : (str; default='black') color of label text
-            markersize : (int; default=20) size of marker in legend
-            markerfirst : (bool; default=True) places marker in front
-                          of label text. If False, label will be first
-            frameon : (bool; default=True) Puts legend on a patch
-            fancybox : (bool; default=True) Applies round edges to patch
-            shadow : (bool; default=False) Draws shadow behind legend
-            framealpha : (float; default=0.8) Alpha transparency of
-                         legend background
-            facecolor : (str; default='inherit') Background color of
-                        legend
-            edgecolor : (str; default='lightgray') Legend's background
-                        edge color
-            title : (str; default=None) Title of legend
-            title_fonstize : (int or str: default='medium') the font of
-                             the legend title.
-                             Options include ['xx-small', 'x-small',
-                             'small', 'medium', 'large', 'x-large',
-                             'xx-large'] or an integer value
-        """
-
-        legend = self.ax.legend(
-            loc=loc, ncol=ncol, fontsize=fontsize,
-            labelcolor=labelcolor, markerfirst=markerfirst,
-            frameon=frameon, fancybox=fancybox, shadow=shadow,
-            framealpha=framealpha, facecolor=facecolor,
-            edgecolor=edgecolor, title=title,
-            title_fontsize=title_fontsize)
-
-        for i, key in enumerate(legend.legendHandles):
-            legend.legendHandles[i]._sizes = [markersize]
-
-    def add_text(self, xloc, yloc, text, fontsize=12,
-                 fontweight='normal', color='k', alpha=1.,
-                 horizontalalignment='center'):
-        """
-        Add text to a figure.
-
-        Args:
-            xloc : (int/float) x location on axis
-            yloc : (int/float) y location on axis
-            text : (str) Text to plot on figure
-            fontsize : (int; default=12) Text font size
-            fontweight : (str; default='normal') Text font weight
-            color : (str; default='k') Text font color
-            alpha : (float; default=1.) alpha of text
-            horizontalalignment : (str; default='baseline') Vertical
-                                alignment of text
-        """
-        self.ax.text(xloc, yloc, text, fontsize=fontsize,
-                     fontweight=fontweight, color=color,
-                     alpha=alpha, ha=horizontalalignment)
-
-    def add_logo(self, xloc, yloc, zorder=10, which='noaa/nws',
-                 alpha=0.5):
-        """
-        Add NOAA/NWS logo. Requires user to adjust x and y locations.
-
-        Args:
-            xloc : (int/float) x location on figure in pixels
-            yloc : (int/float) y location on figure in pixels
-            zorder : (int; default=10) The z order of the logo
-            which : (str; default='noaa/nws') which type of logo
-                    to plot. Options include 'noaa', 'nws', or
-                    'noaa/nws'
-            alpha : (float; default=0.5) alpha of the image
-        """
-        image_dict = {
-            'noaa': 'noaa_logo_75x75.png',
-            'nws': 'nws_logo_75x75.png',
-            'noaa/nws': 'noaa_nws_logo_150x75.png'
-        }
-
-        image_path = os.path.join(emcpy.emcpy_directory, 'logos', image_dict[which])
-        im = image.imread(image_path)
-
-        self.ax.figure.figimage(im, xo=xloc, yo=yloc, zorder=zorder,
-                                alpha=alpha)
-
-    def return_figure(self):
-        """
-        Returns the figure created.
-        """
-
-        return self.fig
-
-
-class CreatePlot(EMCPyPlots):
+class CreatePlot:
     """
     Creates a figure to plot data as a scatter plot,
     histogram, or line plot.
     """
+    def __init__(self, plot_layers=[], projection=None,
+                 domain=None):
 
-    def __init__(self, figsize=(8, 6)):
-        """
-        CreatePlot constructor.
+        self.plot_layers = plot_layers
 
-        Args:
-            figsize : (tuple; default=(8,6)) Figure dimension size
-        """
-        super().__init__(figsize)
-        self.ax = self.fig.add_subplot(111)
-        self.shared_ax = None
-        self.shared_ay = None
+        ###############################################
+        # Need a better way of doing this
+        if projection is not None and domain is not None:
+            self.projection = projection
+            self.domain = domain
+        ###############################################
 
-    def draw_data(self, plot_list):
-        """
-        Add data layer onto figure.
+    def add_title(self, label, loc='center',
+                  pad=None, **kwargs):
 
-        Args:
-            plot_list : (array-like) List of map plot objects from emcpy
+        self.title = {
+            'label': label,
+            'loc': loc,
+            'pad': pad,
+            **kwargs
+        }
+
+    def add_xlabel(self, xlabel, labelpad=None,
+                   loc='center', **kwargs):
+
+        self.xlabel = {
+            'xlabel': xlabel,
+            'labelpad': labelpad,
+            'loc': loc,
+            **kwargs
+        }
+
+    def add_ylabel(self, ylabel, labelpad=None,
+                   loc='center', **kwargs):
+
+        self.ylabel = {
+            'ylabel': ylabel,
+            'labelpad': labelpad,
+            'loc': loc,
+            **kwargs
+        }
+
+    def add_colorbar(self, label=None, fontsize=12, single_cbar=False,
+                     cbar_location=None, **kwargs):
+
+        kwargs.setdefault('orientation', 'horizontal')
+
+        pad = 0.15 if kwargs['orientation'] == 'horizontal' else 0.1
+        fraction = 0.065 if kwargs['orientation'] == 'horizontal' else 0.085
+
+        kwargs.setdefault('pad', pad)
+        kwargs.setdefault('fraction', fraction)
+
+        if not cbar_location:
+            h_loc = [0.14, -0.1, 0.8, 0.04]
+            v_loc = [1.02, 0.12, 0.04, 0.8]
+            cbar_location = h_loc if kwargs['orientation'] == 'horizontal' else v_loc
+
+        self.colorbar = {
+            'label': label,
+            'fontsize': fontsize,
+            'single_cbar': single_cbar,
+            'cbar_loc': cbar_location,
+            'kwargs': kwargs
+        }
+
+    def add_stats_dict(self, stats_dict={}, xloc=0.5,
+                       yloc=-0.1, ha='center', **kwargs):
+
+        self.stats = {
+            'stats': stats_dict,
+            'xloc': xloc,
+            'yloc': yloc,
+            'ha': ha,
+            'kwargs': kwargs
+        }
+
+    def add_legend(self, **kwargs):
+
+        self.legend = {
+            **kwargs
+        }
+
+    def add_text(self, xloc, yloc, text, **kwargs):
+
+        self.text = {
+            'xloc': xloc,
+            'yloc': yloc,
+            'text': text,
+            'kwargs': kwargs
+        }
+
+    def add_grid(self, **kwargs):
+
+        self.grid = {
+            **kwargs
+        }
+
+    def add_map_features(self, feature_list=['coastline']):
+
+        self.map_features = feature_list
+
+    def set_xlim(self, left=None, right=None):
+
+        self.xlim = {
+            'left': left,
+            'right': right
+        }
+
+    def set_ylim(self, bottom=None, top=None):
+
+        self.ylim = {
+            'bottom': bottom,
+            'top': top
+        }
+
+    def set_xticks(self, ticks=list(), minor=False):
+
+        self.xticks = {
+            'ticks': ticks,
+            'minor': minor
+        }
+
+    def set_yticks(self, ticks=list(), minor=False):
+
+        self.yticks = {
+            'ticks': ticks,
+            'minor': minor
+        }
+
+    def set_xticklabels(self, labels=list(), **kwargs):
+
+        self.xticklabels = {
+            'labels': labels,
+            'kwargs': kwargs
+        }
+
+    def set_yticklabels(self, labels=list(), **kwargs):
+
+        self.yticklabels = {
+            'labels': labels,
+            'kwargs': kwargs
+        }
+
+    def invert_xaxis(self):
+
+        self.invert_xaxis = True
+
+    def invert_yaxis(self):
+
+        self.invert_yaxis = True
+
+    def set_yscale(self, scale):
+
+        valid_scales = ['log', 'linear', 'symlog', 'logit']
+        if scale not in valid_scales:
+            raise ValueError(f'requested scale {scale} is invalid. Valid '
+                             f'choices are: {" | ".join(valid_scales)}')
+
+        self.yscale = scale
+
+
+class CreateFigure:
+
+    def __init__(self, nrows=1, ncols=1, figsize=(8, 6),
+                 sharex=False, sharey=False):
+
+        self.nrows = nrows
+        self.ncols = ncols
+        self.figsize = figsize
+        self.sharex = sharex
+        self.sharey = sharey
+        self.plot_list = []
+
+    def save_figure(self, pathfile, **kwargs):
         """
+        Method to save figure to file
+        """
+        # Create directory if needed
+        path, file = os.path.split(pathfile)
+        if path != '':
+            os.makedirs(path, exist_ok=True)
+
+        # Remove deprecated options from dictionary
+        if 'output name' in kwargs:
+            del kwargs['output name']
+
+        if 'tight_layout' in kwargs:
+            del kwargs['tight_layout']
+
+        # Save figure
+        self.fig.savefig(pathfile, **kwargs)
+
+    def close_figure(self):
+        """
+        Method to close figure
+        """
+        # Close figure
+        plt.close()
+
+    def create_figure(self):
+        """
+        Driver method to create figure and subplots.
+        """
+
+        # Check to make sure plot_list == nrows*ncols
+        if len(self.plot_list) != self.nrows*self.ncols:
+            raise ValueError(
+                'Number of plots does not match the number inputted rows'
+                'and columns.')
 
         plot_dict = {
             'scatter': self._scatter,
@@ -312,652 +237,466 @@ class CreatePlot(EMCPyPlots):
             'vertical_line': self._verticalline,
             'horizontal_line': self._horizontalline,
             'bar_plot': self._barplot,
-            'horizontal_bar': self._hbar
+            'horizontal_bar': self._hbar,
+            'map_scatter': self._map_scatter,
+            'map_gridded': self._map_gridded,
+            'map_contour': self._map_contour
         }
 
-        for obj in plot_list:
-            try:
-                plot_dict[obj.plottype](obj)
-            except KeyError:
-                raise TypeError(f'{obj} is not a valid plot type.' +
-                                'Current plot types supported are:\n' +
-                                f'{" | ".join(feature_dict.keys())}"')
+        gs = gridspec.GridSpec(self.nrows, self.ncols)
+        self.fig = plt.figure(figsize=self.figsize)
 
-    def _density_scatter(self, plotobj):
+        for i, plot_obj in enumerate(self.plot_list):
+
+            # check if object has projection and domain attributes to determine ax
+            if hasattr(plot_obj, 'projection'):
+                self.domain = Domain(plot_obj.domain)
+                self.projection = MapProjection(plot_obj.projection)
+
+                # Set up axis specific things
+                ax = plt.subplot(gs[i], projection=self.projection.projection)
+                if str(self.projection) not in ['npstere', 'spstere']:
+                    ax.set_extent(self.domain.extent)
+                    if str(self.projection) not in ['lamconf']:
+                        ax.set_xticks(self.domain.xticks, crs=ccrs.PlateCarree())
+                        ax.set_yticks(self.domain.yticks, crs=ccrs.PlateCarree())
+                        lon_formatter = LongitudeFormatter(zero_direction_label=False)
+                        lat_formatter = LatitudeFormatter()
+                        ax.xaxis.set_major_formatter(lon_formatter)
+                        ax.yaxis.set_major_formatter(lat_formatter)
+
+            else:
+                ax = plt.subplot(gs[i])
+
+            # Loop through plot layers
+            for layer in plot_obj.plot_layers:
+                plot_dict[layer.plottype](layer, ax)
+
+            # loop through all keys in an object and then call approriate
+            # method to plot the feature on the axis
+            for feat in vars(plot_obj).keys():
+                self._plot_features(plot_obj, feat, ax)
+
+            if self.sharex:
+                self._sharex(ax)
+            if self.sharey:
+                self._sharey(ax)
+
+    def add_suptitle(self, text, **kwargs):
+        """
+        Add super title to figure. Useful for subplots.
+        """
+        if hasattr(self, 'fig'):
+            self.fig.suptitle(text, **kwargs)
+
+    def _plot_features(self, plot_obj, feature, ax):
+
+        feature_dict = {
+            'title': self._plot_title,
+            'xlabel': self._plot_xlabel,
+            'ylabel': self._plot_ylabel,
+            'colorbar': self._plot_colorbar,
+            'stats': self._plot_stats,
+            'legend': self._plot_legend,
+            'text': self._plot_text,
+            'grid': self._plot_grid,
+            'xlim': self._set_xlim,
+            'ylim': self._set_ylim,
+            'xticks': self._set_xticks,
+            'yticks': self._set_yticks,
+            'xticklabels': self._set_xticklabels,
+            'yticklabels': self._set_yticklabels,
+            'invert_xaxis': self._invert_xaxis,
+            'invert_yaxis': self._invert_yaxis,
+            'yscale': self._set_yscale,
+            'map_features': self._add_map_features
+        }
+
+        if feature in feature_dict:
+            feature_dict[feature](ax, vars(plot_obj)[feature])
+
+    def _map_scatter(self, plotobj, ax):
+
+        # Flag set for integer fields
+        integer_field = False
+        if 'integer_field' in vars(plotobj):
+            integer_field = True
+
+        if plotobj.data is None:
+            skipvars = ['plottype', 'longitude', 'latitude',
+                        'markersize', 'integer_field']
+            inputs = self._get_inputs_dict(skipvars, plotobj)
+
+            cs = ax.scatter(plotobj.longitude, plotobj.latitude,
+                            s=plotobj.markersize, **inputs,
+                            transform=self.projection.projection)
+        else:
+            skipvars = ['plottype', 'longitude', 'latitude',
+                        'data', 'markersize', 'colorbar', 'normalize', 'integer_field']
+            inputs = self._get_inputs_dict(skipvars, plotobj)
+
+            norm = None
+            if integer_field:
+                cmap = matplotlib.cm.get_cmap(inputs['cmap'])
+                vmin = inputs['vmin']
+                vmax = inputs['vmax']
+                if vmin is None or vmax is None:
+                    print("Abort: vmin and vmax must be set for integer fields")
+                    exit()
+                norm = matplotlib.colors.BoundaryNorm(np.arange(vmin-0.5, vmax, 1), cmap.N)
+
+            cs = ax.scatter(plotobj.longitude, plotobj.latitude,
+                            c=plotobj.data, s=plotobj.markersize,
+                            **inputs, norm=norm, transform=self.projection.projection)
+        if plotobj.colorbar:
+            self.cs = cs
+
+    def _map_gridded(self, plotobj, ax):
+
+        skipvars = ['plottype', 'longitude', 'latitude',
+                    'markersize']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
+
+        cs = ax.pcolormesh(plotobj.latitude, plotobj.longitude,
+                           plotobj.data, **inputs,
+                           transform=self.projection.projection)
+
+        if plotobj.colorbar:
+            self.cs = cs
+
+    def _map_contour(self, plotobj, ax):
+
+        skipvars = ['plottype', 'longitude', 'latitude',
+                    'markersize']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
+
+        cs = ax.contour(plotobj.longitude, plotobj.latitude,
+                        plot.data, **inputs,
+                        transform=self.projection.projection)
+
+        if plotobj.clabel:
+            plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
+
+        if plotobj.colorbar:
+            self.cs = cs
+
+    def _density_scatter(self, plotobj, ax):
         """
         Uses Scatter Object to plot density scatter colored by
         2d histogram.
         """
         _idx = np.logical_and(~np.isnan(plotobj.x), ~np.isnan(plotobj.y))
         data, x_e, y_e = np.histogram2d(plotobj.x[_idx], plotobj.y[_idx],
-                                        bins=plotobj.bins,
-                                        density=not plotobj.nsamples)
-        if plotobj.nsamples:
+                                        bins=plotobj.density['bins'],
+                                        density=not plotobj.density['nsamples'])
+        if plotobj.density['nsamples']:
             # compute percentage of total for each bin
             data = data / np.count_nonzero(_idx) * 100.
         z = interpn((0.5*(x_e[1:] + x_e[:-1]), 0.5*(y_e[1:]+y_e[:-1])),
                     data, np.vstack([plotobj.x, plotobj.y]).T,
-                    method=plotobj.interp, bounds_error=False)
+                    method=plotobj.density['interp'], bounds_error=False)
         # To be sure to plot all data
         z[np.where(np.isnan(z))] = 0.0
         # Sort the points by density, so that the densest
         # points are plotted last
-        if plotobj.sort:
+        if plotobj.density['sort']:
             idx = z.argsort()
             x, y, z = plotobj.x[idx], plotobj.y[idx], z[idx]
-        axis = self._determine_axis(plotobj.plot_ax)
-        cs = axis.scatter(x, y, c=z,
-                          s=plotobj.markersize,
-                          cmap=plotobj.cmap,
-                          label=plotobj.label)
+        cs = ax.scatter(x, y, c=z,
+                        s=plotobj.markersize,
+                        cmap=plotobj.density['cmap'],
+                        label=plotobj.label)
         # below doing nothing? fix/remove in subsequent PR?
         # norm = Normalize(vmin=np.min(z), vmax=np.max(z))
 
-        if plotobj.colorbar:
+        if plotobj.density['colorbar']:
             self.cs = cs
 
-    def _scatter(self, plotobj):
+    def _scatter(self, plotobj, ax):
         """
         Uses Scatter object to plot on axis.
         """
-        axis = self._determine_axis(plotobj.plot_ax)
-
         # checks to see if density attribute is True
-        if plotobj.density:
-            self._density_scatter(plotobj)
-
+        if hasattr(plotobj, 'density'):
+            self._density_scatter(plotobj, ax)
         else:
-            s = axis.scatter(plotobj.x, plotobj.y,
-                             s=plotobj.markersize,
-                             color=plotobj.color,
-                             marker=plotobj.marker,
-                             vmin=plotobj.vmin,
-                             vmax=plotobj.vmax,
-                             alpha=plotobj.alpha,
-                             linewidths=plotobj.linewidths,
-                             edgecolors=plotobj.edgecolors,
-                             label=plotobj.label)
+            skipvars = ['plottype', 'plot_ax', 'x', 'y',
+                        'markersize', 'linear_regression',
+                        'density', 'channel']
+            inputs = self._get_inputs_dict(skipvars, plotobj)
+            s = ax.scatter(plotobj.x, plotobj.y, s=plotobj.markersize,
+                           **inputs)
 
-        # checks to see if linear regression attribute is True
-        if plotobj.linear_regression:
-            y_pred, r_sq, intercept, slope = get_linear_regression(plotobj.x,
-                                                                   plotobj.y)
-            label = f"y = {slope:.4f}x + {intercept:.4f}\nR\u00b2 : {r_sq:.4f}"
-            axis.plot(plotobj.x, y_pred, color=plotobj.lr_color,
-                      linewidth=plotobj.lr_linewidth, label=label)
+        # checks to see if linear regression attribute
+        if hasattr(plotobj, 'linear_regression'):
 
-    def _histogram(self, plotobj):
+            # Assert that plotobj contains nonzero-length data
+            if len(plotobj.x) != 0 and len(plotobj.y) != 0:
+                y_pred, r_sq, intercept, slope = get_linear_regression(plotobj.x,
+                                                                       plotobj.y)
+                label = f"y = {slope:.4f}x + {intercept:.4f}\nR\u00b2 : {r_sq:.4f}"
+
+                inputs = self._get_inputs_dict([], plotobj)
+                if 'color' in plotobj.linear_regression and 'color' in inputs:
+                    plotobj.linear_regression['color'] = inputs['color']
+                ax.plot(plotobj.x, y_pred, label=label, **plotobj.linear_regression)
+
+    def _histogram(self, plotobj, ax):
         """
         Uses Histogram object to plot on axis.
         """
+        skipvars = ['plottype', 'plot_ax', 'data']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
 
-        axis = self._determine_axis(plotobj.plot_ax)
-        axis.hist(plotobj.data,
-                  bins=plotobj.bins,
-                  range=plotobj.range,
-                  density=plotobj.density,
-                  weights=plotobj.weights,
-                  cumulative=plotobj.cumulative,
-                  bottom=plotobj.bottom,
-                  histtype=plotobj.histtype,
-                  align=plotobj.align,
-                  orientation=plotobj.orientation,
-                  rwidth=plotobj.rwidth,
-                  log=plotobj.log,
-                  color=plotobj.color,
-                  label=plotobj.label,
-                  stacked=plotobj.stacked,
-                  alpha=plotobj.alpha)
+        ax.hist(plotobj.data, **inputs)
 
-    def _lineplot(self, plotobj):
+    def _lineplot(self, plotobj, ax):
         """
         Uses LinePlot object to plot on axis.
         """
-        axis = self._determine_axis(plotobj.plot_ax)
-        axis.plot(plotobj.x,
-                  plotobj.y,
-                  color=plotobj.color,
-                  linestyle=plotobj.linestyle,
-                  linewidth=plotobj.linewidth,
-                  marker=plotobj.marker,
-                  markersize=plotobj.markersize,
-                  alpha=plotobj.alpha,
-                  label=plotobj.label)
+        skipvars = ['plottype', 'plot_ax', 'x', 'y']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
 
-    def _verticalline(self, plotobj):
+        ax.plot(plotobj.x, plotobj.y, **inputs)
+
+    def _verticalline(self, plotobj, ax):
         """
         Uses VerticalLine object to plot on axis.
         """
+        skipvars = ['plottype', 'plot_ax', 'x']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
 
-        axis = self._determine_axis(plotobj.plot_ax)
-        axis.axvline(plotobj.x,
-                     color=plotobj.color,
-                     linestyle=plotobj.linestyle,
-                     linewidth=plotobj.linewidth,
-                     label=plotobj.label)
+        ax.axvline(plotobj.x, **inputs)
 
-    def _horizontalline(self, plotobj):
+    def _horizontalline(self, plotobj, ax):
         """
         Uses HorizontalLine object to plot on axis.
         """
+        skipvars = ['plottype', 'plot_ax', 'y']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
 
-        axis = self._determine_axis(plotobj.plot_ax)
-        axis.axhline(plotobj.y,
-                     color=plotobj.color,
-                     linestyle=plotobj.linestyle,
-                     linewidth=plotobj.linewidth,
-                     label=plotobj.label)
+        ax.axhline(plotobj.y, **inputs)
 
-    def _barplot(self, plotobj):
+    def _barplot(self, plotobj, ax):
         """
         Uses BarPlot object to plot on axis.
         """
+        skipvars = ['plottype', 'plot_ax', 'x', 'height']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
 
-        axis = self._determine_axis(plotobj.plot_ax)
+        ax.bar(plotobj.x, plotobj.height, **inputs)
 
-        axis.bar(plotobj.x,
-                 plotobj.height,
-                 width=plotobj.width,
-                 bottom=plotobj.bottom,
-                 align=plotobj.align,
-                 color=plotobj.color,
-                 edgecolor=plotobj.edgecolor,
-                 linewidth=plotobj.linewidth,
-                 tick_label=plotobj.tick_label,
-                 xerr=plotobj.xerr,
-                 yerr=plotobj.yerr,
-                 ecolor=plotobj.ecolor,
-                 capsize=plotobj.capsize,
-                 error_kw=plotobj.error_kw,
-                 log=plotobj.log)
-
-    def _hbar(self, plotobj):
+    def _hbar(self, plotobj, ax):
         """
         Uses HorizontalBar object to plot on axis.
         """
-        axis = self._determine_axis(plotobj.plot_ax)
-        axis.barh(plotobj.y,
-                  plotobj.width,
-                  height=plotobj.height,
-                  left=plotobj.left,
-                  align=plotobj.align,
-                  color=plotobj.color,
-                  edgecolor=plotobj.edgecolor,
-                  linewidth=plotobj.linewidth,
-                  tick_label=plotobj.tick_label,
-                  xerr=plotobj.xerr,
-                  yerr=plotobj.yerr,
-                  ecolor=plotobj.ecolor,
-                  capsize=plotobj.capsize,
-                  error_kw=plotobj.error_kw,
-                  log=plotobj.log)
+        skipvars = ['plottype', 'plot_ax', 'y', 'width']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
 
-    def _determine_axis(self, requested_axis):
-        """
-        Determine which axis to use for plotting.  Default is self.ax.
-        Return:
-            correct axis for plotting
-        """
-        if requested_axis == 'shared_ax':
-            if self.shared_ax is None:
-                self.shared_ax = self.ax.twinx()
-            axis = self.shared_ax
-        elif requested_axis == 'shared_ay':
-            if self.shared_ay is None:
-                self.shared_ay = self.ax.twiny()
-            axis = self.shared_ay
-        else:
-            axis = self.ax
+        ax.barh(plotobj.y, plotobj.width, **inputs)
 
-        return axis
-
-    def add_unity(self,
-                  linewidth=1,
-                  color='gray',
-                  alpha=None,
-                  linestyle='-'):
+    def _get_inputs_dict(self, skipvars, plotobj):
         """
-        Plots 1:1 line on plot.
-
-        Args:
-            linewidth : (int; default=1) Line thickness
-            color : (str; default='gray') Line color
-            alpha : (float; default=None) The alpha value,
-                    between 0 (transparent) and 1 (opaque)
-            linestyle : (str; default='-') Line style
+        Creates dictionary for plot inputs. Skips variables
+        in 'skipvars' list.
         """
-        _xy = np.array(self.ax.get_xlim())
-        self.ax.plot(_xy, _xy, linewidth=linewidth, color=color,
-                     alpha=alpha, linestyle=linestyle)
+        inputs = {}
+        for v in [v for v in vars(plotobj) if v not in skipvars]:
+            inputs[v] = vars(plotobj)[v]
 
-    def add_grid(self,
-                 linewidth=1,
-                 color='gray',
-                 alpha=None,
-                 linestyle='-'):
-        """
-        Plots gridlines on plot.
+        return inputs
 
-        Args:
-            linewidth : (int; default=1) Line thickness
-            color : (str; default='gray') Line color
-            alpha : (float; default=None) The alpha value,
-                    between 0 (transparent) and 1 (opaque)
-            linestyle : (str; default='-') Line style
+    def _plot_title(self, ax, title):
         """
-        self.ax.grid(linewidth=linewidth, color=color,
-                     alpha=alpha, linestyle=linestyle)
+        Add title on specified ax.
+        """
+        ax.set_title(**title)
 
-    def set_xlim(self, left=None, right=None):
+    def _plot_xlabel(self, ax, xlabel):
         """
-        Sets x limits on plot.
+        Add xlabel on specified ax.
+        """
+        ax.set_xlabel(**xlabel)
 
-        Args:
-            left: (int, float) the left xlim in data coorinates
-            right: (int, float) the right xlim in data coorinates
+    def _plot_ylabel(self, ax, ylabel):
         """
-        self.ax.set_xlim(left, right)
+        Add ylabel on specified ax.
+        """
+        ax.set_ylabel(**ylabel)
 
-    def set_ylim(self, bottom=None, top=None):
+    def _plot_colorbar(self, ax, colorbar):
         """
-        Sets y limits on plot.
-
-        Args:
-            bottom: (int, float) the bottom ylim in data coorinates
-            top: (int, float) the top ylim in data coorinates
-        """
-        self.ax.set_ylim(bottom, top)
-
-    def set_xticks(self, ticks=list(), minor=False):
-        """
-        Sets x ticks on plot.
-        """
-        self.ax.set_xticks(ticks, minor=minor)
-
-    def set_yticks(self, ticks=list(), minor=False):
-        """
-        Sets y ticks on plot.
-        """
-        self.ax.set_yticks(ticks, minor=minor)
-
-    def set_xticklabels(self, labels=list(),
-                        fontsize=12,
-                        fontweight='normal',
-                        color='k',
-                        rotation=0):
-        """
-        Sets the xtick labels.
-
-        Note, if len of labels does not equal the number of x ticks,
-        a Value Error will be raised.
-
-        Args:
-            labels : (array like) list of str to use for x ticks
-            fontsize : (int; default=12) Text font size
-            fontweight : (str; default='normal') Text font weight
-            color : (str; default='k') Text font color
-            rotation : (int) rotation of tick labels
+        Add colorbar on specified ax or for total figure.
         """
 
-        if len(labels) == len(self.ax.get_xticks()):
-            self.ax.set_xticklabels(labels=labels,
-                                    fontsize=fontsize,
-                                    fontweight=fontweight,
-                                    color=color, rotation=rotation)
+        if hasattr(self, 'cs'):
+            if colorbar['single_cbar']:
+                # IMPORTANT NOTICE ####
+                # If using single colorbar option, this method grabs the color
+                # series from the subplot that is in last row and column. It
+                # is important to note that if comparing multiple subplots with
+                # the same colorbar, the vmin and vmax should all be the same to
+                # avoid comparison errors.
+                if ax.is_last_row() and ax.is_last_col():
+                    cbar_ax = self.fig.add_axes(colorbar['cbar_loc'])
+                    cb = self.fig.colorbar(self.cs, cax=cbar_ax, **colorbar['kwargs'])
+                    cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
+
+            else:
+                cb = self.fig.colorbar(self.cs, ax=ax,
+                                       **colorbar['kwargs'])
+                cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
+
+    def _plot_stats(self, ax, stats):
+        """
+        Add annotated stats on specified ax.
+        """
+        # loop through the dictionary and create the sting to annotate
+        outstr = ''
+        for key, value in stats['stats'].items():
+            outstr = outstr + f'{key}: {value}    '
+
+        ax.annotate(outstr, xy=(stats['xloc'], stats['yloc']),
+                    xycoords='axes fraction', ha=stats['ha'],
+                    **stats['kwargs'])
+
+    def _plot_legend(self, ax, legend):
+        """
+        Add legend on specified ax.
+        """
+        leg = ax.legend(**legend)
+
+        for i, key in enumerate(leg.legendHandles):
+            leg.legendHandles[i]._sizes = [20]
+
+    def _plot_text(self, ax, text):
+        """
+        Add text on specified ax.
+        """
+        ax.text(text['xloc'], text['yloc'],
+                text['text'], **text['kwargs'])
+
+    def _plot_grid(self, ax, grid):
+        """
+        Add grid on specified ax.
+        """
+        try:
+            ax.gridlines(crs=ccrs.PlateCarree(), **grid)
+        except AttributeError:
+            ax.grid(**grid)
+
+    def _set_xlim(self, ax, xlim):
+        """
+        Set x-limits on specified ax.
+        """
+        ax.set_xlim(**xlim)
+
+    def _set_ylim(self, ax, ylim):
+        """
+        Set y-limits on specified ax.
+        """
+        ax.set_ylim(**ylim)
+
+    def _set_xticks(self, ax, xticks):
+        """
+        Set x-ticks on specified ax.
+        """
+        try:
+            ax.set_xticks(**xticks, crs=ccrs.PlateCarree())
+            lon_formatter = LongitudeFormatter(zero_direction_label=True)
+            lat_formatter = LatitudeFormatter()
+            ax.xaxis.set_major_formatter(lon_formatter)
+            ax.yaxis.set_major_formatter(lat_formatter)
+        except AttributeError:
+            ax.set_xticks(**xticks)
+
+    def _set_yticks(self, ax, yticks):
+        """
+        Set y-ticks on specified ax.
+        """
+        try:
+            ax.set_yticks(**yticks, crs=ccrs.PlateCarree())
+        except AttributeError:
+            ax.set_yticks(**yticks)
+
+    def _set_xticklabels(self, ax, xticklabels):
+        """
+        Set x-tick labels on specified ax.
+        """
+        if len(xticklabels['labels']) == len(ax.get_xticks()):
+            ax.set_xticklabels(xticklabels['labels'],
+                               **xticklabels['kwargs'])
 
         else:
             raise ValueError('Len of xtick labels does not equal ' +
                              'len of xticks. Set xticks appropriately ' +
                              'or change labels to be len of xticks.')
 
-    def set_yticklabels(self, labels=list(),
-                        fontsize=12,
-                        fontweight='normal',
-                        color='k',
-                        rotation=0):
+    def _set_yticklabels(self, ax, yticklabels):
         """
-        Sets the ytick labels.
-
-        Note, if len of labels does not equal the number of y ticks,
-        a Value Error will be raised.
-
-        Args:
-            labels : (array like) list of str to use for y ticks
-            fontsize : (int; default=12) Text font size
-            fontweight : (str; default='normal') Text font weight
-            color : (str; default='k') Text font color
-            rotation : (int) rotation of tick labels
+        Set y-tick labels on specified ax.
         """
-
-        if len(labels) == len(self.ax.get_yticks()):
-            self.ax.set_yticklabels(labels=labels,
-                                    fontsize=fontsize,
-                                    fontweight=fontweight,
-                                    color=color, rotation=rotation)
+        if len(yticklabels['labels']) == len(ax.get_yticks()):
+            ax.set_yticklabels(yticklabels['labels'],
+                               **yticklabels['kwargs'])
 
         else:
             raise ValueError('Len of ytick labels does not equal ' +
                              'len of yticks. Set yticks appropriately ' +
                              'or change labels to be len of yticks.')
 
-    def invert_xaxis(self):
+    def _invert_xaxis(self, ax, invert_xaxis):
         """
-        Invert the x axis
+        Invert x-axis on specified ax.
         """
-        self.ax.invert_xaxis()
+        if invert_xaxis:
+            ax.invert_xaxis()
 
-    def invert_yaxis(self):
+    def _invert_yaxis(self, ax, invert_yaxis):
         """
-        Invert the y axis
+        Invert y-axis on specified ax.
         """
-        self.ax.invert_yaxis()
+        if invert_yaxis:
+            ax.invert_yaxis()
 
-    def set_yscale(self, scale):
+    def _set_yscale(self, ax, yscale):
         """
-        Sets the y axis scale to 'log', 'linear', 'symlog', or 'logit'
-
-        Args:
-            scale : (str) scale type 'log', 'linear', 'symlog', or 'logit'
+        Set y-scale on specified ax.
         """
-        valid_scales = ['log', 'linear', 'symlog', 'logit']
-        if scale not in valid_scales:
-            raise ValueError(f'requested scale {scale} is invalid. Valid '
-                             f'choices are: {" | ".join(valid_scales)}')
+        ax.set_yscale(yscale)
 
-        self.ax.set_yscale(scale)
-
-
-class CreateMap(EMCPyPlots):
-    """
-    Creates a map axes on a figure to plot data.
-    """
-
-    def __init__(self, figsize=(12, 8),
-                 domain=Domain('global'),
-                 proj_obj=MapProjection('plcarr')):
+    def _sharex(self, ax):
         """
-        CreateMap constructor
-
-        Args:
-            figsize : (tuple; default=(12,8)) Figure dimension size
-            domain : (object) domain from emcpy.plots.map_tools.Domain()
-            projection : (object) projection from emcpy
-                         emcpy.plots.map_tools.MapProjection()
+        If sharex axis is True, will find where to hide xticklabels.
         """
+        if not ax.is_last_row():
+            plt.setp(ax.get_xticklabels(), visible=False)
 
-        super().__init__(figsize)
-
-        self.domain = domain
-        self.proj_obj = proj_obj
-        ax = self.fig.add_subplot(1, 1, 1, projection=proj_obj.projection)
-
-        if str(proj_obj) not in ['npstere', 'spstere']:
-            ax.set_extent(domain.extent)
-            if str(proj_obj) not in ['lamconf']:
-                ax.set_xticks(domain.xticks, crs=ccrs.PlateCarree())
-                ax.set_yticks(domain.yticks, crs=ccrs.PlateCarree())
-                lon_formatter = LongitudeFormatter(zero_direction_label=False)
-                lat_formatter = LatitudeFormatter()
-                ax.xaxis.set_major_formatter(lon_formatter)
-                ax.yaxis.set_major_formatter(lat_formatter)
-
-        self.ax = ax
-
-    def add_features(self, feature_list=['coastlines']):
+    def _sharey(self, ax):
         """
-        Add features onto map.
-
-        Args:
-            feature_list : (array-like, default=['coastlines']) List of cartopy
-                           cfeatures that can be found here:
-                           https://scitools.org.uk/cartopy/docs/v0.14/matplotlib
-                           /feature_interface.html
-
-
-        ***Need to get shapefiles/figure out how to get cfeatures from Cartopy
+        If sharey axis is True, will find where to hide yticklabels.
         """
+        if not ax.is_first_col():
+            plt.setp(ax.get_yticklabels(), visible=False)
 
+    def _add_map_features(self, ax, map_features):
+        """
+        Factory to add map features.
+        """
         feature_dict = {
-            'coastlines': self._add_coastlines,
-            'borders': self._add_borders,
-            'states': self._add_states,
-            'lakes': self._add_lakes,
-            'rivers': self._add_rivers
+            'coastline': cfeature.COASTLINE,
+            'borders': cfeature.BORDERS,
+            'states': cfeature.STATES,
+            'lakes': cfeature.LAKES,
+            'rivers': cfeature.RIVERS,
+            'land': cfeature.LAND,
+            'ocean': cfeature.OCEAN
         }
 
-        for feat in feature_list:
+        for feat in map_features:
             try:
-                feature_dict[feat]()
+                ax.add_feature(feature_dict[feat])
             except KeyError:
                 raise TypeError(f'{feat} is not a valid map feature.' +
                                 'Current map features supported are:\n' +
                                 f'{" | ".join(feature_dict.keys())}"')
-
-    def draw_data(self, plot_list=list()):
-        """
-        Add data layer onto map.
-
-        Args:
-            plot_list : (array-like) List of map plot objects from emcpy
-        """
-
-        plot_dict = {
-            'map_scatter': self._scatter,
-            'map_gridded': self._gridded,
-            'map_contour': self._contour
-        }
-
-        for plotobj in plot_list:
-            try:
-                plot_dict[plotobj.plottype](plotobj)
-            except KeyError:
-                raise TypeError(f'{plotobj} is not a valid plot type.' +
-                                'Current plot types supported are:\n' +
-                                f'{" | ".join(feature_dict.keys())}"')
-
-    def _scatter(self, plot):
-        """
-        Plots MapScatter object on map axes.
-        """
-        if plot.data is None:
-            cs = self.ax.scatter(plot.longitude,
-                                 plot.latitude,
-                                 s=plot.markersize,
-                                 color=plot.color,
-                                 marker=plot.marker,
-                                 edgecolors=plot.edgecolors,
-                                 linewidths=plot.linewidths,
-                                 alpha=plot.alpha,
-                                 vmin=plot.vmin,
-                                 vmax=plot.vmax,
-                                 label=plot.label,
-                                 transform=self.proj_obj.projection)
-        else:
-            cs = self.ax.scatter(plot.longitude,
-                                 plot.latitude,
-                                 c=plot.data,
-                                 s=plot.markersize,
-                                 cmap=plot.cmap,
-                                 marker=plot.marker,
-                                 edgecolors=plot.edgecolors,
-                                 linewidths=plot.linewidths,
-                                 alpha=plot.alpha,
-                                 vmin=plot.vmin,
-                                 vmax=plot.vmax,
-                                 label=plot.label,
-                                 transform=self.proj_obj.projection)
-        if plot.colorbar:
-            self.cs = cs
-
-    def _gridded(self, plot):
-        """
-        Plots MapGridded object on map axes.
-        """
-
-        cs = self.ax.pcolormesh(plot.longitude,
-                                plot.latitude,
-                                plot.data,
-                                cmap=plot.cmap,
-                                vmin=plot.vmin,
-                                vmax=plot.vmax,
-                                alpha=plot.alpha,
-                                transform=self.proj_obj.projection)
-
-        if plot.colorbar:
-            self.cs = cs
-
-    def _contour(self, plot):
-        """
-        Plots MapContour object on map axes.
-        """
-
-        cs = self.ax.contour(plot.longitude,
-                             plot.latitude,
-                             plot.data,
-                             levels=plot.levels,
-                             colors=plot.colors,
-                             linewidth=plot.linewidths,
-                             linestyle=plot.linestyles,
-                             cmap=plot.cmap,
-                             vmin=plot.vmin,
-                             vmax=plot.vmax,
-                             alpha=plot.alpha,
-                             transform=self.proj_obj.projection)
-
-        if plot.clabel:
-            plt.clabel(cs, levels=plot.levels, use_clabeltext=True)
-
-        if plot.colorbar:
-            self.cs = cs
-
-    def add_grid(self,
-                 linewidth=1,
-                 color='gray',
-                 alpha=None,
-                 linestyle='-'):
-        """
-        Adds gridlines on map axes.
-
-        Args:
-            linewidth : (int; default=1) Line thickness
-            color : (str; default='gray') Line color
-            alpha : (float; default=None) The alpha value,
-                    between 0 (transparent) and 1 (opaque)
-            linestyle : (str; default='-') Line style
-        """
-        self.ax.gridlines(crs=ccrs.PlateCarree(), linewidth=linewidth,
-                          color=color, alpha=alpha, linestyle=linestyle)
-
-    def _add_coastlines(self):
-        """
-        Add coastline to map axes. (Only feature that currently works)
-        """
-        self.ax.add_feature(cfeature.GSHHSFeature(scale='auto'))
-
-        # Will uncomment when we can get cfeatures to work
-        # self.ax.add_feature(cfeature.COASTLINE)
-
-    def _add_borders(self):
-        """
-        Add country borders to map axes.
-        """
-        self.ax.add_feature(cfeature.BORDERS)
-
-    def _add_states(self):
-        """
-        Add state borders to map axes.
-        """
-        self.ax.add_feature(cfeature.STATES)
-
-    def _add_lakes(self):
-        """
-        Add lakes to map axes.
-        """
-        self.ax.add_feature(cfeature.LAKES)
-
-    def _add_rivers(self):
-        """
-        Add rivers to map axes.
-        """
-        self.ax.add_feature(sfeature.RIVERS)
-
-
-class CreateFigure(Figure):
-    """
-    Extends class figure for plotted data.
-    """
-
-    def __init__(self, *args, **kwargs):
-        """
-        CreatePlot constructor.
-        """
-        super().__init__(*args, **kwargs)
-
-    def add_legend(self, plotobj, loc='upper left', ncol=1, fontsize='medium',
-                   labelcolor='black', markersize=20, markerfirst=True,
-                   frameon=True, fancybox=True, shadow=False,
-                   framealpha=0.8, facecolor='inherit', edgecolor='lightgray',
-                   title=None, title_fontsize='medium'):
-        """
-        Add a legend to a CreateFigure class object.
-
-        Args:
-            plotobj : (CreatePlot) object for bbox transformation.
-            loc : (str; default='upper left') location of legend box.
-            ncol : (int) number of columsn legend is split into
-            fontsize : (int or str; default='medium') the font
-                size of the legend.
-                Options include ['xx-small', 'x-small', 'small',
-                'medium', 'large', 'x-large', 'xx-large'] or an
-                integer value
-            labelcolor : (str; default='black') color of label text
-            markersize : (int; default=20) size of marker in legend
-            markerfirst : (bool; default=True) places marker in front
-                          of label text. If False, label will be first
-            frameon : (bool; default=True) Puts legend on a patch
-            fancybox : (bool; default=True) Applies round edges to patch
-            shadow : (bool; default=False) Draws shadow behind legend
-            framealpha : (float; default=0.8) Alpha transparency of
-                         legend background
-            facecolor : (str; default='inherit') Background color of
-                        legend
-            edgecolor : (str; default='lightgray') Legend's background
-                        edge color
-            title : (str; default=None) Title of legend
-            title_fonstize : (int or str: default='medium') the font of
-                             the legend title.
-                             Options include ['xx-small', 'x-small',
-                             'small', 'medium', 'large', 'x-large',
-                             'xx-large'] or an integer value
-        """
-        coords = self._getcoords(loc)
-        legend = self.legend(loc=loc, bbox_to_anchor=coords,
-                             bbox_transform=plotobj.ax.transAxes,
-                             ncol=ncol, fontsize=fontsize,
-                             labelcolor=labelcolor, markerfirst=markerfirst,
-                             frameon=frameon, fancybox=fancybox, shadow=shadow,
-                             framealpha=framealpha, facecolor=facecolor,
-                             edgecolor=edgecolor, title=title,
-                             title_fontsize=title_fontsize)
-
-        for i, key in enumerate(legend.legendHandles):
-            legend.legendHandles[i]._sizes = [markersize]
-
-    def _getcoords(self, loc):
-        """
-        Return the relative coordinate tuple for a given location string.
-
-        Args:
-            loc : (str; default='upper left') location of legend box.
-        """
-        return {
-            'upper left': (0, 1),
-            'upper center': (0.5, 1),
-            'upper right': (1, 1),
-            'center left': (0, 0.5),
-            'center': (0.5, 0.5),
-            'center right': (1, 0.5),
-            'lower left': (0, 0),
-            'lower center': (0.5, 0),
-            'lower right': (1, 0)
-        }.get(loc, (0, 1))    # upper left is default if loc is not found
