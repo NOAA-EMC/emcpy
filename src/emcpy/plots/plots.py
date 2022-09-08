@@ -1,37 +1,16 @@
+# This work developed by NOAA/NWS/EMC under the Apache 2.0 license.
 import numpy as np
 
-
 __all__ = ['Scatter', 'Histogram', 'LinePlot' 'VerticalLine',
-           'HorizontalLine', 'BarPlot' 'HorizontalBar']
+           'HorizontalLine', 'BarPlot' 'HorizontalBar',
+           'MapScatter', 'MapGridded', 'MapContour']
 
 
-class BasePlot:
-    def __init__(self):
-        """
-        BasePlot Constructor.
-        """
-        self.plot_ax = 'ax'
-        return
-
-    def use_shared_ax(self):
-        """
-        Set object to plot on shared ax axis
-        """
-        self.plot_ax = 'shared_ax'
-
-    def use_shared_ay(self):
-        """
-        Set object to plot on shared ay axis
-        """
-        self.plot_ax = 'shared_ay'
-
-
-class Scatter(BasePlot):
+class Scatter:
 
     def __init__(self, x, y):
         """
         Constructor for Scatter.
-
         Args:
             x : (array type)
             y : (array type)
@@ -52,36 +31,36 @@ class Scatter(BasePlot):
         self.linewidths = 1.5
         self.edgecolors = None
         self.label = f'n={np.count_nonzero(~np.isnan(x))}'
-        self.linear_regression = False
-        self.density = False
 
     def add_linear_regression(self):
         """
         Include linear regression line info as attributes.
         """
-        self.linear_regression = True
-        self.lr_color = 'black'
-        self.lr_linewidth = 1
+        self.linear_regression = {
+            'color': 'black',
+            'linewidth': 1,
+            'linestyle': '-'
+        }
 
     def density_scatter(self):
         """
         Include density scatter plot info as attributes.
         """
-        self.density = True
-        self.sort = True
-        self.cmap = 'nipy_spectral_r'
-        self.colorbar = True
-        self.bins = [100, 100]
-        self.interp = 'linear'
-        self.nsamples = True
+        self.density = {
+            'sort': True,
+            'cmap': 'nipy_spectral_r',
+            'colorbar': True,
+            'bins': [100, 100],
+            'interp': 'linear',
+            'nsamples': True
+        }
 
 
-class Histogram(BasePlot):
+class Histogram:
 
     def __init__(self, data):
         """
         Constructor for Histogram.
-
         Args:
             data : (array type)
         """
@@ -108,12 +87,11 @@ class Histogram(BasePlot):
         self.alpha = None
 
 
-class LinePlot(BasePlot):
+class LinePlot:
 
     def __init__(self, x, y):
         """
         Constructor for LinePlot.
-
         Args:
             x : (array type)
             y : (array type)
@@ -133,12 +111,11 @@ class LinePlot(BasePlot):
         self.label = None
 
 
-class VerticalLine(BasePlot):
+class VerticalLine:
 
     def __init__(self, x):
         """
         Constructor for VerticalLine
-
         Args:
             x : (int/float) x-value where vertical line
                 is to be plotted
@@ -154,13 +131,11 @@ class VerticalLine(BasePlot):
         self.linewidth = 1.5
         self.label = None
 
-
-class HorizontalLine(BasePlot):
+class HorizontalLine:
 
     def __init__(self, y):
         """
         Constructor for HorizontalLine
-
         Args:
             y : (int/float) y-value where horizontal
                 line is to be plotted
@@ -176,13 +151,11 @@ class HorizontalLine(BasePlot):
         self.linewidth = 1.5
         self.label = None
 
-
-class BarPlot(BasePlot):
+class BarPlot:
 
     def __init__(self, x, height):
         """
         Constructor for BarPlot.
-
         Args:
             x : (array type) x coordinate of bars
             height : (array type) the height(s) of the bars
@@ -209,12 +182,11 @@ class BarPlot(BasePlot):
         self.log = False
 
 
-class HorizontalBar(BasePlot):
+class HorizontalBar:
 
     def __init__(self, y, width):
         """
         Constructor to create a horizontal bar plot.
-
         Args:
             y : (array type) y coordinate of bars
             width : (array type) the width(s) of the bars
@@ -239,3 +211,83 @@ class HorizontalBar(BasePlot):
         self.capsize = 0
         self.error_kw = {}
         self.log = False
+
+
+class MapScatter:
+
+    def __init__(self, latitude, longitude, data=None):
+        """
+        Constructor for MapScatter.
+        Args:
+            latitude : (array type) Latitude data
+            longitude : (array type) Longitude data
+            data : (array type; default=None) data to be plotted
+        """
+        self.plottype = 'map_scatter'
+
+        self.latitude = latitude
+        self.longitude = longitude
+        self.data = data
+
+        self.marker = 'o'
+        self.markersize = 5
+        if data is None:
+            self.color = 'tab:blue'
+        else:
+            self.cmap = 'viridis'
+        self.linewidths = 1.5
+        self.edgecolors = None
+        self.alpha = None
+        self.vmin = None
+        self.vmax = None
+        self.label = None
+        self.colorbar = None
+
+
+class MapGridded:
+
+    def __init__(self, latitude, longitude, data):
+        """
+        Constructor for MapGridded.
+        Args:
+            latitude : (array type) Latitude data
+            longitude : (array type) Longitude data
+            data : (array type) data to be plotted
+        """
+        self.plottype = 'map_gridded'
+
+        self.latitude = latitude
+        self.longitude = longitude
+        self.data = data
+
+        self.cmap = 'viridis'
+        self.vmin = None
+        self.vmax = None
+        self.alpha = None
+
+
+class MapContour:
+
+    def __init__(self, latitude, longitude, data):
+        """
+        Constructor for MapScatter.
+        Args:
+            latitude : (array type) Latitude data
+            longitude : (array type) Longitude data
+            data : (array type) data to be plotted
+        """
+        self.plottype = 'map_contour'
+
+        self.latitude = latitude
+        self.longitude = longitude
+        self.data = data
+
+        self.levels = None
+        self.clabel = False
+        self.colors = 'black'
+        self.linewidths = 1.5
+        self.linestyles = '-'
+        self.cmap = None
+        self.vmin = None
+        self.vmax = None
+        self.alpha = None
