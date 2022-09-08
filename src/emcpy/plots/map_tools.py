@@ -1,3 +1,4 @@
+# This work developed by NOAA/NWS/EMC under the Apache 2.0 license.
 import cartopy.crs as ccrs
 
 
@@ -7,7 +8,6 @@ class Domain:
         """
         Class constructor that stores extent, xticks, and
         yticks for the domain given.
-
         Args:
             domain : (str; default='global') domain name to grab info
             dd : (dict) dictionary to add custom xticks, yticks
@@ -298,7 +298,6 @@ class MapProjection:
         """
         Class constructor that stores projection cartopy object
         for the projection given.
-
         Args:
             projection : (str; default='plcarr') projection name to grab info
             cenlon : (int, float; default=None) central longitude
