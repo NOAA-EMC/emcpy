@@ -60,14 +60,14 @@ jobs:
 #        cd $GITHUB_WORKSPACE/emcpy
 #        pytest -v src/tests
 
-#    - name: Generate documentation
-#      run: |
-#        cd $GITHUB_WORKSPACE
-#        pdoc --docformat "google" -o docs emcpy
-#        ls -lR docs/
+    - name: Generate documentation
+      run: |
+        cd $GITHUB_WORKSPACE
+        pdoc --docformat "google" -o docs emcpy
+        ls -lR docs/
 
-#    - name: Upload documentation
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: docs
-#        path: docs
+    - name: Upload documentation
+      uses: actions/upload-artifact@v2
+      with:
+        name: docs
+        path: docs
