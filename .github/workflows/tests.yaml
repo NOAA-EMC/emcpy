@@ -55,10 +55,13 @@ jobs:
 #        pip install .
 #        $CONDA/bin/pip3 install --use-deprecated=legacy-resolver -r requirements-github.txt --user .
 
-    - name: Run pytests
-      run: |
-        cd $GITHUB_WORKSPACE/emcpy
-        pytest -v src/tests
+    # Run empcy test suite
+    - name: Run emcpy pytests
+      run: emcpy_tests application
+
+#      run: |
+#        cd $GITHUB_WORKSPACE/emcpy
+#        pytest -v src/tests
 
 #    - name: Generate documentation
 #      run: |
