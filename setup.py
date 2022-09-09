@@ -24,9 +24,6 @@ setuptools.setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Operating System :: OS Independent',
         'Typing :: Typed'],
-    project_urls=[
-        Bug Tracker='https://github.com/noaa-emc/emcpy/issues',
-        CI='https://github.com/noaa-emc/emcpy/actions'],
     python_requires='>=3.6',
     install_requires=[
         'pyyaml>=6.0',
