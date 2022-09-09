@@ -1,14 +1,14 @@
 import setuptools
 setuptools.setup(
-    name = 'emcpy',
-    version = '0.0.1',
-    description = 'A collection of python tools used at EMC',
-    author = 'NOAA-EMC',
-    author_email = 'rahul.mahajan@noaa.gov',
-    url = 'https://github.com/noaa-emc/emcpy',
+    name='emcpy',
+    version='0.0.1',
+    description='A collection of python tools used at EMC',
+    author='NOAA-EMC',
+    author_email='rahul.mahajan@noaa.gov',
+    url='https://github.com/noaa-emc/emcpy',
     package_dir={'': 'src'},
     packages=setuptools.find_packages(where='src'),
-    classifiers = [
+    classifiers=[
         'Development Status :: 1 - Beta',
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
@@ -24,9 +24,9 @@ setuptools.setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Operating System :: OS Independent',
         'Typing :: Typed'],
-    project_urls = [
-        Bug Tracker = 'https://github.com/noaa-emc/emcpy/issues',
-        CI = 'https://github.com/noaa-emc/emcpy/actions'],
+    project_urls=[
+        Bug Tracker='https://github.com/noaa-emc/emcpy/issues',
+        CI='https://github.com/noaa-emc/emcpy/actions'],
     python_requires='>=3.6',
     install_requires=[
         'pyyaml>=6.0',
@@ -39,7 +39,6 @@ setuptools.setup(
     ],
     entry_points={
         'console_scripts': [
-            #'eva = eva.eva_base:main',
             'emcpy_tests = emcpy.emcpy_tests:main',
         ],
     },
