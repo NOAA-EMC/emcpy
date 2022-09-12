@@ -396,3 +396,17 @@ def _getBarData():
     x_pos = [i for i, _ in enumerate(x)]
 
     return x_pos, heights, variance
+
+
+def main():
+    
+    test_line_plot()
+    test_histogram_plot()
+    test_scatter_plot()
+    test_bar_plot()
+    test_horizontal_bar_plot()
+    test_multi_subplot()
+    
+
+if __name__ == "__main__":
+    main()
