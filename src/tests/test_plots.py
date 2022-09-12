@@ -22,106 +22,106 @@ def test_line_plot():
     lp3.color = 'tab:red'
     lp3.label = 'line 3'
 
-    plt_list = [lp1, lp2, lp3]
-    myplt = CreatePlot()
-    myplt.draw_data(plt_list)
-
-    myplt.add_title(label='Test Line Plot')
-    myplt.add_xlabel(xlabel='X Axis Label')
-    myplt.add_ylabel(ylabel='Y Axis Label')
-
-    fig = myplt.return_figure()
-    fig.add_legend(plotobj=myplt, loc='upper right')
-    fig.savefig('test_line_plot.png')
-
-
-def test_line_plot_2_x_axes():
-    # create line plot with two sets of axes
-    # sharing a common y axis
-
-    x1, y1, x2, y2, x3, y3 = _getLineData()
-    lp1 = LinePlot(x1, y1)
-    lp1.label = 'line 1'
-
-    lp2 = LinePlot(x2, y2)
-    lp2.color = 'tab:green'
-    lp2.label = 'line 2'
-    lp2.use_shared_ay()
-
-    lp3 = LinePlot(x3, y3)
-    lp3.color = 'tab:red'
-    lp3.label = 'line 3'
-    lp3.use_shared_ay()
-
-    myplt = CreatePlot()
-    plt_list = [lp1, lp2, lp3]
-    myplt.draw_data(plt_list)
-
-    myplt.add_title(label='Test Line Plot, 2 X Axes ')
-    myplt.add_xlabel(xlabel='X Axis Label')
-    myplt.add_ylabel(ylabel='Y Axis Label')
-    myplt.add_xlabel(xlabel='Secondary X Axis Label', xaxis='secondary')
-
-    fig = myplt.return_figure()
-    fig.add_legend(plotobj=myplt, loc="upper right")
-    fig.savefig('test_line_plot_2_x_axes.png')
+    plot1 = CreatePlot()
+    plot1.plot_layers = [lp1, lp2, lp3]
+    plot1.add_title('Test Line Plot')
+    plot1.add_xlabel('X Axis Label')
+    plot1.add_ylabel('Y Axis Label')
+    plot1.add_legend(loc='upper right')
+    
+    fig = CreateFigure()
+    fig.plot_list = [plot1]
+    fig.create_figure()
+    fig.save_figure('test_line_plot.png')
 
 
-def test_line_plot_2_y_axes():
-    # create line plot with two sets of axes
-    # sharing a common x axis
+# def test_line_plot_2_x_axes():
+#     # create line plot with two sets of axes
+#     # sharing a common y axis
 
-    x1, y1, x2, y2, x3, y3 = _getLineData()
+#     x1, y1, x2, y2, x3, y3 = _getLineData()
+#     lp1 = LinePlot(x1, y1)
+#     lp1.label = 'line 1'
 
-    lp1 = LinePlot(x1, y1)
-    lp1.label = 'line 1'
+#     lp2 = LinePlot(x2, y2)
+#     lp2.color = 'tab:green'
+#     lp2.label = 'line 2'
+#     lp2.use_shared_ay()
 
-    lp2 = LinePlot(x2, y2)
-    lp2.color = 'tab:green'
-    lp2.label = 'line 2'
-    lp2.use_shared_ax()
+#     lp3 = LinePlot(x3, y3)
+#     lp3.color = 'tab:red'
+#     lp3.label = 'line 3'
+#     lp3.use_shared_ay()
 
-    lp3 = LinePlot(x3, y3)
-    lp3.color = 'tab:red'
-    lp3.label = 'line 3'
+#     myplt = CreatePlot()
+#     plt_list = [lp1, lp2, lp3]
+#     myplt.draw_data(plt_list)
 
-    myplt = CreatePlot()
-    plt_list = [lp1, lp2, lp3]
-    myplt.draw_data(plt_list)
+#     myplt.add_title(label='Test Line Plot, 2 X Axes ')
+#     myplt.add_xlabel(xlabel='X Axis Label')
+#     myplt.add_ylabel(ylabel='Y Axis Label')
+#     myplt.add_xlabel(xlabel='Secondary X Axis Label', xaxis='secondary')
 
-    myplt.add_title(label='Test Line Plot, 2 Y Axes ')
-    myplt.add_xlabel(xlabel='X Axis Label')
-    myplt.add_ylabel(ylabel='Y Axis Label')
-    myplt.add_ylabel(ylabel='Secondary Y Axis Label', yaxis='secondary')
-
-    fig = myplt.return_figure()
-    fig.add_legend(plotobj=myplt, loc='upper right')
-    fig.savefig('test_line_plot_2_y_axes.png')
+#     fig = myplt.return_figure()
+#     fig.add_legend(plotobj=myplt, loc="upper right")
+#     fig.savefig('test_line_plot_2_x_axes.png')
 
 
-def test_line_plot_inverted_log_scale():
-    # create a line plot with an inverted, log scale y axis
+# def test_line_plot_2_y_axes():
+#     # create line plot with two sets of axes
+#     # sharing a common x axis
 
-    x = [0, 401, 1039, 2774, 2408, 512]
-    y = [0, 45, 225, 510, 1200, 1820]
-    lp = LinePlot(x, y)
-    plt_list = [lp]
+#     x1, y1, x2, y2, x3, y3 = _getLineData()
 
-    myplt = CreatePlot()
-    myplt.draw_data(plt_list)
+#     lp1 = LinePlot(x1, y1)
+#     lp1.label = 'line 1'
 
-    myplt.add_title(label='Test Line Plot, Inverted Log Scale')
-    myplt.add_xlabel(xlabel='X Axis Label')
-    myplt.add_ylabel(ylabel='Y Axis Label')
+#     lp2 = LinePlot(x2, y2)
+#     lp2.color = 'tab:green'
+#     lp2.label = 'line 2'
+#     lp2.use_shared_ax()
 
-    myplt.set_yscale('log')
-    myplt.invert_yaxis()
+#     lp3 = LinePlot(x3, y3)
+#     lp3.color = 'tab:red'
+#     lp3.label = 'line 3'
 
-    ylabels = [0, 50, 100, 500, 1000, 2000]
-    myplt.set_yticklabels(labels=ylabels)
+#     myplt = CreatePlot()
+#     plt_list = [lp1, lp2, lp3]
+#     myplt.draw_data(plt_list)
 
-    fig = myplt.return_figure()
-    fig.savefig('test_line_inverted_log_scale.png')
+#     myplt.add_title(label='Test Line Plot, 2 Y Axes ')
+#     myplt.add_xlabel(xlabel='X Axis Label')
+#     myplt.add_ylabel(ylabel='Y Axis Label')
+#     myplt.add_ylabel(ylabel='Secondary Y Axis Label', yaxis='secondary')
+
+#     fig = myplt.return_figure()
+#     fig.add_legend(plotobj=myplt, loc='upper right')
+#     fig.savefig('test_line_plot_2_y_axes.png')
+
+
+# def test_line_plot_inverted_log_scale():
+#     # create a line plot with an inverted, log scale y axis
+
+#     x = [0, 401, 1039, 2774, 2408, 512]
+#     y = [0, 45, 225, 510, 1200, 1820]
+#     lp = LinePlot(x, y)
+#     plt_list = [lp]
+
+#     myplt = CreatePlot()
+#     myplt.draw_data(plt_list)
+
+#     myplt.add_title(label='Test Line Plot, Inverted Log Scale')
+#     myplt.add_xlabel(xlabel='X Axis Label')
+#     myplt.add_ylabel(ylabel='Y Axis Label')
+
+#     myplt.set_yscale('log')
+#     myplt.invert_yaxis()
+
+#     ylabels = [0, 50, 100, 500, 1000, 2000]
+#     myplt.set_yticklabels(labels=ylabels)
+
+#     fig = myplt.return_figure()
+#     fig.savefig('test_line_inverted_log_scale.png')
 
 
 def test_histogram_plot():
@@ -130,40 +130,40 @@ def test_histogram_plot():
     data1, data2 = _getHistData()
     hst1 = Histogram(data1)
 
-    myplt = CreatePlot()
-    plt_list = [hst1]
-    myplt.draw_data(plt_list)
+    plot1 = CreatePlot()
+    plot1.plot_layers = [hst1]
+    plot1.add_title(label='Test Histogram Plot')
+    plot1.add_xlabel(xlabel='X Axis Label')
+    plot1.add_ylabel(ylabel='Y Axis Label')
 
-    myplt.add_title(label='Test Histogram Plot')
-    myplt.add_xlabel(xlabel='X Axis Label')
-    myplt.add_ylabel(ylabel='Y Axis Label')
-
-    fig = myplt.return_figure()
-    fig.savefig('test_histogram_plot.png')
+    fig = CreateFigure()
+    fig.plot_list = [plot1]
+    fig.create_figure()
+    fig.save_figure('test_histogram_plot.png')
 
 
-def test_histogram_plot_2_x_axes():
-    # create histogram plot on two pair of axes with
-    # a shared y axis
+# def test_histogram_plot_2_x_axes():
+#     # create histogram plot on two pair of axes with
+#     # a shared y axis
 
-    data1, data2 = _getHistData()
-    hst1 = Histogram(data1)
-    hst2 = Histogram(data2)
+#     data1, data2 = _getHistData()
+#     hst1 = Histogram(data1)
+#     hst2 = Histogram(data2)
 
-    hst2.color = 'tab:red'
-    hst2.use_shared_ay()
+#     hst2.color = 'tab:red'
+#     hst2.use_shared_ay()
 
-    myplt = CreatePlot()
-    plt_list = [hst1, hst2]
-    myplt.draw_data(plt_list)
+#     myplt = CreatePlot()
+#     plt_list = [hst1, hst2]
+#     myplt.draw_data(plt_list)
 
-    myplt.add_title(label='Test Histogram Plot, 2 X Axes')
-    myplt.add_xlabel(xlabel='X Axis Label')
-    myplt.add_ylabel(ylabel='Y Axis Label')
-    myplt.add_xlabel(xlabel='Secondary X Axis Label', xaxis='secondary')
+#     myplt.add_title(label='Test Histogram Plot, 2 X Axes')
+#     myplt.add_xlabel(xlabel='X Axis Label')
+#     myplt.add_ylabel(ylabel='Y Axis Label')
+#     myplt.add_xlabel(xlabel='Secondary X Axis Label', xaxis='secondary')
 
-    fig = myplt.return_figure()
-    fig.savefig('test_histogram_plot_2_x_axes.png')
+#     fig = myplt.return_figure()
+#     fig.savefig('test_histogram_plot_2_x_axes.png')
 
 
 def test_scatter_plot():
@@ -172,40 +172,40 @@ def test_scatter_plot():
     x1, y1, x2, y2 = _getScatterData()
     sctr1 = Scatter(x1, y1)
 
-    myplt = CreatePlot()
-    plt_list = [sctr1]
-    myplt.draw_data(plt_list)
+    plot1 = CreatePlot()
+    plot1.plot_layers = [sctr1]
+    plot1.add_title(label='Test Scatter Plot')
+    plot1.add_xlabel(xlabel='X Axis Label')
+    plot1.add_ylabel(ylabel='Y Axis Label')
 
-    myplt.add_title(label='Test Scatter Plot')
-    myplt.add_xlabel(xlabel='X Axis Label')
-    myplt.add_ylabel(ylabel='Y Axis Label')
-
-    fig = myplt.return_figure()
-    fig.savefig('test_scatter_plot.png')
+    fig = CreateFigure()
+    fig.plot_list = [plot1]
+    fig.create_figure()
+    fig.save_figure('test_scatter_plot.png')
 
 
-def test_scatter_plot_2_y_axes():
-    # create scatter plot using two sets of axes
-    # with a shared x axis
+# def test_scatter_plot_2_y_axes():
+#     # create scatter plot using two sets of axes
+#     # with a shared x axis
 
-    x1, y1, x2, y2 = _getScatterData()
-    sctr1 = Scatter(x1, y1)
+#     x1, y1, x2, y2 = _getScatterData()
+#     sctr1 = Scatter(x1, y1)
 
-    sctr2 = Scatter(x2, y2)
-    sctr2.color = 'tab:blue'
-    sctr2.use_shared_ax()
+#     sctr2 = Scatter(x2, y2)
+#     sctr2.color = 'tab:blue'
+#     sctr2.use_shared_ax()
 
-    myplt = CreatePlot()
-    plt_list = [sctr1, sctr2]
-    myplt.draw_data(plt_list)
+#     myplt = CreatePlot()
+#     plt_list = [sctr1, sctr2]
+#     myplt.draw_data(plt_list)
 
-    myplt.add_title(label='Test Scatter Plot, 2 Y Axes')
-    myplt.add_xlabel(xlabel='X Axis Label')
-    myplt.add_ylabel(ylabel='Y Axis Label')
-    myplt.add_ylabel(ylabel='Secondary Y Axis Label', yaxis='secondary')
+#     myplt.add_title(label='Test Scatter Plot, 2 Y Axes')
+#     myplt.add_xlabel(xlabel='X Axis Label')
+#     myplt.add_ylabel(ylabel='Y Axis Label')
+#     myplt.add_ylabel(ylabel='Secondary Y Axis Label', yaxis='secondary')
 
-    fig = myplt.return_figure()
-    fig.savefig('test_scatter_plot_2_y_axes.png')
+#     fig = myplt.return_figure()
+#     fig.savefig('test_scatter_plot_2_y_axes.png')
 
 
 def test_bar_plot():
@@ -218,15 +218,16 @@ def test_bar_plot():
     bar.yerr = variance
     bar.capsize = 5.
 
-    myplt = CreatePlot()
-    myplt.draw_data([bar])
+    plot1 = CreatePlot()
+    plot1.plot_layers = [bar]
+    plot1.add_xlabel(xlabel='X Axis Label')
+    plot1.add_ylabel(ylabel='Y Axis Label')
+    plot1.add_title("Test Bar Plot")
 
-    myplt.add_xlabel(xlabel='X Axis Label')
-    myplt.add_ylabel(ylabel='Y Axis Label')
-    myplt.add_title("Test Bar Plot")
-
-    fig = myplt.return_figure()
-    fig.savefig('test_bar_plot.png')
+    fig = CreateFigure()
+    fig.plot_list = [plot1]
+    fig.create_figure()
+    fig.save_figure('test_bar_plot.png')
 
 
 def test_horizontal_bar_plot():
@@ -239,19 +240,47 @@ def test_horizontal_bar_plot():
     bar.xerr = variance
     bar.capsize = 5
 
-    myplt = CreatePlot()
-    myplt.draw_data([bar])
+    plot1 = CreatePlot()
+    plot1.plot_layers = [bar]
+    plot1.add_xlabel(xlabel='X Axis Label')
+    plot1.add_ylabel(ylabel='Y Axis Label')
+    plot1.add_title("Test Horizontal Bar Plot")
 
-    myplt.add_xlabel(xlabel='X Axis Label')
-    myplt.add_ylabel(ylabel='Y Axis Label')
-    myplt.add_title("Test Horizontal Bar Plot")
+    fig = CreateFigure()
+    fig.plot_list = [plot1]
+    fig.create_figure()
+    fig.save_figure('test_horizontal_bar_plot.png')
 
-    fig = myplt.return_figure()
-    fig.savefig('test_horizontal_bar_plot.png')
+# def test_add_logo():
+#     # Test adding logos
+#     x1, y1, x2, y2, x3, y3 = _getLineData()
+#     lp1 = LinePlot(x1, y1)
+#     lp1.label = 'line 1'
 
+#     lp2 = LinePlot(x2, y2)
+#     lp2.color = 'tab:green'
+#     lp2.label = 'line 2'
 
-def test_add_logo():
-    # Test adding logos
+#     lp3 = LinePlot(x3, y3)
+#     lp3.color = 'tab:red'
+#     lp3.label = 'line 3'
+
+#     plt_list = [lp1, lp2, lp3]
+#     myplt = CreatePlot()
+#     myplt.draw_data(plt_list)
+
+#     myplt.add_title(label='Test Line Plot')
+#     myplt.add_xlabel(xlabel='X Axis Label')
+#     myplt.add_ylabel(ylabel='Y Axis Label')
+#     myplt.add_logo(400, 50, which='noaa')
+
+#     fig = myplt.return_figure()
+#     fig.savefig('test_add_logo.png')
+
+def test_multi_subplot():
+    # Create a figure with four different subplots
+    
+    # Line plot
     x1, y1, x2, y2, x3, y3 = _getLineData()
     lp1 = LinePlot(x1, y1)
     lp1.label = 'line 1'
@@ -264,17 +293,58 @@ def test_add_logo():
     lp3.color = 'tab:red'
     lp3.label = 'line 3'
 
-    plt_list = [lp1, lp2, lp3]
-    myplt = CreatePlot()
-    myplt.draw_data(plt_list)
+    plot1 = CreatePlot()
+    plot1.plot_layers = [lp1, lp2, lp3]
+    plot1.add_title('Test Line Plot')
+    plot1.add_xlabel('X Axis Label')
+    plot1.add_ylabel('Y Axis Label')
+    plot1.add_legend(loc='upper right')
+    
+    # Histogram plot
+    data1, data2 = _getHistData()
+    hst1 = Histogram(data1)
 
-    myplt.add_title(label='Test Line Plot')
-    myplt.add_xlabel(xlabel='X Axis Label')
-    myplt.add_ylabel(ylabel='Y Axis Label')
-    myplt.add_logo(400, 50, which='noaa')
+    plot2 = CreatePlot()
+    plot2.plot_layers = [hst1]
+    plot2.add_title(label='Test Histogram Plot')
+    plot2.add_xlabel(xlabel='X Axis Label')
+    plot2.add_ylabel(ylabel='Y Axis Label')
+    
+    # Bar plot
+    x_pos, heights, variance = _getBarData()
 
-    fig = myplt.return_figure()
-    fig.savefig('test_add_logo.png')
+    bar = BarPlot(x_pos, heights)
+    bar.color = 'tab:red'
+    bar.yerr = variance
+    bar.capsize = 5.
+
+    plot3 = CreatePlot()
+    plot3.plot_layers = [bar]
+    plot3.add_xlabel(xlabel='X Axis Label')
+    plot3.add_ylabel(ylabel='Y Axis Label')
+    plot3.add_title("Test Bar Plot")
+    
+    # Horizontal bar plot
+    y_pos, widths, variance = _getBarData()
+
+    bar = HorizontalBar(y_pos, widths)
+    bar.color = 'tab:green'
+    bar.xerr = variance
+    bar.capsize = 5
+
+    plot4 = CreatePlot()
+    plot4.plot_layers = [bar]
+    plot4.add_xlabel(xlabel='X Axis Label')
+    plot4.add_ylabel(ylabel='Y Axis Label')
+    plot4.add_title("Test Horizontal Bar Plot")
+    
+    fig = CreateFigure()
+    fig.plot_list = [plot1, plot2, plot3, plot4]
+    fig.figsize=(14,10)
+    fig.ncols = 2
+    fig.nrows = 2
+    fig.create_figure()
+    fig.save_figure('test_multi_subplot.png')
 
 
 def _getLineData():
