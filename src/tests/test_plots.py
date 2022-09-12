@@ -399,14 +399,15 @@ def _getBarData():
 
 
 def main():
-    
+
     test_line_plot()
     test_histogram_plot()
     test_scatter_plot()
     test_bar_plot()
     test_horizontal_bar_plot()
     test_multi_subplot()
-    
+
 
 if __name__ == "__main__":
+
     main()
