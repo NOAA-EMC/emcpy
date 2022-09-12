@@ -28,7 +28,7 @@ def test_line_plot():
     plot1.add_xlabel('X Axis Label')
     plot1.add_ylabel('Y Axis Label')
     plot1.add_legend(loc='upper right')
-    
+
     fig = CreateFigure()
     fig.plot_list = [plot1]
     fig.create_figure()
@@ -277,9 +277,10 @@ def test_horizontal_bar_plot():
 #     fig = myplt.return_figure()
 #     fig.savefig('test_add_logo.png')
 
+
 def test_multi_subplot():
     # Create a figure with four different subplots
-    
+
     # Line plot
     x1, y1, x2, y2, x3, y3 = _getLineData()
     lp1 = LinePlot(x1, y1)
@@ -299,7 +300,7 @@ def test_multi_subplot():
     plot1.add_xlabel('X Axis Label')
     plot1.add_ylabel('Y Axis Label')
     plot1.add_legend(loc='upper right')
-    
+
     # Histogram plot
     data1, data2 = _getHistData()
     hst1 = Histogram(data1)
@@ -309,7 +310,7 @@ def test_multi_subplot():
     plot2.add_title(label='Test Histogram Plot')
     plot2.add_xlabel(xlabel='X Axis Label')
     plot2.add_ylabel(ylabel='Y Axis Label')
-    
+
     # Bar plot
     x_pos, heights, variance = _getBarData()
 
@@ -323,7 +324,7 @@ def test_multi_subplot():
     plot3.add_xlabel(xlabel='X Axis Label')
     plot3.add_ylabel(ylabel='Y Axis Label')
     plot3.add_title("Test Bar Plot")
-    
+
     # Horizontal bar plot
     y_pos, widths, variance = _getBarData()
 
@@ -337,10 +338,10 @@ def test_multi_subplot():
     plot4.add_xlabel(xlabel='X Axis Label')
     plot4.add_ylabel(ylabel='Y Axis Label')
     plot4.add_title("Test Horizontal Bar Plot")
-    
+
     fig = CreateFigure()
     fig.plot_list = [plot1, plot2, plot3, plot4]
-    fig.figsize=(14,10)
+    fig.figsize = (14, 10)
     fig.ncols = 2
     fig.nrows = 2
     fig.create_figure()
