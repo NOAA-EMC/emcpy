@@ -171,6 +171,14 @@ class CreatePlot:
 
         self.invert_yaxis = True
 
+    def set_xscale(self, scale):
+
+        valid_scales = ['log', 'linear', 'symlog', 'logit']
+        if scale not in valid_scales:
+            raise ValueError(f'requested scale {scale} is invalid. Valid '
+                             f'choices are: {" | ".join(valid_scales)}')
+        self.xscale = scale
+
     def set_yscale(self, scale):
 
         valid_scales = ['log', 'linear', 'symlog', 'logit']
@@ -308,6 +316,7 @@ class CreateFigure:
             'yticklabels': self._set_yticklabels,
             'invert_xaxis': self._invert_xaxis,
             'invert_yaxis': self._invert_yaxis,
+            'xscale': self._set_xscale,
             'yscale': self._set_yscale,
             'map_features': self._add_map_features
         }
@@ -658,6 +667,12 @@ class CreateFigure:
         """
         if invert_yaxis:
             ax.invert_yaxis()
+
+    def _set_xscale(self, ax, xscale):
+        """
+        Set x-scale on specified ax.
+        """
+        ax.set_xscale(xscale)
 
     def _set_yscale(self, ax, yscale):
         """
