@@ -99,29 +99,29 @@ def test_line_plot():
 #     fig.savefig('test_line_plot_2_y_axes.png')
 
 
-# def test_line_plot_inverted_log_scale():
-#     # create a line plot with an inverted, log scale y axis
+def test_line_plot_inverted_log_scale():
+    # create a line plot with an inverted, log scale y axis
 
-#     x = [0, 401, 1039, 2774, 2408, 512]
-#     y = [0, 45, 225, 510, 1200, 1820]
-#     lp = LinePlot(x, y)
-#     plt_list = [lp]
+    x = [0, 401, 1039, 2774, 2408, 512]
+    y = [0, 45, 225, 510, 1200, 1820]
+    lp = LinePlot(x, y)
+    plt_list = [lp]
 
-#     myplt = CreatePlot()
-#     myplt.draw_data(plt_list)
+    plot1 = CreatePlot()
+    plot1.plot_layers = [lp]
+    plot1.add_title(label='Test Line Plot, Inverted Log Scale')
+    plot1.add_xlabel(xlabel='X Axis Label')
+    plot1.add_ylabel(ylabel='Y Axis Label')
+    plot1.set_yscale('log')
+    plot1.invert_yaxis()
 
-#     myplt.add_title(label='Test Line Plot, Inverted Log Scale')
-#     myplt.add_xlabel(xlabel='X Axis Label')
-#     myplt.add_ylabel(ylabel='Y Axis Label')
+    ylabels = [0, 50, 100, 500, 1000, 2000]
+    plot1.set_yticklabels(labels=ylabels)
 
-#     myplt.set_yscale('log')
-#     myplt.invert_yaxis()
-
-#     ylabels = [0, 50, 100, 500, 1000, 2000]
-#     myplt.set_yticklabels(labels=ylabels)
-
-#     fig = myplt.return_figure()
-#     fig.savefig('test_line_inverted_log_scale.png')
+    fig = CreateFigure()
+    fig.plot_list = [plot1]
+    fig.create_figure()
+    fig.save_figure('test_line_inverted_log_scale.png')
 
 
 def test_histogram_plot():

@@ -353,8 +353,8 @@ class CreateFigure:
 
     def _map_gridded(self, plotobj, ax):
 
-        skipvars = ['plottype', 'longitude', 'latitude',
-                    'markersize']
+        skipvars = ['plottype', 'longitude', 'latitude', 'data',
+                    'markersize', 'colorbar']
         inputs = self._get_inputs_dict(skipvars, plotobj)
 
         cs = ax.pcolormesh(plotobj.latitude, plotobj.longitude,
@@ -366,12 +366,12 @@ class CreateFigure:
 
     def _map_contour(self, plotobj, ax):
 
-        skipvars = ['plottype', 'longitude', 'latitude',
-                    'markersize']
+        skipvars = ['plottype', 'longitude', 'latitude', 'data',
+                    'markersize', 'colorbar']
         inputs = self._get_inputs_dict(skipvars, plotobj)
 
-        cs = ax.contour(plotobj.longitude, plotobj.latitude,
-                        plot.data, **inputs,
+        cs = ax.contour(plotobj.latitude, plotobj.longitude,
+                        plotobj.data, **inputs,
                         transform=self.projection.projection)
 
         if plotobj.clabel:
