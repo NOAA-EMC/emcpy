@@ -4,6 +4,7 @@ from emcpy.plots import CreatePlot, CreateFigure
 from emcpy.plots.map_tools import Domain, MapProjection
 from emcpy.plots.map_plots import MapScatter, MapGridded, MapContour
 
+
 def test_plot_global_map_no_features():
     # Create global map with no data using
     # PlateCarree projection and no coastlines
@@ -27,7 +28,7 @@ def test_plot_global_map_coastlines():
     plot1.add_map_features(['coastline', 'land', 'ocean'])
     plot1.add_xlabel(xlabel='longitude')
     plot1.add_ylabel(ylabel='latitude')
-    
+
     fig = CreateFigure()
     fig.plot_list = [plot1]
     fig.create_figure()
@@ -36,9 +37,9 @@ def test_plot_global_map_coastlines():
 
 def test_plot_map_scatter_conus():
     # Create scatter plot on CONUS domian
-    scatter= MapScatter(latitude=np.linspace(35, 50, 30),
-                        longitude=np.linspace(-70, -120, 30),
-                        data=np.linspace(200, 300, 30))
+    scatter = MapScatter(latitude=np.linspace(35, 50, 30),
+                         longitude=np.linspace(-70, -120, 30),
+                         data=np.linspace(200, 300, 30))
     # change colormap and markersize
     scatter.cmap = 'Blues'
     scatter.markersize = 25
@@ -73,8 +74,8 @@ def test_plot_map_gridded_global():
     # Create 2d gridded plot on global domian
     lats = np.linspace(25, 50, 25)
     lons = np.linspace(245, 290, 45)
-    X,Y = np.meshgrid(lons, lats)
-    Z = np.random.normal(size = X.shape)
+    X, Y = np.meshgrid(lons, lats)
+    Z = np.random.normal(size=X.shape)
 
     gridded = MapGridded(X, Y, Z)
     gridded.cmap = 'plasma'
@@ -87,7 +88,7 @@ def test_plot_map_gridded_global():
     plot1.add_xlabel(xlabel='longitude')
     plot1.add_ylabel(ylabel='latitude')
     plot1.add_title(label='2D Gridded Data', loc='center')
-    
+
     fig = CreateFigure()
     fig.plot_list = [plot1]
     fig.create_figure()
@@ -97,10 +98,10 @@ def test_plot_map_gridded_global():
 def test_plot_map_contour_global():
     x, y, z = _getContourData((20, 40))
     z = z * -1.5 * y
-    
+
     contour = MapContour(x, y, z)
     gridded = MapGridded(x, y, z)
-    
+
     plot1 = CreatePlot()
     plot1.plot_layers = [contour, gridded]
     plot1.projection = 'plcarr'
@@ -109,27 +110,26 @@ def test_plot_map_contour_global():
     plot1.add_xlabel(xlabel='longitude')
     plot1.add_ylabel(ylabel='latitude')
     plot1.add_title(label='Contour Data', loc='center')
-    
+
     fig = CreateFigure()
     fig.plot_list = [plot1]
     fig.create_figure()
-    fig.save_figure('test_plot_map_contour_global.png')    
+    fig.save_figure('test_plot_map_contour_global.png')
 
 
 def test_plot_map_multidata_conus():
     # Plot scatter and gridded data on CONUS domain
-
     lats = np.linspace(25, 50, 25)
     lons = np.linspace(245, 290, 45)
-    X,Y = np.meshgrid(lons, lats)
-    Z = np.random.normal(size = X.shape)
+    X, Y = np.meshgrid(lons, lats)
+    Z = np.random.normal(size=X.shape)
 
     gridded = MapGridded(X, Y, Z)
     gridded.cmap = 'gist_earth'
 
-    scatter= MapScatter(latitude=np.linspace(35, 50, 30),
-                        longitude=np.linspace(-70, -120, 30),
-                        data=np.linspace(200, 300, 30))
+    scatter = MapScatter(latitude=np.linspace(35, 50, 30),
+                         longitude=np.linspace(-70, -120, 30),
+                         data=np.linspace(200, 300, 30))
     # change colormap and markersize
     scatter.cmap = 'Reds'
     scatter.markersize = 100
@@ -157,7 +157,6 @@ def test_plot_map_multidata_conus():
 
 def _getContourData(shape=(73, 145)):
     # Generate test data for contour plots
-    
     nlats, nlons = shape
     lats = np.linspace(-np.pi / 2, np.pi / 2, nlats)
     lons = np.linspace(0, 2 * np.pi, nlons)
