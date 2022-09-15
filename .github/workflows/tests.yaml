@@ -37,4 +37,4 @@ jobs:
 
     # Run empcy test suite
     - name: Run emcpy pytests
-      run: eva_tests application
+      run: emcpy_tests application

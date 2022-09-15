@@ -36,7 +36,7 @@ setuptools.setup(
     ],
     entry_points={
         'console_scripts': [
-            'emcpy_tests = emcpy.test_plots:main',
+            'emcpy_tests = emcpy.test.test_plots:main',
         ],
     },
 )
