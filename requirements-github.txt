@@ -7,3 +7,4 @@ scikit-learn>=1.0.2
 xarray>=0.11.3
 pytest
 Shapely
+pdoc
