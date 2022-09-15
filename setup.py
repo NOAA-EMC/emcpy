@@ -34,9 +34,4 @@ setuptools.setup(
         'scikit-learn>=1.0.2',
         'xarray>=0.11.3',
     ]
-#    entry_points={
-#        'console_scripts': [
-#            'emcpy_tests = emcpy.test_plots:main',
-#        ],
-#    },
 )
