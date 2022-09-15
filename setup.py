@@ -33,10 +33,10 @@ setuptools.setup(
         'cartopy>=0.20.2',
         'scikit-learn>=1.0.2',
         'xarray>=0.11.3',
-    ],
-    entry_points={
-        'console_scripts': [
-            'emcpy_tests = emcpy.src.emcpy.test.test_plots:main',
-        ],
-    },
+    ]
+#    entry_points={
+#        'console_scripts': [
+#            'emcpy_tests = emcpy.test_plots:main',
+#        ],
+#    },
 )

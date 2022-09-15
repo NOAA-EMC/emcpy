@@ -31,10 +31,13 @@ jobs:
     - name: Upgrade pip
       run: $CONDA/bin/pip3 install --upgrade pip
     - name: Install emcpy and dependencies
-      run: $CONDA/bin/pip3 install --use-deprecated=legacy-resolver -r requirements-github.txt --user .
-    - name: Put emcpy in the path
-      run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+      run: |
+        $CONDA/bin/pip3 install --use-deprecated=legacy-resolver -r requirements-github.txt --user .
+        cd $GITHUB_WORKSPACE/emcpy
+        pip install .
 
     # Run empcy test suite
     - name: Run emcpy pytests
-      run: emcpy_tests application
+      run: |
+        cd $GITHUB_WORKSPACE/emcpy
+        pytest -v src/tests
