@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from emcpy.plots.plots import LinePlot, VerticalLine,\
     Histogram, Scatter, HorizontalLine, BarPlot, \
     HorizontalBar
-from emcpy.plots.create_plots import CreatePlot
+from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
 
 def test_line_plot():
