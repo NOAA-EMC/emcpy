@@ -14,19 +14,6 @@ jobs:
       with:
         python-version: 3.9
 
-#    - name: Install ubuntu dependencies
-#      run: |
-#        sudo apt-get install libproj-dev proj-data proj-bin
-#        sudo apt-get install libgeos-dev musl-dev libc-dev
-#        sudo ln -s /usr/lib/x86_64-linux-musl/libc.so /lib/libc.musl-x86_64.so.1
-
-#    - name: Install (upgrade) dependencies
-#      run: |
-#        pip install --upgrade pip
-#        pip install pytest
-#        pip install pdoc
-#        pip install Shapely
-
     # Update conda
     - name: Update conda
       run: conda update -n base -c defaults conda
@@ -39,7 +26,6 @@ jobs:
       uses: actions/checkout@v2
       with:
         lfs: true
-#        path: emcpy
 
     # Install emcpy
     - name: Upgrade pip
@@ -49,28 +35,6 @@ jobs:
     - name: Put emcpy in the path
       run: echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-#    - name: Install emcpy
-#      run: |
-#        cd $GITHUB_WORKSPACE/emcpy
-#        pip install .
-#        $CONDA/bin/pip3 install --use-deprecated=legacy-resolver -r requirements-github.txt --user .
-
     # Run empcy test suite
     - name: Run emcpy pytests
-      run: emcpy_tests application
-
-#      run: |
-#        cd $GITHUB_WORKSPACE/emcpy
-#        pytest -v src/tests
-
-#    - name: Generate documentation
-#      run: |
-#        cd $GITHUB_WORKSPACE
-#        pdoc --docformat "google" -o docs emcpy
-#        ls -lR docs/
-
-#    - name: Upload documentation
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: docs
-#        path: docs
+      run: eva_tests application
