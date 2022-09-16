@@ -436,7 +436,7 @@ class CreateFigure:
             s = ax.scatter(plotobj.x, plotobj.y, s=plotobj.markersize,
                            **inputs)
 
-        # checks to see if linear regression attribute
+        # checks to see if linear regression attribute exists
         if hasattr(plotobj, 'linear_regression'):
 
             # Assert that plotobj contains nonzero-length data
@@ -560,7 +560,7 @@ class CreateFigure:
         """
         Add annotated stats on specified ax.
         """
-        # loop through the dictionary and create the sting to annotate
+        # loop through the dictionary and create the string to annotate
         outstr = ''
         for key, value in stats['stats'].items():
             outstr = outstr + f'{key}: {value}    '
