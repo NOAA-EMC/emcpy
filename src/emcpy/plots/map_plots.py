@@ -58,7 +58,7 @@ class MapContour:
 
     def __init__(self, latitude, longitude, data):
         """
-        Constructor for MapScatter.
+        Constructor for MapContour.
 
         Args:
             latitude : (array type) Latitude data
