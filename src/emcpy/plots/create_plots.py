@@ -1,13 +1,16 @@
 # This work developed by NOAA/NWS/EMC under the Apache 2.0 license.
 import os
+import emcpy
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
+from PIL import Image
 from scipy.interpolate import interpn
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
+from matplotlib.offsetbox import OffsetImage, AnchoredOffsetbox
 from emcpy.plots.map_tools import Domain, MapProjection
 from emcpy.stats import get_linear_regression
 
@@ -220,6 +223,12 @@ class CreateFigure:
         # Save figure
         self.fig.savefig(pathfile, **kwargs)
 
+    def tight_layout(self):
+        """
+        Set figure to tight layout.
+        """
+        self.fig.tight_layout()
+
     def close_figure(self):
         """
         Method to close figure
@@ -296,6 +305,48 @@ class CreateFigure:
         """
         if hasattr(self, 'fig'):
             self.fig.suptitle(text, **kwargs)
+
+    def plot_logo(self, loc, which='noaa/nws',
+                  zoom=1, alpha=0.5):
+        """
+        Add branding logo on all axes.
+        """
+        image_dict = {
+            'noaa': 'noaa_logo_75x75.png',
+            'nws': 'nws_logo_75x75.png',
+            'noaa/nws': 'noaa_nws_logo_150x75.png'
+        }
+
+        loc_dict = {
+            'upper right': 1,
+            'upper left': 2,
+            'bottom left': 3,
+            'bottom right': 4,
+            'right': 5,
+            'center left': 6,
+            'center right': 7,
+            'lower center': 8,
+            'upper center': 9,
+            'center': 10
+        }
+
+        image_path = os.path.join(emcpy.emcpy_directory, 'logos', image_dict[which])
+        im = Image.open(image_path)
+
+        ax_list = self.fig.axes
+
+        for ax in ax_list:
+            width, height = ax.figure.get_size_inches()*self.fig.dpi
+            wm_width = int(width/4)  # make the watermark 1/4 of the figure size
+            scaling = (wm_width / float(im.size[0]))
+            wm_height = int(float(im.size[1])*float(scaling))
+
+            imagebox = OffsetImage(im, zoom=zoom, alpha=alpha)
+            imagebox.image.axes = ax
+
+            ao = AnchoredOffsetbox(loc_dict[loc], pad=0.1, borderpad=0.1, child=imagebox)
+            ao.patch.set_alpha(0)
+            ax.add_artist(ao)
 
     def _plot_features(self, plot_obj, feature, ax):
 

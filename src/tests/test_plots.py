@@ -251,31 +251,29 @@ def test_horizontal_bar_plot():
     fig.create_figure()
     fig.save_figure('test_horizontal_bar_plot.png')
 
-# def test_add_logo():
-#     # Test adding logos
-#     x1, y1, x2, y2, x3, y3 = _getLineData()
-#     lp1 = LinePlot(x1, y1)
-#     lp1.label = 'line 1'
 
-#     lp2 = LinePlot(x2, y2)
-#     lp2.color = 'tab:green'
-#     lp2.label = 'line 2'
+def test_add_logo():
+    # Test adding logos
+    x1, y1, x2, y2, x3, y3 = _getLineData()
+    lp1 = LinePlot(x1, y1)
+    lp1.label = 'line 1'
 
-#     lp3 = LinePlot(x3, y3)
-#     lp3.color = 'tab:red'
-#     lp3.label = 'line 3'
+    plot1 = CreatePlot()
+    plot1.plot_layers = [lp1]
+    plot1.add_title('Test Line Plot')
+    plot1.add_xlabel('X Axis Label')
+    plot1.add_ylabel('Y Axis Label')
+    plot1.add_legend(loc='upper right')
 
-#     plt_list = [lp1, lp2, lp3]
-#     myplt = CreatePlot()
-#     myplt.draw_data(plt_list)
-
-#     myplt.add_title(label='Test Line Plot')
-#     myplt.add_xlabel(xlabel='X Axis Label')
-#     myplt.add_ylabel(ylabel='Y Axis Label')
-#     myplt.add_logo(400, 50, which='noaa')
-
-#     fig = myplt.return_figure()
-#     fig.savefig('test_add_logo.png')
+    fig = CreateFigure()
+    fig.plot_list = [plot1, plot1, plot1, plot1]
+    fig.nrows = 2
+    fig.ncols = 2
+    fig.figsize = (12, 8)
+    fig.create_figure()
+    fig.tight_layout()
+    fig.plot_logo(loc='bottom right', zoom=0.9, alpha=0.2)
+    fig.save_figure('test_add_logo.png')
 
 
 def test_multi_subplot():
@@ -345,6 +343,7 @@ def test_multi_subplot():
     fig.ncols = 2
     fig.nrows = 2
     fig.create_figure()
+    fig.tight_layout()
     fig.save_figure('test_multi_subplot.png')
 
 
