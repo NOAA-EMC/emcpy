@@ -408,7 +408,7 @@ class CreateFigure:
 
             cs = ax.scatter(plotobj.longitude, plotobj.latitude,
                             c=plotobj.data, s=plotobj.markersize,
-                            **inputs, norm=norm, transform=ccrs.PlateCarree())
+                            **inputs, norm=norm, transform=self.projection.projection)
         if plotobj.colorbar:
             self.cs = cs
 
@@ -420,7 +420,7 @@ class CreateFigure:
 
         cs = ax.pcolormesh(plotobj.latitude, plotobj.longitude,
                            plotobj.data, **inputs,
-                           transform=ccrs.PlateCarree())
+                           transform=self.projection.projection)
 
         if plotobj.colorbar:
             self.cs = cs
@@ -433,7 +433,7 @@ class CreateFigure:
 
         cs = ax.contour(plotobj.latitude, plotobj.longitude,
                         plotobj.data, **inputs,
-                        transform=ccrs.PlateCarree())
+                        transform=self.projection.projection)
 
         if plotobj.clabel:
             plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
