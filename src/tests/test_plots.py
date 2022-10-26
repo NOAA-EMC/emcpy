@@ -166,6 +166,24 @@ def test_histogram_plot():
 #     fig.savefig('test_histogram_plot_2_x_axes.png')
 
 
+def test_density_plot():
+    # Test density plot
+    
+    data1, data2 = _getHistData()
+    den1 = Density(data1)
+
+    plot1 = CreatePlot()
+    plot1.plot_layers = [den1]
+    plot1.add_title(label='Test Density Plot')
+    plot1.add_xlabel(xlabel='X Axis Label')
+    plot1.add_ylabel(ylabel='Y Axis Label')
+
+    fig = CreateFigure()
+    fig.plot_list = [plot1]
+    fig.create_figure()
+    fig.save_figure('test_density_plot.png')
+
+
 def test_scatter_plot():
     # create scatter plot
 
