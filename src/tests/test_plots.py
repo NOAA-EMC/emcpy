@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from emcpy.plots.plots import LinePlot, VerticalLine,\
-    Histogram, Scatter, HorizontalLine, BarPlot, \
+    Histogram, Density, Scatter, HorizontalLine, BarPlot, \
     HorizontalBar
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
@@ -168,7 +168,7 @@ def test_histogram_plot():
 
 def test_density_plot():
     # Test density plot
-    
+
     data1, data2 = _getHistData()
     den1 = Density(data1)
 
