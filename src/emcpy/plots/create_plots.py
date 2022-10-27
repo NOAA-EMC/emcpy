@@ -482,14 +482,14 @@ class CreateFigure:
             self._density_scatter(plotobj, ax)
         else:
             skipvars = ['plottype', 'plot_ax', 'x', 'y',
-                        'markersize', 'linear_regression',
-                        'density', 'channel']
+                        'markersize', 'do_linear_regression',
+                        'linear_regression', 'density', 'channel']
             inputs = self._get_inputs_dict(skipvars, plotobj)
             s = ax.scatter(plotobj.x, plotobj.y, s=plotobj.markersize,
                            **inputs)
 
-        # checks to see if linear regression attribute exists
-        if hasattr(plotobj, 'linear_regression'):
+        # checks to see if linear regression attribute
+        if plotobj.do_linear_regression:
 
             # Assert that plotobj contains nonzero-length data
             if len(plotobj.x) != 0 and len(plotobj.y) != 0:
