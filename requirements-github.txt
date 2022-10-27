@@ -8,3 +8,4 @@ xarray==2022.6.0
 pytest
 Shapely
 pdoc
+seaborn==0.12

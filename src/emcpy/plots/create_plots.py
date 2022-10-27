@@ -20,7 +20,7 @@ __all__ = ['CreateFigure', 'CreatePlot']
 class CreatePlot:
     """
     Creates a figure to plot data as a scatter plot,
-    histogram, or line plot.
+    histogram, density or line plot.
     """
     def __init__(self, plot_layers=[], projection=None,
                  domain=None):
@@ -250,6 +250,7 @@ class CreateFigure:
         plot_dict = {
             'scatter': self._scatter,
             'histogram': self._histogram,
+            'density': self._density,
             'line_plot': self._lineplot,
             'vertical_line': self._verticalline,
             'horizontal_line': self._horizontalline,
@@ -257,7 +258,7 @@ class CreateFigure:
             'horizontal_bar': self._hbar,
             'map_scatter': self._map_scatter,
             'map_gridded': self._map_gridded,
-            'map_contour': self._map_contour
+            'map_contour': self._map_contour,
         }
 
         gs = gridspec.GridSpec(self.nrows, self.ncols)
@@ -509,6 +510,17 @@ class CreateFigure:
         inputs = self._get_inputs_dict(skipvars, plotobj)
 
         ax.hist(plotobj.data, **inputs)
+
+    def _density(self, plotobj, ax):
+        """
+        Uses Density object to plot on axis.
+        """
+        import seaborn as sns
+
+        skipvars = ['plottype', 'plot_ax', 'data']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
+
+        sns.kdeplot(data=plotobj.data, ax=ax, **inputs)
 
     def _lineplot(self, plotobj, ax):
         """
