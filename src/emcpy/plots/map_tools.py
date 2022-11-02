@@ -16,6 +16,8 @@ class Domain:
 
         map_domains = {
             "global": self._global,
+            "north": self._north,
+            "south": self._south,
             "north america": self._north_america,
             "europe": self._europe,
             "conus": self._conus,
@@ -52,6 +54,32 @@ class Domain:
                                         0, 60, 120, 180))
         self.yticks = dd.get('yticks', (-90, -60, -30, 0,
                                         30, 60, 90))
+
+    def _north(self, dd=dict()):
+        """
+        Sets extent, longitude xticks, and latitude yticks
+        for arctic domain.
+        """
+        self.extent = (-180, 180, 70, 90)
+        self.xticks = dd.get('xticks', (-180, -90, -30, 0,
+                                        30, 90, 180))
+        self.yticks = dd.get('yticks', (50, 75, 90))
+
+        self.cenlon = dd.get('cenlon', 0)
+        self.cenlat = dd.get('cenlat', 90)
+
+    def _south(self, dd=dict()):
+        """
+        Sets extent, longitude xticks, and latitude yticks
+        for arctic domain.
+        """
+        self.extent = (-180, 180, -90, -50)
+        self.xticks = dd.get('xticks', (-180, -90, -30, 0,
+                                        30, 90, 180))
+        self.yticks = dd.get('yticks', (-90, -75, -50))
+
+        self.cenlon = dd.get('cenlon', 0)
+        self.cenlat = dd.get('cenlat', 90)
 
     def _north_america(self, dd=dict()):
         """
@@ -335,12 +363,16 @@ class MapProjection:
         self.projection = ccrs.PlateCarree(central_longitude=self.cenlon,
                                            globe=self.globe)
 
+        self.transform = self.projection
+
     def _miller(self):
         """Creates projection using Miller from Cartopy."""
         self.cenlon = 0 if self.cenlon is None else self.cenlon
 
         self.projection = ccrs.Miller(central_longitude=self.cenlon,
                                       globe=self.globe)
+
+        self.transform = self.projection
 
     def _lambertconformal(self):
         """Creates projection using Lambert Conformal from Cartopy."""
@@ -353,16 +385,19 @@ class MapProjection:
         self.projection = ccrs.LambertConformal(central_longitude=self.cenlon,
                                                 central_latitude=self.cenlat)
 
+        self.transform = self.projection
+
     def _npstereo(self):
         """
         Creates projection using Orthographic from Cartopy and
         orients it from central latitude 90 degrees.
         """
-        self.cenlon = -90 if self.cenlon is None else self.cenlon
+        self.cenlon = 0 if self.cenlon is None else self.cenlon
 
         self.projection = ccrs.Orthographic(central_longitude=self.cenlon,
                                             central_latitude=90,
                                             globe=self.globe)
+        self.transform = ccrs.PlateCarree()
 
     def _spstereo(self):
         """
@@ -374,3 +409,4 @@ class MapProjection:
         self.projection = ccrs.Orthographic(central_longitude=self.cenlon,
                                             central_latitude=-90,
                                             globe=self.globe)
+        self.transform = ccrs.PlateCarree()
