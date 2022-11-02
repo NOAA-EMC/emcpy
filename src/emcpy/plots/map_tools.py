@@ -73,7 +73,7 @@ class Domain:
         Sets extent, longitude xticks, and latitude yticks
         for arctic domain.
         """
-        self.extent = (-180, 180, -90,  -50)
+        self.extent = (-180, 180, -90, -50)
         self.xticks = dd.get('xticks', (-180, -90, -30, 0,
                                         30, 90, 180))
         self.yticks = dd.get('yticks', (-90, -75, -50))
