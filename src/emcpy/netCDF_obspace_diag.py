@@ -92,6 +92,12 @@ def obspace_stats(datapath,date1,date2,expt_names,n_mem,ob_types=["u"],codes_uv=
             else:
               obsfile=_os.path.join(datapath,'%s/%s/mem%s/diag_conv_%s_ges.%s.nc4' % (expt_name,date,memid,ob_type,date))
 
+            exists=_os.path.exists(obsfile)
+            if(not exists):
+              print("%s doesn't exist."%(obsfile))
+              mem=mem+1
+              continue
+
             if(mem == 1):
               code    =_io.netCDF.read_netCDF_var(obsfile,'Observation_Type',oneD=True)
               lat     =_io.netCDF.read_netCDF_var(obsfile,'Latitude',oneD=True)
