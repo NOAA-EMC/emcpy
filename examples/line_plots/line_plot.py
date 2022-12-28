@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from emcpy.plots.plots import LinePlot
-from emcpy.plots.create_plots import CreatePlot
+from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
 x = [1, 2, 3, 4, 5]
 y = [1, 2, 3, 4, 5]
@@ -15,14 +15,17 @@ plt_list = [lp]
 
 # Create Plot and draw data
 myplt = CreatePlot()
-myplt.draw_data(plt_list)
+myplt.plot_layers=plt_list
 
 # Add plot features
 myplt.add_title(label='Test Line Plot')
 myplt.add_xlabel(xlabel='X Axis Label')
 myplt.add_ylabel(ylabel='Y Axis Label')
+myplt.add_legend(loc='upper left')
 
 # Return matplotlib figure
-fig = myplt.return_figure()
-fig.add_legend(plotobj=myplt)
-fig.savefig('line_plot.png')
+fig = CreateFigure()
+fig.plot_list = [myplt]
+fig.create_figure()
+fig.tight_layout()
+fig.save_figure('line_plot.png')
