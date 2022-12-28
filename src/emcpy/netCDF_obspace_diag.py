@@ -106,13 +106,6 @@ def obspace_stats(datapath,date1,date2,expt_names,n_mem,ob_types=["u"],codes_uv=
               elif(ob_type == "t" or ob_type == "q"):
                 codes=codes_tq
 
-              #consider where use flag==1 and bound by error/lat/lon/pres 
-              used = _io.netCDF.filter_obs(code,codes,errorinv,lat,lon,pressure,\
-                                      use=1,p_max=p_max,p_min=p_min,lat_max=lat_max,lat_min=lat_min,\
-                                      lon_max=lon_max,lon_min=lon_min,error_max=error_max,error_min=error_min)
-
-              errorinv=errorinv[used]
-              error=1.0/errorinv
 
               if(ob_type == "u"):
                 ob=_io.netCDF.read_netCDF_var(obsfile,'u_Observation',oneD=True)
@@ -122,10 +115,16 @@ def obspace_stats(datapath,date1,date2,expt_names,n_mem,ob_types=["u"],codes_uv=
                 ob=_io.netCDF.read_netCDF_var(obsfile,'Observation',oneD=True)
     
               if(ob_type == "q"):
-                ob=emcpy.calcs.units.kgkg_to_gkg(ob) #1000.0*ob
-                error=emcpy.calcs.units.kgkg_to_gkg(error)  #1000.0*error
-                errorinv=1.0/error
+                ob=1000.0*ob #convert from kg/kg to g/kg
+                errorinv=errorinv/1000.0 #convert from kg/kg to g/kg
 
+              #consider where use flag==1 and bound by error/lat/lon/pres 
+              used = _io.netCDF.filter_obs(code,codes,errorinv,lat,lon,pressure,\
+                                      use=1,p_max=p_max,p_min=p_min,lat_max=lat_max,lat_min=lat_min,\
+                                      lon_max=lon_max,lon_min=lon_min,error_max=error_max,error_min=error_min)
+
+              errorinv=errorinv[used]
+              error=1.0/errorinv
               itot=len(ob)
               ob=ob[used]
               iasm=len(ob)
@@ -139,7 +138,7 @@ def obspace_stats(datapath,date1,date2,expt_names,n_mem,ob_types=["u"],codes_uv=
             else:
               omf=_io.netCDF.read_netCDF_var(obsfile,'Obs_Minus_Forecast_adjusted',oneD=True)
             if(ob_type == "q"):
-              omf=emcpy.calcs.units.kgkg_to_gkg(omf) #1000.0*omf
+              omf=1000.0*omf #convert from kg/kg to g/kg
   
             omf=omf[used]
          
