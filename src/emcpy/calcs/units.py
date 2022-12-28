@@ -111,27 +111,3 @@ def inches_to_mm(inches):
         The input length in millimeters
     """
     return inches * 25.4
-
-
-def kgkg_to_gkg(kgkg):
-    """
-    Convert kilograms/kilogram to grams/kilogram
-
-    Args:
-        kgkg : (float, or array of floats) kg/kg
-    Returns:
-        The input mixing ratio in g/kg
-    """
-    return kgkg * 1000.0
-
-
-def gkg_to_kgkg(gkg):
-    """
-    Convert grams/kilogram to kilograms/kilogram
-
-    Args:
-        gkg : (float, or array of floats) mixing ratio in g/kg
-    Returns:
-        The input mixing ratio in kg/kg
-    """
-    return gkg / 1000.0
