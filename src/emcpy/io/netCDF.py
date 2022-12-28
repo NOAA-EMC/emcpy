@@ -128,9 +128,11 @@ def filter_obs(code,codes,errorinv,lat,lon,pressure,\
     for cd in codes:
         used = _np.logical_or(used,code==cd) #loop over all codes provided
     
+    error_min_inv=1.0/error_min
+    error_max_inv=1.0/error_max
     #consider where use flag==1 and bound by error/lat/lon/pres 
     used = _np.logical_and(used,use==1)
-    used = _np.logical_and(used,_np.logical_and(errorinv > error_min,errorinv < error_max))
+    used = _np.logical_and(used,_np.logical_and(errorinv<=error_min_inv,errorinv>=error_max_inv))
     used = _np.logical_and(used,_np.logical_and(lat>=lat_min,lat<=lat_max))
     used = _np.logical_and(used,_np.logical_and(lon>=lon_min,lon<=lon_max))
     used = _np.logical_and(used,_np.logical_and(pressure>=p_min,pressure<=p_max))
