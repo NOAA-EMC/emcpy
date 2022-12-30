@@ -25,4 +25,4 @@ def test_convert_units_winds():
 
 def test_convert_units_rainfall():
     # convert mm to inches
-    assert emcpy.calcs.units.mm_to_inches(100) == 3.94
+    assert emcpy.calcs.units.mm_to_inches(100) == 100/25.4
