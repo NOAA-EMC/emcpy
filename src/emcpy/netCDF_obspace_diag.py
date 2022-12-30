@@ -96,7 +96,7 @@ def obspace_stats(datapath,date1,date2,skip_enkf_hours,expt_names,n_mem,\
 
             exists=_os.path.exists(obsfile)
             if(not exists):
-              print("diag file for mem%s %s doesn't exist."%(str(mem).zfill(4),str(date)))
+              print("diag file for %s mem%s %s doesn't exist."%(expt_name,str(mem).zfill(4),str(date)))
               mem=mem+1
               continue
 
