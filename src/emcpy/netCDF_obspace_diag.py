@@ -3,8 +3,8 @@ import os as _os
 import emcpy.dateutils as _dateutils
 import emcpy.io as _io
 
-def obspace_stats(datapath,date1,date2,skip_enkf_hours,expt_names,n_mem,\
-                        ob_types=["u"],codes_uv=[187],codes_tq=[287],\
+def obspace_stats(datapath,date1,date2,expt_names,n_mem,\
+                        skip_enkf_hours=[],ob_types=["u"],codes_uv=[187],codes_tq=[287],\
                         p_max=1050.0,p_min=100.0,lat_max=90.0,lat_min=0.0,lon_max=360.0,lon_min=0.0,\
                         error_max=40.0,error_min=0.000001):
     """
