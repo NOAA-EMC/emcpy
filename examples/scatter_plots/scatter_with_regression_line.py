@@ -12,6 +12,7 @@ y = rng.randn(100)
 # Create Scatter object
 sctr1 = Scatter(x, y)
 # Add linear regression feature in scatter object
+sctr1.do_linear_regression = True
 sctr1.add_linear_regression()
 
 # Create plot object and add features
