@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from emcpy.plots.plots import Histogram
-from emcpy.plots.create_plots import CreatePlot
+from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
 # Generate test data for histogram plots
 mu = 100  # mean of distribution
@@ -14,17 +14,16 @@ hst.color = 'tab:green'
 hst.alpha = 0.7
 hst.label = 'data'
 
-# Create histogram plot and draw data
-myplt = CreatePlot()
-plt_list = [hst]
-myplt.draw_data(plt_list)
+# Create histogram plot object and add features
+plot1 = CreatePlot()
+plot1.plot_layers = [hst]
+plot1.add_title(label='Test Histogram Plot')
+plot1.add_xlabel(xlabel='X Axis Label')
+plot1.add_ylabel(ylabel='Y Axis Label')
+plot1.add_legend()
 
-# Add features
-myplt.add_title(label='Test Histogram Plot')
-myplt.add_xlabel(xlabel='X Axis Label')
-myplt.add_ylabel(ylabel='Y Axis Label')
-myplt.add_legend()
-
-# Return matplotlib figure
-fig = myplt.return_figure()
-fig.savefig('histogram.png')
+# Create figure and save as png
+fig = CreateFigure()
+fig.plot_list = [plot1]
+fig.create_figure()
+fig.save_figure('histogram.png')

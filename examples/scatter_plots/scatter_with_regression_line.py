@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from emcpy.plots.plots import Scatter
-from emcpy.plots.create_plots import CreatePlot
+from emcpy.plots.create_plots import CreatePlot, CreateFigure
 from emcpy.stats import get_linear_regression
 
 # Create test data
@@ -10,21 +10,20 @@ x = rng.randn(100)
 y = rng.randn(100)
 
 # Create Scatter object
-sctr = Scatter(x, y)
+sctr1 = Scatter(x, y)
 # Add linear regression feature in scatter object
-sctr.add_linear_regression()
+sctr1.add_linear_regression()
 
-# Create Plot and draw data
-myplt = CreatePlot()
-plt_list = [sctr]
-myplt.draw_data(plt_list)
+# Create plot object and add features
+plot1 = CreatePlot()
+plot1.plot_layers = [sctr1]
+plot1.add_title(label='Test Scatter Plot')
+plot1.add_xlabel(xlabel='X Axis Label')
+plot1.add_ylabel(ylabel='Y Axis Label')
+plot1.add_legend()
 
-# Add features
-myplt.add_title(label='Test Scatter Plot')
-myplt.add_xlabel(xlabel='X Axis Label')
-myplt.add_ylabel(ylabel='Y Axis Label')
-myplt.add_legend()
-
-# Return matplotlib figure
-fig = myplt.return_figure()
-fig.savefig('scatter_w_regression.png')
+# Create figure
+fig = CreateFigure()
+fig.plot_list = [plot1]
+fig.create_figure()
+fig.save_figure('scatter_w_regression.png')
