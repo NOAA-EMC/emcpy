@@ -5,8 +5,8 @@ __docformat__ = "restructuredtext"
 
 import os
 import emcpy.calcs
-import emcpy.utils
-import emcpy.stats
+import emcpy.utils.utils
+import emcpy.stats.stats
 import emcpy.io.netCDF
 import emcpy.plots
 

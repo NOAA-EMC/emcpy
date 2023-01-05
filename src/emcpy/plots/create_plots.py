@@ -12,7 +12,7 @@ from scipy.interpolate import interpn
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 from matplotlib.offsetbox import OffsetImage, AnchoredOffsetbox
 from emcpy.plots.map_tools import Domain, MapProjection
-from emcpy.stats import get_linear_regression
+from emcpy.stats.stats import get_linear_regression
 
 __all__ = ['CreateFigure', 'CreatePlot']
 
