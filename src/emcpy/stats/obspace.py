@@ -5,7 +5,7 @@ import emcpy.io as _io
 import emcpy.utils.filter_obs as _filter_obs
 
 
-def obspace_stats(
+def ensemble_obspace_diag(
     datapath,
     date1,
     date2,
