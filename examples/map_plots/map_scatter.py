@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from emcpy.plots import CreateMap
+from emcpy.plots import CreatePlot, CreateFigure
 from emcpy.plots.map_tools import Domain, MapProjection
 from emcpy.plots.map_plots import MapScatter
 
@@ -9,30 +9,23 @@ lons = np.linspace(-70, -120, 30)
 data = np.linspace(200, 300, 30)
 
 # Create scatter plot on CONUS domian
-mymap = CreateMap(figsize=(12, 8),
-                  domain=Domain('conus'),
-                  proj_obj=MapProjection('plcarr'))
-# Add coastlines
-mymap.add_features(['coastlines'])
-
-# generate a diagonal line across the US
-scatterobj = MapScatter(latitude=lats,
-                        longitude=lons,
-                        data=data)
+scatter = MapScatter(lats, lons, data)
 # change colormap and markersize
-scatterobj.cmap = 'Reds'
-scatterobj.markersize = 25
+scatter.cmap = 'Blues'
+scatter.markersize = 25
 
-# Draw data onto map
-mymap.draw_data([scatterobj])
-
-# Add plot features
-mymap.add_colorbar(label='colorbar label',
-                   label_fontsize=12, extend='neither')
-mymap.add_title(label='EMCPy Map', loc='center',
+# Create plot object and add features
+plot1 = CreatePlot()
+plot1.plot_layers = [scatter]
+plot1.projection = 'plcarr'
+plot1.domain = 'conus'
+plot1.add_map_features(['coastline', 'states'])
+plot1.add_xlabel(xlabel='longitude')
+plot1.add_ylabel(ylabel='latitude')
+plot1.add_title(label='EMCPy Map', loc='center',
                 fontsize=20)
-mymap.add_xlabel(xlabel='longitude')
-mymap.add_ylabel(ylabel='latitude')
+plot1.add_colorbar(label='colorbar label',
+                   fontsize=12, extend='neither')
 
 # annotate some stats
 stats_dict = {
@@ -40,8 +33,9 @@ stats_dict = {
     'vmin': 200,
     'vmax': 300,
 }
-mymap.add_stats_dict(stats_dict=stats_dict)
+plot1.add_stats_dict(stats_dict=stats_dict, yloc=-0.175)
 
-# Return matplotlib figure
-fig = mymap.return_figure()
-fig.savefig('map_scatter.png')
+fig = CreateFigure()
+fig.plot_list = [plot1]
+fig.create_figure()
+fig.save_figure('map_scatter.png')

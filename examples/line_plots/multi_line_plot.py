@@ -17,8 +17,7 @@ def _getLineData():
     return x1, y1, x2, y2, x3, y3
 
 
-# create line plot with two sets of axes
-# sharing a common y axis
+# create line plot with multiple lines
 
 x1, y1, x2, y2, x3, y3 = _getLineData()
 lp1 = LinePlot(x1, y1)
@@ -27,22 +26,18 @@ lp1.label = 'line 1'
 lp2 = LinePlot(x2, y2)
 lp2.color = 'tab:green'
 lp2.label = 'line 2'
-lp2.use_shared_ay()
 
 lp3 = LinePlot(x3, y3)
 lp3.color = 'tab:red'
 lp3.label = 'line 3'
-lp3.use_shared_ay()
 
-myplt = CreatePlot()
-plt_list = [lp1, lp2, lp3]
-myplt.draw_data(plt_list)
+plot1 = CreatePlot()
+plot1.plot_layers = [lp1, lp2, lp3]
+plot1.add_title('Test Line Plot')
+plot1.add_xlabel('X Axis Label')
+plot1.add_ylabel('Y Axis Label')
+plot1.add_legend(loc='upper right')
 
-myplt.add_title(label='Test Line Plot, 2 X Axes ')
-myplt.add_xlabel(xlabel='X Axis Label')
-myplt.add_ylabel(ylabel='Y Axis Label')
-myplt.add_xlabel(xlabel='Secondary X Axis Label', xaxis='secondary')
-
-fig = myplt.return_figure()
-fig.add_legend(plotobj=myplt, loc='upper right')
-fig.savefig('multi_line_plot.png')
+fig = CreateFigure()
+fig.plot_list = [plot1]
+fig.create_figure()
