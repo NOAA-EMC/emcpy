@@ -29,6 +29,8 @@ skip_enkf_hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
 datapath = "/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs_mon/diags/"  # rrfs_a_conus/"
 
 # Filtering parameters
+hem = None  # GL, NH, TR, SH, CONUS, or None. Overrides lat/lon max/mins filter options.
+
 p_max = 1050.0  # maximum pressure (mb) for including observation in calculations
 p_min = 100.0  # minimum pressure (mb) for including observation in calculations
 
@@ -109,6 +111,7 @@ emcpy.stats.obspace.obspace_stats(
     ob_types,
     codes_uv,
     codes_tq,
+    hem,
     p_max,
     p_min,
     lat_max,

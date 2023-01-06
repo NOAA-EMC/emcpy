@@ -8,7 +8,8 @@ def filter_obs(
     lat,
     lon,
     pressure,
-    use=1,
+    use,
+    hem=None,
     p_max=1050.0,
     p_min=100.0,
     lat_max=90.0,
@@ -46,6 +47,37 @@ def filter_obs(
     Returns:
         used : (array bool) observations to consider after all filtering
     """
+
+    # if hem is provided, override the lat/lon min/maxes
+    if (hem == "GL"):
+        lat_max = 90.0
+        lat_min = -90.0
+        lon_max = 360.0
+        lon_min = 0.0
+    elif (hem == "NH"):
+        lat_max = -30.0
+        lat_min = -90.0
+        lon_max = 360.0
+        lon_min = 0.0
+    elif (hem == "TR"):
+        lat_max = 30.0
+        lat_min = -30.0
+        lon_max = 360.0
+        lon_min = 0.0
+    elif (hem == "SH"):
+        lat_max = 90.0
+        lat_min = 30.0
+        lon_max = 360.0
+        lon_min = 0.0
+    elif (hem == "CONUS"):
+        lat_max = 50.0
+        lat_min = 27.0
+        lon_max = 295.0
+        lon_min = 235.0
+    elif (hem != None):
+        msg = 'hemispheres must be: GLOBAL, NH, TR, SH, CONUS, or None'
+        raise ValueError(msg)
+
     used = code == codes[0]  # initialize used
     for cd in codes:
         used = _np.logical_or(used, code == cd)  # loop over all codes provided
