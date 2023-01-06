@@ -1,17 +1,14 @@
-import tictoc
-
-tic0 = tictoc.tic()
+import emcpy.utils.utils as utils
 import emcpy.stats.obspace
 from emcpy.plots.plots import LinePlot, HorizontalLine
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 import numpy as np
 import matplotlib
 
-matplotlib.use("Agg")
+matplotlib.use("Agg") # Must be called before importing pyplot
 import matplotlib.pyplot as plt
 
-# import emcpy.utils
-# lsdict=emcpy.utils.advanced_linestyles()
+tic = utils.tic()
 
 expt_names = []
 # ********************************************************************
@@ -19,7 +16,6 @@ expt_names = []
 # ********************************************************************
 n_mem = 30
 expt_names.append("rrfs_a_conus")
-# expt_names.append("rrfs_b_test")
 # expt_names.append("just uncomment for a second experiment")
 
 date1 = "2022122000"
@@ -68,40 +64,25 @@ tick_label_fontsize = 10  # xy-axes tick label fontsizes
 lw = 1.5  # linewidth
 ms = 4  # markersize
 ls = ["-", "--", ":", ".-"]  # linestyles: solid, dashed, dotted, dash-dotted
-# ls=["solid","dashed","dotted","dashdot"]
-# ls=["solid",lsdict["densely dotted"],lsdict[""],"dashdot"]
 
 scale_fig_size = 1.2  # =1.2 --> 8*1.2x6*1.2=9.6x7.2 sized fig (1.44 times bigger fig)
 
 # Debug settings
-validate = False
 debug = False
-# validate=True
 debug = True
-
 if debug:
-    codes_uv = [287]
-    codes_tq = [187]
     codes_uv = [280, 281, 282, 220, 221, 230, 231, 232, 233, 234, 235]
     codes_tq = [180, 181, 182, 120, 130, 131, 132, 133, 134, 135]
-    # date1="2022113019"; date2="2022113023"
-    date1 = "2022121619"
-    date2 = "2022121623"  # 1 day
     date1 = "2022121619"
     date2 = "2022121723"  # 2 day
     ob_types = ["u"]
-#  ob_types=["q"]
-#  date1="2022122000"; date2="2022122200" #will skip 00-18
-#  ob_types=["u","q"]
 
 # ********************************************************************
 #                   END OF USER SPECIFIED PARAMETERS                *
 # ********************************************************************
 
 # Calculate all observation space statistics
-dates, bias, rms, std_dev, rmse, spread, ob_error, total_spread, num_obs_total, num_obs_assim, cr, ser = \
-emcpy.stats.obspace.obspace_stats(
-#_stats.netCDF_obspace_diag.obspace_stats(
+dates, bias, rms, std_dev, rmse, spread, ob_error, total_spread, num_obs_total, num_obs_assim, cr, ser = emcpy.stats.obspace.ensemble_obspace_diag(
     datapath,
     date1,
     date2,
@@ -121,48 +102,6 @@ emcpy.stats.obspace.obspace_stats(
     error_max,
     error_min,
 )
-
-if validate:
-
-    def check(t, test):
-        testmin = np.min(test)
-        testmax = np.max(test)
-        if testmin == 0 and testmax == 0:
-            print("%s....GOOD" % (t))
-        else:
-            print("%s: min=%.2f max=%.2f" % (t, testmin, testmax))
-
-        test = ["bias", "rms", "std_dev", "rmse", "spread", "ob_error", "total_spread", "cr", "ser"]
-        for t in test:
-            if t == "bias":
-                test = bias[0, 0, :] - bias[0, 1, :]
-                check(t, test)
-            if t == "rms":
-                test = rms[0, 0, :] - rms[0, 1, :]
-                check(t, test)
-            if t == "std_dev":
-                test = std_dev[0, 0, :] - std_dev[0, 1, :]
-                check(t, test)
-            if t == "rmse":
-                test = rmse[0, 0, :] - rmse[0, 1, :]
-                check(t, test)
-            if t == "spread":
-                test = spread[0, 0, :] - spread[0, 1, :]
-                check(t, test)
-            if t == "ob_error":
-                test = ob_error[0, 0, :] - ob_error[0, 1, :]
-                check(t, test)
-            if t == "total_spread":
-                test = total_spread[0, 0, :] - total_spread[0, 1, :]
-                check(t, test)
-            if t == "cr":
-                test = cr[0, 0, :] - cr[0, 1, :]
-                check(t, test)
-            if t == "ser":
-                test = ser[0, 0, :] - ser[0, 1, :]
-                check(t, test)
-        exit()
-
 
 # ****************************************************************************
 
@@ -378,4 +317,4 @@ for ob_type in ob_types:  # make a new figure for each observation type
     fig.save_figure("obs_diag_%s.png" % (ob_type))
 
 # Calculate time to run script
-tictoc.toc(tic0, "End. ")
+utils.toc(tic, "End. ")

@@ -7,13 +7,14 @@ utils.py contains handy utility functions
 import numpy as _np
 import pickle as _pickle
 import pandas as _pd
+from timeit import default_timer as timer
 
 __all__ = [
     'float10Power', 'roundNumber',
     'pickle', 'unpickle',
     'writeHDF', 'readHDF',
     'EmptyDataFrame',
-    'printcolour'
+    'printcolour', 'tictoc'
 ]
 
 
@@ -172,3 +173,15 @@ def printcolour(text, colour='red'):
 
 
 printcolor = printcolour
+
+
+def tic():
+    return timer()
+
+def toc(tic=tic, string=""):
+    toc = timer()
+    time = toc-tic
+    hrs = str(int(time/3600)).zfill(2)
+    mins = str(int(time%3600/60)).zfill(2)
+    secs = str(int(time%3600%60)).zfill(2)
+    print("%sTotal elapsed time: (%1.2fs), %s:%s:%s"%(string, time, hrs, mins, secs))
