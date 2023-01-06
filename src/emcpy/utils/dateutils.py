@@ -1,9 +1,8 @@
-import datetime, calendar
+# coding: utf-8 -*-
 
 """
 utilities for working with dates using datetime module (Python 2.3 or later)
-
-Jeff Whitaker <jeffrey.s.whitaker@noaa.gov>
+original author: Jeff Whitaker <jeffrey.s.whitaker@noaa.gov>
 """
 
 __all__ = [
@@ -20,6 +19,8 @@ __all__ = [
     "daysinmonth",
 ]
 
+import datetime, calendar
+
 
 hrsgregstart = 13865688  # hrs from 00010101 to 15821015 in Julian calendar.
 # times in many datasets use mixed Gregorian/Julian calendar, datetime
@@ -31,7 +32,15 @@ day1 = datetime.datetime(1, 1, 1)  # datetime.datetime instance
 
 
 def dateto_hrs_since_day1CE(curdate, mixedcal=True):
-    """given datetime.datetime instance, compute hours since 1-Jan-0001"""
+    """
+    Given datetime.datetime instance, compute hours since 1-Jan-0001
+    Args:
+        curdate: (datetime.datetime instance) date to check.
+        mixedcal: (bool) is mixed Gregorian/Julian calendar used?
+
+    Returns:
+        The number of hours since 1-Jan-0001
+    """
     if mixedcal:
         if curdate < gregstart:
             msg = "date must be after start of gregorian calendar (15821015)!"
@@ -45,7 +54,15 @@ def dateto_hrs_since_day1CE(curdate, mixedcal=True):
 
 
 def hrs_since_day1CE_todate(hrs, mixedcal=True):
-    """return datetime.datetime instance given hours since 1-Jan-0001"""
+    """
+    return datetime.datetime instance given hours since 1-Jan-0001
+
+    Args:
+        hrs: (float) number of hours since 1-Jan-0001 to compute a date.
+        mixedcal: (bool) is mixed Gregorian/Julian calendar used?
+    Returns:
+        curdate: (datetime.datetime instance) date given hours since 1-Jan-0001
+    """
     if hrs < 0.0:
         msg = "hrs must be positive!"
         raise ValueError(msg)
@@ -60,10 +77,12 @@ def hrs_since_day1CE_todate(hrs, mixedcal=True):
 
 def dateshift(analdate, fcsthr):
     """
-    verifdate = incdate(analdate, fcsthr)
-
-    compute verification date given analysis date string (yyyymmddhh) and
-    fcst hour.
+    compute verification date given analysis date string (yyyymmddhh) and fcst hour.
+    Args:
+        analdate: (date str) analysis date
+        fcsthr: (int) forecast hour
+    Returns:
+        verifdate: (date str) verification date given analysis date string (yyyymmddhh) and fcst hour.
     """
     yyyy, mm, dd, hh = splitdate(analdate)
     analdate = datetime.datetime(yyyy, mm, dd, hh)
@@ -74,9 +93,14 @@ def dateshift(analdate, fcsthr):
 
 def splitdate(yyyymmddhh):
     """
-    yyyy,mm,dd,hh = splitdate(yyyymmddhh)
-
-    give an date string (yyyymmddhh) return integers yyyy,mm,dd,hh.
+    given a date string (yyyymmddhh) return integers yyyy,mm,dd,hh.
+    Args:
+        yyyymmddhh: (date str) date
+    Returns:
+        yyyy: (int) year
+        mm: (int) month
+        dd: (int) day
+        hh: (int) hour
     """
     yyyy = int(yyyymmddhh[0:4])
     mm = int(yyyymmddhh[4:6])
@@ -90,15 +114,24 @@ def makedate(yyyy, mm, dd, hh):
     yyyymmddhh = makedate(yyyy,mm,dd,hh)
 
     return a date string of the form yyyymmddhh given integers yyyy,mm,dd,hh.
+    Args:
+        yyyy: (int) year
+        mm: (int) month
+        dd: (int) day
+        hh: (int) hour
+    Returns:
+        yyyymmddhh: (date str) date
     """
     return "%0.4i" % (yyyy) + "%0.2i" % (mm) + "%0.2i" % (dd) + "%0.2i" % (hh)
 
 
 def hrstodate(hrs, mixedcal=True):
     """
-    yyyymmddhh = hrstodate(hrs)
-
-    return a date string of the form yyyymmddhh given hrs since day 1 CE.
+    Args:
+        hrs:
+        mixedcal: (bool) is mixed Gregorian/Julian calendar used?
+    Returns:
+        date string of the form yyyymmddhh given hrs since day 1 CE.
     """
     date = hrs_since_day1CE_todate(hrs, mixedcal=mixedcal)
     return makedate(date.year, date.month, date.day, date.hour)
@@ -106,22 +139,26 @@ def hrstodate(hrs, mixedcal=True):
 
 def datetohrs(yyyymmddhh, mixedcal=True):
     """
-    hrs = hrstodate(yyyymmddhh)
-
-    return hrs since day 1 CE given a date string of the form yyyymmddhh.
+    Args:
+        yyyymmddhh: (date str) date
+        mixedcal: (bool) is mixed Gregorian/Julian calendar used?
+    Returns:
+        hours since day 1 CE given a date string of the form yyyymmddhh 
     """
     yyyy, mm, dd, hh = splitdate(yyyymmddhh)
-    return dateto_hrs_since_day1CE(
-        datetime.datetime(yyyy, mm, dd, hh), mixedcal=mixedcal
-    )
+    return dateto_hrs_since_day1CE(datetime.datetime(yyyy, mm, dd, hh), mixedcal=mixedcal)
 
 
 def daterange(date1, date2, hrinc):
     """
-    date_list = daterange(date1,date2,hrinc)
-
-    return of list of date strings of the form yyyymmddhh given
+    return a list of date strings of the form yyyymmddhh given
     a starting date, ending date and an increment in hours.
+    Args:
+        date1: (date str) start date
+        date2: (date str) end date
+        hrinc: (int) increment in hours
+    Returns:
+        dates: (list date str) of the form yyyymmddhh
     """
     date = date1
     delta = datetime.timedelta(hours=1)
@@ -139,7 +176,13 @@ def daterange(date1, date2, hrinc):
 
 def dayofyear(yyyy, mm, dd):
     """
-    return integer day of year given yyyy,mm,dd
+    Args:
+        yyyy: (int) year
+        mm: (int) month
+        dd: (int) day
+        hh: (int) hour
+    Returns:
+        integer day of year given yyyy,mm,dd
     """
     d = datetime.datetime(yyyy, mm, dd)
     d0 = datetime.datetime(yyyy, 1, 1)
@@ -147,6 +190,14 @@ def dayofyear(yyyy, mm, dd):
 
 
 def getyrmon(day_of_year, yyyy=2001):
+    """
+    Args:
+        day_of_year: (int) day of the year
+        yyyy: (int) year
+    Returns:
+        mm: (int) month of year given day of year
+        dd: (int) day of month given day of year
+    """
     d1 = datetime.datetime(yyyy, 1, 1)
     if calendar.isleap(d1.year) and day_of_year > 366:
         raise ValueError("not that many days in the year")
@@ -158,7 +209,11 @@ def getyrmon(day_of_year, yyyy=2001):
 
 def daysinmonth(yyyy, mm):
     """
-    return number of days in month given yyyy,mm
+    Args:
+        yyyy: (int) year
+        mm: (int) month
+    Returns:
+        number of days in month given yyyy,mm
     """
     return calendar.monthrange(yyyy, mm)[1]
 
