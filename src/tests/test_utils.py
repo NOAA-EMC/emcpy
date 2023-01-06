@@ -1,4 +1,4 @@
-from emcpy.utils import float10Power, roundNumber
+from emcpy.utils.utils import float10Power, roundNumber
 
 float10Power_values = [
     (1.0, -1.),
