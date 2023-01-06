@@ -23,6 +23,7 @@ plot1.add_map_features(['coastline'])
 plot1.add_xlabel(xlabel='longitude')
 plot1.add_ylabel(ylabel='latitude')
 plot1.add_title(label='2D Gridded Data', loc='center')
+plot1.add_grid()
 plot1.add_colorbar(label='colorbar label',
                    fontsize=12, extend='neither')
 
