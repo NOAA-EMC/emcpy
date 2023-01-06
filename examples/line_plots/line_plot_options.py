@@ -78,7 +78,7 @@ plot2.set_xticks(x2)
 plot2.set_xticklabels([str(item) for item in x2], rotation=0)
 yticks = np.arange(np.min(y2), np.max(y2) + 1, 1)
 plot2.set_yticks(yticks)
-#plot2.set_yticklabels([str(item) for item in yticks], rotation=0)
+plot2.set_yticklabels([str(item) for item in yticks], rotation=0)
 plot2.add_legend(loc="upper left", fancybox=True, framealpha=0.80)
 
 # Return matplotlib figure
