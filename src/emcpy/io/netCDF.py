@@ -9,9 +9,10 @@ __all__ = ['variable_exist', 'read_netCDF_var']
 import numpy as _np
 from netCDF4 import Dataset as _Dataset
 
+
 def print_variables(filename):
     '''
-    prints all available variables in a netCDF file 
+    prints all available variables in a netCDF file
 
     Args:
         filename : (str) netCDF filename

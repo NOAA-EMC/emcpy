@@ -178,10 +178,11 @@ printcolor = printcolour
 def tic():
     return timer()
 
+
 def toc(tic=tic, string=""):
     toc = timer()
-    time = toc-tic
+    time = toc - tic
     hrs = str(int(time/3600)).zfill(2)
-    mins = str(int(time%3600/60)).zfill(2)
-    secs = str(int(time%3600%60)).zfill(2)
-    print("%sTotal elapsed time: (%1.2fs), %s:%s:%s"%(string, time, hrs, mins, secs))
+    mins = str(int(time % 3600/60)).zfill(2)
+    secs = str(int(time % 3600 % 60)).zfill(2)
+    print("%sTotal elapsed time: (%1.2fs), %s:%s:%s" % (string, time, hrs, mins, secs))

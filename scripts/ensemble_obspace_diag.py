@@ -5,7 +5,7 @@ from emcpy.plots.create_plots import CreatePlot, CreateFigure
 import numpy as np
 import matplotlib
 
-matplotlib.use("Agg") # Must be called before importing pyplot
+matplotlib.use("Agg")  # Must be called before importing pyplot
 import matplotlib.pyplot as plt
 
 tic = utils.tic()

@@ -673,7 +673,7 @@ class CreateFigure:
         """
         Set x-ticks on specified ax.
         """
-        if(latlon):
+        if (latlon):
             ax.set_xticks(**xticks, crs=ccrs.PlateCarree())
             lon_formatter = LongitudeFormatter(zero_direction_label=True)
             lat_formatter = LatitudeFormatter()
@@ -686,7 +686,7 @@ class CreateFigure:
         """
         Set y-ticks on specified ax.
         """
-        if(latlon):
+        if (latlon):
             ax.set_yticks(**yticks, crs=ccrs.PlateCarree())
         else:
             ax.set_yticks(**yticks)

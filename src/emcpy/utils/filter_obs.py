@@ -74,7 +74,7 @@ def filter_obs(
         lat_min = 27.0
         lon_max = 295.0
         lon_min = 235.0
-    elif (hem != None):
+    elif hem is not None:
         msg = 'hemispheres must be: GLOBAL, NH, TR, SH, CONUS, or None'
         raise ValueError(msg)
 
