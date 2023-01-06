@@ -13,19 +13,16 @@ lp.label = 'line'
 # Add line plot object to list
 plt_list = [lp]
 
-# Create Plot and draw data
-myplt = CreatePlot()
-myplt.plot_layers = plt_list
+# Create plot object and add features
+plot1 = CreatePlot()
+plot1.plot_layers = [lp]
+plot1.add_title('Test Line Plot')
+plot1.add_xlabel('X Axis Label')
+plot1.add_ylabel('Y Axis Label')
+plot1.add_legend(loc='upper right')
 
-# Add plot features
-myplt.add_title(label='Test Line Plot')
-myplt.add_xlabel(xlabel='X Axis Label')
-myplt.add_ylabel(ylabel='Y Axis Label')
-myplt.add_legend(loc='upper left')
-
-# Return matplotlib figure
+# Create figure and save as png
 fig = CreateFigure()
-fig.plot_list = [myplt]
+fig.plot_list = [plot1]
 fig.create_figure()
-fig.tight_layout()
 fig.save_figure('line_plot.png')

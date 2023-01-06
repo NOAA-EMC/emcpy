@@ -1,37 +1,34 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from emcpy.plots import CreateMap
+from emcpy.plots import CreatePlot, CreateFigure
 from emcpy.plots.map_tools import Domain, MapProjection
 from emcpy.plots.map_plots import MapGridded
 
-# Plot scatter and gridded data on CONUS domain
-mymap = CreateMap(figsize=(12, 8),
-                  domain=Domain('conus'),
-                  proj_obj=MapProjection('plcarr'))
-mymap.add_features(['coastlines'])
+# Create 2d gridded plot on global domian
+lats = np.linspace(25, 50, 25)
+lons = np.linspace(245, 290, 45)
+X, Y = np.meshgrid(lons, lats)
+Z = np.random.normal(size=X.shape)
 
-# Create random gridded data
-lat, lon = np.mgrid[25:50:1, 245:290:1]
-data = np.random.randint(low=200, high=300, size=(25, 45))
+# Create gridded map object
+gridded = MapGridded(X, Y, Z)
+gridded.cmap = 'plasma'
 
-griddedobj = MapGridded(lat, lon, data)
-griddedobj.cmap = 'magma'
+# Create plot object and add features
+plot1 = CreatePlot()
+plot1.plot_layers = [gridded]
+plot1.projection = 'plcarr'
+plot1.domain = 'conus'
+plot1.add_map_features(['coastline'])
+plot1.add_xlabel(xlabel='longitude')
+plot1.add_ylabel(ylabel='latitude')
+plot1.add_title(label='2D Gridded Data', loc='center')
+plot1.add_grid()
+plot1.add_colorbar(label='colorbar label',
+                   fontsize=12, extend='neither')
 
-# Draw data onto map in layered order
-mymap.draw_data([griddedobj])
-
-# Add plot features
-mymap.add_colorbar(label='colorbar label',
-                   label_fontsize=12, extend='neither')
-mymap.add_title(label='2D Gridded Data',
-                loc='left', fontsize=14)
-mymap.add_title(label='YYYYMMDDHHMM',
-                loc='right', fontsize=14,
-                fontweight='semibold')
-mymap.add_xlabel(xlabel='longitude')
-mymap.add_ylabel(ylabel='latitude')
-mymap.add_grid()
-
-# Return matplotlib figure
-fig = mymap.return_figure()
-fig.savefig('map_gridded.png')
+# Create figure
+fig = CreateFigure()
+fig.plot_list = [plot1]
+fig.create_figure()
+fig.save_figure('map_gridded.png')
