@@ -15,7 +15,7 @@ plt_list = [lp]
 
 # Create Plot and draw data
 myplt = CreatePlot()
-myplt.plot_layers=plt_list
+myplt.plot_layers = plt_list
 
 # Add plot features
 myplt.add_title(label='Test Line Plot')
