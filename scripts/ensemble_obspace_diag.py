@@ -14,15 +14,15 @@ expt_names = []
 # ********************************************************************
 #                        USER SPECIFIED PARAMETERS                  *
 # ********************************************************************
-n_mem = 30
-expt_names.append("rrfs_a_conus")
+n_mem = 2
+expt_names.append("sample_experiment_data")
 # expt_names.append("just uncomment for a second experiment")
 
-date1 = "2022122000"
-date2 = "2022123023"  # will skip 00-18
+date1 = "2022121619"
+date2 = "2022121623"
 skip_enkf_hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]  # right now rrfs only runs EnKF at 18-23Z
 
-datapath = "/lfs/h2/emc/da/noscrub/donald.e.lippi/rrfs_mon/diags/"  # rrfs_a_conus/"
+datapath = "./diags/"
 
 # Filtering parameters
 hem = None  # GL, NH, TR, SH, CONUS, or None. Overrides lat/lon max/mins filter options.
@@ -39,7 +39,7 @@ lon_min = 0.0  # minimum latitude (deg E) for including observation in calculati
 error_max = 40.0  # maximum error standard deviation for including observation in calculations
 error_min = 0.000001  # minimum error standard deviation for including observation in calculations
 
-ob_types = ["u", "v", "t", "q"]
+ob_types = ["u"]  # supported types: u, v, t, and q
 codes_uv = [280, 281, 282, 220, 221, 230, 231, 232, 233, 234, 235]
 codes_tq = [180, 181, 182, 120, 130, 131, 132, 133, 134, 135]
 
@@ -66,16 +66,6 @@ ms = 4  # markersize
 ls = ["-", "--", ":", ".-"]  # linestyles: solid, dashed, dotted, dash-dotted
 
 scale_fig_size = 1.2  # =1.2 --> 8*1.2x6*1.2=9.6x7.2 sized fig (1.44 times bigger fig)
-
-# Debug settings
-debug = False
-debug = True
-if debug:
-    codes_uv = [280, 281, 282, 220, 221, 230, 231, 232, 233, 234, 235]
-    codes_tq = [180, 181, 182, 120, 130, 131, 132, 133, 134, 135]
-    date1 = "2022121619"
-    date2 = "2022121723"  # 2 day
-    ob_types = ["u"]
 
 # ********************************************************************
 #                   END OF USER SPECIFIED PARAMETERS                *
