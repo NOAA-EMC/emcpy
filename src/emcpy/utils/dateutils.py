@@ -143,7 +143,7 @@ def datetohrs(yyyymmddhh, mixedcal=True):
         yyyymmddhh: (date str) date
         mixedcal: (bool) is mixed Gregorian/Julian calendar used?
     Returns:
-        hours since day 1 CE given a date string of the form yyyymmddhh 
+        hours since day 1 CE given a date string of the form yyyymmddhh
     """
     yyyy, mm, dd, hh = splitdate(yyyymmddhh)
     return dateto_hrs_since_day1CE(datetime.datetime(yyyy, mm, dd, hh), mixedcal=mixedcal)
