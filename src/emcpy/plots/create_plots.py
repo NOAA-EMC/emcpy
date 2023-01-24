@@ -268,7 +268,12 @@ class CreateFigure:
 
             # check if object has projection and domain attributes to determine ax
             if hasattr(plot_obj, 'projection'):
-                self.domain = Domain(plot_obj.domain)
+                # Check if domain object is tuple/list for custom domains
+                if isinstance(plot_obj.domain, (tuple, list)):
+                    self.domain = Domain(domain=plot_obj.domain[0], dd=plot_obj.domain[1])
+                else:
+                    self.domain = Domain(plot_obj.domain)
+
                 self.projection = MapProjection(plot_obj.projection)
 
                 # Set up axis specific things
