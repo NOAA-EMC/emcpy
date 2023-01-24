@@ -17,7 +17,7 @@ africa_dict = {
 plot1 = CreatePlot()
 plot1.projection = 'plcarr'
 # Add data as a tuple with 'custom' as domain name
-# and `africa_dict` as dictionary 
+# and `africa_dict` as dictionary
 plot1.domain = ('custom', africa_dict)
 plot1.add_map_features(['coastline'])
 plot1.add_xlabel(xlabel='longitude')
