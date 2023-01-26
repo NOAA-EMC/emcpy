@@ -68,7 +68,7 @@ def test_plot_map_scatter_conus():
     fig.plot_list = [plot1]
     fig.create_figure()
     fig.save_figure('test_plot_map_scatter_conus.png')
-    
+
 
 def test_plot_map_scatter_2D_conus():
     # Create scatter plot on CONUS domian
