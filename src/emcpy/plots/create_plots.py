@@ -254,6 +254,7 @@ class CreateFigure:
             'line_plot': self._lineplot,
             'vertical_line': self._verticalline,
             'horizontal_line': self._horizontalline,
+            'horizontal_span': self._horizontalspan,
             'bar_plot': self._barplot,
             'horizontal_bar': self._hbar,
             'map_scatter': self._map_scatter,
@@ -548,6 +549,15 @@ class CreateFigure:
         inputs = self._get_inputs_dict(skipvars, plotobj)
 
         ax.axhline(plotobj.y, **inputs)
+
+    def _horizontalspan(self, plotobj, ax):
+        """
+        Uses HorizontalSpan object to plot on axis.
+        """
+        skipvars = ['plottype', 'plot_ax', 'ymin', 'ymax']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
+
+        ax.axhspan(plotobj.ymin, plotobj.ymax, **inputs)
 
     def _barplot(self, plotobj, ax):
         """
