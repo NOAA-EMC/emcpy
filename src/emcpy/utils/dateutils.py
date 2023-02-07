@@ -86,7 +86,7 @@ def dateshift(analdate, fcsthr):
     """
     yyyy, mm, dd, hh = splitdate(analdate)
     analdate = datetime.datetime(yyyy, mm, dd, hh)
-    verifdate = analdate + fcsthr * datetime.timedelta(hours=1)
+    verifdate = analdate + datetime.timedelta(hours=fcsthr)
     verifdate = makedate(verifdate.year, verifdate.month, verifdate.day, verifdate.hour)
     return verifdate
 
@@ -122,7 +122,7 @@ def makedate(yyyy, mm, dd, hh):
     Returns:
         yyyymmddhh: (date str) date
     """
-    return "%0.4i" % (yyyy) + "%0.2i" % (mm) + "%0.2i" % (dd) + "%0.2i" % (hh)
+    return f"{yyyy}{mm:0>2}{dd:0>2}{hh:0>2}"
 
 
 def hrstodate(hrs, mixedcal=True):
