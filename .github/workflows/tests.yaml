@@ -3,7 +3,7 @@ on: [push, pull_request]
 
 jobs:
   run_pytests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     name: Install and run tests with pytests
 
     steps:
