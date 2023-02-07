@@ -390,7 +390,7 @@ class CreateFigure:
 
         if plotobj.data is None:
             skipvars = ['plottype', 'longitude', 'latitude',
-                        'markersize', 'integer_field']
+                        'markersize', 'integer_field', 'colorbar']
             inputs = self._get_inputs_dict(skipvars, plotobj)
 
             cs = ax.scatter(plotobj.longitude, plotobj.latitude,
@@ -414,6 +414,7 @@ class CreateFigure:
             cs = ax.scatter(plotobj.longitude, plotobj.latitude,
                             c=plotobj.data, s=plotobj.markersize,
                             **inputs, norm=norm, transform=self.projection.transform)
+
         if plotobj.colorbar:
             self.cs = cs
 
