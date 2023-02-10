@@ -14,7 +14,7 @@ __all__ = [
     'pickle', 'unpickle',
     'writeHDF', 'readHDF',
     'EmptyDataFrame',
-    'printcolour', 'tictoc'
+    'printcolour', 'start_timer', 'end_timer'
 ]
 
 
@@ -173,31 +173,3 @@ def printcolour(text, colour='red'):
 
 
 printcolor = printcolour
-
-
-def tic():
-    '''
-    Args:
-       None
-    Returns:
-       The current time (sec) at code execution since (arbitrary date).
-    '''
-    return timer()
-
-
-def toc(tic=tic, string=""):
-    '''
-    Gets the current time (sec) at code execution since (arbitrary date) and
-    compute the difference between time given by tic.
-    Args:
-       tic: (sec) previous time instance of tic()
-       string: (str) an optional string to print.
-    Returns:
-       Prints the total time elapsed
-    '''
-    toc = timer()
-    time = toc - tic
-    hrs = str(int(time/3600)).zfill(2)
-    mins = str(int(time % 3600/60)).zfill(2)
-    secs = str(int(time % 3600 % 60)).zfill(2)
-    print("%sTotal elapsed time: (%1.2fs), %s:%s:%s" % (string, time, hrs, mins, secs))
