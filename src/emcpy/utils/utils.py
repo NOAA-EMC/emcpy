@@ -7,14 +7,13 @@ utils.py contains handy utility functions
 import numpy as _np
 import pickle as _pickle
 import pandas as _pd
-from timeit import default_timer as timer
 
 __all__ = [
     'float10Power', 'roundNumber',
     'pickle', 'unpickle',
     'writeHDF', 'readHDF',
     'EmptyDataFrame',
-    'printcolour', 'start_timer', 'end_timer'
+    'printcolour'
 ]
 
 
