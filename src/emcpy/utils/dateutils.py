@@ -33,13 +33,13 @@ day1 = datetime.datetime(1, 1, 1)  # datetime.datetime instance
 
 def dateto_hrs_since_day1CE(curdate, mixedcal=True):
     """
-    Given datetime.datetime instance, compute hours since 1-Jan-0001
+    Given datetime.datetime instance, compute hours since 1-Jan-0001.
     Args:
         curdate: (datetime.datetime instance) date to check.
         mixedcal: (bool) is mixed Gregorian/Julian calendar used?
 
     Returns:
-        The number of hours since 1-Jan-0001
+        hrs: (float) number of hours since 1-Jan-0001.
     """
     if mixedcal:
         if curdate < gregstart:
@@ -47,21 +47,21 @@ def dateto_hrs_since_day1CE(curdate, mixedcal=True):
             raise ValueError(msg)
         difftime = curdate - gregstart
         hrsdiff = 24 * difftime.days + difftime.seconds / 3600
-        return hrsdiff + hrsgregstart
+        hrs = hrsdiff + hrsgregstart
     else:
         difftime = curdate - day1
-        return 24.0 * (difftime.days + 1) + difftime.seconds / 3600.0
+        hrs = 24.0 * (difftime.days + 1) + difftime.seconds / 3600.0
+    return hrs
 
 
 def hrs_since_day1CE_todate(hrs, mixedcal=True):
     """
-    return datetime.datetime instance given hours since 1-Jan-0001
-
+    Return datetime.datetime instance given hours since 1-Jan-0001.
     Args:
         hrs: (float) number of hours since 1-Jan-0001 to compute a date.
         mixedcal: (bool) is mixed Gregorian/Julian calendar used?
     Returns:
-        curdate: (datetime.datetime instance) date given hours since 1-Jan-0001
+        curdate: (datetime.datetime instance) date given hours since 1-Jan-0001.
     """
     if hrs < 0.0:
         msg = "hrs must be positive!"
@@ -77,7 +77,7 @@ def hrs_since_day1CE_todate(hrs, mixedcal=True):
 
 def dateshift(analdate, fcsthr):
     """
-    compute verification date given analysis date string (yyyymmddhh) and fcst hour.
+    Compute verification date given analysis date string (yyyymmddhh) and fcst hour.
     Args:
         analdate: (date str) analysis date
         fcsthr: (int) forecast hour
@@ -93,7 +93,7 @@ def dateshift(analdate, fcsthr):
 
 def splitdate(yyyymmddhh):
     """
-    given a date string (yyyymmddhh) return integers yyyy,mm,dd,hh.
+    Given a date string (yyyymmddhh) return integers yyyy, mm, dd, and hh.
     Args:
         yyyymmddhh: (date str) date
     Returns:
@@ -111,48 +111,51 @@ def splitdate(yyyymmddhh):
 
 def makedate(yyyy, mm, dd, hh):
     """
-    yyyymmddhh = makedate(yyyy,mm,dd,hh)
-
-    return a date string of the form yyyymmddhh given integers yyyy,mm,dd,hh.
+    Return a date string of the form yyyymmddhh given integers yyyy, mm, dd, and hh.
     Args:
         yyyy: (int) year
         mm: (int) month
         dd: (int) day
         hh: (int) hour
     Returns:
-        yyyymmddhh: (date str) date
+        yyyymmddhh: (date str) date string
     """
-    return f"{yyyy}{mm:0>2}{dd:0>2}{hh:0>2}"
+    yyyymmddhh = f"{yyyy}{mm:0>2}{dd:0>2}{hh:0>2}"
+    return yyyymmddhh
 
 
 def hrstodate(hrs, mixedcal=True):
     """
+    Given number of hours since 1-Jan-0001, return date string.
     Args:
-        hrs:
+        hrs: (int) hours since
         mixedcal: (bool) is mixed Gregorian/Julian calendar used?
     Returns:
-        date string of the form yyyymmddhh given hrs since day 1 CE.
+        yyyymmddhh: (date str) date string given hrs since day 1 CE.
     """
     date = hrs_since_day1CE_todate(hrs, mixedcal=mixedcal)
-    return makedate(date.year, date.month, date.day, date.hour)
+    yyyymmddhh = makedate(date.year, date.month, date.day, date.hour)
+    return yyyymmddhh
 
 
 def datetohrs(yyyymmddhh, mixedcal=True):
     """
+    Given a date string, return number of hours since 1-Jan-0001.
     Args:
-        yyyymmddhh: (date str) date
+        yyyymmddhh: (date str) date to convert to hours since 1-Jan-0001.
         mixedcal: (bool) is mixed Gregorian/Julian calendar used?
     Returns:
-        hours since day 1 CE given a date string of the form yyyymmddhh
+        hrs_since_day1CE: (float) number of hours since day 1 CE.
     """
     yyyy, mm, dd, hh = splitdate(yyyymmddhh)
-    return dateto_hrs_since_day1CE(datetime.datetime(yyyy, mm, dd, hh), mixedcal=mixedcal)
+    hrs_since_day1CE = dateto_hrs_since_day1CE(datetime.datetime(yyyy, mm, dd, hh), mixedcal=mixedcal)
+    return hrs_since_day1CE
 
 
 def daterange(date1, date2, hrinc):
     """
-    return a list of date strings of the form yyyymmddhh given
-    a starting date, ending date and an increment in hours.
+    Return a list of date strings of the form yyyymmddhh given
+    a starting date, ending date, and an increment in hours.
     Args:
         date1: (date str) start date
         date2: (date str) end date
@@ -176,27 +179,30 @@ def daterange(date1, date2, hrinc):
 
 def dayofyear(yyyy, mm, dd):
     """
+    Return the day number of the year given the year, month, and day.
     Args:
         yyyy: (int) year
         mm: (int) month
         dd: (int) day
         hh: (int) hour
     Returns:
-        integer day of year given yyyy,mm,dd
+        day_of_year: (int) day of year
     """
     d = datetime.datetime(yyyy, mm, dd)
     d0 = datetime.datetime(yyyy, 1, 1)
-    return (d - d0).days
+    day_of_year = int((d - d0).days)
+    return day_of_year
 
 
 def getyrmon(day_of_year, yyyy=2001):
     """
+    Return the month and day given the day of the year and year.
     Args:
         day_of_year: (int) day of the year
         yyyy: (int) year
     Returns:
-        mm: (int) month of year given day of year
-        dd: (int) day of month given day of year
+        mm: (int) month of year
+        dd: (int) day of month
     """
     d1 = datetime.datetime(yyyy, 1, 1)
     if calendar.isleap(d1.year) and day_of_year > 366:
@@ -204,18 +210,22 @@ def getyrmon(day_of_year, yyyy=2001):
     if not calendar.isleap(d1.year) and day_of_year > 365:
         raise ValueError("not that many days in the year")
     d2 = d1 + (day_of_year - 1) * datetime.timedelta(days=1)
-    return d2.month, d2.day
+    mm = d2.month
+    dd = d2.day
+    return mm, dd
 
 
 def daysinmonth(yyyy, mm):
     """
+    Return the number of days in a month given the year and month.
     Args:
         yyyy: (int) year
         mm: (int) month
     Returns:
-        number of days in month given yyyy,mm
+        days_in_month: (int) number of days in month
     """
-    return calendar.monthrange(yyyy, mm)[1]
+    days_in_month = calendar.monthrange(yyyy, mm)[1]
+    return days_in_month
 
 
 if __name__ == "__main__":
