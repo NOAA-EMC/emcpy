@@ -365,7 +365,6 @@ def test_multi_subplot():
     fig.save_figure('test_multi_subplot.png')
 
 
-
 def test_HorizontalSpan():
     # Create a figure that looks like a vertical profile of
     # RMS, then demo HorizontalSpan by marking areas of
@@ -403,12 +402,12 @@ def test_HorizontalSpan():
     levels_up = levs2
     levels_down = levs1
 
-    rms = [1.8088608 , 2.0255764 , 2.36743771, 2.10772568, 2.21097423,
-           2.17568766, 2.08600823, 2.14898654, 2.14259149, 2.19376006,
-           2.43268861, 2.38224955, 2.60514412, 2.66867903, 2.63766036,
-           2.7269978 , 2.88738757, 3.99005364, np.nan, np.nan, np.nan, np.nan, np.nan]
+    rms = [1.80, 2.02, 2.36, 2.10, 2.21,
+           2.17, 2.08, 2.14, 2.14, 2.19,
+           2.43, 2.38, 2.60, 2.66, 2.63,
+           2.72, 2.88, 3.99, np.nan, np.nan, np.nan, np.nan, np.nan]
 
-    plt_list=[]
+    plt_list = []
     y = levels
     x = rms
     lp = LinePlot(x, y)
