@@ -305,12 +305,11 @@ class Domain:
         for a Custom domain.
         """
         try:
-            self.extent = dd.extent
-            self.xticks = dd.xticks
-            self.yticks = dd.yticks
-
-            self.cenlon = dd.cenlon
-            self.cenlat = dd.cenlat
+            self.extent = dd.get('extent')
+            self.xticks = dd.get('xticks')
+            self.yticks = dd.get('yticks')
+            self.cenlon = dd.get('cenlon')
+            self.cenlat = dd.get('cenlat')
         except AttributeError:
             raise TypeError("Custom domain requires input dictionary " +
                             "with keys: 'extent', 'xticks', 'yticks', " +

@@ -70,6 +70,30 @@ def test_plot_map_scatter_conus():
     fig.save_figure('test_plot_map_scatter_conus.png')
 
 
+def test_plot_map_scatter_2D_conus():
+    # Create scatter plot on CONUS domian
+    scatter = MapScatter(latitude=np.linspace(35, 50, 30),
+                         longitude=np.linspace(-70, -120, 30))
+    # change colormap and markersize
+    scatter.color = 'tab:red'
+    scatter.markersize = 25
+
+    plot1 = CreatePlot()
+    plot1.plot_layers = [scatter]
+    plot1.projection = 'plcarr'
+    plot1.domain = 'conus'
+    plot1.add_map_features(['coastline', 'states'])
+    plot1.add_xlabel(xlabel='longitude')
+    plot1.add_ylabel(ylabel='latitude')
+    plot1.add_title(label='EMCPy Map', loc='center',
+                    fontsize=20)
+
+    fig = CreateFigure()
+    fig.plot_list = [plot1]
+    fig.create_figure()
+    fig.save_figure('test_plot_map_scatter_2D_conus.png')
+
+
 def test_plot_map_gridded_global():
     # Create 2d gridded plot on global domian
     lats = np.linspace(25, 50, 25)

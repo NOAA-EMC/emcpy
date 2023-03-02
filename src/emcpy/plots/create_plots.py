@@ -269,7 +269,12 @@ class CreateFigure:
 
             # check if object has projection and domain attributes to determine ax
             if hasattr(plot_obj, 'projection'):
-                self.domain = Domain(plot_obj.domain)
+                # Check if domain object is tuple/list for custom domains
+                if isinstance(plot_obj.domain, (tuple, list)):
+                    self.domain = Domain(domain=plot_obj.domain[0], dd=plot_obj.domain[1])
+                else:
+                    self.domain = Domain(plot_obj.domain)
+
                 self.projection = MapProjection(plot_obj.projection)
 
                 # Set up axis specific things
@@ -386,7 +391,7 @@ class CreateFigure:
 
         if plotobj.data is None:
             skipvars = ['plottype', 'longitude', 'latitude',
-                        'markersize', 'integer_field']
+                        'markersize', 'integer_field', 'colorbar']
             inputs = self._get_inputs_dict(skipvars, plotobj)
 
             cs = ax.scatter(plotobj.longitude, plotobj.latitude,
@@ -410,6 +415,7 @@ class CreateFigure:
             cs = ax.scatter(plotobj.longitude, plotobj.latitude,
                             c=plotobj.data, s=plotobj.markersize,
                             **inputs, norm=norm, transform=self.projection.transform)
+
         if plotobj.colorbar:
             self.cs = cs
 
