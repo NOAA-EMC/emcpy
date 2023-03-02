@@ -12,7 +12,7 @@ from scipy.interpolate import interpn
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 from matplotlib.offsetbox import OffsetImage, AnchoredOffsetbox
 from emcpy.plots.map_tools import Domain, MapProjection
-from emcpy.stats import get_linear_regression
+from emcpy.stats.stats import get_linear_regression
 
 __all__ = ['CreateFigure', 'CreatePlot']
 
@@ -254,6 +254,7 @@ class CreateFigure:
             'line_plot': self._lineplot,
             'vertical_line': self._verticalline,
             'horizontal_line': self._horizontalline,
+            'horizontal_span': self._horizontalspan,
             'bar_plot': self._barplot,
             'horizontal_bar': self._hbar,
             'map_scatter': self._map_scatter,
@@ -555,6 +556,15 @@ class CreateFigure:
 
         ax.axhline(plotobj.y, **inputs)
 
+    def _horizontalspan(self, plotobj, ax):
+        """
+        Uses HorizontalSpan object to plot on axis.
+        """
+        skipvars = ['plottype', 'plot_ax', 'ymin', 'ymax']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
+
+        ax.axhspan(plotobj.ymin, plotobj.ymax, **inputs)
+
     def _barplot(self, plotobj, ax):
         """
         Uses BarPlot object to plot on axis.
@@ -675,26 +685,26 @@ class CreateFigure:
         """
         ax.set_ylim(**ylim)
 
-    def _set_xticks(self, ax, xticks):
+    def _set_xticks(self, ax, xticks, latlon=False):
         """
         Set x-ticks on specified ax.
         """
-        try:
+        if (latlon):
             ax.set_xticks(**xticks, crs=ccrs.PlateCarree())
             lon_formatter = LongitudeFormatter(zero_direction_label=True)
             lat_formatter = LatitudeFormatter()
             ax.xaxis.set_major_formatter(lon_formatter)
             ax.yaxis.set_major_formatter(lat_formatter)
-        except AttributeError:
+        else:
             ax.set_xticks(**xticks)
 
-    def _set_yticks(self, ax, yticks):
+    def _set_yticks(self, ax, yticks, latlon=False):
         """
         Set y-ticks on specified ax.
         """
-        try:
+        if (latlon):
             ax.set_yticks(**yticks, crs=ccrs.PlateCarree())
-        except AttributeError:
+        else:
             ax.set_yticks(**yticks)
 
     def _set_xticklabels(self, ax, xticklabels):

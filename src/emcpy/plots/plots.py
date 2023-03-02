@@ -191,6 +191,26 @@ class HorizontalLine:
         self.label = None
 
 
+class HorizontalSpan:
+
+    def __init__(self, ymin, ymax):
+        """
+        Constructor for HorizontalSpan
+        Args:
+            ymin : (int/float) lower y-coordinate of the span, in data units.
+            ymax : (int/float) upper y-coordinate of the span, in data units.
+        """
+        super().__init__()
+        self.plottype = 'horizontal_span'
+
+        self.ymin = ymin
+        self.ymax = ymax
+
+        self.facecolor = 'lightgoldenrodyellow'
+        self.edgecolor = None
+        self.alpha = None
+
+
 class BarPlot:
 
     def __init__(self, x, height):

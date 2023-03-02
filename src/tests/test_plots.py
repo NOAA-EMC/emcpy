@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from emcpy.plots.plots import LinePlot, VerticalLine,\
     Histogram, Density, Scatter, HorizontalLine, BarPlot, \
-    HorizontalBar
+    HorizontalBar, HorizontalSpan
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
 
@@ -365,6 +365,89 @@ def test_multi_subplot():
     fig.save_figure('test_multi_subplot.png')
 
 
+def test_HorizontalSpan():
+    # Create a figure that looks like a vertical profile of
+    # RMS, then demo HorizontalSpan by marking areas of
+    # statistical significance.
+
+    levbot = 925
+    levtop = 125
+    deltap = 50.0
+    pbot = 975
+    n_levs = 23
+    levs = np.zeros(n_levs, float)
+    levs1 = np.zeros(n_levs, float)
+    levs2 = np.zeros(n_levs, float)
+    levs[0:18] = pbot - deltap * np.arange(18)
+    levs1[0:18] = levs[0:18] + 0.5 * deltap
+    levs2[0:18] = levs[0:18] - 0.5 * deltap
+    levs1[18] = levs2[17]
+    levs2[18] = 70.0
+    levs1[19] = 70.0
+    levs2[19] = 50.0
+    levs1[20] = 50.0
+    levs2[20] = 30.0
+    levs1[21] = 30.0
+    levs2[21] = 10.0
+    levs1[22] = 10.0
+    levs2[22] = 0.0
+    levs1[0] = 1200.0
+    pbins = np.zeros(n_levs + 1, float)
+    pbins[0:n_levs] = levs1
+    pbins[n_levs] = levs2[-1]
+    for nlev in range(18, n_levs):
+        levs[nlev] = 0.5 * (levs1[nlev] + levs2[nlev])
+
+    levels = levs
+    levels_up = levs2
+    levels_down = levs1
+
+    rms = [1.80, 2.02, 2.36, 2.10, 2.21,
+           2.17, 2.08, 2.14, 2.14, 2.19,
+           2.43, 2.38, 2.60, 2.66, 2.63,
+           2.72, 2.88, 3.99, np.nan, np.nan, np.nan, np.nan, np.nan]
+
+    plt_list = []
+    y = levels
+    x = rms
+    lp = LinePlot(x, y)
+    lp.color = "red"
+    lp.linestyle = '-'
+    lp.linewidth = 1.5
+    lp.marker = "o"
+    lp.markersize = 4
+    lp.label = "rms of F-O"
+    plt_list.append(lp)
+
+    # Make up which levels show significance to demo HorizontalSpan
+    sig = [False for i in range(len(rms))]
+    sig[5] = True
+    sig[6] = True
+    sig[8] = True
+    sig[12] = True
+
+    # Mark areas of statistical significance
+    for n in range(len(levels)):
+        if sig[n]:
+            lp = HorizontalSpan(levels_up[n], levels_down[n])
+            plt_list.append(lp)
+
+    # Create the plot
+    plot = CreatePlot()
+    plot.plot_layers = plt_list
+    plot.set_ylim(levbot, levtop)
+    plot.add_xlabel(xlabel='X Axis Label')
+    plot.add_ylabel(ylabel='Y Axis Label')
+    plot.add_title("Test Horizontal Span")
+    plot.add_grid()
+
+    fig = CreateFigure(nrows=1, ncols=1, figsize=(5, 8))
+    fig.plot_list = [plot]
+    fig.create_figure()
+    fig.tight_layout()
+    fig.save_figure("./test_HorizontalSpan.png")
+
+
 def _getLineData():
     # generate test data for line plots
 
@@ -423,6 +506,7 @@ def main():
     test_bar_plot()
     test_horizontal_bar_plot()
     test_multi_subplot()
+    test_HorizontalSpan()
 
 
 if __name__ == "__main__":

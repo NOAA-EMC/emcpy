@@ -10,6 +10,20 @@ import numpy as _np
 from netCDF4 import Dataset as _Dataset
 
 
+def print_variables(filename):
+    '''
+    prints all available variables in a netCDF file
+
+    Args:
+        filename : (str) netCDF filename
+    '''
+    try:
+        nc = _Dataset(filename, 'r')
+    except IOError:
+        raise IOError(f'Unable to open {filename}')
+    print(nc.variables.keys())
+
+
 def variable_exist(filename, variable_name):
     '''
     Check if a variable exists in a netCDF file

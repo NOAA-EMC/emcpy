@@ -98,7 +98,7 @@ def mm_to_inches(mm):
     Returns:
         The input length in inches
     """
-    return mm * 0.0394
+    return mm / 25.4
 
 
 def inches_to_mm(inches):
@@ -110,4 +110,4 @@ def inches_to_mm(inches):
     Returns:
         The input length in millimeters
     """
-    return inches / 0.0394
+    return inches * 25.4
