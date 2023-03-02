@@ -105,12 +105,14 @@ class CreatePlot:
             **kwargs
         }
 
-    def add_text(self, xloc, yloc, text, **kwargs):
+    def add_text(self, xloc, yloc, text, transform='datacoords',
+                 **kwargs):
 
         self.text = {
             'xloc': xloc,
             'yloc': yloc,
             'text': text,
+            'transform': transform,
             'kwargs': kwargs
         }
 
@@ -661,8 +663,16 @@ class CreateFigure:
         """
         Add text on specified ax.
         """
+        if text['transform'] not in ['datacoords', 'axcoords']:
+            raise ValueError('Transform input is not valid. ' +
+                             'Valid options include ["datacoords", ' +
+                             '"axcoords"].')
+
+        transform = ax.transAxes if text['transform'] == 'axcoords' else ax.transData
+
         ax.text(text['xloc'], text['yloc'],
-                text['text'], **text['kwargs'])
+                text['text'], transform=transform,
+                **text['kwargs'])
 
     def _plot_grid(self, ax, grid):
         """
