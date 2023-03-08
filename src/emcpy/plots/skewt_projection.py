@@ -98,9 +98,9 @@ class SkewXAxes(Axes):
         # We keep the pre-transAxes transform around for other users, like the
         # spines for finding bounds
         self.transDataToAxes = (
-            self.transScale
-            + self.transLimits
-            + transforms.Affine2D().skew_deg(rot, 0)
+            self.transScale +
+            self.transLimits +
+            transforms.Affine2D().skew_deg(rot, 0)
         )
         # Create the full transform from Data to Pixels
         self.transData = self.transDataToAxes + self.transAxes
@@ -110,9 +110,9 @@ class SkewXAxes(Axes):
         self._xaxis_transform = (
             transforms.blended_transform_factory(
                 self.transScale + self.transLimits,
-                transforms.IdentityTransform())
-            + transforms.Affine2D().skew_deg(rot, 0)
-            + self.transAxes
+                transforms.IdentityTransform()) +
+            transforms.Affine2D().skew_deg(rot, 0) +
+            self.transAxes
         )
 
     @property
