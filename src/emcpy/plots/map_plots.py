@@ -1,3 +1,6 @@
+__all__ = ['MapScatter', 'MapGridded', 'MapContour'
+           'MapContourf']
+
 class MapScatter:
 
     def __init__(self, latitude, longitude, data=None):
@@ -77,6 +80,33 @@ class MapContour:
         self.linewidths = 1.5
         self.linestyles = '-'
         self.cmap = None
+        self.vmin = None
+        self.vmax = None
+        self.alpha = None
+        self.colorbar = False
+
+
+class MapContourf:
+
+    def __init__(self, latitude, longitude, data):
+        """
+        Constructor for MapContourf.
+
+        Args:
+            latitude : (array type) Latitude data
+            longitude : (array type) Longitude data
+            data : (array type) data to be plotted
+        """
+        self.plottype = 'map_contourf'
+
+        self.latitude = latitude
+        self.longitude = longitude
+        self.data = data
+
+        self.levels = None
+        self.clabel = False
+        self.colors = None
+        self.cmap = 'viridis'
         self.vmin = None
         self.vmax = None
         self.alpha = None
