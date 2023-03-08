@@ -519,6 +519,7 @@ def _getBarData():
 
     return x_pos, heights, variance
 
+
 def _getSkewTData():
     # use data for skew-t log-p plot
     from io import StringIO
@@ -604,7 +605,7 @@ def _getSkewTData():
     sound_data = StringIO(data_txt)
     p, h, T, Td = np.loadtxt(sound_data, unpack=True)
     
-    return T, p, Td
+    return p, T, Td
 
 
 def main():
@@ -616,6 +617,7 @@ def main():
     test_horizontal_bar_plot()
     test_multi_subplot()
     test_HorizontalSpan()
+    test_SkewT()
 
 
 if __name__ == "__main__":
