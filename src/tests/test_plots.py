@@ -470,6 +470,7 @@ def test_SkewT():
     fig.tight_layout()
     fig.save_figure("./test_SkewT.png")
 
+
 def _getLineData():
     # generate test data for line plots
 
@@ -604,7 +605,7 @@ def _getSkewTData():
     # Parse the data
     sound_data = StringIO(data_txt)
     p, h, T, Td = np.loadtxt(sound_data, unpack=True)
-    
+
     return p, T, Td
 
 

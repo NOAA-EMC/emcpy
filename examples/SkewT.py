@@ -4,6 +4,7 @@ import numpy as np
 from emcpy.plots.plots import SkewT
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
+
 def _getSkewTData():
     # use data for skew-t log-p plot
     from io import StringIO
@@ -88,8 +89,9 @@ def _getSkewTData():
     # Parse the data
     sound_data = StringIO(data_txt)
     p, h, T, Td = np.loadtxt(sound_data, unpack=True)
-    
+
     return p, T, Td
+
 
 p, T, Td = _getSkewTData()
 
