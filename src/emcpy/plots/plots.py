@@ -273,7 +273,7 @@ class HorizontalBar:
 
 
 class SkewT:
-    
+
     def __init__(self, x, y):
         """
         Constructor to create a Skew T plot.

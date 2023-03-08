@@ -1,5 +1,6 @@
-__all__ = ['MapScatter', 'MapGridded', 'MapContour'
+__all__ = ['MapScatter', 'MapGridded', 'MapContour',
            'MapContourf']
+
 
 class MapScatter:
 

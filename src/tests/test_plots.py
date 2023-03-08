@@ -447,6 +447,7 @@ def test_HorizontalSpan():
     fig.tight_layout()
     fig.save_figure("./test_HorizontalSpan.png")
 
+
 def test_SkewT():
     # Create skew-T log-p plot
     p, T, Td = _getSkewTData()
