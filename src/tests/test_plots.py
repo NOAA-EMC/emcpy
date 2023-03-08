@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from emcpy.plots.plots import LinePlot, VerticalLine,\
     Histogram, Density, Scatter, HorizontalLine, BarPlot, \
-    HorizontalBar, HorizontalSpan
+    HorizontalBar, HorizontalSpan, SkewT
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
 
