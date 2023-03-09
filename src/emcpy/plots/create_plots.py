@@ -11,7 +11,10 @@ from PIL import Image
 from scipy.interpolate import interpn
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 from matplotlib.offsetbox import OffsetImage, AnchoredOffsetbox
+from matplotlib.ticker import MultipleLocator, NullFormatter, ScalarFormatter
+from matplotlib.projections import register_projection
 from emcpy.plots.map_tools import Domain, MapProjection
+from emcpy.plots.skewt_projection import SkewXAxes
 from emcpy.stats.stats import get_linear_regression
 
 __all__ = ['CreateFigure', 'CreatePlot']
@@ -262,6 +265,7 @@ class CreateFigure:
             'horizontal_span': self._horizontalspan,
             'bar_plot': self._barplot,
             'horizontal_bar': self._hbar,
+            'skewt': self._skewt,
             'map_scatter': self._map_scatter,
             'map_gridded': self._map_gridded,
             'map_contour': self._map_contour,
@@ -295,7 +299,13 @@ class CreateFigure:
                         ax.yaxis.set_major_formatter(lat_formatter)
 
             else:
-                ax = plt.subplot(gs[i])
+                # Check plot types
+                plot_types = [x.plottype for x in plot_obj.plot_layers]
+                if 'skewt' in plot_types:
+                    register_projection(SkewXAxes)
+                    ax = plt.subplot(gs[i], projection='skewx')
+                else:
+                    ax = plt.subplot(gs[i])
 
             # Loop through plot layers
             for layer in plot_obj.plot_layers:
@@ -513,6 +523,27 @@ class CreateFigure:
                 if 'color' in plotobj.linear_regression and 'color' in inputs:
                     plotobj.linear_regression['color'] = inputs['color']
                 ax.plot(plotobj.x, y_pred, label=label, **plotobj.linear_regression)
+
+    def _skewt(self, plotobj, ax):
+        """
+        Creates a skewt-logp profile plot on axis.
+        """
+        skipvars = ['plottype', 'plot_ax', 'x', 'y']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
+
+        # Plot data using log scaling Y
+        ax.semilogy(plotobj.x, plotobj.y, **inputs)
+
+        # Disables the log-formatting that comes with semilogy
+        ax.yaxis.set_major_formatter(ScalarFormatter())
+        ax.yaxis.set_minor_formatter(NullFormatter())
+
+        # Setting custom ylim and xlims; can be changed
+        ax.set_yticks(np.linspace(100, 1000, 10))
+        ax.set_ylim(1050, 100)
+
+        ax.xaxis.set_major_locator(MultipleLocator(10))
+        ax.set_xlim(-45, 30)
 
     def _histogram(self, plotobj, ax):
         """

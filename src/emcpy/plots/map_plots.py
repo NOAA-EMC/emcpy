@@ -1,3 +1,7 @@
+__all__ = ['MapScatter', 'MapGridded', 'MapContour',
+           'MapContourf']
+
+
 class MapScatter:
 
     def __init__(self, latitude, longitude, data=None):

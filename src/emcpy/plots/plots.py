@@ -2,9 +2,8 @@
 import numpy as np
 
 __all__ = ['Scatter', 'Histogram', 'Density', 'LinePlot',
-           'VerticalLine', 'HorizontalLine', 'BarPlot',
-           'HorizontalBar', 'MapScatter', 'MapGridded',
-           'MapContour']
+           'VerticalLine', 'HorizontalLine', 'HorizontalSpan',
+           'BarPlot', 'HorizontalBar', 'SkewT']
 
 
 class Scatter:
@@ -271,3 +270,28 @@ class HorizontalBar:
         self.capsize = 0
         self.error_kw = {}
         self.log = False
+
+
+class SkewT:
+
+    def __init__(self, x, y):
+        """
+        Constructor to create a Skew T plot.
+        Args:
+            x : (array type)
+            y : (array type)
+        """
+
+        super().__init__()
+        self.plottype = 'skewt'
+
+        self.x = x
+        self.y = y
+
+        self.color = 'tab:blue'
+        self.linestyle = '-'
+        self.linewidth = 1.5
+        self.marker = None
+        self.markersize = None
+        self.alpha = None
+        self.label = None
