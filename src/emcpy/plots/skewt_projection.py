@@ -6,6 +6,10 @@ import matplotlib.axis as maxis
 import matplotlib.spines as mspines
 
 
+# This code was replicated from matplotlib's example gallery.
+# The orginal code can be found here: https://matplotlib.org/stable/gallery/specialty_plots/skewt.html
+
+
 # The sole purpose of this class is to look at the upper, lower, or total
 # interval as appropriate and see what parts of the tick to draw, if any.
 class SkewXTick(maxis.XTick):
