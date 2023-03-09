@@ -2,8 +2,8 @@
 import numpy as np
 
 __all__ = ['Scatter', 'Histogram', 'Density', 'LinePlot',
-           'VerticalLine', 'HorizontalLine', 'BarPlot',
-           'HorizontalBar', ]
+           'VerticalLine', 'HorizontalLine', 'HorizontalSpan',
+           'BarPlot', 'HorizontalBar', 'SkewT']
 
 
 class Scatter:

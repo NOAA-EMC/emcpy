@@ -1,5 +1,3 @@
-import sys
-sys.path.append('/scratch1/NCEPDEV/da/Kevin.Dougherty/emcpy/src/')
 import numpy as np
 from emcpy.plots.plots import SkewT
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
