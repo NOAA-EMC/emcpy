@@ -111,16 +111,13 @@ class CreatePlot:
     def add_text(self, xloc, yloc, text, transform='datacoords',
                  **kwargs):
 
-        if not hasattr(self, 'text'):
-            self.text = []
-
-        self.text.append({
+        self.text = {
             'xloc': xloc,
             'yloc': yloc,
             'text': text,
             'transform': transform,
             'kwargs': kwargs
-        })
+        }
 
     def add_grid(self, **kwargs):
 
@@ -299,7 +296,9 @@ class CreateFigure:
                         ax.yaxis.set_major_formatter(lat_formatter)
 
             else:
-                if plot_obj.plot_layers[i].plottype == 'skewt':
+                # Check plot types
+                plot_types = [x.plottype for x in plot_obj.plot_layers]
+                if 'skewt' in plot_types:
                     register_projection(SkewXAxes)
                     ax = plt.subplot(gs[i], projection='skewx')
                 else:
@@ -691,21 +690,20 @@ class CreateFigure:
         for i, key in enumerate(leg.legendHandles):
             leg.legendHandles[i]._sizes = [20]
 
-    def _plot_text(self, ax, text_in):
+    def _plot_text(self, ax, text):
         """
         Add text on specified ax.
         """
-        for text in text_in:
-            if text['transform'] not in ['datacoords', 'axcoords']:
-                raise ValueError('Transform input is not valid. ' +
-                                 'Valid options include ["datacoords", ' +
-                                 '"axcoords"].')
+        if text['transform'] not in ['datacoords', 'axcoords']:
+            raise ValueError('Transform input is not valid. ' +
+                             'Valid options include ["datacoords", ' +
+                             '"axcoords"].')
 
-            transform = ax.transAxes if text['transform'] == 'axcoords' else ax.transData
+        transform = ax.transAxes if text['transform'] == 'axcoords' else ax.transData
 
-            ax.text(text['xloc'], text['yloc'],
-                    text['text'], transform=transform,
-                    **text['kwargs'])
+        ax.text(text['xloc'], text['yloc'],
+                text['text'], transform=transform,
+                **text['kwargs'])
 
     def _plot_grid(self, ax, grid):
         """
