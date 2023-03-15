@@ -1,2 +1,2 @@
-nclude package/*.yaml
+include package/*.yaml
 recursive-include src *.yaml *.py
