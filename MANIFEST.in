@@ -1,0 +1,2 @@
+nclude package/*.yaml
+recursive-include src *.yaml *.py

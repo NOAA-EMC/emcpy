@@ -8,6 +8,7 @@ setuptools.setup(
     url='https://github.com/noaa-emc/emcpy',
     package_dir={'': 'src'},
     packages=setuptools.find_packages(where='src'),
+    include_pacakge_data=True,
     classifiers=[
         'Development Status :: 1 - Beta',
         'Intended Audience :: Developers',
