@@ -441,7 +441,7 @@ class CreateFigure:
         inputs = self._get_inputs_dict(skipvars, plotobj)
 
         # Check for 3d data
-        if len(plotobj.longitude.shape) == 3:
+        if plotobj.longitude.ndim == 3:
             # Get total number of layers
             layers = plotobj.longitude.shape[0]
 

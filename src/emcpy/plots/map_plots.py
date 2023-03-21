@@ -54,7 +54,7 @@ class MapGridded:
         self.data = data
 
         self.cmap = 'viridis'
-        if len(latitude.shape) == 3:
+        if latitude.ndim == 3:
             self.vmin = np.nanmin(data)
             self.vmax = np.nanmax(data)
         else:
