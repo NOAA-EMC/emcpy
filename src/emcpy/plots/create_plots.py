@@ -442,13 +442,13 @@ class CreateFigure:
 
         # Check for 3d data
         if plotobj.longitude.ndim == 3:
-            # Get total number of layers
-            layers = plotobj.longitude.shape[0]
+            # Get total number of tiles; assumes Nth dimension is tile
+            tiles = plotobj.longitude.shape[-1]
 
-            # Loop through layers and plot on one map
-            for i in range(layers):
-                cs = ax.pcolormesh(plotobj.longitude[i], plotobj.latitude[i],
-                                   plotobj.data[i], **inputs,
+            # Loops through tiles to plot on one map
+            for i in range(tiles):
+                cs = ax.pcolormesh(plotobj.longitude[:,:,i], plotobj.latitude[:,:,i],
+                                   plotobj.data[:,:,i], **inputs,
                                    transform=self.projection.transform)
 
         # Else, plot regular 2D data
