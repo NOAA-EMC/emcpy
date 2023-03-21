@@ -447,8 +447,9 @@ class CreateFigure:
 
             # Loops through tiles to plot on one map
             for i in range(tiles):
-                cs = ax.pcolormesh(plotobj.longitude[:,:,i], plotobj.latitude[:,:,i],
-                                   plotobj.data[:,:,i], **inputs,
+                cs = ax.pcolormesh(plotobj.longitude[:, :, i],
+                                   plotobj.latitude[:, :, i],
+                                   plotobj.data[:, :, i], **inputs,
                                    transform=self.projection.transform)
 
         # Else, plot regular 2D data
