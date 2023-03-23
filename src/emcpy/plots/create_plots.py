@@ -440,9 +440,23 @@ class CreateFigure:
                     'markersize', 'colorbar']
         inputs = self._get_inputs_dict(skipvars, plotobj)
 
-        cs = ax.pcolormesh(plotobj.latitude, plotobj.longitude,
-                           plotobj.data, **inputs,
-                           transform=self.projection.transform)
+        # Check for 3d data
+        if plotobj.longitude.ndim == 3:
+            # Get total number of tiles; assumes Nth dimension is tile
+            tiles = plotobj.longitude.shape[-1]
+
+            # Loops through tiles to plot on one map
+            for i in range(tiles):
+                cs = ax.pcolormesh(plotobj.longitude[:, :, i],
+                                   plotobj.latitude[:, :, i],
+                                   plotobj.data[:, :, i], **inputs,
+                                   transform=self.projection.transform)
+
+        # Else, plot regular 2D data
+        else:
+            cs = ax.pcolormesh(plotobj.longitude, plotobj.latitude,
+                               plotobj.data, **inputs,
+                               transform=self.projection.transform)
 
         if plotobj.colorbar:
             self.cs = cs
@@ -453,7 +467,7 @@ class CreateFigure:
                     'markersize', 'colorbar']
         inputs = self._get_inputs_dict(skipvars, plotobj)
 
-        cs = ax.contour(plotobj.latitude, plotobj.longitude,
+        cs = ax.contour(plotobj.longitude, plotobj.latitude,
                         plotobj.data, **inputs,
                         transform=self.projection.transform)
 

@@ -1,3 +1,5 @@
+import numpy as np
+
 __all__ = ['MapScatter', 'MapGridded', 'MapContour',
            'MapContourf']
 
@@ -52,8 +54,12 @@ class MapGridded:
         self.data = data
 
         self.cmap = 'viridis'
-        self.vmin = None
-        self.vmax = None
+        if latitude.ndim == 3:
+            self.vmin = np.nanmin(data)
+            self.vmax = np.nanmax(data)
+        else:
+            self.vmin = None
+            self.vmax = None
         self.alpha = None
         self.colorbar = True
 
