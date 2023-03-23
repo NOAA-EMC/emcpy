@@ -11,23 +11,37 @@ jobs:
 
     steps:
 
-    - name: Install ubuntu dependencies
-      run: |
-        sudo apt-get install libproj-dev proj-data proj-bin
-        sudo apt-get install libgeos-dev musl-dev libc-dev
-        sudo ln -s /usr/lib/x86_64-linux-musl/libc.so /lib/libc.musl-x86_64.so.1
+    # Setup Python
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
 
-    - name: Install (upgrade) dependencies
-      run: |
-        pip install --upgrade pip
-        pip install pdoc
+    # Update conda
+    - name: Update conda
+      run: conda update -n base -c defaults conda
+
+    # Intall pip
+    - name: Install pip
+      run: conda install pip
+    
+    # Install cartopy
+    - name: Install cartopy
+      run: conda install -c conda-forge cartopy
 
     - name: Checkout
       uses: actions/checkout@v2
+      with:
+        lfs: true
 
-    - name: Install emcpy
+    # Install emcpy
+    - name: Upgrade pip
+      run: $CONDA/bin/pip3 install --upgrade pip
+    
+    - name: Install emcpy and dependencies
       run: |
-        pip install .
+        $CONDA/bin/pip3 install --use-deprecated=legacy-resolver -r requirements-github.txt --user .
+        echo "$PWD" 
 
     - name: Generate documentation
       run: |
