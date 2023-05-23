@@ -1,0 +1,15 @@
+Installation
+============
+
+To clone the most recent version of EMCPy from the develop branch, use the following on the command line::
+
+    git clone https://github.com/noaa-emc/emcpy
+
+To install EMCPy::
+
+    cd emcpy
+    pip install .
+    
+If working on Hera, there are firewalls that prevent the shapefiles needed to plot map projections to download from the internet. A workaround for this is to run the following script which links the shape files that are downloaded on Hera::
+
+    sh /scratch1/NCEPDEV/da/Cory.R.Martin/Python/ln_cartopy.sh
