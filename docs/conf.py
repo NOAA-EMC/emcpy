@@ -16,13 +16,10 @@ from pathlib import Path
 from datetime import datetime
 sys.path.insert(0, str(Path(__file__).parent.resolve()))
 
-
 import matplotlib
-
 from sphinx_gallery.sorting import ExampleTitleSortKey, ExplicitOrder
 
-
-#sys.path.append(os.path.abspath('../src'))
+# sys.path.append(os.path.abspath('../src'))
 import emcpy
 
 
@@ -65,7 +62,6 @@ sphinx_gallery_conf = {
     'within_subsection_order': ExampleTitleSortKey,
     'matplotlib_animations': True,
 }
-
 
 
 # Add any paths that contain templates here, relative to this directory.
