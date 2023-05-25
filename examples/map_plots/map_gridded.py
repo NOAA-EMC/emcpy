@@ -17,7 +17,7 @@ def main():
     # Create 2d gridded plot on global domian
     lats = np.linspace(25, 50, 25)
     lons = np.linspace(245, 290, 45)
-    X, Y = np.meshgrid(lons, lats)
+    X, Y = np.meshgrid(lats, lons)
     Z = np.random.normal(size=X.shape)
 
     # Create gridded map object
