@@ -28,6 +28,7 @@ def _getLineData():
 
     return x1, y1, x2, y2, x3, y3
 
+
 def main():
     # create line plot with multiple lines
     x1, y1, x2, y2, x3, y3 = _getLineData()

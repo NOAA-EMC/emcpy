@@ -14,8 +14,9 @@ import matplotlib.pyplot as plt
 from emcpy.plots.plots import LinePlot, HorizontalLine
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
+
 def main():
-    
+
     x1 = [1, 2, 3, 4, 5]
     y1 = [1, 2, 3, 4, 5]
     x2 = [1, 2, 3, 4, 5]

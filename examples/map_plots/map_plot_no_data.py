@@ -4,7 +4,7 @@ Creating a map plot with no data
 
 The following example shows how to use the
 map features in EMCPy. The map feature underlying
-source code comes from `Cartopy`. 
+source code comes from `Cartopy`.
 """
 
 import matplotlib.pyplot as plt

@@ -3,7 +3,7 @@ Create a map plot with gridded data
 -----------------------------------
 
 The following example plots gridded data over
-a CONUS domain. 
+a CONUS domain.
 """
 
 import numpy as np
