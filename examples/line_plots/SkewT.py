@@ -1,11 +1,25 @@
+"""
+Creating a Skew-T Log-p Plot
+----------------------------
+
+EMCPy has a method to produce skew-T log-p
+plots. Given pressure, temperature, and dewpoint
+temperature data, users can call the `SkewT()`
+method to create a plot with the appropriate
+x and y axes.
+
+"""
+
 import numpy as np
+import matplotlib.pyplot as plt
+from io import StringIO
+
 from emcpy.plots.plots import SkewT
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
 
 def _getSkewTData():
     # use data for skew-t log-p plot
-    from io import StringIO
 
     # Some example data.
     data_txt = '''
@@ -91,23 +105,30 @@ def _getSkewTData():
     return p, T, Td
 
 
-p, T, Td = _getSkewTData()
+def main():
 
-tplot = SkewT(T, p)
-tplot.color = 'tab:red'
+    p, T, Td = _getSkewTData()
 
-tdplot = SkewT(Td, p)
-tdplot.color = 'tab:green'
+    tplot = SkewT(T, p)
+    tplot.color = 'tab:red'
 
-plot1 = CreatePlot()
-plot1.plot_layers = [tplot, tdplot]
-plot1.add_grid()
-plot1.add_xlabel('Temperature (C)')
-plot1.add_ylabel('Pressure (hPa)')
-plot1.add_title('Example Skew-T')
+    tdplot = SkewT(Td, p)
+    tdplot.color = 'tab:green'
 
-fig = CreateFigure()
-fig.plot_list = [plot1]
-fig.create_figure()
-fig.tight_layout()
-fig.save_figure("SkewT.png")
+    plot1 = CreatePlot()
+    plot1.plot_layers = [tplot, tdplot]
+    plot1.add_grid()
+    plot1.add_xlabel('Temperature (C)')
+    plot1.add_ylabel('Pressure (hPa)')
+    plot1.add_title('Example Skew-T')
+
+    fig = CreateFigure()
+    fig.plot_list = [plot1]
+    fig.create_figure()
+    fig.tight_layout()
+
+    plt.show()
+
+
+if __name__ == '__main__':
+    main()
