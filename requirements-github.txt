@@ -9,3 +9,8 @@ pytest
 Shapely
 pdoc
 seaborn==0.12.2
+sphinx
+sphinx_rtd_theme
+sphinx_gallery
+myst_parser
+pydata_sphinx_theme

@@ -19,7 +19,6 @@ sys.path.insert(0, str(Path(__file__).parent.resolve()))
 import matplotlib
 from sphinx_gallery.sorting import ExampleTitleSortKey, ExplicitOrder
 
-# sys.path.append(os.path.abspath('../src'))
 import emcpy
 
 
@@ -40,6 +39,7 @@ project = 'EMCPy'
 # ones.
 extensions = [
     'myst_parser',
+    'sphinx.ext.githubpages',
     'sphinx_gallery.gen_gallery'
 ]
 
