@@ -9,3 +9,4 @@ pytest
 Shapely
 pdoc
 seaborn==0.12.2
+sphinx_gallery
