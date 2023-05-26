@@ -6,7 +6,7 @@ EMCPy's map domain includes a feature
 to create a custom dictionary with specified
 lat and lon inputs to create a specific map
 domain. This is helpful for users who want to
-look at a specific domain that is not included in EMCPy..
+look at a specific domain that is not included in EMCPy.
 """
 
 import numpy as np
