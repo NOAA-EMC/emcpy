@@ -16,7 +16,7 @@ from pathlib import Path
 from datetime import datetime
 sys.path.insert(0, str(Path(__file__).parent.resolve()))
 
-import matplotlib
+# import matplotlib
 from sphinx_gallery.sorting import ExampleTitleSortKey, ExplicitOrder
 
 # sys.path.append(os.path.abspath('../src'))
