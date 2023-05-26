@@ -10,6 +10,7 @@ EMCPy
     :hidden:
 
     getting_started/index
+    gallery/index
     installing
 
 

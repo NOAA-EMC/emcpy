@@ -10,9 +10,17 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
+from pathlib import Path
+from datetime import datetime
+sys.path.insert(0, str(Path(__file__).parent.resolve()))
+
+import matplotlib
+from sphinx_gallery.sorting import ExampleTitleSortKey, ExplicitOrder
+
+# sys.path.append(os.path.abspath('../src'))
+import emcpy
 
 
 # -- Project information -----------------------------------------------------
@@ -30,7 +38,31 @@ project = 'EMCPy'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["myst_parser"]
+extensions = [
+    'myst_parser',
+    'sphinx_gallery.gen_gallery'
+]
+
+
+# Sphinx gallery configuration
+subsection_order = ExplicitOrder([
+    '../examples/line_plots',
+    '../examples/scatter_plots',
+    '../examples/histograms',
+    '../examples/map_plots'
+])
+
+sphinx_gallery_conf = {
+    'capture_repr': (),
+    'filename_pattern': '^((?!skip_).)*$',
+    'examples_dirs': ['../examples'],   # path to example scripts
+    'gallery_dirs': ['gallery'],  # path to where to save gallery generated output
+    'backreferences_dir': '../build/backrefs',
+    'subsection_order': subsection_order,
+    'within_subsection_order': ExampleTitleSortKey,
+    'matplotlib_animations': True,
+}
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
