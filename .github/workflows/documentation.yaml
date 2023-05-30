@@ -1,0 +1,51 @@
+name: Deploy documentation
+on: [push]
+permissions:
+    contents: write
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      # Setup Python
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.10.10
+
+      # Update conda
+      - name: Update conda
+        run: conda update -n base -c defaults conda
+
+      # Intall pip
+      - name: Install pip
+        run: conda install pip
+
+      # Install cartopy
+      - name: Install cartopy
+        run: conda install -c conda-forge cartopy
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+
+      # Install emcpy
+      - name: Upgrade pip
+        run: $CONDA/bin/pip3 install --upgrade pip
+      - name: Install emcpy and dependencies
+        run: |
+          $CONDA/bin/pip3 install --use-deprecated=legacy-resolver -r requirements-github.txt --user .
+          echo "$PWD"
+
+      # Build docs
+      - name: Sphinx build
+        run: |
+          sphinx-build docs _build
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/head/develop' }}
+        with:
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: _build/
+          force_orphan: true

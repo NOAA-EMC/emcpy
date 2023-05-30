@@ -9,10 +9,10 @@ jobs:
     steps:
 
     # Setup Python
-    - name: Set up Python 3.9
+    - name: Set up Python 3.10
       uses: actions/setup-python@v2
       with:
-        python-version: 3.9
+        python-version: 3.10.10
 
     # Update conda
     - name: Update conda
@@ -27,7 +27,7 @@ jobs:
       run: conda install -c conda-forge cartopy
 
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         lfs: true
 
@@ -44,16 +44,3 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE
         pytest -v src/tests
-
-    # Generate documentation
-    - name: Generate documentation
-      run: |
-        cd $GITHUB_WORKSPACE
-        pdoc --docformat "google" -o docs emcpy
-        ls -lR docs/
-
-    - name: Upload documentation
-      uses: actions/upload-artifact@v2
-      with:
-        name: docs
-        path: docs
