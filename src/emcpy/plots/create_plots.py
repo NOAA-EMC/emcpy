@@ -231,11 +231,11 @@ class CreateFigure:
         # Save figure
         self.fig.savefig(pathfile, **kwargs)
 
-    def tight_layout(self):
+    def tight_layout(self, **kwargs):
         """
         Set figure to tight layout.
         """
-        self.fig.tight_layout()
+        self.fig.tight_layout(**kwargs)
 
     def close_figure(self):
         """
