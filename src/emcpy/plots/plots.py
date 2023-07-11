@@ -147,6 +147,32 @@ class LinePlot:
         self.alpha = None
         self.label = None
 
+        
+class GriddedPlot:
+
+    def __init__(self, x, y, z):
+        """
+        Constructor for GriddedPlot.
+        Args:
+            x : (array type)
+            y : (array type)
+            z : (array type)
+        """
+        super().__init__()
+        self.plottype = 'gridded_plot'
+
+        self.x = x
+        self.y = y
+        self.z = z
+
+        self.cmap = 'viridis'
+        self.norm = None
+        self.vmin = None
+        self.vmax = None
+        self.edgecolors = None
+        self.shading = None
+        self.alpha = None
+        self.colorbar = True
 
 class VerticalLine:
 

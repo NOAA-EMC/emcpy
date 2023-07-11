@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.ndimage.filters import gaussian_filter
 import matplotlib.pyplot as plt
 
 from emcpy.plots.plots import LinePlot, VerticalLine,\
@@ -247,6 +248,23 @@ def test_bar_plot():
     fig.create_figure()
     fig.save_figure('test_bar_plot.png')
 
+    
+def test_gridded_plot():
+    # Create gridded plot
+    
+    gp = GriddedPlot(x, y, z)
+    gp.cmap = 'plasma' 
+
+    plot1 = CreatePlot()
+    plot1.plot_layers = [gp]
+    plot1.add_xlabel(xlabel='X Axis Label')
+    plot1.add_ylabel(ylabel='Y Axis Label')
+    plot1.add_title("Test Gridded Plot")
+
+    fig = CreateFigure()
+    fig.plot_list = [plot1]
+    fig.create_figure()
+    fig.save_figure('test_gridded_plot.png')
 
 def test_horizontal_bar_plot():
     # Create horizontal bar plot
@@ -520,6 +538,16 @@ def _getBarData():
     x_pos = [i for i, _ in enumerate(x)]
 
     return x_pos, heights, variance
+
+def _getGriddedData():
+    # generate test data for gridded data
+
+    x = np.linspace(0, 1, 51)
+    y = np.linspace(0, 1, 51)
+    r = np.random.RandomState(25)
+    z = gaussian_filter(r.random_sample([50, 50]), sigma=5, mode='wrap')
+    
+    return x, y, z
 
 
 def _getSkewTData():
