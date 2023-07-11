@@ -260,6 +260,7 @@ class CreateFigure:
             'histogram': self._histogram,
             'density': self._density,
             'line_plot': self._lineplot,
+            'gridded_plot': self._gridded,
             'vertical_line': self._verticalline,
             'horizontal_line': self._horizontalline,
             'horizontal_span': self._horizontalspan,
@@ -537,6 +538,20 @@ class CreateFigure:
                 if 'color' in plotobj.linear_regression and 'color' in inputs:
                     plotobj.linear_regression['color'] = inputs['color']
                 ax.plot(plotobj.x, y_pred, label=label, **plotobj.linear_regression)
+
+    def _gridded(self, plotobj, ax):
+        """
+        Uses Gridded object to plot on axis.
+        """
+        skipvars = ['plottype', 'plot_ax', 'x', 'y', 'z',
+                    'colorbar']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
+
+        cs = ax.pcolormesh(plotobj.x, plotobj.y,
+                           plotobj.z, **inputs)
+
+        if plotobj.colorbar:
+            self.cs = cs
 
     def _skewt(self, plotobj, ax):
         """
