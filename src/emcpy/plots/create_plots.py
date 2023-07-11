@@ -547,13 +547,11 @@ class CreateFigure:
                     'colorbar']
         inputs = self._get_inputs_dict(skipvars, plotobj)
 
-        
         cs = ax.pcolormesh(plotobj.x, plotobj.y,
                            plotobj.z, **inputs)
 
         if plotobj.colorbar:
             self.cs = cs
-        
 
     def _skewt(self, plotobj, ax):
         """

@@ -147,7 +147,7 @@ class LinePlot:
         self.alpha = None
         self.label = None
 
-        
+
 class GriddedPlot:
 
     def __init__(self, x, y, z):
@@ -170,9 +170,10 @@ class GriddedPlot:
         self.vmin = None
         self.vmax = None
         self.edgecolors = None
-        self.shading = None
+        self.shading = 'auto'
         self.alpha = None
         self.colorbar = True
+
 
 class VerticalLine:
 
