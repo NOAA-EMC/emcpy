@@ -685,6 +685,7 @@ def main():
     test_scatter_plot()
     test_bar_plot()
     test_gridded_plot()
+    test_contourf_plot()
     test_horizontal_bar_plot()
     test_multi_subplot()
     test_HorizontalSpan()
