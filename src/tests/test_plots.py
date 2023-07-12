@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 
 from emcpy.plots.plots import LinePlot, VerticalLine,\
     Histogram, Density, Scatter, HorizontalLine, BarPlot, \
-    GriddedPlot, HorizontalBar, HorizontalSpan, SkewT
+    GriddedPlot, ContourPlot, ContourfPlot, HorizontalBar, \
+    HorizontalSpan, SkewT
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
 
