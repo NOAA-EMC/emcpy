@@ -273,7 +273,7 @@ def test_gridded_plot():
 def test_contours_plot():
     # Create contourf plot
 
-    x, y, z = _getContourfData
+    x, y, z = _getContourfData()
 
     cfp = ContourfPlot(x, y, z)
     cfp.cmap = 'Greens'
