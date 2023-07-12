@@ -269,6 +269,30 @@ def test_gridded_plot():
     fig.save_figure('test_gridded_plot.png')
 
 
+def test_contourf_plot():
+    # Create contourf plot
+
+    z, y, z = _getContourfData
+
+    cfp = ContourfPlot(x, y, z)
+    cfp.cmap = 'Greens'
+
+    cp = ContourPlot(x, y, z)
+    cp.linestyles = '--'
+
+    plot1 = CreatePlot()
+    plot1.plot_layers = [cfp, cp]
+    plot1.add_xlabel(xlabel='X Axis Label')
+    plot1.add_ylabel(ylabel='Y Axis Label')
+    plot1.add_title('Test Contour and Contourf Plot')
+    plot1.add_colorbar(orientation='vertical')
+
+    fig = CreateFigure()
+    fig.plot_list = [plot1]
+    fig.create_figure()
+    fig.save_figure('test_contour_and_contourf_plot.png')
+
+
 def test_horizontal_bar_plot():
     # Create horizontal bar plot
 
@@ -550,6 +574,18 @@ def _getGriddedData():
     y = np.linspace(0, 1, 51)
     r = np.random.RandomState(25)
     z = gaussian_filter(r.random_sample([50, 50]), sigma=5, mode='wrap')
+
+    return x, y, z
+
+
+def _getContourfData():
+    # generate test data for contourf plots
+
+    x = np.linspace(-3, 15, 50).reshape(1, -1)
+    y = np.linspace(-3, 15, 20).reshape(-1, 1)
+    z = np.cos(x)*2 - np.sin(y)*2
+
+    x, y = x.flatten(), y.flatten()
 
     return x, y, z
 
