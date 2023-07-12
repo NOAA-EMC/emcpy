@@ -270,10 +270,10 @@ def test_gridded_plot():
     fig.save_figure('test_gridded_plot.png')
 
 
-def test_contourf_plot():
+def test_contours_plot():
     # Create contourf plot
 
-    z, y, z = _getContourfData
+    x, y, z = _getContourfData
 
     cfp = ContourfPlot(x, y, z)
     cfp.cmap = 'Greens'
@@ -686,7 +686,7 @@ def main():
     test_scatter_plot()
     test_bar_plot()
     test_gridded_plot()
-    test_contourf_plot()
+    test_contours_plot()
     test_horizontal_bar_plot()
     test_multi_subplot()
     test_HorizontalSpan()
