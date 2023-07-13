@@ -620,7 +620,7 @@ class CreateFigure:
 
     def _contourf(self, plotobj, ax):
         """
-        Use ContourfPlot object to plot on axis.
+        Use FilledContourPlot object to plot on axis.
         """
         skipvars = ['plottype', 'x', 'y', 'z', 'colorbar']
         inputs = self._get_inputs_dict(skipvars, plotobj)

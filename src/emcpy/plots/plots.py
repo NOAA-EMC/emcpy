@@ -206,11 +206,11 @@ class ContourPlot:
         self.colorbar = False
 
 
-class ContourfPlot:
+class FilledContourPlot:
 
     def __init__(self, x, y, z):
         """
-        Constructor for ContourfPlot.
+        Constructor for FilledContourPlot.
         Args:
             x : (array type)
             y : (array type)

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 from emcpy.plots.plots import LinePlot, VerticalLine,\
     Histogram, Density, Scatter, HorizontalLine, BarPlot, \
-    GriddedPlot, ContourPlot, ContourfPlot, HorizontalBar, \
+    GriddedPlot, ContourPlot, FilledContourPlot, HorizontalBar, \
     HorizontalSpan, SkewT
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
@@ -275,7 +275,7 @@ def test_contours_plot():
 
     x, y, z = _getContourfData()
 
-    cfp = ContourfPlot(x, y, z)
+    cfp = FilledContourPlot(x, y, z)
     cfp.cmap = 'Greens'
 
     cp = ContourPlot(x, y, z)
