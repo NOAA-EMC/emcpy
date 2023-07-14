@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 
 from emcpy.plots.plots import LinePlot, VerticalLine,\
     Histogram, Density, Scatter, HorizontalLine, BarPlot, \
-    GriddedPlot, HorizontalBar, HorizontalSpan, SkewT
+    GriddedPlot, ContourPlot, FilledContourPlot, HorizontalBar, \
+    HorizontalSpan, SkewT
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
 
@@ -267,6 +268,30 @@ def test_gridded_plot():
     fig.plot_list = [plot1]
     fig.create_figure()
     fig.save_figure('test_gridded_plot.png')
+
+
+def test_contours_plot():
+    # Create contourf plot
+
+    x, y, z = _getContourfData()
+
+    cfp = FilledContourPlot(x, y, z)
+    cfp.cmap = 'Greens'
+
+    cp = ContourPlot(x, y, z)
+    cp.linestyles = '--'
+
+    plot1 = CreatePlot()
+    plot1.plot_layers = [cfp, cp]
+    plot1.add_xlabel(xlabel='X Axis Label')
+    plot1.add_ylabel(ylabel='Y Axis Label')
+    plot1.add_title('Test Contour and Contourf Plot')
+    plot1.add_colorbar(orientation='vertical')
+
+    fig = CreateFigure()
+    fig.plot_list = [plot1]
+    fig.create_figure()
+    fig.save_figure('test_contour_and_contourf_plot.png')
 
 
 def test_horizontal_bar_plot():
@@ -554,6 +579,18 @@ def _getGriddedData():
     return x, y, z
 
 
+def _getContourfData():
+    # generate test data for contourf plots
+
+    x = np.linspace(-3, 15, 50).reshape(1, -1)
+    y = np.linspace(-3, 15, 20).reshape(-1, 1)
+    z = np.cos(x)*2 - np.sin(y)*2
+
+    x, y = x.flatten(), y.flatten()
+
+    return x, y, z
+
+
 def _getSkewTData():
     # use data for skew-t log-p plot
     from io import StringIO
@@ -649,6 +686,7 @@ def main():
     test_scatter_plot()
     test_bar_plot()
     test_gridded_plot()
+    test_contours_plot()
     test_horizontal_bar_plot()
     test_multi_subplot()
     test_HorizontalSpan()

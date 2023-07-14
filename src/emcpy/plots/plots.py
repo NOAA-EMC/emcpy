@@ -175,6 +175,68 @@ class GriddedPlot:
         self.colorbar = True
 
 
+class ContourPlot:
+
+    def __init__(self, x, y, z):
+        """
+        Constructor for ContourPlot.
+        Args:
+            x : (array type)
+            y : (array type)
+            z : (array type)
+        """
+        super().__init__()
+        self.plottype = 'contour'
+
+        self.x = x
+        self.y = y
+        self.z = z
+
+        self.corner_mask = False
+        self.colors = 'black'
+        self.alpha = None
+        self.cmap = None
+        self.norm = None
+        self.vmin = None
+        self.vmax = None
+        self.origin = None
+        self.extent = None
+        self.locator = None
+        self.extend = None
+        self.colorbar = False
+
+
+class FilledContourPlot:
+
+    def __init__(self, x, y, z):
+        """
+        Constructor for FilledContourPlot.
+        Args:
+            x : (array type)
+            y : (array type)
+            z : (array type)
+        """
+        super().__init__()
+        self.plottype = 'contourf'
+
+        self.x = x
+        self.y = y
+        self.z = z
+
+        self.corner_mask = False
+        self.colors = None
+        self.alpha = None
+        self.cmap = 'viridis'
+        self.norm = None
+        self.vmin = None
+        self.vmax = None
+        self.origin = None
+        self.extent = None
+        self.locator = None
+        self.extend = None
+        self.colorbar = True
+
+
 class VerticalLine:
 
     def __init__(self, x):

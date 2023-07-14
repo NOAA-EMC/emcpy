@@ -261,6 +261,8 @@ class CreateFigure:
             'density': self._density,
             'line_plot': self._lineplot,
             'gridded_plot': self._gridded,
+            'contour': self._contour,
+            'contourf': self._contourf,
             'vertical_line': self._verticalline,
             'horizontal_line': self._horizontalline,
             'horizontal_span': self._horizontalspan,
@@ -602,6 +604,32 @@ class CreateFigure:
         inputs = self._get_inputs_dict(skipvars, plotobj)
 
         ax.plot(plotobj.x, plotobj.y, **inputs)
+
+    def _contour(self, plotobj, ax):
+        """
+        Uses ContourPlot object to plot on axis.
+        """
+        skipvars = ['plottype', 'x', 'y', 'z', 'colorbar']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
+
+        cs = ax.contour(plotobj.x, plotobj.y,
+                        plotobj.z, **inputs)
+
+        if plotobj.colorbar:
+            self.cs = cs
+
+    def _contourf(self, plotobj, ax):
+        """
+        Use FilledContourPlot object to plot on axis.
+        """
+        skipvars = ['plottype', 'x', 'y', 'z', 'colorbar']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
+
+        cs = ax.contourf(plotobj.x, plotobj.y,
+                         plotobj.z, **inputs)
+
+        if plotobj.colorbar:
+            self.cs = cs
 
     def _verticalline(self, plotobj, ax):
         """
