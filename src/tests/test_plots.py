@@ -294,6 +294,25 @@ def test_contours_plot():
     fig.save_figure('test_contour_and_contourf_plot.png')
 
 
+def test_box_and_whisker_plot():
+    # Create box and whisker plot
+
+    data = _getBoxPlotData()
+
+    bwp = BoxandWhiskerPlot(data)
+
+    plot1 = CreatePlot()
+    plot1.plot_layers = [bwp]
+    plot1.add_xlabel(xlabel='X Axis Label')
+    plot1.add_ylabel(ylabel='Y Axis Label')
+    plot1.add_title('Test Box and Whisker Plot')
+
+    fig = CreateFigure()
+    fig.plot_list = [plot1]
+    fig.create_figure()
+    fig.save_figure('test_box_and_whisker_plot.png')
+
+
 def test_horizontal_bar_plot():
     # Create horizontal bar plot
 
@@ -589,6 +608,17 @@ def _getContourfData():
     x, y = x.flatten(), y.flatten()
 
     return x, y, z
+
+
+def _getBoxPlotData():
+    # generate test data for box and whisker plot
+
+    # Fixing random state for reproducibility
+    np.random.seed(19680801)
+
+    data = [np.random.normal(0, std, 100) for std in range(6, 10)]
+
+    return data
 
 
 def _getSkewTData():

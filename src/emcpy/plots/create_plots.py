@@ -269,6 +269,7 @@ class CreateFigure:
             'bar_plot': self._barplot,
             'horizontal_bar': self._hbar,
             'skewt': self._skewt,
+            'boxandwhisker': self._boxandwhisker,
             'map_scatter': self._map_scatter,
             'map_gridded': self._map_gridded,
             'map_contour': self._map_contour,
@@ -675,6 +676,15 @@ class CreateFigure:
         inputs = self._get_inputs_dict(skipvars, plotobj)
 
         ax.barh(plotobj.y, plotobj.width, **inputs)
+
+    def _boxandwhisker(self, plotobj, ax):
+        """
+        Uses BoxandWhiskerPlot object to plot on axis.
+        """
+        skipvars = ['plottype', 'data']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
+
+        ax.boxplot(plotobj.data, **inputs)
 
     def _get_inputs_dict(self, skipvars, plotobj):
         """

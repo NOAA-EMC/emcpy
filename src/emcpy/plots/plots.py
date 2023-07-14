@@ -384,3 +384,34 @@ class SkewT:
         self.markersize = None
         self.alpha = None
         self.label = None
+
+
+class BoxandWhiskerPlot:
+
+    def __init__(self, data):
+        """
+        Constructor to create a Box and Whisker
+        plot.
+        Args:
+            data : (array type)
+        """
+        super().__init__()
+        self.plottype = 'boxandwhisker'
+
+        self.data = data
+
+        self.notch = False
+        self.sym = None
+        self.vert = True
+        self.whis = 1.5
+        self.bootstrap = None
+        self.usermedians = None
+        self.conf_intervals = None
+        self.positions = None
+        self.widths = None
+        self.patch_artist = False
+        self.labels = None
+        self.manage_ticks = True
+        self.autorange = False
+        self.meanline = False
+        self.zorder = None
