@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from emcpy.plots.plots import LinePlot, VerticalLine,\
     Histogram, Density, Scatter, HorizontalLine, BarPlot, \
     GriddedPlot, ContourPlot, FilledContourPlot, HorizontalBar, \
-    HorizontalSpan, SkewT
+    BoxandWhiskerPlot, HorizontalSpan, SkewT
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
 
@@ -292,6 +292,25 @@ def test_contours_plot():
     fig.plot_list = [plot1]
     fig.create_figure()
     fig.save_figure('test_contour_and_contourf_plot.png')
+
+
+def test_box_and_whisker_plot():
+    # Create box and whisker plot
+
+    data = _getBoxPlotData()
+
+    bwp = BoxandWhiskerPlot(data)
+
+    plot1 = CreatePlot()
+    plot1.plot_layers = [bwp]
+    plot1.add_xlabel(xlabel='X Axis Label')
+    plot1.add_ylabel(ylabel='Y Axis Label')
+    plot1.add_title('Test Box and Whisker Plot')
+
+    fig = CreateFigure()
+    fig.plot_list = [plot1]
+    fig.create_figure()
+    fig.save_figure('test_box_and_whisker_plot.png')
 
 
 def test_horizontal_bar_plot():
@@ -591,6 +610,17 @@ def _getContourfData():
     return x, y, z
 
 
+def _getBoxPlotData():
+    # generate test data for box and whisker plot
+
+    # Fixing random state for reproducibility
+    np.random.seed(19680801)
+
+    data = [np.random.normal(0, std, 100) for std in range(6, 10)]
+
+    return data
+
+
 def _getSkewTData():
     # use data for skew-t log-p plot
     from io import StringIO
@@ -687,6 +717,7 @@ def main():
     test_bar_plot()
     test_gridded_plot()
     test_contours_plot()
+    test_box_and_whisker_plot()
     test_horizontal_bar_plot()
     test_multi_subplot()
     test_HorizontalSpan()
