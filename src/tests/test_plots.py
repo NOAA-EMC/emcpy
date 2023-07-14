@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from emcpy.plots.plots import LinePlot, VerticalLine,\
     Histogram, Density, Scatter, HorizontalLine, BarPlot, \
     GriddedPlot, ContourPlot, FilledContourPlot, HorizontalBar, \
-    HorizontalSpan, SkewT
+    BoxandWhiskerPlot, HorizontalSpan, SkewT
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
 
@@ -717,6 +717,7 @@ def main():
     test_bar_plot()
     test_gridded_plot()
     test_contours_plot()
+    test_box_and_whisker_plot()
     test_horizontal_bar_plot()
     test_multi_subplot()
     test_HorizontalSpan()
