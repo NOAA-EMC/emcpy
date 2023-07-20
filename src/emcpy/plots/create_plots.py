@@ -333,7 +333,7 @@ class CreateFigure:
             self.fig.suptitle(text, **kwargs)
 
     def plot_logo(self, loc, which='noaa/nws',
-                  zoom=1, alpha=0.5):
+                  single_logo=True, zoom=1, alpha=0.5):
         """
         Add branding logo on all axes.
         """
@@ -342,6 +342,21 @@ class CreateFigure:
             'nws': 'nws_logo_75x75.png',
             'noaa/nws': 'noaa_nws_logo_150x75.png'
         }
+
+        image_path = os.path.join(emcpy.emcpy_directory, 'logos', image_dict[which])
+        im = Image.open(image_path)
+
+        ax_list = self.fig.axes
+
+        if single_logo:
+            ax = ax_list[-1]
+            self._display_logo(ax, im, loc, zoom, alpha)
+
+        else:
+            for ax in ax_list:
+                self._display_logo(ax, im, loc, zoom, alpha)
+
+    def _display_logo(self, ax, im, loc, zoom, alpha):
 
         loc_dict = {
             'upper right': 1,
@@ -356,23 +371,17 @@ class CreateFigure:
             'center': 10
         }
 
-        image_path = os.path.join(emcpy.emcpy_directory, 'logos', image_dict[which])
-        im = Image.open(image_path)
+        width, height = ax.figure.get_size_inches()*self.fig.dpi
+        wm_width = int(width/4)  # make the watermark 1/4 of the figure size
+        scaling = (wm_width / float(im.size[0]))
+        wm_height = int(float(im.size[1])*float(scaling))
 
-        ax_list = self.fig.axes
+        imagebox = OffsetImage(im, zoom=zoom, alpha=alpha)
+        imagebox.image.axes = ax
 
-        for ax in ax_list:
-            width, height = ax.figure.get_size_inches()*self.fig.dpi
-            wm_width = int(width/4)  # make the watermark 1/4 of the figure size
-            scaling = (wm_width / float(im.size[0]))
-            wm_height = int(float(im.size[1])*float(scaling))
-
-            imagebox = OffsetImage(im, zoom=zoom, alpha=alpha)
-            imagebox.image.axes = ax
-
-            ao = AnchoredOffsetbox(loc_dict[loc], pad=0.1, borderpad=0.1, child=imagebox)
-            ao.patch.set_alpha(0)
-            ax.add_artist(ao)
+        ao = AnchoredOffsetbox(loc_dict[loc], pad=0.1, borderpad=0.1, child=imagebox)
+        ao.patch.set_alpha(0)
+        ax.add_artist(ao)
 
     def _plot_features(self, plot_obj, feature, ax):
 
