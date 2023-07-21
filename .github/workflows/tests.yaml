@@ -32,8 +32,8 @@ jobs:
         lfs: true
 
     # Install emcpy
-    - name: Upgrade pip
-      run: $CONDA/bin/pip3 install --upgrade pip
+    #- name: Upgrade pip
+    #  run: $CONDA/bin/pip3 install --upgrade pip
     - name: Install emcpy and dependencies
       run: |
         $CONDA/bin/pip3 install --use-deprecated=legacy-resolver -r requirements-github.txt --user .
