@@ -355,7 +355,7 @@ def test_add_logo():
     fig.figsize = (12, 8)
     fig.create_figure()
     fig.tight_layout()
-    fig.plot_logo(loc='bottom right', zoom=0.9, alpha=0.2)
+    fig.plot_logo(loc='lower right', zoom=0.9, alpha=0.2)
     fig.save_figure('test_add_logo.png')
 
 
