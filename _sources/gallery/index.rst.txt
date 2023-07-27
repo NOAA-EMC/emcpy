@@ -1,0 +1,360 @@
+:orphan:
+
+Gallery
+-------
+
+The following examples show off the functionality of EMCPy. The examples
+give reference to what can be done with these collection of tools. Please
+do not hesitate to issue a pull request to add further examples!
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    </div>
+
+
+Line Plots
+==========
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="EMCPy has a method to produce skew-T log-p plots. Given pressure, temperature, and dewpoint tem...">
+
+.. only:: html
+
+  .. image:: /gallery/line_plots/images/thumb/sphx_glr_SkewT_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_line_plots_SkewT.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a Skew-T Log-p Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a basic line plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /gallery/line_plots/images/thumb/sphx_glr_line_plot_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_line_plots_line_plot.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a simple line plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to create an inverted y-axis that also uses a log scale. This is useful ...">
+
+.. only:: html
+
+  .. image:: /gallery/line_plots/images/thumb/sphx_glr_inverted_log_scale_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_line_plots_inverted_log_scale.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Invert log scale</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This script shows several examples of the many different line plot options. They follow the sam...">
+
+.. only:: html
+
+  .. image:: /gallery/line_plots/images/thumb/sphx_glr_line_plot_options_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_line_plots_line_plot_options.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Line Plot Options</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use EMCPy&#x27;s method to plot several lines on a single subplot...">
+
+.. only:: html
+
+  .. image:: /gallery/line_plots/images/thumb/sphx_glr_multi_line_plot_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_line_plots_multi_line_plot.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Plotting multiple lines on a single plot</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+Scatter Plots
+=============
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to create a density scatter plot.">
+
+.. only:: html
+
+  .. image:: /gallery/scatter_plots/images/thumb/sphx_glr_density_scatter_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_scatter_plots_density_scatter.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a Density Scatter Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following is an example of how to plot data as a scatter plot and include a linear regressi...">
+
+.. only:: html
+
+  .. image:: /gallery/scatter_plots/images/thumb/sphx_glr_scatter_with_regression_line_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_scatter_plots_scatter_with_regression_line.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a Scatter Plot with a Regression Line</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a basic scatter plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /gallery/scatter_plots/images/thumb/sphx_glr_scatter_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_scatter_plots_scatter.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a simple scatter plot</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+Histogram Plots
+===============
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a basic histogram plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /gallery/histograms/images/thumb/sphx_glr_histogram_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_histograms_histogram.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a simple histogram</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to plot multiple histograms as layers on single plot.">
+
+.. only:: html
+
+  .. image:: /gallery/histograms/images/thumb/sphx_glr_layered_histogram_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_histograms_layered_histogram.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Layered histograms</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+Map Plots
+=========
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="EMCPy&#x27;s map domain includes a feature to create a custom dictionary with specified lat and lon ...">
+
+.. only:: html
+
+  .. image:: /gallery/map_plots/images/thumb/sphx_glr_custom_map_domain_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_map_plots_custom_map_domain.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Create a custom map domain</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example plots gridded data over a CONUS domain.">
+
+.. only:: html
+
+  .. image:: /gallery/map_plots/images/thumb/sphx_glr_map_gridded_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_map_plots_map_gridded.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Create a map plot with gridded data</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use the map features in EMCPy. The map feature underlying so...">
+
+.. only:: html
+
+  .. image:: /gallery/map_plots/images/thumb/sphx_glr_map_plot_no_data_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_map_plots_map_plot_no_data.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a map plot with no data</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example plots scatter data on a map plot over a CONUS domain. This example also s...">
+
+.. only:: html
+
+  .. image:: /gallery/map_plots/images/thumb/sphx_glr_map_scatter_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_map_plots_map_scatter.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a map plot with scatter data</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Sometimes, users only want to look at the locations of their data on a map and do not care abou...">
+
+.. only:: html
+
+  .. image:: /gallery/map_plots/images/thumb/sphx_glr_map_scatter_2D_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_map_plots_map_scatter_2D.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Plotting 2D scatter data on map plot</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+   :includehidden:
+
+
+   /gallery/line_plots/index.rst
+   /gallery/scatter_plots/index.rst
+   /gallery/histograms/index.rst
+   /gallery/map_plots/index.rst
+
+
+.. only:: html
+
+  .. container:: sphx-glr-footer sphx-glr-footer-gallery
+
+    .. container:: sphx-glr-download sphx-glr-download-python
+
+      :download:`Download all examples in Python source code: gallery_python.zip </gallery/gallery_python.zip>`
+
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
+
+      :download:`Download all examples in Jupyter notebooks: gallery_jupyter.zip </gallery/gallery_jupyter.zip>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_

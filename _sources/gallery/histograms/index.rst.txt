@@ -1,0 +1,60 @@
+
+
+.. _sphx_glr_gallery_histograms:
+
+.. _histogram_plots:
+
+Histogram Plots
+===============
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a basic histogram plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /gallery/histograms/images/thumb/sphx_glr_histogram_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_histograms_histogram.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a simple histogram</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to plot multiple histograms as layers on single plot.">
+
+.. only:: html
+
+  .. image:: /gallery/histograms/images/thumb/sphx_glr_layered_histogram_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_histograms_layered_histogram.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Layered histograms</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /gallery/histograms/histogram
+   /gallery/histograms/layered_histogram
+

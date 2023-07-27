@@ -1,0 +1,114 @@
+
+
+.. _sphx_glr_gallery_line_plots:
+
+.. _line_plots:
+
+Line Plots
+==========
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="EMCPy has a method to produce skew-T log-p plots. Given pressure, temperature, and dewpoint tem...">
+
+.. only:: html
+
+  .. image:: /gallery/line_plots/images/thumb/sphx_glr_SkewT_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_line_plots_SkewT.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a Skew-T Log-p Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a basic line plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /gallery/line_plots/images/thumb/sphx_glr_line_plot_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_line_plots_line_plot.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a simple line plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to create an inverted y-axis that also uses a log scale. This is useful ...">
+
+.. only:: html
+
+  .. image:: /gallery/line_plots/images/thumb/sphx_glr_inverted_log_scale_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_line_plots_inverted_log_scale.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Invert log scale</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This script shows several examples of the many different line plot options. They follow the sam...">
+
+.. only:: html
+
+  .. image:: /gallery/line_plots/images/thumb/sphx_glr_line_plot_options_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_line_plots_line_plot_options.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Line Plot Options</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use EMCPy&#x27;s method to plot several lines on a single subplot...">
+
+.. only:: html
+
+  .. image:: /gallery/line_plots/images/thumb/sphx_glr_multi_line_plot_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_line_plots_multi_line_plot.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Plotting multiple lines on a single plot</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /gallery/line_plots/SkewT
+   /gallery/line_plots/line_plot
+   /gallery/line_plots/inverted_log_scale
+   /gallery/line_plots/line_plot_options
+   /gallery/line_plots/multi_line_plot
+

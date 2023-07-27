@@ -1,0 +1,78 @@
+
+
+.. _sphx_glr_gallery_scatter_plots:
+
+.. _scatter_plots:
+
+Scatter Plots
+=============
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to create a density scatter plot.">
+
+.. only:: html
+
+  .. image:: /gallery/scatter_plots/images/thumb/sphx_glr_density_scatter_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_scatter_plots_density_scatter.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a Density Scatter Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following is an example of how to plot data as a scatter plot and include a linear regressi...">
+
+.. only:: html
+
+  .. image:: /gallery/scatter_plots/images/thumb/sphx_glr_scatter_with_regression_line_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_scatter_plots_scatter_with_regression_line.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a Scatter Plot with a Regression Line</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a basic scatter plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /gallery/scatter_plots/images/thumb/sphx_glr_scatter_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_scatter_plots_scatter.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a simple scatter plot</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /gallery/scatter_plots/density_scatter
+   /gallery/scatter_plots/scatter_with_regression_line
+   /gallery/scatter_plots/scatter
+

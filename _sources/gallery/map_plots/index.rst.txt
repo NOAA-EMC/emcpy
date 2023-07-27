@@ -1,0 +1,114 @@
+
+
+.. _sphx_glr_gallery_map_plots:
+
+.. _map_plots:
+
+Map Plots
+=========
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="EMCPy&#x27;s map domain includes a feature to create a custom dictionary with specified lat and lon ...">
+
+.. only:: html
+
+  .. image:: /gallery/map_plots/images/thumb/sphx_glr_custom_map_domain_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_map_plots_custom_map_domain.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Create a custom map domain</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example plots gridded data over a CONUS domain.">
+
+.. only:: html
+
+  .. image:: /gallery/map_plots/images/thumb/sphx_glr_map_gridded_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_map_plots_map_gridded.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Create a map plot with gridded data</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use the map features in EMCPy. The map feature underlying so...">
+
+.. only:: html
+
+  .. image:: /gallery/map_plots/images/thumb/sphx_glr_map_plot_no_data_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_map_plots_map_plot_no_data.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a map plot with no data</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example plots scatter data on a map plot over a CONUS domain. This example also s...">
+
+.. only:: html
+
+  .. image:: /gallery/map_plots/images/thumb/sphx_glr_map_scatter_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_map_plots_map_scatter.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a map plot with scatter data</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Sometimes, users only want to look at the locations of their data on a map and do not care abou...">
+
+.. only:: html
+
+  .. image:: /gallery/map_plots/images/thumb/sphx_glr_map_scatter_2D_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gallery_map_plots_map_scatter_2D.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Plotting 2D scatter data on map plot</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /gallery/map_plots/custom_map_domain
+   /gallery/map_plots/map_gridded
+   /gallery/map_plots/map_plot_no_data
+   /gallery/map_plots/map_scatter
+   /gallery/map_plots/map_scatter_2D
+
