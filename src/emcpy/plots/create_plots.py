@@ -369,9 +369,8 @@ class CreateFigure:
         loc_dict = {
             'upper right': 1,
             'upper left': 2,
-            'bottom left': 3,
-            'bottom right': 4,
-            'right': 5,
+            'lower left': 3,
+            'lower right': 4,
             'center left': 6,
             'center right': 7,
             'lower center': 8,
