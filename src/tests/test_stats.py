@@ -1,4 +1,4 @@
-from emcpy.stats.stats import mstats, lregress, ttest, get_weights,\
+from emcpy.stats.stats import mstats, lregress, ttest, get_weights, \
     get_linear_regression, bootstrap, calc_bins
 import numpy as np
 

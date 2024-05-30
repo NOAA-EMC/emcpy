@@ -2,7 +2,7 @@ import numpy as np
 from scipy.ndimage.filters import gaussian_filter
 import matplotlib.pyplot as plt
 
-from emcpy.plots.plots import LinePlot, VerticalLine,\
+from emcpy.plots.plots import LinePlot, VerticalLine, \
     Histogram, Density, Scatter, HorizontalLine, BarPlot, \
     GriddedPlot, ContourPlot, FilledContourPlot, HorizontalBar, \
     BoxandWhiskerPlot, HorizontalSpan, SkewT
