@@ -248,7 +248,6 @@ class CreateFigure:
         """
         Driver method to create figure and subplots.
         """
-
         # Check to make sure plot_list == nrows*ncols
         if len(self.plot_list) != self.nrows*self.ncols:
             raise ValueError(
@@ -279,7 +278,6 @@ class CreateFigure:
         self.fig = plt.figure(figsize=self.figsize)
 
         for i, plot_obj in enumerate(self.plot_list):
-
             # check if object has projection and domain attributes to determine ax
             if hasattr(plot_obj, 'projection'):
                 # Check if domain object is tuple/list for custom domains
@@ -301,6 +299,8 @@ class CreateFigure:
                         lat_formatter = LatitudeFormatter()
                         ax.xaxis.set_major_formatter(lon_formatter)
                         ax.yaxis.set_major_formatter(lat_formatter)
+                else:
+                    ax.set_extent(self.domain.extent, ccrs.PlateCarree())
 
             else:
                 # Check plot types

@@ -391,11 +391,8 @@ class MapProjection:
         Creates projection using Orthographic from Cartopy and
         orients it from central latitude 90 degrees.
         """
-        self.cenlon = 0 if self.cenlon is None else self.cenlon
 
-        self.projection = ccrs.Orthographic(central_longitude=self.cenlon,
-                                            central_latitude=90,
-                                            globe=self.globe)
+        self.projection = ccrs.NorthPolarStereo(globe=self.globe)
         self.transform = ccrs.PlateCarree()
 
     def _spstereo(self):
@@ -403,9 +400,6 @@ class MapProjection:
         Creates projection using Orthographic from Cartopy and
         orients it from central latitude -90 degrees.
         """
-        self.cenlon = 0 if self.cenlon is None else self.cenlon
 
-        self.projection = ccrs.Orthographic(central_longitude=self.cenlon,
-                                            central_latitude=-90,
-                                            globe=self.globe)
+        self.projection = ccrs.SouthPolarStereo(globe=self.globe)
         self.transform = ccrs.PlateCarree()
