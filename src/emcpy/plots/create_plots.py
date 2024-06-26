@@ -774,7 +774,7 @@ class CreateFigure:
         leg = ax.legend(**legend)
 
         for handle in leg.legend_handles:
-            handle._sizes = [20] 
+            handle._sizes = [20]
 
     def _plot_text(self, ax, text_in):
         """
