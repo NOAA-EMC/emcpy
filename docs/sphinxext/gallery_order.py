@@ -32,6 +32,7 @@ explicit_order_folders.append(UNSORTED)
 explicit_order_folders.extend([fd for folders in folder_lists
                                for fd in folders[folders.index(UNSORTED):]])
 
+
 class MplExplicitOrder(ExplicitOrder):
     """For use within the 'subsection_order' key."""
     def __call__(self, item):
@@ -40,6 +41,7 @@ class MplExplicitOrder(ExplicitOrder):
             return f"{self.ordered_list.index(item):04d}"
         else:
             return f"{self.ordered_list.index(UNSORTED):04d}{item}"
+
 
 # Subsection order:
 # Subsections are ordered by filename, unless they appear in the following
@@ -62,8 +64,9 @@ list_all = [
     # **Plot Types**
     # Basic
     "line"
-    ]
+]
 explicit_subsection_order = [item + ".py" for item in list_all]
+
 
 class MplExplicitSubOrder(ExplicitOrder):
     """For use within the 'within_subsection_order' key."""
@@ -78,6 +81,7 @@ class MplExplicitSubOrder(ExplicitOrder):
         else:
             # ensure not explicitly listed items come last.
             return "zzz" + item
+
 
 # Provide the above classes for use in conf.py
 sectionorder = MplExplicitOrder(explicit_order_folders)
