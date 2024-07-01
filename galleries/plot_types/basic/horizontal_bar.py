@@ -18,7 +18,7 @@ def main():
     # Create horizontal bar plot
 
     # Grab sample bar plot data
-    y_pos, widths= _getBarData()
+    y_pos, widths = _getBarData()
 
     # Create horizontal bar plot object
     bar = HorizontalBar(y_pos, widths)

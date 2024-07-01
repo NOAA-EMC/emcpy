@@ -49,5 +49,6 @@ def _getBarData():
 
     return x_pos, heights
 
+
 if __name__ == '__main__':
     main()

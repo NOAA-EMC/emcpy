@@ -34,6 +34,7 @@ def main():
 
     plt.show()
 
+
 def _getScatterData():
     # Generate test data for scatter plots
 
