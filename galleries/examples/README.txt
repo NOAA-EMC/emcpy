@@ -1,5 +1,7 @@
-Gallery
--------
+.. _examples:
+
+Examples
+--------
 
 The following examples show off the functionality of EMCPy. The examples
 give reference to what can be done with these collection of tools. Please

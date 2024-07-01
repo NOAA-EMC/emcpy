@@ -61,11 +61,11 @@ for gd in gallery_dirs:
 sphinx_gallery_conf = {
     'capture_repr': (),
     'filename_pattern': '^((?!skip_).)*$',
-    'examples_dirs': example_dirs,
-    'gallery_dirs': gallery_dirs,  # path to where to save gallery generated output
+    'examples_dirs': ['../galleries/examples', '../galleries/plot_types'],
+    'gallery_dirs': ['examples', 'plot_types'],  # path to where to save gallery generated output
     'backreferences_dir': '../build/backrefs',
-    'subsection_order': gallery_order_sectionorder,
-    'within_subsection_order': gallery_order_subsectionorder,
+    # 'subsection_order': gallery_order_sectionorder,
+    # 'within_subsection_order': gallery_order_subsectionorder,
     'matplotlib_animations': True
 }
 

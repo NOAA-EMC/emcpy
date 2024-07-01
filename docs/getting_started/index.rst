@@ -10,7 +10,7 @@ The following links provide further documentation on the different branches with
 
     calculations.md
     io.md
-    galleries/plot_types/index
+    plots.md
     statistics.md
     utilities.md
 

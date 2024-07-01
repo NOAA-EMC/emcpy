@@ -203,6 +203,7 @@ class ContourPlot:
         self.extent = None
         self.locator = None
         self.extend = None
+        self.levels = None
         self.colorbar = False
 
 
