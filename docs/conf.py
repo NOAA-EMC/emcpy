@@ -17,7 +17,7 @@ from datetime import datetime
 sys.path.insert(0, str(Path(__file__).parent.resolve()))
 
 import matplotlib
-# from sphinx_gallery
+from sphinx_gallery.sorting import ExplicitOrder
 
 import emcpy
 
@@ -57,6 +57,18 @@ example_dirs = []
 for gd in gallery_dirs:
     gd = gd.replace('gallery', 'examples')
     example_dirs += [f'../galleries/{gd}']
+
+# Sphinx gallery configuration
+subsection_order = ExplicitOrder([
+    '../plot_types/basic',
+    '../plot_types/statistical',
+    '../plot_types/gridded',
+    '../plot_types/map',
+    '../examples/line_plots',
+    '../examples/scatter_plots',
+    '../examples/histograms',
+    '../examples/map_plots'
+])
 
 sphinx_gallery_conf = {
     'capture_repr': (),
