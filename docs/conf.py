@@ -76,8 +76,7 @@ sphinx_gallery_conf = {
     'examples_dirs': ['../galleries/examples', '../galleries/plot_types'],
     'gallery_dirs': ['examples', 'plot_types'],  # path to where to save gallery generated output
     'backreferences_dir': '../build/backrefs',
-    # 'subsection_order': gallery_order_sectionorder,
-    # 'within_subsection_order': gallery_order_subsectionorder,
+    'subsection_order': subsection_order,
     'matplotlib_animations': True
 }
 
