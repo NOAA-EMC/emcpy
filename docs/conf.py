@@ -60,14 +60,14 @@ for gd in gallery_dirs:
 
 # Sphinx gallery configuration
 subsection_order = ExplicitOrder([
-    '../plot_types/basic',
-    '../plot_types/statistical',
-    '../plot_types/gridded',
-    '../plot_types/map',
-    '../examples/line_plots',
-    '../examples/scatter_plots',
-    '../examples/histograms',
-    '../examples/map_plots'
+    '../galleries/plot_types/basic',
+    '../galleries/plot_types/statistical',
+    '../galleries/plot_types/gridded',
+    '../galleries/plot_types/map',
+    '../galleries/examples/line_plots',
+    '../galleries/examples/scatter_plots',
+    '../galleries/examples/histograms',
+    '../galleries/examples/map_plots'
 ])
 
 sphinx_gallery_conf = {
