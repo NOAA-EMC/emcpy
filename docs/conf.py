@@ -45,11 +45,6 @@ extensions = [
 
 
 # Sphinx gallery configuration
-# gallery_order.py from the sphinxext folder provides the classes that
-# allow custom ordering of sections and subsections of the gallery
-from sphinxext.gallery_order import (
-    sectionorder as gallery_order_sectionorder,
-    subsectionorder as gallery_order_subsectionorder)
 
 # Create gallery dirs
 gallery_dirs = ["examples", "plot_types"]
