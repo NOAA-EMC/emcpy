@@ -36,7 +36,7 @@ def main():
     z = z * -1.5 * y
 
     contourf = MapFilledContour(x, y, z)
-    contourf.cmap='viridis'
+    contourf.cmap = 'viridis'
     contour = MapContour(x, y, z)
 
     plot1 = CreatePlot()
@@ -56,4 +56,5 @@ def main():
 
 
 if __name__ == '__main__':
+
     main()

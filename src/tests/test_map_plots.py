@@ -146,7 +146,7 @@ def test_plot_map_filled_contour_global():
     z = z * -1.5 * y
 
     contourf = MapFilledContour(x, y, z)
-    contourf.cmap='viridis'
+    contourf.cmap = 'viridis'
     contour = MapContour(x, y, z)
 
     plot1 = CreatePlot()
@@ -217,8 +217,9 @@ def _getContourData(shape=(73, 145)):
 
     return lons, lats, data
 
+
 def main():
-    
+
     test_plot_global_map_no_features()
     test_plot_global_map_coastlines()
     test_plot_map_scatter_conus()
