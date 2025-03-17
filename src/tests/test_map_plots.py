@@ -225,7 +225,7 @@ def main():
     test_plot_map_scatter_2D_conus()
     test_plot_map_gridded_global()
     test_plot_map_contour_global()
-    test_plot_map_filled_contour_global
+    test_plot_map_filled_contour_global()
     test_plot_map_multidata_conus()
 
 
