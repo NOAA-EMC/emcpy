@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from emcpy.plots import CreatePlot, CreateFigure
 from emcpy.plots.map_tools import Domain, MapProjection
-from emcpy.plots.map_plots import MapScatter, MapGridded, MapContour
+from emcpy.plots.map_plots import MapScatter, MapGridded, MapContour, MapFilledContour
 
 
 def test_plot_global_map_no_features():
@@ -141,6 +141,29 @@ def test_plot_map_contour_global():
     fig.save_figure('test_plot_map_contour_global.png')
 
 
+def test_plot_map_filled_contour_global():
+    x, y, z = _getContourData((20, 40))
+    z = z * -1.5 * y
+
+    contourf = MapFilledContour(x, y, z)
+    contourf.cmap = 'viridis'
+    contour = MapContour(x, y, z)
+
+    plot1 = CreatePlot()
+    plot1.plot_layers = [contourf, contour]
+    plot1.projection = 'plcarr'
+    plot1.domain = 'global'
+    plot1.add_map_features(['coastline'])
+    plot1.add_xlabel(xlabel='longitude')
+    plot1.add_ylabel(ylabel='latitude')
+    plot1.add_title(label='Contourf Data', loc='center')
+
+    fig = CreateFigure()
+    fig.plot_list = [plot1]
+    fig.create_figure()
+    fig.save_figure('test_plot_map_contourf_global.png')
+
+
 def test_plot_map_multidata_conus():
     # Plot scatter and gridded data on CONUS domain
     lats = np.linspace(25, 50, 25)
@@ -193,3 +216,20 @@ def _getContourData(shape=(73, 145)):
     data = wave + mean
 
     return lons, lats, data
+
+
+def main():
+
+    test_plot_global_map_no_features()
+    test_plot_global_map_coastlines()
+    test_plot_map_scatter_conus()
+    test_plot_map_scatter_2D_conus()
+    test_plot_map_gridded_global()
+    test_plot_map_contour_global()
+    test_plot_map_filled_contour_global()
+    test_plot_map_multidata_conus()
+
+
+if __name__ == "__main__":
+
+    main()

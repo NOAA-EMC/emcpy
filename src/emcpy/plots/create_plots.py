@@ -272,6 +272,7 @@ class CreateFigure:
             'map_scatter': self._map_scatter,
             'map_gridded': self._map_gridded,
             'map_contour': self._map_contour,
+            'map_filled_contour': self._map_filled_contour
         }
 
         gs = gridspec.GridSpec(self.nrows, self.ncols)
@@ -490,6 +491,22 @@ class CreateFigure:
         cs = ax.contour(plotobj.longitude, plotobj.latitude,
                         plotobj.data, **inputs,
                         transform=self.projection.transform)
+
+        if plotobj.clabel:
+            plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
+
+        if plotobj.colorbar:
+            self.cs = cs
+
+    def _map_filled_contour(self, plotobj, ax):
+
+        skipvars = ['plottype', 'longitude', 'latitude', 'data',
+                    'colorbar']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
+
+        cs = ax.contourf(plotobj.latitude, plotobj.longitude,
+                         plotobj.data, **inputs,
+                         transform=self.projection.projection)
 
         if plotobj.clabel:
             plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
