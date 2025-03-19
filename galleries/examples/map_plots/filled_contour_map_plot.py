@@ -27,13 +27,13 @@ def _getContourData(shape=(73, 145)):
     lons = np.rad2deg(lons)
     data = wave + mean
 
-    return lons, lats, data
+    return lats, lons, data
 
 
 def main():
     # Get created test data
     x, y, z = _getContourData((20, 40))
-    z = z * -1.5 * y
+    z = z * -1.5 * x
 
     contourf = MapFilledContour(x, y, z)
     contourf.cmap = 'viridis'

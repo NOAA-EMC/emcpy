@@ -121,7 +121,7 @@ def test_plot_map_gridded_global():
 
 def test_plot_map_contour_global():
     x, y, z = _getContourData((20, 40))
-    z = z * -1.5 * y
+    z = z * -1.5 * x
 
     contour = MapContour(x, y, z)
     gridded = MapGridded(x, y, z)
@@ -143,7 +143,7 @@ def test_plot_map_contour_global():
 
 def test_plot_map_filled_contour_global():
     x, y, z = _getContourData((20, 40))
-    z = z * -1.5 * y
+    z = z * -1.5 * x
 
     contourf = MapFilledContour(x, y, z)
     contourf.cmap = 'viridis'
@@ -215,7 +215,7 @@ def _getContourData(shape=(73, 145)):
     lons = np.rad2deg(lons)
     data = wave + mean
 
-    return lons, lats, data
+    return lats, lons, data
 
 
 def main():
