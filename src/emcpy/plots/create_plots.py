@@ -504,7 +504,7 @@ class CreateFigure:
                     'colorbar']
         inputs = self._get_inputs_dict(skipvars, plotobj)
 
-        cs = ax.contourf(plotobj.latitude, plotobj.longitude,
+        cs = ax.contourf(plotobj.longitude, plotobj.latitude,
                          plotobj.data, **inputs,
                          transform=self.projection.projection)
 
