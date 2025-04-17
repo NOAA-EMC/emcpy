@@ -1,0 +1,293 @@
+:orphan:
+
+.. _examples:
+
+Examples
+--------
+
+The following examples show off the functionality of EMCPy. The examples
+give reference to what can be done with these collection of tools. Please
+do not hesitate to issue a pull request to add further examples!
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+Line Plots
+==========
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to create an inverted y-axis that also uses a log scale. This is useful if you are looking at a column of data throughout the atmosphere and the y-axis is pressure.">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_inverted_log_scale_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_inverted_log_scale.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Invert log scale</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use EMCPy&#x27;s method to plot several lines on a single subplot. The user creates three separate objects using different data and plots them on the same layer.">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_multi_line_plot_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_multi_line_plot.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Plotting multiple lines on a single plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This script shows several examples of the many different line plot options. They follow the same options as matplotlib.">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_line_plot_options_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_line_plot_options.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Line Plot Options</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="EMCPy has a method to produce skew-T log-p plots. Given pressure, temperature, and dewpoint temperature data, users can call the SkewT() method to create a plot with the appropriate x and y axes.">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_SkewT_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_SkewT.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a Skew-T Log-p Plot</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+Scatter Plots
+=============
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following is an example of how to plot data as a scatter plot and include a linear regression line. Calling the linear regression function will give the user the y=mx+b equation as well as the R-squared value if the user specifies a legend.">
+
+.. only:: html
+
+  .. image:: /examples/scatter_plots/images/thumb/sphx_glr_scatter_with_regression_line_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_scatter_plots_scatter_with_regression_line.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a Scatter Plot with a Regression Line</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+Histogram Plots
+===============
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to plot multiple histograms as layers on single plot.">
+
+.. only:: html
+
+  .. image:: /examples/histograms/images/thumb/sphx_glr_layered_histogram_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_histograms_layered_histogram.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Layered histograms</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+Map Plots
+=========
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use the map features in EMCPy. The map feature underlying source code comes from Cartopy.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_plot_no_data_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_map_plot_no_data.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a map plot with no data</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Sometimes, users only want to look at the locations of their data on a map and do not care about the actual values. Below is an example of how to just plot lat and lon values on map.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_scatter_2D_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_map_scatter_2D.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Plotting 2D scatter data on map plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="EMCPy&#x27;s map domain includes a feature to create a custom dictionary with specified lat and lon inputs to create a specific map domain. This is helpful for users who want to look at a specific domain that is not included in EMCPy.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_custom_map_domain_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_custom_map_domain.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Create a custom map domain</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The below example shows a map with plotted contour lines that are filled.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_filled_contour_map_plot_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_filled_contour_map_plot.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Plotting contours on a map plot</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+   :includehidden:
+
+
+   /examples/line_plots/index.rst
+   /examples/scatter_plots/index.rst
+   /examples/histograms/index.rst
+   /examples/map_plots/index.rst
+
+
+.. only:: html
+
+  .. container:: sphx-glr-footer sphx-glr-footer-gallery
+
+    .. container:: sphx-glr-download sphx-glr-download-python
+
+      :download:`Download all examples in Python source code: examples_python.zip </examples/examples_python.zip>`
+
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
+
+      :download:`Download all examples in Jupyter notebooks: examples_jupyter.zip </examples/examples_jupyter.zip>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_

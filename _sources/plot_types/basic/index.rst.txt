@@ -1,0 +1,136 @@
+
+
+.. _sphx_glr_plot_types_basic:
+
+.. _basic:
+
+Basic
+=====
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a basic line plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_line_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_basic_line.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Line Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a vertical line using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_vertical_line_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_basic_vertical_line.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Vertical Line Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a horizontal line using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_horizontal_line_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_basic_horizontal_line.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Horizontal Line Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a basic scatter plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_scatter_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_basic_scatter.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Scatter Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a bar plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_bar_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_basic_bar.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Bar Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a horizontal bar plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_horizontal_bar_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_basic_horizontal_bar.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Horizontal Bar Plot</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /plot_types/basic/line
+   /plot_types/basic/vertical_line
+   /plot_types/basic/horizontal_line
+   /plot_types/basic/scatter
+   /plot_types/basic/bar
+   /plot_types/basic/horizontal_bar
+

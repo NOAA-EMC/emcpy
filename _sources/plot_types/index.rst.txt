@@ -1,0 +1,399 @@
+:orphan:
+
+.. _plot-types:
+
+Plot Types
+----------
+
+Here is a collection of the plot types that are currently available using EMCPy.
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+Basic
+=====
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a basic line plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_line_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_basic_line.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Line Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a vertical line using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_vertical_line_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_basic_vertical_line.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Vertical Line Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a horizontal line using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_horizontal_line_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_basic_horizontal_line.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Horizontal Line Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a basic scatter plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_scatter_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_basic_scatter.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Scatter Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a bar plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_bar_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_basic_bar.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Bar Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a horizontal bar plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_horizontal_bar_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_basic_horizontal_bar.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Horizontal Bar Plot</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+.. _statistical_distributions
+
+Statistical distributions
+=========================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to create a density scatter plot.">
+
+.. only:: html
+
+  .. image:: /plot_types/statistical/images/thumb/sphx_glr_density_scatter_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_statistical_density_scatter.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Density Scatter Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a density histogram plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/statistical/images/thumb/sphx_glr_density_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_statistical_density.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Density</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a histogram using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/statistical/images/thumb/sphx_glr_histogram_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_statistical_histogram.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Histogram</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a box plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/statistical/images/thumb/sphx_glr_boxplot_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_statistical_boxplot.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Box Plot</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+.. _gridded
+
+Gridded
+=======
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a contour plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/gridded/images/thumb/sphx_glr_contour_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_gridded_contour.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Contour</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a filled contour plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/gridded/images/thumb/sphx_glr_contourf_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_gridded_contourf.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Filled Contour</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a gridded plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/gridded/images/thumb/sphx_glr_gridded_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_gridded_gridded.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Gridded</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+Map Plots
+=========
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot 2D data on a map plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/map/images/thumb/sphx_glr_map_scatter_2D_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_map_map_scatter_2D.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">2D Scatter Map Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot gridded data on a map plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/map/images/thumb/sphx_glr_map_gridded_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_map_map_gridded.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Gridded Map Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot scatter data on a map plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/map/images/thumb/sphx_glr_map_scatter_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_map_map_scatter.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Scatter Map Plot</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+   :includehidden:
+
+
+   /plot_types/basic/index.rst
+   /plot_types/statistical/index.rst
+   /plot_types/gridded/index.rst
+   /plot_types/map/index.rst
+
+
+.. only:: html
+
+  .. container:: sphx-glr-footer sphx-glr-footer-gallery
+
+    .. container:: sphx-glr-download sphx-glr-download-python
+
+      :download:`Download all examples in Python source code: plot_types_python.zip </plot_types/plot_types_python.zip>`
+
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
+
+      :download:`Download all examples in Jupyter notebooks: plot_types_jupyter.zip </plot_types/plot_types_jupyter.zip>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_

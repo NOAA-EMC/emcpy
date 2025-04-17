@@ -1,0 +1,99 @@
+
+
+.. _sphx_glr_examples_line_plots:
+
+.. _line_plots:
+
+Line Plots
+==========
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to create an inverted y-axis that also uses a log scale. This is useful if you are looking at a column of data throughout the atmosphere and the y-axis is pressure.">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_inverted_log_scale_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_inverted_log_scale.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Invert log scale</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use EMCPy&#x27;s method to plot several lines on a single subplot. The user creates three separate objects using different data and plots them on the same layer.">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_multi_line_plot_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_multi_line_plot.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Plotting multiple lines on a single plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This script shows several examples of the many different line plot options. They follow the same options as matplotlib.">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_line_plot_options_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_line_plot_options.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Line Plot Options</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="EMCPy has a method to produce skew-T log-p plots. Given pressure, temperature, and dewpoint temperature data, users can call the SkewT() method to create a plot with the appropriate x and y axes.">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_SkewT_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_SkewT.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a Skew-T Log-p Plot</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/line_plots/inverted_log_scale
+   /examples/line_plots/multi_line_plot
+   /examples/line_plots/line_plot_options
+   /examples/line_plots/SkewT
+

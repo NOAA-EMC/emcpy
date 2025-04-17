@@ -1,0 +1,45 @@
+
+
+.. _sphx_glr_examples_histograms:
+
+.. _histogram_plots:
+
+Histogram Plots
+===============
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to plot multiple histograms as layers on single plot.">
+
+.. only:: html
+
+  .. image:: /examples/histograms/images/thumb/sphx_glr_layered_histogram_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_histograms_layered_histogram.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Layered histograms</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/histograms/layered_histogram
+

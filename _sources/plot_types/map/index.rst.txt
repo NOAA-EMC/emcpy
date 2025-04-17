@@ -1,0 +1,82 @@
+
+
+.. _sphx_glr_plot_types_map:
+
+.. _map_plots:
+
+Map Plots
+=========
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot 2D data on a map plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/map/images/thumb/sphx_glr_map_scatter_2D_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_map_map_scatter_2D.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">2D Scatter Map Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot gridded data on a map plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/map/images/thumb/sphx_glr_map_gridded_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_map_map_gridded.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Gridded Map Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot scatter data on a map plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/map/images/thumb/sphx_glr_map_scatter_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_map_map_scatter.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Scatter Map Plot</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /plot_types/map/map_scatter_2D
+   /plot_types/map/map_gridded
+   /plot_types/map/map_scatter
+

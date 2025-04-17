@@ -1,0 +1,100 @@
+
+
+.. _sphx_glr_plot_types_statistical:
+
+.. _statistical_distributions
+
+Statistical distributions
+=========================
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to create a density scatter plot.">
+
+.. only:: html
+
+  .. image:: /plot_types/statistical/images/thumb/sphx_glr_density_scatter_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_statistical_density_scatter.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Density Scatter Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a density histogram plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/statistical/images/thumb/sphx_glr_density_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_statistical_density.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Density</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a histogram using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/statistical/images/thumb/sphx_glr_histogram_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_statistical_histogram.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Histogram</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a box plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/statistical/images/thumb/sphx_glr_boxplot_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_statistical_boxplot.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Box Plot</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /plot_types/statistical/density_scatter
+   /plot_types/statistical/density
+   /plot_types/statistical/histogram
+   /plot_types/statistical/boxplot
+
