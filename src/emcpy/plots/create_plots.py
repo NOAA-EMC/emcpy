@@ -3,6 +3,7 @@ import os
 import emcpy
 import numpy as np
 import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import cartopy.crs as ccrs
@@ -583,8 +584,7 @@ class CreateFigure:
                     'colorbar']
         inputs = self._get_inputs_dict(skipvars, plotobj)
 
-        cs = ax.pcolormesh(plotobj.x, plotobj.y,
-                           plotobj.z, **inputs)
+        cs = ax.pcolormesh(plotobj.x, plotobj.y, plotobj.z, **inputs)
 
         if plotobj.colorbar:
             self.cs = cs
