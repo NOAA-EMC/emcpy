@@ -25,7 +25,7 @@ __all__ = ['CreateFigure', 'CreatePlot']
 # Register SkewXAxes projection exactly once
 try:
     register_projection(SkewXAxes)
-except Exception:
+except ValueError:
     pass
 
 
@@ -837,9 +837,10 @@ class CreateFigure:
         correct source for the color scale, instead of relying on
         global state like self.cs.
         """
-        for seq in (ax.collections[::-1], ax.images[::-1], ax.containers[::-1]):
-            for m in seq:
-                return m
+        # Combine all mappables in reverse order of addition
+        mappables = list(ax.collections[::-1]) + list(ax.images[::-1]) + list(ax.containers[::-1])
+        for m in mappables:
+            return m
         return None
 
     def _plot_colorbar(self, ax, colorbar):
@@ -850,14 +851,16 @@ class CreateFigure:
         mappable = self._last_mappable_for_ax(ax)
         if mappable is None:
             return
-
+    
+        cb = None
         if colorbar['single_cbar']:
             if ax.is_last_row() and ax.is_last_col():
                 cbar_ax = self.fig.add_axes(colorbar['cbar_loc'])
                 cb = self.fig.colorbar(mappable, cax=cbar_ax, **colorbar['kwargs'])
-                cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
         else:
             cb = self.fig.colorbar(mappable, ax=ax, **colorbar['kwargs'])
+    
+        if cb is not None and colorbar.get('label'):
             cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
 
     def _plot_stats(self, ax, stats):
