@@ -28,6 +28,7 @@ try:
 except Exception:
     pass
 
+
 @dataclass
 class AxState:
     ax: plt.Axes
@@ -48,7 +49,7 @@ class LayerAdapter:
         # Capture artists we consider "mappables"
         return {
             "collections": list(ax.collections),
-            "images":     list(ax.images),
+            "images": list(ax.images),
             "containers": list(ax.containers),
         }
 
@@ -826,43 +827,38 @@ class CreateFigure:
     def _last_mappable_for_ax(self, ax: plt.Axes) -> Optional[Any]:
         """
         Return the most recently-added "mappable" artist for a given Axes.
-    
+
         Mappables are objects Matplotlib colorbars can attach to
         (e.g., ContourSet, QuadMesh, PathCollection, Image).
         This helper inspects the Axes' collections, images, and
         containers in reverse order and returns the newest one found.
-    
+
         Used by _plot_colorbar() to deterministically select the
         correct source for the color scale, instead of relying on
         global state like self.cs.
         """
-    for seq in (ax.collections[::-1], ax.images[::-1], ax.containers[::-1]):
-        for m in seq:
-            return m
-    return None
+        for seq in (ax.collections[::-1], ax.images[::-1], ax.containers[::-1]):
+            for m in seq:
+                return m
+        return None
 
     def _plot_colorbar(self, ax, colorbar):
         """
-        Add colorbar on specified ax or for total figure.
+        Add colorbar on specified ax or for total figure (single_cbar).
+        Uses the most recently-added mappable on this axes.
         """
-
-        if hasattr(self, 'cs'):
-            if colorbar['single_cbar']:
-                # IMPORTANT NOTICE ####
-                # If using single colorbar option, this method grabs the color
-                # series from the subplot that is in last row and column. It
-                # is important to note that if comparing multiple subplots with
-                # the same colorbar, the vmin and vmax should all be the same to
-                # avoid comparison errors.
-                if ax.is_last_row() and ax.is_last_col():
-                    cbar_ax = self.fig.add_axes(colorbar['cbar_loc'])
-                    cb = self.fig.colorbar(self.cs, cax=cbar_ax, **colorbar['kwargs'])
-                    cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
-
-            else:
-                cb = self.fig.colorbar(self.cs, ax=ax,
-                                       **colorbar['kwargs'])
+        mappable = self._last_mappable_for_ax(ax)
+        if mappable is None:
+            return
+    
+        if colorbar['single_cbar']:
+            if ax.is_last_row() and ax.is_last_col():
+                cbar_ax = self.fig.add_axes(colorbar['cbar_loc'])
+                cb = self.fig.colorbar(mappable, cax=cbar_ax, **colorbar['kwargs'])
                 cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
+        else:
+            cb = self.fig.colorbar(mappable, ax=ax, **colorbar['kwargs'])
+            cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
 
     def _plot_stats(self, ax, stats):
         """
