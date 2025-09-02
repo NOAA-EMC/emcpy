@@ -851,7 +851,7 @@ class CreateFigure:
         mappable = self._last_mappable_for_ax(ax)
         if mappable is None:
             return
-    
+
         cb = None
         if colorbar['single_cbar']:
             if ax.is_last_row() and ax.is_last_col():
@@ -859,7 +859,7 @@ class CreateFigure:
                 cb = self.fig.colorbar(mappable, cax=cbar_ax, **colorbar['kwargs'])
         else:
             cb = self.fig.colorbar(mappable, ax=ax, **colorbar['kwargs'])
-    
+
         if cb is not None and colorbar.get('label'):
             cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
 
