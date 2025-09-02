@@ -850,7 +850,7 @@ class CreateFigure:
         mappable = self._last_mappable_for_ax(ax)
         if mappable is None:
             return
-    
+
         if colorbar['single_cbar']:
             if ax.is_last_row() and ax.is_last_col():
                 cbar_ax = self.fig.add_axes(colorbar['cbar_loc'])
