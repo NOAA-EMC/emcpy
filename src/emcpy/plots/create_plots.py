@@ -813,14 +813,14 @@ class CreateFigure:
         """
         skipvars = ['plottype', 'data']
         inputs = self._get_inputs_dict(skipvars, plotobj)
-    
+
         # Fail fast if the old kw is used.
         if 'labels' in inputs:
             raise TypeError(
                 "BoxandWhiskerPlot no longer supports 'labels'; use 'tick_labels' "
                 "(Matplotlib 3.9+)."
             )
-    
+
         ax.boxplot(plotobj.data, **inputs)
 
     def _get_inputs_dict(self, skipvars, plotobj):
@@ -830,8 +830,9 @@ class CreateFigure:
         """
         inputs = {}
         for v in [v for v in vars(plotobj) if v not in skipvars]:
-            inputs[v] = vars(plotobj)[v]
-
+            val = getattr(plotobj, v)
+            if val is not None:
+                inputs[v] = val
         return inputs
 
     def _plot_title(self, ax, title):
