@@ -10,9 +10,8 @@ _NEED_FIX = not (hasattr(Axes, "is_last_row") and hasattr(Axes, "is_last_col"))
 @pytest.mark.xfail(
     _NEED_FIX,
     reason="Waiting for GridSpec-based last-row/col helpers in CreateFigure (next PR).",
-    strict=False # don't break CI if it unexpectedly passes
+    strict=False  # don't break CI if it unexpectedly passes
 )
-
 def test_per_axes_colorbar_adds_axes_and_label():
     x = np.linspace(0, 1, 30)
     y = np.linspace(0, 1, 20)
