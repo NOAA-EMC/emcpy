@@ -30,9 +30,11 @@ def _hist_data():
 
 def _scatter_data():
     rng = np.random.RandomState(0)
-    x1 = rng.randn(100); y1 = rng.randn(100)
+    x1 = rng.randn(100)
+    y1 = rng.randn(100)
     rng = np.random.RandomState(1)
-    x2 = rng.randn(30); y2 = rng.randn(30)
+    x2 = rng.randn(30)
+    y2 = rng.randn(30)
     return x1, y1, x2, y2
 
 
@@ -190,7 +192,8 @@ def test_scatter_plot(single_axes):
 
 def test_bar_plot(single_axes):
     x_pos, heights, variance = _bar_data()
-    bar = BarPlot(x_pos, heights); bar.yerr = variance
+    bar = BarPlot(x_pos, heights)
+    bar.yerr = variance
     plot = CreatePlot(plot_layers=[bar])
     _, ax = single_axes(plot)
     assert len(ax.patches) == len(x_pos)
@@ -198,7 +201,8 @@ def test_bar_plot(single_axes):
 
 def test_horizontal_bar_plot(single_axes):
     y_pos, widths, variance = _bar_data()
-    bar = HorizontalBar(y_pos, widths); bar.xerr = variance
+    bar = HorizontalBar(y_pos, widths)
+    bar.xerr = variance
     plot = CreatePlot(plot_layers=[bar])
     _, ax = single_axes(plot)
     assert len(ax.patches) == len(y_pos)
@@ -213,10 +217,15 @@ def test_gridded_plot(single_axes):
 
 def test_contour_and_contourf_with_colorbar():
     x, y, z = _contourf_data()
-    cfp = FilledContourPlot(x, y, z); cfp.cmap = "Greens"
-    cp = ContourPlot(x, y, z); cp.linestyles = "--"
-    plot = CreatePlot(plot_layers=[cfp, cp]); plot.add_colorbar(orientation="vertical")
-    fig = CreateFigure(); fig.plot_list = [plot]; fig.create_figure()
+    cfp = FilledContourPlot(x, y, z)
+    cfp.cmap = "Greens"
+    cp = ContourPlot(x, y, z)
+    cp.linestyles = "--"
+    plot = CreatePlot(plot_layers=[cfp, cp])
+    plot.add_colorbar(orientation="vertical")
+    fig = CreateFigure()
+    fig.plot_list = [plot]
+    fig.create_figure()
     assert len(fig.fig.axes) >= 2  # colorbar added
 
 
@@ -241,7 +250,8 @@ def test_horizontal_span(single_axes):
 
 def test_skewt_projection(single_axes):
     p, T, Td = _skewt_data()
-    tplot = SkewT(T, p); tdplot = SkewT(Td, p)
+    tplot = SkewT(T, p)
+    tdplot = SkewT(Td, p)
     plot = CreatePlot(plot_layers=[tplot, tdplot])
     _, ax = single_axes(plot)
     assert "SkewXAxes" in ax.__class__.__name__

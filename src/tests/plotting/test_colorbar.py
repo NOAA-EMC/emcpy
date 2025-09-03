@@ -28,7 +28,8 @@ def test_single_colorbar_on_last_subplot_only():
     plots = []
     for seed in (0, 1, 2, 3):
         rng = np.random.RandomState(seed)
-        x = np.linspace(0, 1, 20); y = np.linspace(0, 1, 20)
+        x = np.linspace(0, 1, 20)
+        y = np.linspace(0, 1, 20)
         z = rng.rand(20, 20)
         gp = GriddedPlot(x, y, z)
         p = CreatePlot(plot_layers=[gp])
