@@ -1139,11 +1139,16 @@ class CreateFigure:
             plt.setp(ax.get_yticklabels(), visible=False)
 
     def _subplot_spec(self, ax):
-        """Return (ss, gs) or (None, None) if ax is not a GridSpec subplot."""
+        """
+        Return a tuple (ss, gs) where:
+            - ss is a matplotlib SubplotSpec object for the given axis.
+            - gs is the corresponding matplotlib GridSpec object.
+        Returns (None, None) if ax is not a GridSpec subplot.
+        """
         try:
             ss = ax.get_subplotspec()
             return ss, ss.get_gridspec()
-        except Exception:
+        except AttributeError:
             return None, None
 
     def _is_first_col(self, ax) -> bool:
