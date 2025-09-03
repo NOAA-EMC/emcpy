@@ -654,18 +654,24 @@ class CreateFigure:
                            **inputs)
 
         # checks to see if linear regression attribute
-        if plotobj.do_linear_regression:
-
-            # Assert that plotobj contains nonzero-length data
+        if getattr(plotobj, "do_linear_regression", False):
             if len(plotobj.x) != 0 and len(plotobj.y) != 0:
-                y_pred, r_sq, intercept, slope = get_linear_regression(plotobj.x,
-                                                                       plotobj.y)
+                y_pred, r_sq, intercept, slope = get_linear_regression(plotobj.x, plotobj.y)
                 label = f"y = {slope:.4f}x + {intercept:.4f}\nR\u00b2 : {r_sq:.4f}"
-
-                inputs = self._get_inputs_dict([], plotobj)
-                if 'color' in plotobj.linear_regression and 'color' in inputs:
-                    plotobj.linear_regression['color'] = inputs['color']
-                ax.plot(plotobj.x, y_pred, label=label, **plotobj.linear_regression)
+    
+                # User may provide a dict of style kwargs on the layer:
+                #   plotobj.linear_regression = {"linestyle": "--", "linewidth": 1.5, ...}
+                # Treat it as optional.
+                style = getattr(plotobj, "linear_regression", None) or {}
+    
+                # Default the regression line color to the scatter's color
+                # unless the user already set one in `linear_regression`.
+                if "color" not in style:
+                    point_color = getattr(plotobj, "color", None)
+                    if point_color is not None:
+                        style["color"] = point_color
+    
+                ax.plot(plotobj.x, y_pred, label=label, **style)
 
     def _gridded(self, plotobj, ax):
         """
