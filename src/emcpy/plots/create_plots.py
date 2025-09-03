@@ -903,8 +903,16 @@ class CreateFigure:
         """
         leg = ax.legend(**legend)
 
-        for handle in leg.legend_handles:
-            handle._sizes = [20]
+        # Matplotlib versions differ in attribute name
+        handles = getattr(leg, "legend_handles", None) or getattr(leg, "legendHandles", [])
+
+        for h in handles:
+            # PathCollection (scatter) has a public setter
+            if hasattr(h, "set_sizes"):
+                h.set_sizes([20])
+            # Fallback for older MPL where only the private attr exists
+            elif hasattr(h, "_sizes"):
+                h._sizes = [20]
 
     def _plot_text(self, ax, text_in):
         """

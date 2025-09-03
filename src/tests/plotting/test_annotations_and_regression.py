@@ -50,20 +50,17 @@ def test_scatter_linear_regression_adds_line_and_label():
 
 
 def test_scatter_legend_handles_have_fixed_size():
-    # Ensure legend handle sizes are normalized to 20 for scatter
-    x = [0, 1, 2]
-    y = [1, 2, 3]
-    s = Scatter(x, y)
-    s.label = "points"
-    plot = CreatePlot(plot_layers=[s])
-    plot.add_legend()
-    fig = CreateFigure()
-    fig.plot_list = [plot]
-    fig.create_figure()
-    ax = fig.fig.axes[0]
-    leg = ax.get_legend()
+    s = Scatter([0,1,2], [1,2,3]); s.label = "points"
+    plot = CreatePlot(plot_layers=[s]); plot.add_legend()
+    fig = CreateFigure(); fig.plot_list = [plot]; fig.create_figure()
+    ax = fig.fig.axes[0]; leg = ax.get_legend()
+
+    handles = getattr(leg, "legend_handles", None) or getattr(leg, "legendHandles", [])
     sizes = []
-    for h in getattr(leg, "legendHandles", []):
-        if hasattr(h, "_sizes"):
+    for h in handles:
+        if hasattr(h, "get_sizes"):
+            sizes.extend(h.get_sizes())
+        elif hasattr(h, "_sizes"):
             sizes.extend(h._sizes)
-    assert sizes and all(s == 20 for s in sizes)
+
+    assert sizes and all(abs(sz - 20) < 1e-6 for sz in sizes)
