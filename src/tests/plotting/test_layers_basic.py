@@ -162,7 +162,8 @@ def test_line_plot_inverted_log_scale(single_axes):
     x = [1, 401, 1039, 2774, 2408, 512]  # avoid 0 for log
     y = [1, 45, 225, 510, 1200, 1820]
     plot = CreatePlot(plot_layers=[LinePlot(x, y)])
-    plot.set_yscale("log"); plot.invert_yaxis()
+    plot.set_yscale("log")
+    plot.invert_yaxis()
     _, ax = single_axes(plot)
     assert ax.yaxis.get_scale() == "log"
     assert ax.yaxis_inverted()

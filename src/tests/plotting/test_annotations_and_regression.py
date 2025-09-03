@@ -6,7 +6,8 @@ from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
 
 def test_stats_annotation_text_present():
-    x = [0, 1, 2]; y = [2, 3, 5]
+    x = [0, 1, 2]
+    y = [2, 3, 5]
     plot = CreatePlot(plot_layers=[LinePlot(x, y)])
     stats = {"nobs": 3, "vmin": 2, "vmax": 5}
     plot.add_stats_dict(stats_dict=stats, yloc=-0.2)
@@ -18,7 +19,7 @@ def test_stats_annotation_text_present():
 
 
 def test_add_text_axcoords_adds_artist():
-    plot = CreatePlot(plot_layers=[LinePlot([0,1],[0,1])])
+    plot = CreatePlot(plot_layers=[LinePlot([0, 1], [0, 1])])
     plot.add_text(0.5, 0.5, "Hello", transform="axcoords", fontsize=8)
     fig = CreateFigure()
     fig.plot_list = [plot]
