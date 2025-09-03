@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
+from dataclasses import dataclass, field
+from typing import Any, List, Optional
 from PIL import Image
 from scipy.interpolate import interpn
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
@@ -19,6 +21,75 @@ from emcpy.plots.skewt_projection import SkewXAxes
 from emcpy.stats.stats import get_linear_regression
 
 __all__ = ['CreateFigure', 'CreatePlot']
+
+# Register SkewXAxes projection exactly once
+try:
+    register_projection(SkewXAxes)
+except ValueError:
+    pass
+
+
+@dataclass
+class AxState:
+    ax: plt.Axes
+    mappables: List[Any] = field(default_factory=list)
+    is_map: bool = False
+
+
+class LayerAdapter:
+    """
+    Thin wrapper around existing emcpy layer objects that forwards to the
+    current _plot_* methods and records any new 'mappable' created.
+    """
+    def __init__(self, plottype: str, plotobj: Any):
+        self.kind = plottype
+        self.plotobj = plotobj
+
+    def _snapshot(self, ax: plt.Axes) -> dict:
+        # Capture artists we consider "mappables"
+        return {
+            "collections": list(ax.collections),
+            "images": list(ax.images),
+            "containers": list(ax.containers),
+        }
+
+    def _diff_new_mappable(self, before: dict, after: dict) -> Optional[Any]:
+        # Prefer contour/pcolormesh/etc. (collections), then images, then containers
+        for key in ("collections", "images", "containers"):
+            b = before[key]
+            a = after[key]
+            if len(a) > len(b):
+                # Return the newest thing(s); choose the last added
+                return a[-1]
+        return None
+
+    def render(self, renderer: "CreateFigure", st: AxState) -> Optional[Any]:
+        # Reuse the existing plot dispatch (renderer has _scatter, _gridded, etc.)
+        plot_fn = {
+            'scatter': renderer._scatter,
+            'histogram': renderer._histogram,
+            'density': renderer._density,
+            'line_plot': renderer._lineplot,
+            'gridded_plot': renderer._gridded,
+            'contour': renderer._contour,
+            'contourf': renderer._contourf,
+            'vertical_line': renderer._verticalline,
+            'horizontal_line': renderer._horizontalline,
+            'horizontal_span': renderer._horizontalspan,
+            'bar_plot': renderer._barplot,
+            'horizontal_bar': renderer._hbar,
+            'skewt': renderer._skewt,
+            'boxandwhisker': renderer._boxandwhisker,
+            'map_scatter': renderer._map_scatter,
+            'map_gridded': renderer._map_gridded,
+            'map_contour': renderer._map_contour,
+            'map_filled_contour': renderer._map_filled_contour,
+        }[self.kind]
+
+        before = self._snapshot(st.ax)
+        plot_fn(self.plotobj, st.ax)
+        after = self._snapshot(st.ax)
+        return self._diff_new_mappable(before, after)
 
 
 class CreatePlot:
@@ -291,7 +362,7 @@ class CreateFigure:
                 self.projection = MapProjection(plot_obj.projection)
 
                 # Set up axis specific things
-                ax = plt.subplot(gs[i], projection=self.projection.projection)
+                ax = self.fig.add_subplot(gs[i], projection=self.projection.projection)
                 if str(self.projection) not in ['npstere', 'spstere']:
                     ax.set_extent(self.domain.extent)
                     if str(self.projection) not in ['lamconf']:
@@ -308,14 +379,19 @@ class CreateFigure:
                 # Check plot types
                 plot_types = [x.plottype for x in plot_obj.plot_layers]
                 if 'skewt' in plot_types:
-                    register_projection(SkewXAxes)
-                    ax = plt.subplot(gs[i], projection='skewx')
+                    ax = self.fig.add_subplot(gs[i], projection='skewx')
                 else:
-                    ax = plt.subplot(gs[i])
+                    ax = self.fig.add_subplot(gs[i])
 
-            # Loop through plot layers
+            # Create per-axes state
+            ax_state = AxState(ax=ax, is_map=hasattr(plot_obj, 'projection'))
+
+            # With adapter-based rendering that records mappables
             for layer in plot_obj.plot_layers:
-                plot_dict[layer.plottype](layer, ax)
+                adapter = LayerAdapter(layer.plottype, layer)
+                m = adapter.render(self, ax_state)
+                if m is not None:
+                    ax_state.mappables.append(m)
 
             # loop through all keys in an object and then call approriate
             # method to plot the feature on the axis
@@ -748,28 +824,44 @@ class CreateFigure:
         """
         ax.set_ylabel(**ylabel)
 
+    def _last_mappable_for_ax(self, ax: plt.Axes) -> Optional[Any]:
+        """
+        Return the most recently-added "mappable" artist for a given Axes.
+
+        Mappables are objects Matplotlib colorbars can attach to
+        (e.g., ContourSet, QuadMesh, PathCollection, Image).
+        This helper inspects the Axes' collections, images, and
+        containers in reverse order and returns the newest one found.
+
+        Used by _plot_colorbar() to deterministically select the
+        correct source for the color scale, instead of relying on
+        global state like self.cs.
+        """
+        # Combine all mappables in reverse order of addition
+        mappables = list(ax.collections[::-1]) + list(ax.images[::-1]) + list(ax.containers[::-1])
+        for m in mappables:
+            return m
+        return None
+
     def _plot_colorbar(self, ax, colorbar):
         """
-        Add colorbar on specified ax or for total figure.
+        Add colorbar on specified ax or for total figure (single_cbar).
+        Uses the most recently-added mappable on this axes.
         """
+        mappable = self._last_mappable_for_ax(ax)
+        if mappable is None:
+            return
 
-        if hasattr(self, 'cs'):
-            if colorbar['single_cbar']:
-                # IMPORTANT NOTICE ####
-                # If using single colorbar option, this method grabs the color
-                # series from the subplot that is in last row and column. It
-                # is important to note that if comparing multiple subplots with
-                # the same colorbar, the vmin and vmax should all be the same to
-                # avoid comparison errors.
-                if ax.is_last_row() and ax.is_last_col():
-                    cbar_ax = self.fig.add_axes(colorbar['cbar_loc'])
-                    cb = self.fig.colorbar(self.cs, cax=cbar_ax, **colorbar['kwargs'])
-                    cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
+        cb = None
+        if colorbar['single_cbar']:
+            if ax.is_last_row() and ax.is_last_col():
+                cbar_ax = self.fig.add_axes(colorbar['cbar_loc'])
+                cb = self.fig.colorbar(mappable, cax=cbar_ax, **colorbar['kwargs'])
+        else:
+            cb = self.fig.colorbar(mappable, ax=ax, **colorbar['kwargs'])
 
-            else:
-                cb = self.fig.colorbar(self.cs, ax=ax,
-                                       **colorbar['kwargs'])
-                cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
+        if cb is not None and colorbar.get('label'):
+            cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
 
     def _plot_stats(self, ax, stats):
         """
