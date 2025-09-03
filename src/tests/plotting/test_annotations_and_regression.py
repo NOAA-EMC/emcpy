@@ -50,10 +50,15 @@ def test_scatter_linear_regression_adds_line_and_label():
 
 
 def test_scatter_legend_handles_have_fixed_size():
-    s = Scatter([0,1,2], [1,2,3]); s.label = "points"
-    plot = CreatePlot(plot_layers=[s]); plot.add_legend()
-    fig = CreateFigure(); fig.plot_list = [plot]; fig.create_figure()
-    ax = fig.fig.axes[0]; leg = ax.get_legend()
+    s = Scatter([0, 1, 2], [1, 2, 3])
+    s.label = "points"
+    plot = CreatePlot(plot_layers=[s])
+    plot.add_legend()
+    fig = CreateFigure()
+    fig.plot_list = [plot]
+    fig.create_figure()
+    ax = fig.fig.axes[0]
+    leg = ax.get_legend()
 
     handles = getattr(leg, "legend_handles", None) or getattr(leg, "legendHandles", [])
     sizes = []
