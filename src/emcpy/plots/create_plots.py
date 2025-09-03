@@ -2,19 +2,24 @@
 import os
 import emcpy
 import numpy as np
+import pandas as pd
+from pandas import Timestamp
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+import matplotlib.dates as mdates
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
+import datetime as datetime
 from dataclasses import dataclass, field
 from typing import Any, List, Optional
 from PIL import Image
 from scipy.interpolate import interpn
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 from matplotlib.offsetbox import OffsetImage, AnchoredOffsetbox
-from matplotlib.ticker import MultipleLocator, NullFormatter, ScalarFormatter
+from matplotlib.ticker import MultipleLocator, FixedLocator, NullLocator
+from matplotlib.ticker import NullFormatter, ScalarFormatter
 from matplotlib.projections import register_projection
 from emcpy.plots.map_tools import Domain, MapProjection
 from emcpy.plots.skewt_projection import SkewXAxes
@@ -218,32 +223,42 @@ class CreatePlot:
             'top': top
         }
 
-    def set_xticks(self, ticks=list(), minor=False):
+    def set_xticks(self, ticks=list(), minor=False, formatter=None, date_format=None, clear_minor=True):
 
         self.xticks = {
-            'ticks': ticks,
-            'minor': minor
+            "ticks": ticks,
+            "minor": minor,
+            "formatter": formatter,
+            "date_format": date_format,
+            "clear_minor": clear_minor,
         }
 
-    def set_yticks(self, ticks=list(), minor=False):
+    def set_yticks(self, ticks=list(), minor=False, formatter=None, date_format=None, clear_minor=True):
 
         self.yticks = {
-            'ticks': ticks,
-            'minor': minor
+            "ticks": ticks,
+            "minor": minor,
+            "formatter": formatter,
+            "date_format": date_format,
+            "clear_minor": clear_minor,
         }
 
-    def set_xticklabels(self, labels=list(), **kwargs):
+    def set_xticklabels(self, labels=list(), minor=False, date_format=None, **kwargs):
 
         self.xticklabels = {
-            'labels': labels,
-            'kwargs': kwargs
+            "labels": labels,
+            "minor": minor,
+            "date_format": date_format,
+            "kwargs": kwargs,
         }
 
-    def set_yticklabels(self, labels=list(), **kwargs):
+    def set_yticklabels(self, labels=list(), minor=False, date_format=None, **kwargs):
 
         self.yticklabels = {
-            'labels': labels,
-            'kwargs': kwargs
+            "labels": labels,
+            "minor": minor,
+            "date_format": date_format,
+            "kwargs": kwargs,
         }
 
     def invert_xaxis(self):
@@ -922,53 +937,163 @@ class CreateFigure:
         """
         ax.set_ylim(**ylim)
 
+    def _as_mpl_dates(self, ticks):
+        """
+        Convert a list of datetime-like objects to Matplotlib date numbers.
+        Returns (converted_ticks, is_datetime).
+        Accepts: datetime.datetime, datetime.date, numpy.datetime64, pandas.Timestamp.
+        """
+        if not ticks:
+            return ticks, False
+
+        first = ticks[0]
+
+        # Python datetime/date
+        is_dt = isinstance(first, (datetime.datetime, datetime.date))
+
+        # numpy.datetime64
+        try:
+            is_dt = is_dt or isinstance(first, np.datetime64)
+        except Exception:
+            pass
+
+        # pandas.Timestamp (optional)
+        try:
+            is_dt = is_dt or hasattr(first, "to_pydatetime")
+        except Exception:
+            pass
+
+        if is_dt:
+            return mdates.date2num(ticks), True
+
+        return ticks, False
+
+    def _apply_ticks(self, ax, axis: str, spec: dict, *, latlon: bool = False) -> None:
+        """
+        Install locators/formatters for x|y ticks in a single place.
+
+        spec keys (all optional):
+          - ticks: list[Any]  (numbers, datetimes, etc.)
+          - minor: bool       (default False)
+          - formatter: matplotlib Formatter or callable
+          - date_format: str  (applied via DateFormatter when datetime & major)
+          - clear_minor: bool (default True; when setting major ticks, clear minor)
+        """
+        ticks = spec.get("ticks", [])
+        minor = bool(spec.get("minor", False))
+        formatter = spec.get("formatter")
+        date_fmt = spec.get("date_format")
+        clear_minor = spec.get("clear_minor", True)
+
+        if latlon:
+            if axis == "x":
+                ax.set_xticks(ticks, crs=ccrs.PlateCarree())
+                ax.xaxis.set_major_formatter(LongitudeFormatter(zero_direction_label=True))
+            else:
+                ax.set_yticks(ticks, crs=ccrs.PlateCarree())
+                ax.yaxis.set_major_formatter(LatitudeFormatter())
+            return
+
+        ticks2, is_dt = self._as_mpl_dates(ticks)
+        locator = FixedLocator(ticks2)
+
+        if axis == "x":
+            (ax.xaxis.set_minor_locator if minor else ax.xaxis.set_major_locator)(locator)
+
+            if not minor:
+                if formatter is not None:
+                    ax.xaxis.set_major_formatter(formatter)
+                elif is_dt:
+                    ax.xaxis.set_major_formatter(mdates.DateFormatter(date_fmt or "%Y-%m-%d\n%H:%M"))
+
+                if clear_minor:
+                    ax.xaxis.set_minor_locator(NullLocator())
+
+        else:
+            (ax.yaxis.set_minor_locator if minor else ax.yaxis.set_major_locator)(locator)
+
+            if not minor:
+                if formatter is not None:
+                    ax.yaxis.set_major_formatter(formatter)
+                elif is_dt:
+                    ax.yaxis.set_major_formatter(mdates.DateFormatter(date_fmt or "%Y-%m-%d\n%H:%M"))
+
+                if clear_minor:
+                    ax.yaxis.set_minor_locator(NullLocator())
+
     def _set_xticks(self, ax, xticks, latlon=False):
         """
         Set x-ticks on specified ax.
         """
-        if (latlon):
-            ax.set_xticks(**xticks, crs=ccrs.PlateCarree())
-            lon_formatter = LongitudeFormatter(zero_direction_label=True)
-            lat_formatter = LatitudeFormatter()
-            ax.xaxis.set_major_formatter(lon_formatter)
-            ax.yaxis.set_major_formatter(lat_formatter)
-        else:
-            ax.set_xticks(**xticks)
+        self._apply_ticks(ax, "x", xticks, latlon=latlon)
 
     def _set_yticks(self, ax, yticks, latlon=False):
         """
         Set y-ticks on specified ax.
         """
-        if (latlon):
-            ax.set_yticks(**yticks, crs=ccrs.PlateCarree())
-        else:
-            ax.set_yticks(**yticks)
+        self._apply_ticks(ax, "y", yticks, latlon=latlon)
 
     def _set_xticklabels(self, ax, xticklabels):
         """
         Set x-tick labels on specified ax.
-        """
-        if len(xticklabels['labels']) == len(ax.get_xticks()):
-            ax.set_xticklabels(xticklabels['labels'],
-                               **xticklabels['kwargs'])
 
-        else:
-            raise ValueError('Len of xtick labels does not equal ' +
-                             'len of xticks. Set xticks appropriately ' +
-                             'or change labels to be len of xticks.')
+        Accepts:
+          - labels: list[str] for MAJOR ticks
+          - minor: bool (default False): minor labels are not supported
+          - date_format: str: prefer a DateFormatter instead of static labels
+          - kwargs: dict: text kwargs (rotation, ha, fontsize, etc.)
+        """
+        labels = xticklabels.get("labels", [])
+        minor = bool(xticklabels.get("minor", False))
+        kwargs = xticklabels.get("kwargs", {})
+        date_fmt = xticklabels.get("date_format")
+
+        if minor:
+            raise ValueError("Setting MINOR tick labels is not supported; use a custom Formatter.")
+
+        # If datetime formatting is requested, prefer a DateFormatter.
+        if date_fmt is not None:
+            ax.xaxis.set_major_formatter(mdates.DateFormatter(date_fmt))
+            return
+
+        current_ticks = ax.get_xticks(minor=False)
+        if len(labels) != len(current_ticks):
+            raise ValueError(
+                f"Len of xtick labels ({len(labels)}) != len of xticks ({len(current_ticks)}). "
+                "Set ticks appropriately or supply matching labels."
+            )
+        ax.set_xticklabels(labels, **kwargs)
 
     def _set_yticklabels(self, ax, yticklabels):
         """
         Set y-tick labels on specified ax.
-        """
-        if len(yticklabels['labels']) == len(ax.get_yticks()):
-            ax.set_yticklabels(yticklabels['labels'],
-                               **yticklabels['kwargs'])
 
-        else:
-            raise ValueError('Len of ytick labels does not equal ' +
-                             'len of yticks. Set yticks appropriately ' +
-                             'or change labels to be len of yticks.')
+        Accepts:
+          - labels: list[str] for MAJOR ticks
+          - minor: bool (default False): minor labels are not supported
+          - date_format: str: prefer a DateFormatter instead of static labels
+          - kwargs: dict: text kwargs (rotation, ha, fontsize, etc.)
+        """
+        labels = yticklabels.get("labels", [])
+        minor = bool(yticklabels.get("minor", False))
+        kwargs = yticklabels.get("kwargs", {})
+        date_fmt = yticklabels.get("date_format")
+
+        if minor:
+            raise ValueError("Setting MINOR tick labels is not supported; use a custom Formatter.")
+
+        # If datetime formatting is requested, prefer a DateFormatter.
+        if date_fmt is not None:
+            ax.yaxis.set_major_formatter(mdates.DateFormatter(date_fmt))
+            return
+
+        current_ticks = ax.get_yticks(minor=False)
+        if len(labels) != len(current_ticks):
+            raise ValueError(
+                f"Len of ytick labels ({len(labels)}) != len of yticks ({len(current_ticks)}). "
+                "Set ticks appropriately or supply matching labels."
+            )
+        ax.set_yticklabels(labels, **kwargs)
 
     def _invert_xaxis(self, ax, invert_xaxis):
         """
