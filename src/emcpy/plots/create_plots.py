@@ -658,19 +658,19 @@ class CreateFigure:
             if len(plotobj.x) != 0 and len(plotobj.y) != 0:
                 y_pred, r_sq, intercept, slope = get_linear_regression(plotobj.x, plotobj.y)
                 label = f"y = {slope:.4f}x + {intercept:.4f}\nR\u00b2 : {r_sq:.4f}"
-    
+
                 # User may provide a dict of style kwargs on the layer:
                 #   plotobj.linear_regression = {"linestyle": "--", "linewidth": 1.5, ...}
                 # Treat it as optional.
                 style = getattr(plotobj, "linear_regression", None) or {}
-    
+
                 # Default the regression line color to the scatter's color
                 # unless the user already set one in `linear_regression`.
                 if "color" not in style:
                     point_color = getattr(plotobj, "color", None)
                     if point_color is not None:
                         style["color"] = point_color
-    
+
                 ax.plot(plotobj.x, y_pred, label=label, **style)
 
     def _gridded(self, plotobj, ax):
