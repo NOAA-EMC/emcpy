@@ -867,15 +867,18 @@ class CreateFigure:
         if mappable is None:
             return
 
-        cb = None
         if colorbar['single_cbar']:
-            if ax.is_last_row() and ax.is_last_col():
+            # Only on the bottom-right subplot
+            if self._is_last_subplot(ax):
                 cbar_ax = self.fig.add_axes(colorbar['cbar_loc'])
                 cb = self.fig.colorbar(mappable, cax=cbar_ax, **colorbar['kwargs'])
-        else:
-            cb = self.fig.colorbar(mappable, ax=ax, **colorbar['kwargs'])
+                if colorbar['label'] is not None:
+                    cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
+            return
 
-        if cb is not None and colorbar.get('label'):
+        # per-axes colorbar
+        cb = self.fig.colorbar(mappable, ax=ax, **colorbar['kwargs'])
+        if colorbar['label'] is not None:
             cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
 
     def _plot_stats(self, ax, stats):
@@ -1125,15 +1128,44 @@ class CreateFigure:
         """
         If sharex axis is True, will find where to hide xticklabels.
         """
-        if not ax.is_last_row():
+        if not self._is_last_row(ax):
             plt.setp(ax.get_xticklabels(), visible=False)
 
     def _sharey(self, ax):
         """
         If sharey axis is True, will find where to hide yticklabels.
         """
-        if not ax.is_first_col():
+        if not self._is_first_col(ax):
             plt.setp(ax.get_yticklabels(), visible=False)
+
+    def _subplot_spec(self, ax):
+        """Return (ss, gs) or (None, None) if ax is not a GridSpec subplot."""
+        try:
+            ss = ax.get_subplotspec()
+            return ss, ss.get_gridspec()
+        except Exception:
+            return None, None
+
+    def _is_first_col(self, ax) -> bool:
+        ss, _ = self._subplot_spec(ax)
+        return bool(ss and ss.colspan.start == 0)
+
+    def _is_last_col(self, ax) -> bool:
+        ss, gs = self._subplot_spec(ax)
+        return bool(ss and gs and ss.colspan.stop == gs.ncols)
+
+    def _is_first_row(self, ax) -> bool:
+        ss, _ = self._subplot_spec(ax)
+        return bool(ss and ss.rowspan.start == 0)
+
+    def _is_last_row(self, ax) -> bool:
+        ss, gs = self._subplot_spec(ax)
+        return bool(ss and gs and ss.rowspan.stop == gs.nrows)
+
+    def _is_last_subplot(self, ax) -> bool:
+        """Bottom-right subplot in the current GridSpec."""
+        ss, gs = self._subplot_spec(ax)
+        return bool(ss and gs and ss.rowspan.stop == gs.nrows and ss.colspan.stop == gs.ncols)
 
     def _add_map_features(self, ax, map_features):
         """
