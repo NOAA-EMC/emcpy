@@ -1,5 +1,6 @@
 # tests/plotting/test_colorbar.py
 import numpy as np
+import pytest
 from emcpy.plots.plots import GriddedPlot
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
