@@ -50,8 +50,8 @@ def test_scatter_linear_regression_adds_line_and_label():
 
 def test_scatter_legend_handles_have_fixed_size():
     # Ensure legend handle sizes are normalized to 20 for scatter
-    x = [0,1,2]
-    y = [1,2,3]
+    x = [0, 1, 2]
+    y = [1, 2, 3]
     s = Scatter(x, y)
     s.label = "points"
     plot = CreatePlot(plot_layers=[s])

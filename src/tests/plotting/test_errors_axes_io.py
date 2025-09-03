@@ -40,8 +40,8 @@ def test_close_figure_closes_handle():
 
 
 def test_sharex_sharey_hide_ticklabels():
-    p1 = CreatePlot(plot_layers=[LinePlot([0,1],[0,1])])
-    p2 = CreatePlot(plot_layers=[LinePlot([0,1],[1,2])])
+    p1 = CreatePlot(plot_layers=[LinePlot([0, 1],[0, 1])])
+    p2 = CreatePlot(plot_layers=[LinePlot([0, 1],[1, 2])])
     fig = CreateFigure(nrows=2, ncols=1, sharex=True, sharey=True)
     fig.plot_list = [p1, p2]
     fig.create_figure()

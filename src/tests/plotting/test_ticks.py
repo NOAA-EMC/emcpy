@@ -31,7 +31,8 @@ def test_xticklabels_length_validation():
     plot = CreatePlot(plot_layers=[lp])
     plot.set_xticks(ticks=[0, 1, 2, 3, 4])
     plot.set_xticklabels(labels=["a", "b", "c"])  # wrong count
-    fig = CreateFigure(); fig.plot_list = [plot]
+    fig = CreateFigure()
+    fig.plot_list = [plot]
     with pytest.raises(ValueError, match="Len of xtick labels"):
         fig.create_figure()
 
@@ -41,7 +42,8 @@ def test_minor_labels_forbidden():
     plot = CreatePlot(plot_layers=[lp])
     plot.set_xticks(ticks=[0, 1, 2])
     plot.set_xticklabels(labels=["x", "y", "z"], minor=True)
-    fig = CreateFigure(); fig.plot_list = [plot]
+    fig = CreateFigure()
+    fig.plot_list = [plot]
     with pytest.raises(ValueError, match="MINOR tick labels"):
         fig.create_figure()
 

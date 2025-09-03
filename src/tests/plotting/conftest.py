@@ -33,6 +33,7 @@ matplotlib.use("Agg", force=True)
 import matplotlib.pyplot as plt
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
+
 @pytest.fixture(scope="session", autouse=True)
 def _stable_mpl_env(tmp_path_factory):
     """
@@ -53,16 +54,19 @@ def _stable_mpl_env(tmp_path_factory):
     yield
     mpl.rcParams.update(old)
 
+
 @pytest.fixture(autouse=True)
 def _close_figures_after_each_test():
     """Ensure no figure leaks between tests."""
     yield
     plt.close("all")
 
+
 @pytest.fixture(autouse=True)
 def _seed_rng():
     """Deterministic random data for plotting tests."""
     np.random.seed(19680801)
+
 
 @pytest.fixture
 def single_axes():
@@ -78,6 +82,7 @@ def single_axes():
         ax = fig.fig.axes[0]
         return fig, ax
     return _run
+
 
 @pytest.fixture
 def skip_if_no_cartopy():
