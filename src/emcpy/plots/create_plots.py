@@ -2,6 +2,8 @@
 import os
 import emcpy
 import numpy as np
+import pandas as pd
+from pandas import Timestamp
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -937,33 +939,33 @@ class CreateFigure:
 
     def _as_mpl_dates(self, ticks):
         """
-        Coerce a list of datetime-like objects to Matplotlib date numbers.
-        Returns (coerced_ticks, is_datetime).
+        Convert a list of datetime-like objects to Matplotlib date numbers.
+        Returns (converted_ticks, is_datetime).
         Accepts: datetime.datetime, datetime.date, numpy.datetime64, pandas.Timestamp.
         """
         if not ticks:
             return ticks, False
 
         first = ticks[0]
+
+        # Python datetime/date
         is_dt = isinstance(first, (datetime.datetime, datetime.date))
 
         # numpy.datetime64
         try:
-            import numpy as _np  # noqa
-            is_dt = is_dt or str(type(first)).endswith("numpy.datetime64'>")
+            is_dt = is_dt or isinstance(first, np.datetime64)
         except Exception:
             pass
 
         # pandas.Timestamp (optional)
         try:
-            import pandas as _pd  # noqa
-            from pandas import Timestamp  # noqa
-            is_dt = is_dt or "Timestamp" in type(first).__name__
+            is_dt = is_dt or hasattr(first, "to_pydatetime")
         except Exception:
             pass
 
         if is_dt:
             return mdates.date2num(ticks), True
+
         return ticks, False
 
     def _apply_ticks(self, ax, axis: str, spec: dict, *, latlon: bool = False) -> None:
