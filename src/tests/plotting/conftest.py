@@ -86,8 +86,10 @@ def single_axes():
 
 @pytest.fixture
 def skip_if_no_cartopy():
-    """Skip test at runtime if cartopy is missing."""
-    try:
-        import cartopy  # noqa: F401
-    except Exception:
-        pytest.skip("cartopy not installed", allow_module_level=False)
+    """Return a callable that skips the test if Cartopy is unavailable."""
+    def _skip():
+        try:
+            import cartopy  # noqa: F401
+        except Exception:
+            pytest.skip("Cartopy not installed/available for this environment.")
+    return _skip
