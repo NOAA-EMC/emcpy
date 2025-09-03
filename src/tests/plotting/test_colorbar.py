@@ -3,6 +3,12 @@ import numpy as np
 from emcpy.plots.plots import GriddedPlot
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
+# Robust Axes import for different Matplotlib layouts
+try:
+    from matplotlib.axes import Axes
+except Exception:  # very defensive fallback
+    import matplotlib
+    Axes = getattr(matplotlib.axes, "Axes", object)
 
 _NEED_FIX = not (hasattr(Axes, "is_last_row") and hasattr(Axes, "is_last_col"))
 
