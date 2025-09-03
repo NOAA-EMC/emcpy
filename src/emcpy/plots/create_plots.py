@@ -31,6 +31,7 @@ try:
 except ValueError:
     pass
 
+
 @dataclass
 class AxState:
     ax: plt.Axes
@@ -942,17 +943,17 @@ class CreateFigure:
         """
         if not ticks:
             return ticks, False
-    
+
         first = ticks[0]
         is_dt = isinstance(first, (datetime.datetime, datetime.date))
-    
+
         # numpy.datetime64
         try:
             import numpy as _np  # noqa
             is_dt = is_dt or str(type(first)).endswith("numpy.datetime64'>")
         except Exception:
             pass
-    
+
         # pandas.Timestamp (optional)
         try:
             import pandas as _pd  # noqa
@@ -960,16 +961,15 @@ class CreateFigure:
             is_dt = is_dt or "Timestamp" in type(first).__name__
         except Exception:
             pass
-    
+
         if is_dt:
             return mdates.date2num(ticks), True
         return ticks, False
 
-
     def _apply_ticks(self, ax, axis: str, spec: dict, *, latlon: bool = False) -> None:
         """
         Install locators/formatters for x|y ticks in a single place.
-    
+
         spec keys (all optional):
           - ticks: list[Any]  (numbers, datetimes, etc.)
           - minor: bool       (default False)
@@ -982,7 +982,7 @@ class CreateFigure:
         formatter = spec.get("formatter")
         date_fmt = spec.get("date_format")
         clear_minor = spec.get("clear_minor", True)
-    
+
         if latlon:
             if axis == "x":
                 ax.set_xticks(ticks, crs=ccrs.PlateCarree())
@@ -991,31 +991,31 @@ class CreateFigure:
                 ax.set_yticks(ticks, crs=ccrs.PlateCarree())
                 ax.yaxis.set_major_formatter(LatitudeFormatter())
             return
-    
+
         ticks2, is_dt = self._as_mpl_dates(ticks)
         locator = FixedLocator(ticks2)
-    
+
         if axis == "x":
             (ax.xaxis.set_minor_locator if minor else ax.xaxis.set_major_locator)(locator)
-    
+
             if not minor:
                 if formatter is not None:
                     ax.xaxis.set_major_formatter(formatter)
                 elif is_dt:
                     ax.xaxis.set_major_formatter(mdates.DateFormatter(date_fmt or "%Y-%m-%d\n%H:%M"))
-    
+
                 if clear_minor:
                     ax.xaxis.set_minor_locator(NullLocator())
-    
+
         else:
             (ax.yaxis.set_minor_locator if minor else ax.yaxis.set_major_locator)(locator)
-    
+
             if not minor:
                 if formatter is not None:
                     ax.yaxis.set_major_formatter(formatter)
                 elif is_dt:
                     ax.yaxis.set_major_formatter(mdates.DateFormatter(date_fmt or "%Y-%m-%d\n%H:%M"))
-    
+
                 if clear_minor:
                     ax.yaxis.set_minor_locator(NullLocator())
 
@@ -1034,7 +1034,7 @@ class CreateFigure:
     def _set_xticklabels(self, ax, xticklabels):
         """
         Set x-tick labels on specified ax.
-    
+
         Accepts:
           - labels: list[str] for MAJOR ticks
           - minor: bool (default False): minor labels are not supported
@@ -1045,15 +1045,15 @@ class CreateFigure:
         minor = bool(xticklabels.get("minor", False))
         kwargs = xticklabels.get("kwargs", {})
         date_fmt = xticklabels.get("date_format")
-    
+
         if minor:
             raise ValueError("Setting MINOR tick labels is not supported; use a custom Formatter.")
-    
+
         # If datetime formatting is requested, prefer a DateFormatter.
         if date_fmt is not None:
             ax.xaxis.set_major_formatter(mdates.DateFormatter(date_fmt))
             return
-    
+
         current_ticks = ax.get_xticks(minor=False)
         if len(labels) != len(current_ticks):
             raise ValueError(
@@ -1065,7 +1065,7 @@ class CreateFigure:
     def _set_yticklabels(self, ax, yticklabels):
         """
         Set y-tick labels on specified ax.
-    
+
         Accepts:
           - labels: list[str] for MAJOR ticks
           - minor: bool (default False): minor labels are not supported
@@ -1076,15 +1076,15 @@ class CreateFigure:
         minor = bool(yticklabels.get("minor", False))
         kwargs = yticklabels.get("kwargs", {})
         date_fmt = yticklabels.get("date_format")
-    
+
         if minor:
             raise ValueError("Setting MINOR tick labels is not supported; use a custom Formatter.")
-    
+
         # If datetime formatting is requested, prefer a DateFormatter.
         if date_fmt is not None:
             ax.yaxis.set_major_formatter(mdates.DateFormatter(date_fmt))
             return
-    
+
         current_ticks = ax.get_yticks(minor=False)
         if len(labels) != len(current_ticks):
             raise ValueError(
