@@ -5,7 +5,7 @@ from typing import Any, ClassVar, Dict, Optional, Protocol, TYPE_CHECKING
 
 if TYPE_CHECKING:
     # Avoids runtime circular imports while keeping type safety
-    from .create_plots import CreateFigure, AxState
+    from .create_plots import CreateFigure
 
 
 class LayerAdapter(Protocol):

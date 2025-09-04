@@ -22,7 +22,7 @@ from matplotlib.offsetbox import OffsetImage, AnchoredOffsetbox
 from matplotlib.ticker import MultipleLocator, FixedLocator, NullLocator
 from matplotlib.ticker import NullFormatter, ScalarFormatter
 from matplotlib.projections import register_projection
-from emcpy.plots.adapters import get_adapter, AxState
+from emcpy.plots.adapters import get_adapter
 from emcpy.plots.map_tools import Domain, MapProjection
 from emcpy.plots.skewt_projection import SkewXAxes
 from emcpy.stats.stats import get_linear_regression
@@ -34,6 +34,13 @@ try:
     register_projection(SkewXAxes)
 except ValueError:
     pass
+
+
+@dataclass
+class AxState:
+    ax: plt.Axes
+    mappables: List[Any] = field(default_factory=list)
+    is_map: bool = False
 
 
 class CreatePlot:
