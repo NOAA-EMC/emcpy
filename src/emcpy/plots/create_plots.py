@@ -870,6 +870,9 @@ class CreateFigure:
         """
         leg = ax.legend(**legend)
 
+        if leg is None:
+            return
+
         # Matplotlib versions differ in attribute name
         handles = getattr(leg, "legend_handles", None) or getattr(leg, "legendHandles", [])
 
