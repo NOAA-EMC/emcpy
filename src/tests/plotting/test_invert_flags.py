@@ -16,6 +16,7 @@ def test_invert_methods_dont_shadow_and_apply_x(single_axes):
     # Use truthiness or cast to bool; avoids numpy.bool_ vs True identity issues
     assert bool(ax.xaxis_inverted())
 
+
 def test_invert_methods_dont_shadow_and_apply_y(single_axes):
     plot = CreatePlot(plot_layers=[LinePlot([0, 1], [0, 1])])
     assert callable(getattr(plot, "invert_yaxis"))
@@ -30,11 +31,11 @@ def test_invert_methods_dont_shadow_and_apply_y(single_axes):
 def test_legacy_bool_attribute_still_work_x(single_axes):
     # Backward compatibility: older code might set plot.invert_xaxis = True
     plot = CreatePlot(plot_layers=[LinePlot([0, 1], [0, 1])])
-    # Simulate legacy usage:
     setattr(plot, "invert_xaxis", True)
 
     fig, ax = single_axes(plot)
-    assert ax.xaxis_inverted() is True
+    # Use truthiness; MPL may return numpy.bool_ instead of True
+    assert bool(ax.xaxis_inverted())
 
 
 def test_legacy_bool_attribute_still_work_y(single_axes):
@@ -42,4 +43,4 @@ def test_legacy_bool_attribute_still_work_y(single_axes):
     setattr(plot, "invert_yaxis", True)
 
     fig, ax = single_axes(plot)
-    assert ax.yaxis_inverted() is True
+    assert bool(ax.yaxis_inverted())
