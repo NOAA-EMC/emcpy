@@ -447,7 +447,7 @@ class CreateFigure:
         integer_field = bool(getattr(plotobj, "integer_field", False))
 
         if plotobj.data is None:
-            # Plain point scatter (no scalar mapping)
+            # unlabeled points (no scalar mapping)
             skip = ['plottype', 'longitude', 'latitude', 'markersize', 'integer_field', 'colorbar']
             inputs = self._get_inputs_dict(skip, plotobj)
             cs = ax.scatter(
@@ -455,39 +455,39 @@ class CreateFigure:
                 s=plotobj.markersize, **inputs,
                 transform=self.projection.transform
             )
-            return cs  # PathCollection (no scalar array)
-    
-        # Scalar-mapped scatter
+
+            return cs  # PathCollection (not scalar-mappable)
+
+        # scalar-mapped points
         skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize',
                 'colorbar', 'normalize', 'integer_field']
         inputs = self._get_inputs_dict(skip, plotobj)
-    
+
         norm = None
         if integer_field:
-            # Validate before touching any colormap (prevents deprecation warning firing first)
             vmin = inputs.get('vmin')
             vmax = inputs.get('vmax')
             if vmin is None or vmax is None:
                 raise ValueError("For integer_field=True, set both vmin and vmax.")
-    
-            # Modern colormap API (no deprecation)
             cmap_name = inputs.get('cmap', 'viridis')
             cmap = _cmaps.get_cmap(cmap_name)
-    
-            # Bin edges for integer classes, inclusive of top
             norm = matplotlib.colors.BoundaryNorm(
                 np.arange(vmin - 0.5, vmax + 0.5, 1), cmap.N
             )
-    
-            # Ensure the same cmap is used on the scatter call if not already provided
             inputs.setdefault('cmap', cmap)
-    
+
+        # If we’re passing c=..., drop conflicting color keys
+        inputs.pop('color', None)
+        inputs.pop('facecolor', None)
+        inputs.pop('facecolors', None)
+
         cs = ax.scatter(
             plotobj.longitude, plotobj.latitude,
             c=plotobj.data, s=plotobj.markersize,
             **inputs, norm=norm, transform=self.projection.transform
         )
-        return cs  # PathCollection with scalar array
+
+        return cs
 
     def _map_gridded(self, plotobj, ax):
 
@@ -574,28 +574,38 @@ class CreateFigure:
     def _scatter(self, plotobj, ax):
         """
         Uses Scatter object to plot on axis.
+        Returns the PathCollection (mappable when `c` is provided).
         """
+        # density mode uses a different path
         if hasattr(plotobj, 'density'):
-            cs = self._density_scatter(plotobj, ax)
+            return self._density_scatter(plotobj, ax)
+
+        skipvars = ['plottype', 'plot_ax', 'x', 'y',
+                    'markersize', 'do_linear_regression',
+                    'linear_regression', 'density', 'channel']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
+
+        # If the layer provided a scalar/array color via `c`, remove conflicting color keys
+        c_val = getattr(plotobj, 'c', None)
+        if c_val is not None:
+            inputs.pop('color', None)
+            inputs.pop('facecolor', None)
+            inputs.pop('facecolors', None)
+            cs = ax.scatter(plotobj.x, plotobj.y, s=plotobj.markersize, c=c_val, **inputs)
         else:
-            skip = ['plottype', 'plot_ax', 'x', 'y', 'markersize',
-                    'do_linear_regression', 'linear_regression', 'density', 'channel']
-            inputs = self._get_inputs_dict(skip, plotobj)
             cs = ax.scatter(plotobj.x, plotobj.y, s=plotobj.markersize, **inputs)
 
-        # optional regression overlay (not a mappable)
+        # Optional regression line
         if getattr(plotobj, "do_linear_regression", False):
             if len(plotobj.x) and len(plotobj.y):
                 y_pred, r_sq, intercept, slope = get_linear_regression(plotobj.x, plotobj.y)
                 label = f"y = {slope:.4f}x + {intercept:.4f}\nR\u00b2 : {r_sq:.4f}"
                 style = getattr(plotobj, "linear_regression", {})
-                if "color" not in style:
-                    point_color = getattr(plotobj, "color", None)
-                    if point_color is not None:
-                        style["color"] = point_color
+                if "color" not in style and hasattr(plotobj, "color"):
+                    style["color"] = plotobj.color
                 ax.plot(plotobj.x, y_pred, label=label, **style)
 
-        return cs  # PathCollection
+        return cs
 
     def _gridded(self, plotobj, ax):
         """
