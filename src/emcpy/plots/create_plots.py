@@ -799,21 +799,6 @@ class CreateFigure:
         if colorbar['label'] is not None:
             cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
 
-    def _plot_colorbar(self, ax, colorbar):
-        mappable = self._last_mappable_for_ax(ax)
-        if mappable is None:
-            return
-        if colorbar['single_cbar']:
-            if self._is_last_subplot(ax):
-                cbar_ax = self.fig.add_axes(colorbar['cbar_loc'])
-                cb = self.fig.colorbar(mappable, cax=cbar_ax, **colorbar['kwargs'])
-                if colorbar['label'] is not None:
-                    cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
-            return
-        cb = self.fig.colorbar(mappable, ax=ax, **colorbar['kwargs'])
-        if colorbar['label'] is not None:
-            cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
-
     def _plot_stats(self, ax, stats):
         """
         Add annotated stats on specified ax.
