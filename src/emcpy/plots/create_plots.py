@@ -280,14 +280,14 @@ class CreateFigure:
                 'Number of plots does not match the number inputted rows'
                 'and columns.'
             )
-    
+
         gs = gridspec.GridSpec(self.nrows, self.ncols)
         self.fig = plt.figure(figsize=self.figsize)
-    
+
         # Track the last colorbar-capable artist per axes
         # (read by _last_mappable_for_ax in _plot_colorbar)
         self._ax_last_mappable = {}  # {Axes: mappable}
-    
+
         for i, plot_obj in enumerate(self.plot_list):
             # --- Axes creation (map vs. normal) ---
             if hasattr(plot_obj, 'projection'):
@@ -296,10 +296,10 @@ class CreateFigure:
                     self.domain = Domain(domain=plot_obj.domain[0], dd=plot_obj.domain[1])
                 else:
                     self.domain = Domain(plot_obj.domain)
-    
+
                 self.projection = MapProjection(plot_obj.projection)
                 ax = self.fig.add_subplot(gs[i], projection=self.projection.projection)
-    
+
                 if str(self.projection) not in ['npstere', 'spstere']:
                     ax.set_extent(self.domain.extent)
                     if str(self.projection) not in ['lamconf']:
@@ -311,7 +311,7 @@ class CreateFigure:
                         ax.yaxis.set_major_formatter(lat_formatter)
                 else:
                     ax.set_extent(self.domain.extent, ccrs.PlateCarree())
-    
+
             else:
                 # Regular Axes (SkewT gets its projection)
                 plot_types = [x.plottype for x in plot_obj.plot_layers]
@@ -319,10 +319,10 @@ class CreateFigure:
                     ax = self.fig.add_subplot(gs[i], projection='skewx')
                 else:
                     ax = self.fig.add_subplot(gs[i])
-    
+
             # --- Per-axes rendering state ---
             st = AxState(ax=ax)  # adapters append any mappables they create
-    
+
             # --- Render each layer via the adapter registry ---
             for layer in plot_obj.plot_layers:
                 adapter = get_adapter(layer.plottype)  # raises KeyError if unknown
@@ -330,11 +330,11 @@ class CreateFigure:
                 if mappable is not None:
                     st.mappables.append(mappable)
                     self._ax_last_mappable[ax] = mappable  # used by _plot_colorbar
-    
+
             # --- Plot figure/axes features (title, labels, ticks, colorbar, etc.) ---
             for feat in vars(plot_obj).keys():
                 self._plot_features(plot_obj, feat, ax)
-    
+
             # --- Shared axes label hiding ---
             if self.sharex:
                 self._sharex(ax)
@@ -454,7 +454,8 @@ class CreateFigure:
         norm = None
         if integer_field:
             cmap = matplotlib.cm.get_cmap(inputs['cmap'])
-            vmin = inputs['vmin']; vmax = inputs['vmax']
+            vmin = inputs['vmin']
+            vmax = inputs['vmax']
             if vmin is None or vmax is None:
                 raise ValueError("For integer_field=True, set both vmin and vmax.")
             norm = matplotlib.colors.BoundaryNorm(np.arange(vmin - 0.5, vmax, 1), cmap.N)
@@ -502,7 +503,7 @@ class CreateFigure:
             plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
 
         return cs  # ContourSet
-    
+
     def _map_filled_contour(self, plotobj, ax):
 
         skip = ['plottype', 'longitude', 'latitude', 'data', 'colorbar']
@@ -529,7 +530,7 @@ class CreateFigure:
         )
         if plotobj.density['nsamples']:
             data = data / np.count_nonzero(_idx) * 100.0
-    
+
         z = interpn(
             (0.5 * (x_e[1:] + x_e[:-1]), 0.5 * (y_e[1:] + y_e[:-1])),
             data, np.vstack([plotobj.x, plotobj.y]).T,
@@ -541,7 +542,7 @@ class CreateFigure:
             x, y, z = plotobj.x[idx], plotobj.y[idx], z[idx]
         else:
             x, y = plotobj.x, plotobj.y
-    
+
         cs = ax.scatter(
             x, y, c=z, s=plotobj.markersize,
             cmap=plotobj.density['cmap'], label=plotobj.label
@@ -560,7 +561,7 @@ class CreateFigure:
                     'do_linear_regression', 'linear_regression', 'density', 'channel']
             inputs = self._get_inputs_dict(skip, plotobj)
             cs = ax.scatter(plotobj.x, plotobj.y, s=plotobj.markersize, **inputs)
-    
+
         # optional regression overlay (not a mappable)
         if getattr(plotobj, "do_linear_regression", False):
             if len(plotobj.x) and len(plotobj.y):
@@ -572,7 +573,7 @@ class CreateFigure:
                     if point_color is not None:
                         style["color"] = point_color
                 ax.plot(plotobj.x, y_pred, label=label, **style)
-    
+
         return cs  # PathCollection
 
     def _gridded(self, plotobj, ax):
@@ -714,10 +715,10 @@ class CreateFigure:
         """
         skip = ['plottype', 'data']
         inputs = self._get_inputs_dict(skip, plotobj)
-    
+
         if 'labels' in inputs:  # defensive against old kw
             raise TypeError("BoxandWhiskerPlot no longer supports 'labels'; use 'tick_labels' (Matplotlib 3.9+).")
-    
+
         bp = ax.boxplot(plotobj.data, **inputs)
 
         return bp  # dict of artists (not a ScalarMappable)
@@ -756,7 +757,7 @@ class CreateFigure:
     def _last_mappable_for_ax(self, ax: plt.Axes) -> Optional[Any]:
         """
         Return the most recently-added ScalarMappable for a given Axes.
-    
+
         Uses the adapter-tracked value first (set when a layer returns a
         mappable). Falls back to scanning Axes collections/images in reverse
         (newest-first). Intentionally ignores 'containers' (e.g., BarContainer),
@@ -765,7 +766,7 @@ class CreateFigure:
         m = getattr(self, "_ax_last_mappable", {}).get(ax)
         if isinstance(m, ScalarMappable):
             return m
-    
+
         # Fallback: newest-first among valid ScalarMappables
         for coll in reversed(ax.collections):
             if isinstance(coll, ScalarMappable):
@@ -773,7 +774,7 @@ class CreateFigure:
         for img in reversed(ax.images):
             if isinstance(img, ScalarMappable):
                 return img
-    
+
         return None
 
     def _plot_colorbar(self, ax, colorbar):
