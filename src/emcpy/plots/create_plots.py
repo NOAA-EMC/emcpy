@@ -18,6 +18,7 @@ from PIL import Image
 from scipy.interpolate import interpn
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 from matplotlib.cm import ScalarMappable
+from matplotlib.contour import ContourSet
 from matplotlib.offsetbox import OffsetImage, AnchoredOffsetbox
 from matplotlib.ticker import MultipleLocator, FixedLocator, NullLocator
 from matplotlib.ticker import NullFormatter, ScalarFormatter
