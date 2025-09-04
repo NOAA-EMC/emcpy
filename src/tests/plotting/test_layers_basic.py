@@ -236,6 +236,27 @@ def test_box_and_whisker_plot(single_axes):
     assert len(ax.artists) + len(ax.lines) > 0
 
 
+def test_box_and_whisker_orientation_horizontal(single_axes):
+    np.random.seed(0)
+    data = [np.random.normal(0, s, 50) for s in (5, 7, 9)]
+    b = BoxandWhiskerPlot(data)
+    b.orientation = 'horizontal'  # new API
+    plot = CreatePlot(plot_layers=[b])
+    fig, ax = single_axes(plot)
+    # sanity: at least one artist was created
+    assert ax.artists or ax.lines or ax.patches or ax.collections
+
+
+def test_box_and_whisker_vert_property_sets_orientation(recwarn):
+    data = [[1, 2, 3], [2, 3, 4]]
+    b = BoxandWhiskerPlot(data)
+    b.vert = False  # deprecated pathway
+    # Should warn exactly once, and update orientation
+    w = recwarn.pop(DeprecationWarning)
+    assert "BoxandWhiskerPlot.vert is deprecated" in str(w.message)
+    assert b.orientation == 'horizontal'
+
+
 def test_horizontal_span(single_axes):
     levs = np.linspace(975, 125, 23)
     rms = [1.8, 2.02, 2.36, 2.10, 2.21, 2.17, 2.08, 2.14, 2.14, 2.19,

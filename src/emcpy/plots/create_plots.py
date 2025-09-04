@@ -749,7 +749,7 @@ class CreateFigure:
         """
         Uses BoxandWhiskerPlot object to plot on axis.
         """
-        skip = ['plottype', 'data']
+        skip = ['plottype', 'data', 'labels', 'vert']
         inputs = self._get_inputs_dict(skip, plotobj)
 
         if 'labels' in inputs:  # defensive against old kw

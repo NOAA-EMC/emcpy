@@ -255,11 +255,16 @@ class BoxWhiskerAdapter:
     plottype = "boxandwhisker"
 
     def render(self, fig, st: AxState, layer):
+        ori = getattr(layer, "orientation", "vertical")
+        if ori not in {"vertical", "horizontal"}:
+            raise ValueError("BoxandWhiskerPlot.orientation must be 'vertical' or 'horizontal'.")
         if getattr(layer, "tick_labels", None) is not None:
             n = len(layer.data) if hasattr(layer.data, "__len__") else None
             if n is not None and len(layer.tick_labels) != n:
-                raise ValueError(f"BoxandWhiskerPlot: tick_labels length {len(layer.tick_labels)} "
-                                 f"must match number of boxes {n}.")
+                raise ValueError(
+                    f"BoxandWhiskerPlot: tick_labels length {len(layer.tick_labels)} "
+                    f"must match number of boxes {n}."
+                )
         return fig._boxandwhisker(layer, st.ax)
 
 
