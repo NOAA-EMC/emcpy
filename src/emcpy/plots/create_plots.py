@@ -17,10 +17,14 @@ from typing import Any, List, Optional
 from PIL import Image
 from scipy.interpolate import interpn
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
+from matplotlib import colormaps as _cmaps
+from matplotlib.cm import ScalarMappable
+from matplotlib.contour import ContourSet
 from matplotlib.offsetbox import OffsetImage, AnchoredOffsetbox
 from matplotlib.ticker import MultipleLocator, FixedLocator, NullLocator
 from matplotlib.ticker import NullFormatter, ScalarFormatter
 from matplotlib.projections import register_projection
+from emcpy.plots.adapters import get_adapter
 from emcpy.plots.map_tools import Domain, MapProjection
 from emcpy.plots.skewt_projection import SkewXAxes
 from emcpy.stats.stats import get_linear_regression
@@ -39,62 +43,6 @@ class AxState:
     ax: plt.Axes
     mappables: List[Any] = field(default_factory=list)
     is_map: bool = False
-
-
-class LayerAdapter:
-    """
-    Thin wrapper around existing emcpy layer objects that forwards to the
-    current _plot_* methods and records any new 'mappable' created.
-    """
-    def __init__(self, plottype: str, plotobj: Any):
-        self.kind = plottype
-        self.plotobj = plotobj
-
-    def _snapshot(self, ax: plt.Axes) -> dict:
-        # Capture artists we consider "mappables"
-        return {
-            "collections": list(ax.collections),
-            "images": list(ax.images),
-            "containers": list(ax.containers),
-        }
-
-    def _diff_new_mappable(self, before: dict, after: dict) -> Optional[Any]:
-        # Prefer contour/pcolormesh/etc. (collections), then images, then containers
-        for key in ("collections", "images", "containers"):
-            b = before[key]
-            a = after[key]
-            if len(a) > len(b):
-                # Return the newest thing(s); choose the last added
-                return a[-1]
-        return None
-
-    def render(self, renderer: "CreateFigure", st: AxState) -> Optional[Any]:
-        # Reuse the existing plot dispatch (renderer has _scatter, _gridded, etc.)
-        plot_fn = {
-            'scatter': renderer._scatter,
-            'histogram': renderer._histogram,
-            'density': renderer._density,
-            'line_plot': renderer._lineplot,
-            'gridded_plot': renderer._gridded,
-            'contour': renderer._contour,
-            'contourf': renderer._contourf,
-            'vertical_line': renderer._verticalline,
-            'horizontal_line': renderer._horizontalline,
-            'horizontal_span': renderer._horizontalspan,
-            'bar_plot': renderer._barplot,
-            'horizontal_bar': renderer._hbar,
-            'skewt': renderer._skewt,
-            'boxandwhisker': renderer._boxandwhisker,
-            'map_scatter': renderer._map_scatter,
-            'map_gridded': renderer._map_gridded,
-            'map_contour': renderer._map_contour,
-            'map_filled_contour': renderer._map_filled_contour,
-        }[self.kind]
-
-        before = self._snapshot(st.ax)
-        plot_fn(self.plotobj, st.ax)
-        after = self._snapshot(st.ax)
-        return self._diff_new_mappable(before, after)
 
 
 class CreatePlot:
@@ -335,49 +283,32 @@ class CreateFigure:
         """
         Driver method to create figure and subplots.
         """
-        # Check to make sure plot_list == nrows*ncols
-        if len(self.plot_list) != self.nrows*self.ncols:
+        # Validate grid shape vs. plot_list
+        if len(self.plot_list) != self.nrows * self.ncols:
             raise ValueError(
                 'Number of plots does not match the number inputted rows'
-                'and columns.')
-
-        plot_dict = {
-            'scatter': self._scatter,
-            'histogram': self._histogram,
-            'density': self._density,
-            'line_plot': self._lineplot,
-            'gridded_plot': self._gridded,
-            'contour': self._contour,
-            'contourf': self._contourf,
-            'vertical_line': self._verticalline,
-            'horizontal_line': self._horizontalline,
-            'horizontal_span': self._horizontalspan,
-            'bar_plot': self._barplot,
-            'horizontal_bar': self._hbar,
-            'skewt': self._skewt,
-            'boxandwhisker': self._boxandwhisker,
-            'map_scatter': self._map_scatter,
-            'map_gridded': self._map_gridded,
-            'map_contour': self._map_contour,
-            'map_filled_contour': self._map_filled_contour
-        }
+                'and columns.'
+            )
 
         gs = gridspec.GridSpec(self.nrows, self.ncols)
         self.fig = plt.figure(figsize=self.figsize)
 
+        # Track the last colorbar-capable artist per axes
+        # (read by _last_mappable_for_ax in _plot_colorbar)
+        self._ax_last_mappable = {}  # {Axes: mappable}
+
         for i, plot_obj in enumerate(self.plot_list):
-            # check if object has projection and domain attributes to determine ax
+            # --- Axes creation (map vs. normal) ---
             if hasattr(plot_obj, 'projection'):
-                # Check if domain object is tuple/list for custom domains
+                # Map: build domain/projection and a GeoAxes
                 if isinstance(plot_obj.domain, (tuple, list)):
                     self.domain = Domain(domain=plot_obj.domain[0], dd=plot_obj.domain[1])
                 else:
                     self.domain = Domain(plot_obj.domain)
 
                 self.projection = MapProjection(plot_obj.projection)
-
-                # Set up axis specific things
                 ax = self.fig.add_subplot(gs[i], projection=self.projection.projection)
+
                 if str(self.projection) not in ['npstere', 'spstere']:
                     ax.set_extent(self.domain.extent)
                     if str(self.projection) not in ['lamconf']:
@@ -391,28 +322,29 @@ class CreateFigure:
                     ax.set_extent(self.domain.extent, ccrs.PlateCarree())
 
             else:
-                # Check plot types
+                # Regular Axes (SkewT gets its projection)
                 plot_types = [x.plottype for x in plot_obj.plot_layers]
                 if 'skewt' in plot_types:
                     ax = self.fig.add_subplot(gs[i], projection='skewx')
                 else:
                     ax = self.fig.add_subplot(gs[i])
 
-            # Create per-axes state
-            ax_state = AxState(ax=ax, is_map=hasattr(plot_obj, 'projection'))
+            # --- Per-axes rendering state ---
+            st = AxState(ax=ax)  # adapters append any mappables they create
 
-            # With adapter-based rendering that records mappables
+            # --- Render each layer via the adapter registry ---
             for layer in plot_obj.plot_layers:
-                adapter = LayerAdapter(layer.plottype, layer)
-                m = adapter.render(self, ax_state)
-                if m is not None:
-                    ax_state.mappables.append(m)
+                adapter = get_adapter(layer.plottype)  # raises KeyError if unknown
+                mappable = adapter.render(self, st, layer)
+                if mappable is not None:
+                    st.mappables.append(mappable)
+                    self._ax_last_mappable[ax] = mappable  # used by _plot_colorbar
 
-            # loop through all keys in an object and then call approriate
-            # method to plot the feature on the axis
+            # --- Plot figure/axes features (title, labels, ticks, colorbar, etc.) ---
             for feat in vars(plot_obj).keys():
                 self._plot_features(plot_obj, feat, ax)
 
+            # --- Shared axes label hiding ---
             if self.sharex:
                 self._sharex(ax)
             if self.sharey:
@@ -512,99 +444,102 @@ class CreateFigure:
 
     def _map_scatter(self, plotobj, ax):
 
-        # Flag set for integer fields
-        integer_field = False
-        if 'integer_field' in vars(plotobj):
-            integer_field = True
+        integer_field = bool(getattr(plotobj, "integer_field", False))
 
         if plotobj.data is None:
-            skipvars = ['plottype', 'longitude', 'latitude',
-                        'markersize', 'integer_field', 'colorbar']
-            inputs = self._get_inputs_dict(skipvars, plotobj)
+            # unlabeled points (no scalar mapping)
+            skip = ['plottype', 'longitude', 'latitude', 'markersize', 'integer_field', 'colorbar']
+            inputs = self._get_inputs_dict(skip, plotobj)
+            cs = ax.scatter(
+                plotobj.longitude, plotobj.latitude,
+                s=plotobj.markersize, **inputs,
+                transform=self.projection.transform
+            )
 
-            cs = ax.scatter(plotobj.longitude, plotobj.latitude,
-                            s=plotobj.markersize, **inputs,
-                            transform=self.projection.transform)
-        else:
-            skipvars = ['plottype', 'longitude', 'latitude',
-                        'data', 'markersize', 'colorbar', 'normalize', 'integer_field']
-            inputs = self._get_inputs_dict(skipvars, plotobj)
+            return cs  # PathCollection (not scalar-mappable)
 
-            norm = None
-            if integer_field:
-                cmap = matplotlib.cm.get_cmap(inputs['cmap'])
-                vmin = inputs['vmin']
-                vmax = inputs['vmax']
-                if vmin is None or vmax is None:
-                    print("Abort: vmin and vmax must be set for integer fields")
-                    exit()
-                norm = matplotlib.colors.BoundaryNorm(np.arange(vmin-0.5, vmax, 1), cmap.N)
+        # scalar-mapped points
+        skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize',
+                'colorbar', 'normalize', 'integer_field']
+        inputs = self._get_inputs_dict(skip, plotobj)
 
-            cs = ax.scatter(plotobj.longitude, plotobj.latitude,
-                            c=plotobj.data, s=plotobj.markersize,
-                            **inputs, norm=norm, transform=self.projection.transform)
+        norm = None
+        if integer_field:
+            vmin = inputs.get('vmin')
+            vmax = inputs.get('vmax')
+            if vmin is None or vmax is None:
+                raise ValueError(
+                    "For integer_field=True, both vmin and vmax must " +
+                    "be provided on the MapScatter layer.")
+            cmap_name = inputs.get('cmap', 'viridis')
+            cmap = _cmaps.get_cmap(cmap_name)
+            norm = matplotlib.colors.BoundaryNorm(
+                np.arange(vmin - 0.5, vmax + 0.5, 1), cmap.N
+            )
+            inputs.setdefault('cmap', cmap)
 
-        if plotobj.colorbar:
-            self.cs = cs
+        # If we’re passing c=..., drop conflicting color keys
+        inputs.pop('c', None)
+        inputs.pop('color', None)
+        inputs.pop('facecolor', None)
+        inputs.pop('facecolors', None)
+
+        cs = ax.scatter(
+            plotobj.longitude, plotobj.latitude,
+            c=plotobj.data, s=plotobj.markersize,
+            **inputs, norm=norm, transform=self.projection.transform
+        )
+
+        return cs
 
     def _map_gridded(self, plotobj, ax):
 
-        skipvars = ['plottype', 'longitude', 'latitude', 'data',
-                    'markersize', 'colorbar']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
+        skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar']
+        inputs = self._get_inputs_dict(skip, plotobj)
 
-        # Check for 3d data
-        if plotobj.longitude.ndim == 3:
-            # Get total number of tiles; assumes Nth dimension is tile
+        cs = None
+        if getattr(plotobj.longitude, "ndim", 2) == 3:
             tiles = plotobj.longitude.shape[-1]
-
-            # Loops through tiles to plot on one map
             for i in range(tiles):
-                cs = ax.pcolormesh(plotobj.longitude[:, :, i],
-                                   plotobj.latitude[:, :, i],
-                                   plotobj.data[:, :, i], **inputs,
-                                   transform=self.projection.transform)
-
-        # Else, plot regular 2D data
+                cs = ax.pcolormesh(
+                    plotobj.longitude[:, :, i],
+                    plotobj.latitude[:, :, i],
+                    plotobj.data[:, :, i],
+                    **inputs, transform=self.projection.transform
+                )
         else:
-            cs = ax.pcolormesh(plotobj.longitude, plotobj.latitude,
-                               plotobj.data, **inputs,
-                               transform=self.projection.transform)
+            cs = ax.pcolormesh(
+                plotobj.longitude, plotobj.latitude, plotobj.data,
+                **inputs, transform=self.projection.transform
+            )
 
-        if plotobj.colorbar:
-            self.cs = cs
+        return cs  # QuadMesh (last plotted if multiple tiles)
 
     def _map_contour(self, plotobj, ax):
 
-        skipvars = ['plottype', 'longitude', 'latitude', 'data',
-                    'markersize', 'colorbar']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
-
-        cs = ax.contour(plotobj.longitude, plotobj.latitude,
-                        plotobj.data, **inputs,
-                        transform=self.projection.transform)
-
-        if plotobj.clabel:
+        skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar']
+        inputs = self._get_inputs_dict(skip, plotobj)
+        cs = ax.contour(
+            plotobj.longitude, plotobj.latitude, plotobj.data,
+            **inputs, transform=self.projection.transform
+        )
+        if getattr(plotobj, 'clabel', False):
             plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
 
-        if plotobj.colorbar:
-            self.cs = cs
+        return cs  # ContourSet
 
     def _map_filled_contour(self, plotobj, ax):
 
-        skipvars = ['plottype', 'longitude', 'latitude', 'data',
-                    'colorbar']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
-
-        cs = ax.contourf(plotobj.longitude, plotobj.latitude,
-                         plotobj.data, **inputs,
-                         transform=self.projection.projection)
-
-        if plotobj.clabel:
+        skip = ['plottype', 'longitude', 'latitude', 'data', 'colorbar']
+        inputs = self._get_inputs_dict(skip, plotobj)
+        cs = ax.contourf(
+            plotobj.longitude, plotobj.latitude, plotobj.data,
+            **inputs, transform=self.projection.projection
+        )
+        if getattr(plotobj, 'clabel', False):
             plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
 
-        if plotobj.colorbar:
-            self.cs = cs
+        return cs  # ContourSet
 
     def _density_scatter(self, plotobj, ax):
         """
@@ -612,89 +547,140 @@ class CreateFigure:
         2d histogram.
         """
         _idx = np.logical_and(~np.isnan(plotobj.x), ~np.isnan(plotobj.y))
-        data, x_e, y_e = np.histogram2d(plotobj.x[_idx], plotobj.y[_idx],
-                                        bins=plotobj.density['bins'],
-                                        density=not plotobj.density['nsamples'])
+        data, x_e, y_e = np.histogram2d(
+            plotobj.x[_idx], plotobj.y[_idx],
+            bins=plotobj.density['bins'],
+            density=not plotobj.density['nsamples']
+        )
         if plotobj.density['nsamples']:
-            # compute percentage of total for each bin
-            data = data / np.count_nonzero(_idx) * 100.
-        z = interpn((0.5*(x_e[1:] + x_e[:-1]), 0.5*(y_e[1:]+y_e[:-1])),
-                    data, np.vstack([plotobj.x, plotobj.y]).T,
-                    method=plotobj.density['interp'], bounds_error=False)
-        # To be sure to plot all data
+            data = data / np.count_nonzero(_idx) * 100.0
+
+        z = interpn(
+            (0.5 * (x_e[1:] + x_e[:-1]), 0.5 * (y_e[1:] + y_e[:-1])),
+            data, np.vstack([plotobj.x, plotobj.y]).T,
+            method=plotobj.density['interp'], bounds_error=False
+        )
         z[np.where(np.isnan(z))] = 0.0
-        # Sort the points by density, so that the densest
-        # points are plotted last
         if plotobj.density['sort']:
             idx = z.argsort()
             x, y, z = plotobj.x[idx], plotobj.y[idx], z[idx]
-        cs = ax.scatter(x, y, c=z,
-                        s=plotobj.markersize,
-                        cmap=plotobj.density['cmap'],
-                        label=plotobj.label)
-        # below doing nothing? fix/remove in subsequent PR?
-        # norm = Normalize(vmin=np.min(z), vmax=np.max(z))
+        else:
+            x, y = plotobj.x, plotobj.y
 
-        if plotobj.density['colorbar']:
-            self.cs = cs
+        cs = ax.scatter(
+            x, y, c=z, s=plotobj.markersize,
+            cmap=plotobj.density['cmap'], label=plotobj.label
+        )
+
+        return cs  # PathCollection
 
     def _scatter(self, plotobj, ax):
         """
         Uses Scatter object to plot on axis.
+        Returns the PathCollection (mappable when `c` is provided).
         """
-        # checks to see if density attribute is True
+        # density mode uses a different path
         if hasattr(plotobj, 'density'):
-            self._density_scatter(plotobj, ax)
-        else:
-            skipvars = ['plottype', 'plot_ax', 'x', 'y',
-                        'markersize', 'do_linear_regression',
-                        'linear_regression', 'density', 'channel']
-            inputs = self._get_inputs_dict(skipvars, plotobj)
-            s = ax.scatter(plotobj.x, plotobj.y, s=plotobj.markersize,
-                           **inputs)
+            return self._density_scatter(plotobj, ax)
 
-        # checks to see if linear regression attribute
+        skipvars = ['plottype', 'plot_ax', 'x', 'y',
+                    'markersize', 'do_linear_regression',
+                    'linear_regression', 'density', 'channel']
+        inputs = self._get_inputs_dict(skipvars, plotobj)
+
+        # If the layer provided a scalar/array color via `c`, remove conflicting color keys
+        c_val = getattr(plotobj, 'c', None)
+        if c_val is not None:
+            # kill all conflicting color sources
+            inputs.pop('c', None)
+            inputs.pop('color', None)
+            inputs.pop('facecolor', None)
+            inputs.pop('facecolors', None)
+            cs = ax.scatter(plotobj.x, plotobj.y, s=plotobj.markersize, c=c_val, **inputs)
+        else:
+            cs = ax.scatter(plotobj.x, plotobj.y, s=plotobj.markersize, **inputs)
+
+        # Optional regression line
         if getattr(plotobj, "do_linear_regression", False):
-            if len(plotobj.x) != 0 and len(plotobj.y) != 0:
+            if len(plotobj.x) and len(plotobj.y):
                 y_pred, r_sq, intercept, slope = get_linear_regression(plotobj.x, plotobj.y)
                 label = f"y = {slope:.4f}x + {intercept:.4f}\nR\u00b2 : {r_sq:.4f}"
-
-                # User may provide a dict of style kwargs on the layer:
-                # plotobj.linear_regression = {"linestyle": "--", "linewidth": 1.5, ...}
-                # Treat it as optional.
                 style = getattr(plotobj, "linear_regression", {})
-
-                # Default the regression line color to the scatter's color
-                # unless the user already set one in `linear_regression`.
-                if "color" not in style:
-                    point_color = getattr(plotobj, "color", None)
-                    if point_color is not None:
-                        style["color"] = point_color
-
+                if "color" not in style and hasattr(plotobj, "color"):
+                    style["color"] = plotobj.color
                 ax.plot(plotobj.x, y_pred, label=label, **style)
+
+        return cs
 
     def _gridded(self, plotobj, ax):
         """
         Uses Gridded object to plot on axis.
         """
-        skipvars = ['plottype', 'plot_ax', 'x', 'y', 'z',
-                    'colorbar']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
-
+        skip = ['plottype', 'plot_ax', 'x', 'y', 'z', 'colorbar']
+        inputs = self._get_inputs_dict(skip, plotobj)
         cs = ax.pcolormesh(plotobj.x, plotobj.y, plotobj.z, **inputs)
 
-        if plotobj.colorbar:
-            self.cs = cs
+        return cs  # QuadMesh
+
+    def _contour(self, plotobj, ax):
+        """
+        Uses ContourPlot object to plot on axis.
+        """
+        skip = ['plottype', 'x', 'y', 'z', 'colorbar']
+        inputs = self._get_inputs_dict(skip, plotobj)
+        cs = ax.contour(plotobj.x, plotobj.y, plotobj.z, **inputs)
+
+        return cs  # ContourSet
+
+    def _contourf(self, plotobj, ax):
+        """
+        Use FilledContourPlot object to plot on axis.
+        """
+        skip = ['plottype', 'x', 'y', 'z', 'colorbar']
+        inputs = self._get_inputs_dict(skip, plotobj)
+        cs = ax.contourf(plotobj.x, plotobj.y, plotobj.z, **inputs)
+
+        return cs  # ContourSet
+
+    def _histogram(self, plotobj, ax):
+        """
+        Uses Histogram object to plot on axis.
+        """
+        skip = ['plottype', 'plot_ax', 'data']
+        inputs = self._get_inputs_dict(skip, plotobj)
+        _, _, patches = ax.hist(plotobj.data, **inputs)
+
+        return patches  # list[Rectangle] (not a ScalarMappable)
+
+    def _density(self, plotobj, ax):
+        """
+        Uses Density object to plot on axis.
+        """
+        import seaborn as sns
+        skip = ['plottype', 'plot_ax', 'data']
+        inputs = self._get_inputs_dict(skip, plotobj)
+        artist = sns.kdeplot(data=plotobj.data, ax=ax, **inputs)
+
+        return artist  # Axes/Line2D-like (not a ScalarMappable)
+
+    def _lineplot(self, plotobj, ax):
+        """
+        Uses LinePlot object to plot on axis.
+        """
+        skip = ['plottype', 'plot_ax', 'x', 'y']
+        inputs = self._get_inputs_dict(skip, plotobj)
+        lines = ax.plot(plotobj.x, plotobj.y, **inputs)
+
+        return lines[0] if lines else None  # Line2D (not a ScalarMappable)
 
     def _skewt(self, plotobj, ax):
         """
         Creates a skewt-logp profile plot on axis.
         """
-        skipvars = ['plottype', 'plot_ax', 'x', 'y']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
-
+        skip = ['plottype', 'plot_ax', 'x', 'y']
+        inputs = self._get_inputs_dict(skip, plotobj)
         # Plot data using log scaling Y
-        ax.semilogy(plotobj.x, plotobj.y, **inputs)
+        lines = ax.semilogy(plotobj.x, plotobj.y, **inputs)
 
         # Disables the log-formatting that comes with semilogy
         ax.yaxis.set_major_formatter(ScalarFormatter())
@@ -707,121 +693,71 @@ class CreateFigure:
         ax.xaxis.set_major_locator(MultipleLocator(10))
         ax.set_xlim(-45, 30)
 
-    def _histogram(self, plotobj, ax):
-        """
-        Uses Histogram object to plot on axis.
-        """
-        skipvars = ['plottype', 'plot_ax', 'data']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
-
-        ax.hist(plotobj.data, **inputs)
-
-    def _density(self, plotobj, ax):
-        """
-        Uses Density object to plot on axis.
-        """
-        import seaborn as sns
-
-        skipvars = ['plottype', 'plot_ax', 'data']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
-
-        sns.kdeplot(data=plotobj.data, ax=ax, **inputs)
-
-    def _lineplot(self, plotobj, ax):
-        """
-        Uses LinePlot object to plot on axis.
-        """
-        skipvars = ['plottype', 'plot_ax', 'x', 'y']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
-
-        ax.plot(plotobj.x, plotobj.y, **inputs)
-
-    def _contour(self, plotobj, ax):
-        """
-        Uses ContourPlot object to plot on axis.
-        """
-        skipvars = ['plottype', 'x', 'y', 'z', 'colorbar']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
-
-        cs = ax.contour(plotobj.x, plotobj.y,
-                        plotobj.z, **inputs)
-
-        if plotobj.colorbar:
-            self.cs = cs
-
-    def _contourf(self, plotobj, ax):
-        """
-        Use FilledContourPlot object to plot on axis.
-        """
-        skipvars = ['plottype', 'x', 'y', 'z', 'colorbar']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
-
-        cs = ax.contourf(plotobj.x, plotobj.y,
-                         plotobj.z, **inputs)
-
-        if plotobj.colorbar:
-            self.cs = cs
+        return lines[0] if lines else None  # Line2D (not a ScalarMappable)
 
     def _verticalline(self, plotobj, ax):
         """
         Uses VerticalLine object to plot on axis.
         """
-        skipvars = ['plottype', 'plot_ax', 'x']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
+        skip = ['plottype', 'plot_ax', 'x']
+        inputs = self._get_inputs_dict(skip, plotobj)
+        ln = ax.axvline(plotobj.x, **inputs)
 
-        ax.axvline(plotobj.x, **inputs)
+        return ln  # Line2D
 
     def _horizontalline(self, plotobj, ax):
         """
         Uses HorizontalLine object to plot on axis.
         """
-        skipvars = ['plottype', 'plot_ax', 'y']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
+        skip = ['plottype', 'plot_ax', 'y']
+        inputs = self._get_inputs_dict(skip, plotobj)
+        ln = ax.axhline(plotobj.y, **inputs)
 
-        ax.axhline(plotobj.y, **inputs)
+        return ln  # Line2D
 
     def _horizontalspan(self, plotobj, ax):
         """
         Uses HorizontalSpan object to plot on axis.
         """
-        skipvars = ['plottype', 'plot_ax', 'ymin', 'ymax']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
+        skip = ['plottype', 'plot_ax', 'ymin', 'ymax']
+        inputs = self._get_inputs_dict(skip, plotobj)
+        poly = ax.axhspan(plotobj.ymin, plotobj.ymax, **inputs)
 
-        ax.axhspan(plotobj.ymin, plotobj.ymax, **inputs)
+        return poly  # PolyCollection
 
     def _barplot(self, plotobj, ax):
         """
         Uses BarPlot object to plot on axis.
         """
-        skipvars = ['plottype', 'plot_ax', 'x', 'height']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
+        skip = ['plottype', 'plot_ax', 'x', 'height']
+        inputs = self._get_inputs_dict(skip, plotobj)
+        cont = ax.bar(plotobj.x, plotobj.height, **inputs)
 
-        ax.bar(plotobj.x, plotobj.height, **inputs)
+        return cont  # BarContainer (not a ScalarMappable)
 
     def _hbar(self, plotobj, ax):
         """
         Uses HorizontalBar object to plot on axis.
         """
-        skipvars = ['plottype', 'plot_ax', 'y', 'width']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
+        skip = ['plottype', 'plot_ax', 'y', 'width']
+        inputs = self._get_inputs_dict(skip, plotobj)
+        cont = ax.barh(plotobj.y, plotobj.width, **inputs)
 
-        ax.barh(plotobj.y, plotobj.width, **inputs)
+        return cont  # BarContainer (not a ScalarMappable)
 
     def _boxandwhisker(self, plotobj, ax):
         """
         Uses BoxandWhiskerPlot object to plot on axis.
         """
-        skipvars = ['plottype', 'data']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
+        skip = ['plottype', 'data']
+        inputs = self._get_inputs_dict(skip, plotobj)
 
-        # Fail fast if the old kw is used.
-        if 'labels' in inputs:
-            raise TypeError(
-                "BoxandWhiskerPlot no longer supports 'labels'; use 'tick_labels' "
-                "(Matplotlib 3.9+)."
-            )
+        if 'labels' in inputs:  # defensive against old kw
+            raise TypeError("BoxandWhiskerPlot no longer supports 'labels'; use 'tick_labels' (Matplotlib 3.9+).")
 
-        ax.boxplot(plotobj.data, **inputs)
+        bp = ax.boxplot(plotobj.data, **inputs)
+
+        return bp  # dict of artists (not a ScalarMappable)
 
     def _get_inputs_dict(self, skipvars, plotobj):
         """
@@ -833,6 +769,7 @@ class CreateFigure:
             val = getattr(plotobj, v)
             if val is not None:
                 inputs[v] = val
+
         return inputs
 
     def _plot_title(self, ax, title):
@@ -853,23 +790,41 @@ class CreateFigure:
         """
         ax.set_ylabel(**ylabel)
 
-    def _last_mappable_for_ax(self, ax: plt.Axes) -> Optional[Any]:
+    def _is_colorbar_source(self, m) -> bool:
         """
-        Return the most recently-added "mappable" artist for a given Axes.
+        Return True if artist 'm' can meaningfully drive a colorbar.
 
-        Mappables are objects Matplotlib colorbars can attach to
-        (e.g., ContourSet, QuadMesh, PathCollection, Image).
-        This helper inspects the Axes' collections, images, and
-        containers in reverse order and returns the newest one found.
-
-        Used by _plot_colorbar() to deterministically select the
-        correct source for the color scale, instead of relying on
-        global state like self.cs.
+        Accept:
+          - ContourSet (levels/norm/cmap define the scale)
+          - ScalarMappable with a non-empty data array (e.g., PathCollection with 'c=',
+            QuadMesh from pcolormesh, Images, etc.)
+        Reject:
+          - Collections with only a constant facecolor (no scalar data attached)
+          - Anything that isn't a ScalarMappable/ContourSet
         """
-        # Combine all mappables in reverse order of addition
-        mappables = list(ax.collections[::-1]) + list(ax.images[::-1]) + list(ax.containers[::-1])
-        for m in mappables:
-            return m
+        if isinstance(m, ContourSet):
+            return True
+        if isinstance(m, ScalarMappable):
+            arr = m.get_array()
+            if arr is None:
+                return False
+            try:
+                return np.size(arr) > 0
+            except (TypeError, AttributeError):
+                # If size introspection fails, err on the safe side and reject.
+                return False
+
+        return False
+
+    def _last_mappable_for_ax(self, ax) -> Optional[Any]:
+        """
+        Return the most recently-added *valid* colorbar source on this Axes.
+        """
+        # Newest-first search across typical mappable containers
+        for m in list(ax.collections[::-1]) + list(ax.images[::-1]) + list(ax.containers[::-1]):
+            if self._is_colorbar_source(m):
+                return m
+
         return None
 
     def _plot_colorbar(self, ax, colorbar):
