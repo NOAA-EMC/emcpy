@@ -42,6 +42,21 @@ def get_adapter(kind: str) -> LayerAdapter:
         raise KeyError(f"Unknown plottype '{kind}'. Registered: {list(_ADAPTERS)}") from e
     return adapter_cls()
 
+
+def registered_plottypes() -> tuple[str, ...]:
+    """
+    Return the names of all registered layer plottypes.
+
+    The order matches adapter registration (dict insertion order in Python 3.7+).
+    Useful for tests, debugging, or surfacing supported `plottype` values.
+
+    Returns
+    -------
+    tuple[str, ...]
+        Registered plottype names, e.g. ("scatter", "line_plot", ...).
+    """
+    return tuple(_ADAPTERS.keys())
+
 # ---------------- Adapters (call existing renderers; add validation) ----------------
 
 
