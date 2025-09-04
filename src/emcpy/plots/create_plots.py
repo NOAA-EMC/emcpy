@@ -294,7 +294,6 @@ class CreateFigure:
 
         # Track the last colorbar-capable artist per axes
         # (read by _last_mappable_for_ax in _plot_colorbar)
-        self._ax_last_mappable = {}  # {Axes: mappable}
 
         for i, plot_obj in enumerate(self.plot_list):
             # --- Axes creation (map vs. normal) ---
@@ -337,7 +336,6 @@ class CreateFigure:
                 mappable = adapter.render(self, st, layer)
                 if mappable is not None:
                     st.mappables.append(mappable)
-                    self._ax_last_mappable[ax] = mappable  # used by _plot_colorbar
 
             # --- Plot figure/axes features (title, labels, ticks, colorbar, etc.) ---
             for feat in vars(plot_obj).keys():
@@ -1173,4 +1171,4 @@ class CreateFigure:
             except KeyError:
                 raise TypeError(f'{feat} is not a valid map feature.' +
                                 'Current map features supported are:\n' +
-                                f'{" | ".join(feature_dict.keys())}"')
+                                f'{" | ".join(feature_dict.keys())}')
