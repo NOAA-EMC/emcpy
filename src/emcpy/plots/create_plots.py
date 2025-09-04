@@ -1086,13 +1086,31 @@ class CreateFigure:
         return isinstance(val, (bool, np.bool_)) and bool(val)
 
     def _apply_invert_flags(self, plot_obj, ax):
-        # New method flags
-        use_x = getattr(plot_obj, "_invert_x", False)
-        use_y = getattr(plot_obj, "_invert_y", False)
+        """
+        Apply axis inversion honoring both the new method-based flags
+        (set by CreatePlot.invert_xaxis()/invert_yaxis()) and the legacy
+        boolean attributes (plot.invert_xaxis = True / plot.invert_yaxis = True).
 
-        # Legacy attribute booleans (show a gentle deprecation warning)
-        legacy_x = _legacy_bool(getattr(plot_obj, "invert_xaxis", None)) and not use_x
-        legacy_y = _legacy_bool(getattr(plot_obj, "invert_yaxis", None)) and not use_y
+        This runs after limits/scales/ticks so inversion is final and does
+        not get undone by later adjustments.
+        """
+        # New method flags set by CreatePlot.invert_* methods
+        use_x = bool(getattr(plot_obj, "_invert_x", False))
+        use_y = bool(getattr(plot_obj, "_invert_y", False))
+
+        # Legacy attributes: users might have set a boolean directly on the instance
+        legacy_x_attr = getattr(plot_obj, "invert_xaxis", None)
+        legacy_y_attr = getattr(plot_obj, "invert_yaxis", None)
+
+        def _is_legacy_true(v) -> bool:
+            # Accept Python bool and numpy.bool_ as "true"; ignore callables (the method)
+            # and other non-bool types.
+            import numpy as _np  # local import to avoid any surprises at import time
+            return isinstance(v, (bool, _np.bool_)) and bool(v)
+
+        legacy_x = _is_legacy_true(legacy_x_attr) and not use_x
+        legacy_y = _is_legacy_true(legacy_y_attr) and not use_y
+
         if legacy_x or legacy_y:
             warnings.warn(
                 "Setting 'invert_xaxis'/'invert_yaxis' as booleans is deprecated; "
@@ -1101,24 +1119,11 @@ class CreateFigure:
                 stacklevel=2,
             )
 
+        # Perform inversion once per axis if any path requests it
         if use_x or legacy_x:
-            self._invert_xaxis(ax, True)
+            ax.invert_xaxis()
         if use_y or legacy_y:
-            self._invert_yaxis(ax, True)
-
-    # def _invert_xaxis(self, ax, flag):
-    #     """
-    #     Invert x-axis on specified ax.
-    #     """
-    #     if flag:
-    #         ax.invert_xaxis()
-
-    # def _invert_yaxis(self, ax, flag):
-    #     """
-    #     Invert y-axis on specified ax.
-    #     """
-    #     if flag:
-    #         ax.invert_yaxis()
+            ax.invert_yaxis()
 
     def _set_xscale(self, ax, xscale):
         """
