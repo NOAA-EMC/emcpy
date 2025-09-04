@@ -468,7 +468,9 @@ class CreateFigure:
             vmin = inputs.get('vmin')
             vmax = inputs.get('vmax')
             if vmin is None or vmax is None:
-                raise ValueError("For integer_field=True, set both vmin and vmax.")
+                raise ValueError(
+                    "For integer_field=True, both vmin and vmax must " +
+                    "be provided on the MapScatter layer.")
             cmap_name = inputs.get('cmap', 'viridis')
             cmap = _cmaps.get_cmap(cmap_name)
             norm = matplotlib.colors.BoundaryNorm(
@@ -808,7 +810,7 @@ class CreateFigure:
                 return False
             try:
                 return np.size(arr) > 0
-            except Exception:
+            except (TypeError, AttributeError):
                 # If size introspection fails, err on the safe side and reject.
                 return False
 

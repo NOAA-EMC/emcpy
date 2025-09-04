@@ -5,7 +5,7 @@ from typing import Any, ClassVar, Dict, Optional, Protocol, TYPE_CHECKING
 
 if TYPE_CHECKING:
     # Avoids runtime circular imports while keeping type safety
-    from .create_plots import CreateFigure
+    from .create_plots import CreateFigure, AxState
 
 
 class LayerAdapter(Protocol):
@@ -84,7 +84,7 @@ class DensityAdapter:
     def render(self, fig, st: AxState, layer):
         try:
             import seaborn as _  # noqa
-        except Exception as e:
+        except ImportError as e:
             raise RuntimeError("Density layer requires 'seaborn' to be installed.") from e
         return fig._density(layer, st.ax)
 
