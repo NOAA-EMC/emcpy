@@ -17,6 +17,7 @@ from typing import Any, List, Optional
 from PIL import Image
 from scipy.interpolate import interpn
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
+from matplotlib import colormaps as _cmaps
 from matplotlib.cm import ScalarMappable
 from matplotlib.contour import ContourSet
 from matplotlib.offsetbox import OffsetImage, AnchoredOffsetbox
@@ -443,9 +444,10 @@ class CreateFigure:
 
     def _map_scatter(self, plotobj, ax):
 
-        integer_field = bool('integer_field' in vars(plotobj) and plotobj.integer_field)
+        integer_field = bool(getattr(plotobj, "integer_field", False))
 
         if plotobj.data is None:
+            # Plain point scatter (no scalar mapping)
             skip = ['plottype', 'longitude', 'latitude', 'markersize', 'integer_field', 'colorbar']
             inputs = self._get_inputs_dict(skip, plotobj)
             cs = ax.scatter(
@@ -453,28 +455,39 @@ class CreateFigure:
                 s=plotobj.markersize, **inputs,
                 transform=self.projection.transform
             )
-
-            return cs  # PathCollection
-
-        skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar', 'normalize', 'integer_field']
+            return cs  # PathCollection (no scalar array)
+    
+        # Scalar-mapped scatter
+        skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize',
+                'colorbar', 'normalize', 'integer_field']
         inputs = self._get_inputs_dict(skip, plotobj)
-
+    
         norm = None
         if integer_field:
-            cmap = matplotlib.cm.get_cmap(inputs['cmap'])
-            vmin = inputs['vmin']
-            vmax = inputs['vmax']
+            # Validate before touching any colormap (prevents deprecation warning firing first)
+            vmin = inputs.get('vmin')
+            vmax = inputs.get('vmax')
             if vmin is None or vmax is None:
                 raise ValueError("For integer_field=True, set both vmin and vmax.")
-            norm = matplotlib.colors.BoundaryNorm(np.arange(vmin - 0.5, vmax, 1), cmap.N)
-
+    
+            # Modern colormap API (no deprecation)
+            cmap_name = inputs.get('cmap', 'viridis')
+            cmap = _cmaps.get_cmap(cmap_name)
+    
+            # Bin edges for integer classes, inclusive of top
+            norm = matplotlib.colors.BoundaryNorm(
+                np.arange(vmin - 0.5, vmax + 0.5, 1), cmap.N
+            )
+    
+            # Ensure the same cmap is used on the scatter call if not already provided
+            inputs.setdefault('cmap', cmap)
+    
         cs = ax.scatter(
             plotobj.longitude, plotobj.latitude,
             c=plotobj.data, s=plotobj.markersize,
             **inputs, norm=norm, transform=self.projection.transform
         )
-
-        return cs  # PathCollection
+        return cs  # PathCollection with scalar array
 
     def _map_gridded(self, plotobj, ax):
 
