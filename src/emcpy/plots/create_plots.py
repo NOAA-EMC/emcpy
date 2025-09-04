@@ -50,10 +50,9 @@ class CreatePlot:
     Creates a figure to plot data as a scatter plot,
     histogram, density or line plot.
     """
-    def __init__(self, plot_layers=[], projection=None,
+    def __init__(self, plot_layers=None, projection=None,
                  domain=None):
-
-        self.plot_layers = plot_layers
+        self.plot_layers = [] if plot_layers is None else list(plot_layers)
 
         ###############################################
         # Need a better way of doing this
@@ -153,9 +152,9 @@ class CreatePlot:
             **kwargs
         }
 
-    def add_map_features(self, feature_list=['coastline']):
+    def add_map_features(self, feature_list=None):
 
-        self.map_features = feature_list
+        self.map_features = ['coastline'] if feature_list is None else feature_list
 
     def set_xlim(self, left=None, right=None):
 
@@ -171,39 +170,39 @@ class CreatePlot:
             'top': top
         }
 
-    def set_xticks(self, ticks=list(), minor=False, formatter=None, date_format=None, clear_minor=True):
+    def set_xticks(self, ticks=None, minor=False, formatter=None, date_format=None, clear_minor=True):
 
         self.xticks = {
-            "ticks": ticks,
+            "ticks": [] if ticks is None else ticks,
             "minor": minor,
             "formatter": formatter,
             "date_format": date_format,
             "clear_minor": clear_minor,
         }
 
-    def set_yticks(self, ticks=list(), minor=False, formatter=None, date_format=None, clear_minor=True):
+    def set_yticks(self, ticks=None, minor=False, formatter=None, date_format=None, clear_minor=True):
 
         self.yticks = {
-            "ticks": ticks,
+            "ticks": [] if ticks is None else ticks,
             "minor": minor,
             "formatter": formatter,
             "date_format": date_format,
             "clear_minor": clear_minor,
         }
-
-    def set_xticklabels(self, labels=list(), minor=False, date_format=None, **kwargs):
+    
+    def set_xticklabels(self, labels=None, minor=False, date_format=None, **kwargs):
 
         self.xticklabels = {
-            "labels": labels,
+            "labels": [] if labels is None else labels,
             "minor": minor,
             "date_format": date_format,
             "kwargs": kwargs,
         }
-
-    def set_yticklabels(self, labels=list(), minor=False, date_format=None, **kwargs):
+    
+    def set_yticklabels(self, labels=None, minor=False, date_format=None, **kwargs):
 
         self.yticklabels = {
-            "labels": labels,
+            "labels": [] if labels is None else labels,
             "minor": minor,
             "date_format": date_format,
             "kwargs": kwargs,
