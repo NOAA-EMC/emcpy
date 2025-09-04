@@ -17,6 +17,7 @@ from typing import Any, List, Optional
 from PIL import Image
 from scipy.interpolate import interpn
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
+from cartopy.mpl.geoaxes import GeoAxes
 from matplotlib import colormaps as _cmaps
 from matplotlib.cm import ScalarMappable
 from matplotlib.contour import ContourSet
@@ -1007,12 +1008,16 @@ class CreateFigure:
         """
         Set x-ticks on specified ax.
         """
+        if isinstance(ax, GeoAxes):
+            latlon = True
         self._apply_ticks(ax, "x", xticks, latlon=latlon)
 
     def _set_yticks(self, ax, yticks, latlon=False):
         """
         Set y-ticks on specified ax.
         """
+        if isinstance(ax, GeoAxes):
+            latlon = True
         self._apply_ticks(ax, "y", yticks, latlon=latlon)
 
     def _set_xticklabels(self, ax, xticklabels):
