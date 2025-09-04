@@ -1,21 +1,23 @@
 # This work developed by NOAA/NWS/EMC under the Apache 2.0 license.
 import numpy as np
 
-__all__ = ['Scatter', 'Histogram', 'Density', 'LinePlot',
-           'VerticalLine', 'HorizontalLine', 'HorizontalSpan',
-           'BarPlot', 'HorizontalBar', 'SkewT']
+__all__ = [
+    'Scatter', 'Histogram', 'Density', 'LinePlot',
+    'VerticalLine', 'HorizontalLine', 'HorizontalSpan',
+    'BarPlot', 'HorizontalBar', 'SkewT',
+    'GriddedPlot', 'ContourPlot', 'FilledContourPlot',
+    'BoxandWhiskerPlot'
+]
 
 
 class Scatter:
-
     def __init__(self, x, y):
         """
-        Constructor for Scatter.
+        Scatter plot layer.
         Args:
-            x : (array type)
-            y : (array type)
+            x: array-like
+            y: array-like
         """
-
         super().__init__()
         self.plottype = 'scatter'
 
@@ -32,6 +34,9 @@ class Scatter:
         self.edgecolors = None
         self.label = f'n={np.count_nonzero(~np.isnan(x))}'
         self.do_linear_regression = False
+        # Optional style overrides for the regression line; kept empty by default.
+        # The renderer will default to the scatter color if 'color' isn't provided.
+        self.linear_regression = {}
 
     def add_linear_regression(self):
         """
@@ -390,13 +395,7 @@ class SkewT:
 class BoxandWhiskerPlot:
 
     def __init__(self, data):
-        """
-        Constructor to create a Box and Whisker
-        plot.
-        Args:
-            data : (array type)
-        """
-        super().__init__()
+
         self.plottype = 'boxandwhisker'
 
         self.data = data
@@ -411,7 +410,10 @@ class BoxandWhiskerPlot:
         self.positions = None
         self.widths = None
         self.patch_artist = False
-        self.labels = None
+
+        # Use the Matplotlib 3.9+ name only
+        self.tick_labels = None
+
         self.manage_ticks = True
         self.autorange = False
         self.meanline = False

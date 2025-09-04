@@ -660,9 +660,9 @@ class CreateFigure:
                 label = f"y = {slope:.4f}x + {intercept:.4f}\nR\u00b2 : {r_sq:.4f}"
 
                 # User may provide a dict of style kwargs on the layer:
-                #   plotobj.linear_regression = {"linestyle": "--", "linewidth": 1.5, ...}
+                # plotobj.linear_regression = {"linestyle": "--", "linewidth": 1.5, ...}
                 # Treat it as optional.
-                style = getattr(plotobj, "linear_regression", None) or {}
+                style = getattr(plotobj, "linear_regression", {})
 
                 # Default the regression line color to the scatter's color
                 # unless the user already set one in `linear_regression`.
@@ -814,6 +814,13 @@ class CreateFigure:
         skipvars = ['plottype', 'data']
         inputs = self._get_inputs_dict(skipvars, plotobj)
 
+        # Fail fast if the old kw is used.
+        if 'labels' in inputs:
+            raise TypeError(
+                "BoxandWhiskerPlot no longer supports 'labels'; use 'tick_labels' "
+                "(Matplotlib 3.9+)."
+            )
+
         ax.boxplot(plotobj.data, **inputs)
 
     def _get_inputs_dict(self, skipvars, plotobj):
@@ -823,8 +830,9 @@ class CreateFigure:
         """
         inputs = {}
         for v in [v for v in vars(plotobj) if v not in skipvars]:
-            inputs[v] = vars(plotobj)[v]
-
+            val = getattr(plotobj, v)
+            if val is not None:
+                inputs[v] = val
         return inputs
 
     def _plot_title(self, ax, title):
