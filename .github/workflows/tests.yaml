@@ -41,4 +41,4 @@ jobs:
     - name: Run emcpy pytests
       run: |
         cd $GITHUB_WORKSPACE
-        pytest -v src/tests
+        pytest
