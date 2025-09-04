@@ -393,8 +393,9 @@ class SkewT:
 
 
 class BoxandWhiskerPlot:
+
     def __init__(self, data):
-        super().__init__()
+
         self.plottype = 'boxandwhisker'
 
         self.data = data

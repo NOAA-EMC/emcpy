@@ -660,9 +660,9 @@ class CreateFigure:
                 label = f"y = {slope:.4f}x + {intercept:.4f}\nR\u00b2 : {r_sq:.4f}"
 
                 # User may provide a dict of style kwargs on the layer:
-                #   plotobj.linear_regression = {"linestyle": "--", "linewidth": 1.5, ...}
+                # plotobj.linear_regression = {"linestyle": "--", "linewidth": 1.5, ...}
                 # Treat it as optional.
-                style = getattr(plotobj, "linear_regression", None) or {}
+                style = getattr(plotobj, "linear_regression", {})
 
                 # Default the regression line color to the scatter's color
                 # unless the user already set one in `linear_regression`.
