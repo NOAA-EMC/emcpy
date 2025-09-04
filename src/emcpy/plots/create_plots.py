@@ -761,26 +761,40 @@ class CreateFigure:
         """
         ax.set_ylabel(**ylabel)
 
-    def _last_mappable_for_ax(self, ax: plt.Axes) -> Optional[Any]:
+    def _is_colorbar_source(self, m) -> bool:
         """
-        Return the most recently-added ScalarMappable for a given Axes.
+        Return True if artist 'm' can meaningfully drive a colorbar.
 
-        Uses the adapter-tracked value first (set when a layer returns a
-        mappable). Falls back to scanning Axes collections/images in reverse
-        (newest-first). Intentionally ignores 'containers' (e.g., BarContainer),
-        which are not ScalarMappable and cannot be used for colorbars.
+        Accept:
+          - ContourSet (levels/norm/cmap define the scale)
+          - ScalarMappable with a non-empty data array (e.g., PathCollection with 'c=',
+            QuadMesh from pcolormesh, Images, etc.)
+        Reject:
+          - Collections with only a constant facecolor (no scalar data attached)
+          - Anything that isn't a ScalarMappable/ContourSet
         """
-        m = getattr(self, "_ax_last_mappable", {}).get(ax)
+        if isinstance(m, ContourSet):
+            return True
         if isinstance(m, ScalarMappable):
-            return m
+            arr = m.get_array()
+            if arr is None:
+                return False
+            try:
+                return np.size(arr) > 0
+            except Exception:
+                # If size introspection fails, err on the safe side and reject.
+                return False
 
-        # Fallback: newest-first among valid ScalarMappables
-        for coll in reversed(ax.collections):
-            if isinstance(coll, ScalarMappable):
-                return coll
-        for img in reversed(ax.images):
-            if isinstance(img, ScalarMappable):
-                return img
+        return False
+
+    def _last_mappable_for_ax(self, ax) -> Optional[Any]:
+        """
+        Return the most recently-added *valid* colorbar source on this Axes.
+        """
+        # Newest-first search across typical mappable containers
+        for m in list(ax.collections[::-1]) + list(ax.images[::-1]) + list(ax.containers[::-1]):
+            if self._is_colorbar_source(m):
+                return m
 
         return None
 
