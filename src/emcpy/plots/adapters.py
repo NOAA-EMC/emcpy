@@ -204,128 +204,20 @@ class BoxWhiskerAdapter:
 @register
 class MapScatterAdapter:
     plottype = "map_scatter"
-
     def render(self, fig, st: AxState, layer):
-        # Pull arrays
-        lon = np.asanyarray(layer.longitude)
-        lat = np.asanyarray(layer.latitude)
-        data = getattr(layer, "data", None)
-
-        # Collect kwargs like legacy renderer (leave out core data fields)
-        if data is None:
-            skip = ['plottype', 'longitude', 'latitude', 'markersize', 'integer_field', 'colorbar']
-        else:
-            skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar', 'normalize', 'integer_field']
-        inputs = fig._get_inputs_dict(skip, layer)
-
-        # Choose the CRS that represents the coordinate system of (lon, lat)
-        transform = getattr(getattr(fig, "projection", None), "transform", ccrs.PlateCarree())
-
-        # Plain 2D scatter (no color mapping)
-        if data is None:
-            pc = st.ax.scatter(lon, lat, s=layer.markersize, transform=transform, **inputs)
-            return pc  # PathCollection
-
-        # Colored scatter
-        integer_field = bool(getattr(layer, "integer_field", False))
-        norm = None
-        if integer_field:
-            # Require vmin/vmax to build integer bin boundaries
-            cmap_name = inputs.get('cmap', None) or matplotlib.rcParams.get('image.cmap', 'viridis')
-            cmap = matplotlib.cm.get_cmap(cmap_name)
-            vmin = inputs.get('vmin', None)
-            vmax = inputs.get('vmax', None)
-            if vmin is None or vmax is None:
-                raise ValueError("MapScatter with integer_field=True requires both vmin and vmax.")
-            norm = BoundaryNorm(np.arange(vmin - 0.5, vmax, 1), cmap.N)
-
-        pc = st.ax.scatter(lon, lat, c=data, s=layer.markersize, norm=norm, transform=transform, **inputs)
-
-        return pc  # PathCollection
+        return fig._map_scatter(layer, st.ax)
 
 @register
 class MapGriddedAdapter:
     plottype = "map_gridded"
-
     def render(self, fig, st: AxState, layer):
-        # Pull arrays in the map naming convention
-        X = np.asanyarray(layer.longitude)
-        Y = np.asanyarray(layer.latitude)
-        Z = np.asanyarray(layer.data)
-
-        # Mirror legacy kwargs behavior, but default shading='auto'
-        skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar']
-        inputs = fig._get_inputs_dict(skip, layer)
-        inputs.setdefault('shading', 'auto')
-
-        # Prefer the projection used when the Axes was created
-        transform = getattr(getattr(fig, "projection", None), "transform", ccrs.PlateCarree())
-
-        # --- 3D tiled case: (..., tiles) on the last axis
-        if X.ndim == 3 and Y.ndim == 3 and Z.ndim == 3:
-            if X.shape[:2] != Y.shape[:2] or X.shape != Z.shape:
-                raise ValueError(
-                    f"MapGridded (tiles): X,Y,Z shapes must match; got {X.shape}, {Y.shape}, {Z.shape}."
-                )
-            qm = None
-            tiles = X.shape[-1]
-            for i in range(tiles):
-                qm = st.ax.pcolormesh(X[:, :, i], Y[:, :, i], Z[:, :, i],
-                                      transform=transform, **inputs)
-            return qm  # QuadMesh from the last tile
-
-        # --- 2D meshgrid case
-        if X.ndim == 2 and Y.ndim == 2:
-            if X.shape != Y.shape:
-                raise ValueError(f"MapGridded: X and Y must share shape; got {X.shape} vs {Y.shape}.")
-            if Z.shape == X.shape or Z.shape == (X.shape[0] - 1, X.shape[1] - 1):
-                return st.ax.pcolormesh(X, Y, Z, transform=transform, **inputs)
-            raise ValueError(
-                "MapGridded (meshgrid): incompatible shapes: "
-                f"X/Y={X.shape}, Z={Z.shape}. "
-                "Expected Z to match X/Y or be one smaller in each dimension (edges)."
-            )
-
-        # --- 1D coordinate vectors (allowed; pcolormesh will grid them)
-        if X.ndim == 1 and Y.ndim == 1 and Z.ndim == 2:
-            nx, ny = len(X), len(Y)
-            zy, zx = Z.shape
-            if (zy, zx) in ((ny, nx), (ny - 1, nx - 1)):
-                return st.ax.pcolormesh(X, Y, Z, transform=transform, **inputs)
-            raise ValueError(
-                "MapGridded (1D coords): incompatible shapes: "
-                f"x(len)={nx}, y(len)={ny}, Z={Z.shape}. "
-                "Expected (ny, nx) for centers or (ny-1, nx-1) for edges."
-            )
-
-        raise ValueError(
-            f"MapGridded: unsupported coordinate dims "
-            f"(lon.ndim={X.ndim}, lat.ndim={Y.ndim}, data.ndim={Z.ndim})."
-        )
+        return fig._map_gridded(layer, st.ax)
 
 @register
 class MapContourAdapter:
     plottype = "map_contour"
-
     def render(self, fig, st: AxState, layer):
-        # Arrays: longitude (X), latitude (Y), data (Z)
-        X = np.asanyarray(layer.longitude)
-        Y = np.asanyarray(layer.latitude)
-        Z = np.asanyarray(layer.data)
-
-        skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar']
-        inputs = fig._get_inputs_dict(skip, layer)
-
-        transform = getattr(getattr(fig, "projection", None), "transform", ccrs.PlateCarree())
-
-        cs = st.ax.contour(X, Y, Z, transform=transform, **inputs)  # ContourSet
-
-        # Optional inline labels
-        if getattr(layer, 'clabel', False):
-            # Use provided levels if present; contour already computed levels otherwise
-            plt.clabel(cs, levels=getattr(layer, 'levels', None), use_clabeltext=True)
-
-        return cs  # ContourSet
+        return fig._map_contour(layer, st.ax)
 
 @register
 class MapFilledContourAdapter:
