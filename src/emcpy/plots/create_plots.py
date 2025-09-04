@@ -210,11 +210,11 @@ class CreatePlot:
 
     def invert_xaxis(self):
 
-        self.invert_xaxis = True
+        self._invert_xaxis_flag = True
 
     def invert_yaxis(self):
 
-        self.invert_yaxis = True
+        self._invert_yaxis_flag = True
 
     def set_xscale(self, scale):
 
@@ -432,7 +432,9 @@ class CreateFigure:
             'xticklabels': self._set_xticklabels,
             'yticklabels': self._set_yticklabels,
             'invert_xaxis': self._invert_xaxis,
+            '_invert_xaxis_flag': self._invert_xaxis,
             'invert_yaxis': self._invert_yaxis,
+            '_invert_yaxis_flag': self._invert_yaxis,
             'xscale': self._set_xscale,
             'yscale': self._set_yscale,
             'map_features': self._add_map_features
@@ -1074,18 +1076,18 @@ class CreateFigure:
             )
         ax.set_yticklabels(labels, **kwargs)
 
-    def _invert_xaxis(self, ax, invert_xaxis):
+    def _invert_xaxis(self, ax, flag):
         """
         Invert x-axis on specified ax.
         """
-        if invert_xaxis:
+        if flag:
             ax.invert_xaxis()
 
-    def _invert_yaxis(self, ax, invert_yaxis):
+    def _invert_yaxis(self, ax, flag):
         """
         Invert y-axis on specified ax.
         """
-        if invert_yaxis:
+        if flag:
             ax.invert_yaxis()
 
     def _set_xscale(self, ax, xscale):
