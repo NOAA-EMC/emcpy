@@ -8,13 +8,6 @@ from emcpy.plots.plots import LinePlot
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
 
-def _single_axes(plot: CreatePlot):
-    fig = CreateFigure(nrows=1, ncols=1)
-    fig.plot_list = [plot]
-    fig.create_figure()
-    return fig, fig.fig.axes[0]
-
-
 def test_datetime_xticks_replace_autos():
     lp = LinePlot([0, 1, 2, 3, 4, 5], [1, 1, 2, 3, 5, 8])
     start = datetime(2025, 9, 2, 0, 0)
