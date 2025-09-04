@@ -1,5 +1,6 @@
 # This work developed by NOAA/NWS/EMC under the Apache 2.0 license.
 import os
+import warnings
 import emcpy
 import numpy as np
 import pandas as pd
@@ -211,11 +212,11 @@ class CreatePlot:
 
     def invert_xaxis(self):
 
-        self._invert_xaxis_flag = True
+        setattr(self, "_invert_x", True)
 
     def invert_yaxis(self):
 
-        self._invert_yaxis_flag = True
+        setattr(self, "_invert_y", True)
 
     def set_xscale(self, scale):
 
@@ -341,6 +342,8 @@ class CreateFigure:
             # --- Plot figure/axes features (title, labels, ticks, colorbar, etc.) ---
             for feat in vars(plot_obj).keys():
                 self._plot_features(plot_obj, feat, ax)
+
+            self._apply_invert_flags(plot_obj, ax)
 
             # --- Shared axes label hiding ---
             if self.sharex:
@@ -1080,19 +1083,44 @@ class CreateFigure:
             )
         ax.set_yticklabels(labels, **kwargs)
 
-    def _invert_xaxis(self, ax, flag):
-        """
-        Invert x-axis on specified ax.
-        """
-        if flag:
-            ax.invert_xaxis()
+    def _legacy_bool(val) -> bool:
+        # Treat True / np.bool_ True as legacy use; ignore callables
+        return isinstance(val, (bool, np.bool_)) and bool(val)
 
-    def _invert_yaxis(self, ax, flag):
-        """
-        Invert y-axis on specified ax.
-        """
-        if flag:
-            ax.invert_yaxis()
+    def _apply_invert_flags(self, plot_obj, ax):
+        # New method flags
+        use_x = getattr(plot_obj, "_invert_x", False)
+        use_y = getattr(plot_obj, "_invert_y", False)
+
+        # Legacy attribute booleans (show a gentle deprecation warning)
+        legacy_x = _legacy_bool(getattr(plot_obj, "invert_xaxis", None)) and not use_x
+        legacy_y = _legacy_bool(getattr(plot_obj, "invert_yaxis", None)) and not use_y
+        if legacy_x or legacy_y:
+            warnings.warn(
+                "Setting 'invert_xaxis'/'invert_yaxis' as booleans is deprecated; "
+                "call plot.invert_xaxis() / plot.invert_yaxis() instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+
+        if use_x or legacy_x:
+            self._invert_xaxis(ax, True)
+        if use_y or legacy_y:
+            self._invert_yaxis(ax, True)
+
+    # def _invert_xaxis(self, ax, flag):
+    #     """
+    #     Invert x-axis on specified ax.
+    #     """
+    #     if flag:
+    #         ax.invert_xaxis()
+
+    # def _invert_yaxis(self, ax, flag):
+    #     """
+    #     Invert y-axis on specified ax.
+    #     """
+    #     if flag:
+    #         ax.invert_yaxis()
 
     def _set_xscale(self, ax, xscale):
         """
