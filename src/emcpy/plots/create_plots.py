@@ -190,7 +190,7 @@ class CreatePlot:
             "date_format": date_format,
             "clear_minor": clear_minor,
         }
-    
+
     def set_xticklabels(self, labels=None, minor=False, date_format=None, **kwargs):
 
         self.xticklabels = {
@@ -199,7 +199,7 @@ class CreatePlot:
             "date_format": date_format,
             "kwargs": kwargs,
         }
-    
+
     def set_yticklabels(self, labels=None, minor=False, date_format=None, **kwargs):
 
         self.yticklabels = {
