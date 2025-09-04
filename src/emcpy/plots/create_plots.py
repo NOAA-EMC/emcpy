@@ -208,13 +208,14 @@ class CreatePlot:
             "date_format": date_format,
             "kwargs": kwargs,
         }
-def invert_xaxis(self):
-    """Request x-axis inversion without shadowing this method."""
-    self._invert_xaxis_flag = True
 
-def invert_yaxis(self):
-    """Request y-axis inversion without shadowing this method."""
-    self._invert_yaxis_flag = True
+    def invert_xaxis(self):
+
+        self._invert_xaxis_flag = True
+
+    def invert_yaxis(self):
+
+        self._invert_yaxis_flag = True
 
     def set_xscale(self, scale):
 
@@ -429,9 +430,7 @@ class CreateFigure:
             'yticks': self._set_yticks,
             'xticklabels': self._set_xticklabels,
             'yticklabels': self._set_yticklabels,
-            'invert_xaxis': self._invert_xaxis,
             '_invert_xaxis_flag': self._invert_xaxis,
-            'invert_yaxis': self._invert_yaxis,
             '_invert_yaxis_flag': self._invert_yaxis,
             'xscale': self._set_xscale,
             'yscale': self._set_yscale,
