@@ -433,8 +433,6 @@ class CreateFigure:
             'yticks': self._set_yticks,
             'xticklabels': self._set_xticklabels,
             'yticklabels': self._set_yticklabels,
-            '_invert_xaxis_flag': self._invert_xaxis,
-            '_invert_yaxis_flag': self._invert_yaxis,
             'xscale': self._set_xscale,
             'yscale': self._set_yscale,
             'map_features': self._add_map_features
