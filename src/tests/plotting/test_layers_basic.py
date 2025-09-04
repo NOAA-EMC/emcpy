@@ -2,6 +2,7 @@
 import numpy as np
 import pytest
 import matplotlib
+from io import StringIO
 
 from emcpy.plots.plots import (
     LinePlot, Histogram, Density, Scatter, BarPlot, HorizontalBar,
@@ -63,7 +64,6 @@ def _contourf_data():
 
 
 def _skewt_data():
-    from io import StringIO
     data_txt = '''
         978.0 345 7.8 0.8
         971.0 404 7.2 0.2
@@ -139,8 +139,6 @@ def _skewt_data():
         103.0 16128 -62.9 -73.9
         100.0 16310 -62.5 -73.5
     '''
-    import numpy as np
-    from io import StringIO
     sound_data = StringIO(data_txt)
     p, h, T, Td = np.loadtxt(sound_data, unpack=True)
     return p, T, Td
