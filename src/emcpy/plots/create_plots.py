@@ -477,6 +477,7 @@ class CreateFigure:
             inputs.setdefault('cmap', cmap)
 
         # If we’re passing c=..., drop conflicting color keys
+        inputs.pop('c', None)
         inputs.pop('color', None)
         inputs.pop('facecolor', None)
         inputs.pop('facecolors', None)
@@ -588,6 +589,8 @@ class CreateFigure:
         # If the layer provided a scalar/array color via `c`, remove conflicting color keys
         c_val = getattr(plotobj, 'c', None)
         if c_val is not None:
+            # kill all conflicting color sources
+            inputs.pop('c', None)
             inputs.pop('color', None)
             inputs.pop('facecolor', None)
             inputs.pop('facecolors', None)
