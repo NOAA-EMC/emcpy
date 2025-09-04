@@ -4,20 +4,25 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, Optional, Protocol
 import numpy as np
 
+
 @dataclass
 class AxState:
     ax: Any
     mappables: list[Any] = field(default_factory=list)
 
+
 class LayerAdapter(Protocol):
     plottype: str
     def render(self, fig, st: AxState, layer) -> Optional[Any]: ...
 
+
 _REGISTRY: Dict[str, LayerAdapter] = {}
+
 
 def register(cls):
     _REGISTRY[cls.plottype] = cls()
     return cls
+
 
 def get_adapter(kind: str) -> LayerAdapter:
     try:
@@ -33,7 +38,8 @@ class ScatterAdapter:
     plottype = "scatter"
 
     def render(self, fig, st: AxState, layer):
-        x = np.asarray(layer.x); y = np.asarray(layer.y)
+        x = np.asarray(layer.x)
+        y = np.asarray(layer.y)
         if x.shape != y.shape:
             raise ValueError(f"Scatter: x and y must have same shape; got {x.shape} vs {y.shape}.")
         return fig._scatter(layer, st.ax)  # must return the PathCollection
@@ -44,7 +50,8 @@ class LineAdapter:
     plottype = "line_plot"
 
     def render(self, fig, st: AxState, layer):
-        x = np.asarray(layer.x); y = np.asarray(layer.y)
+        x = np.asarray(layer.x)
+        y = np.asarray(layer.y)
         if x.shape != y.shape:
             raise ValueError(f"LinePlot: x and y must have same shape; got {x.shape} vs {y.shape}.")
         return fig._lineplot(layer, st.ax)
@@ -167,7 +174,7 @@ class HorizontalLineAdapter:
 @register
 class HorizontalSpanAdapter:
     plottype = "horizontal_span"
-    
+
     def render(self, fig, st, layer):
         # ensure bounds are finite; allow ymin > ymax (Matplotlib handles both)
         for name, val in (("ymin", layer.ymin), ("ymax", layer.ymax)):
@@ -208,7 +215,8 @@ class SkewTAdapter:
     plottype = "skewt"
 
     def render(self, fig, st, layer):
-        x = np.asarray(layer.x); y = np.asarray(layer.y)
+        x = np.asarray(layer.x)
+        y = np.asarray(layer.y)
         if x.shape != y.shape:
             raise ValueError(f"SkewT: x and y must have same shape; got {x.shape} vs {y.shape}.")
         # Axis is already created with projection='skewx' in CreateFigure; just draw.
