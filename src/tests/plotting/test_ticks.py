@@ -47,7 +47,7 @@ def test_yaxis_date_format_is_supported(single_axes):
     yticks = [start + timedelta(hours=h) for h in range(4)]
     plot = CreatePlot(plot_layers=[lp])
     plot.set_yticks(ticks=yticks, date_format="%H:%M")
-    _, ax = _single_axes(plot)
+    _, ax = single_axes(plot)
     assert len(ax.get_yticks()) == len(yticks)
     assert isinstance(ax.yaxis.get_major_formatter(), mdates.DateFormatter)
 
