@@ -1,34 +1,46 @@
 # emcpy/plots/adapters.py
 from __future__ import annotations
-from dataclasses import dataclass, field
-from typing import Any, Dict, Optional, Protocol
 import numpy as np
+from typing import Any, ClassVar, Dict, Optional, Protocol, TYPE_CHECKING
 
-
-@dataclass
-class AxState:
-    ax: Any
-    mappables: list[Any] = field(default_factory=list)
+if TYPE_CHECKING:
+    # Avoids runtime circular imports while keeping type safety
+    from .create_plots import CreateFigure, AxState
 
 
 class LayerAdapter(Protocol):
-    plottype: str
-    def render(self, fig, st: AxState, layer) -> Optional[Any]: ...
+    """Interface that all layer adapters implement."""
+    # Class-level key used to register this adapter
+    plottype: ClassVar[str]
+
+    def render(self, fig: "CreateFigure", st: "AxState", layer: Any) -> Optional[Any]:
+        """Render a single layer onto the given axes state and return the created artist, if any."""
+        ...
 
 
-_REGISTRY: Dict[str, LayerAdapter] = {}
+# Registry of plottype -> adapter class (not instances)
+_ADAPTERS: Dict[str, type[LayerAdapter]] = {}
 
 
-def register(cls):
-    _REGISTRY[cls.plottype] = cls()
+def register(cls: type[LayerAdapter]):
+    """Class decorator to register a LayerAdapter by its `plottype`."""
+    pt = getattr(cls, "plottype", None)
+    if not isinstance(pt, str) or not pt:
+        raise ValueError(f"{cls.__name__} must define a non-empty 'plottype' class attribute.")
+    if pt in _ADAPTERS:
+        raise ValueError(f"Adapter for plottype '{pt}' already registered: "
+                         f"{_ADAPTERS[pt].__name__}")
+    _ADAPTERS[pt] = cls
     return cls
 
 
 def get_adapter(kind: str) -> LayerAdapter:
+    """Return a fresh adapter instance for the given plottype."""
     try:
-        return _REGISTRY[kind]
+        adapter_cls = _ADAPTERS[kind]
     except KeyError as e:
-        raise KeyError(f"Unknown plottype '{kind}'. Registered: {list(_REGISTRY)}") from e
+        raise KeyError(f"Unknown plottype '{kind}'. Registered: {list(_ADAPTERS)}") from e
+    return adapter_cls()
 
 # ---------------- Adapters (call existing renderers; add validation) ----------------
 
