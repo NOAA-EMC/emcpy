@@ -533,7 +533,7 @@ class CreateFigure:
         inputs = self._get_inputs_dict(skip, plotobj)
         cs = ax.contourf(
             plotobj.longitude, plotobj.latitude, plotobj.data,
-            **inputs, transform=self.projection.projection
+            **inputs, transform=self.projection.transform
         )
         if getattr(plotobj, 'clabel', False):
             plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
