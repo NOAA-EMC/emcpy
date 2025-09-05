@@ -1,6 +1,7 @@
 # src/tests/plotting/test_map_adapters.py
 import numpy as np
 import pytest
+from matplotlib.colors import BoundaryNorm
 
 pytest.importorskip("cartopy")  # skip entire module if cartopy missing
 
@@ -122,3 +123,21 @@ def test_map_filled_contour_single_cbar_last_subplot():
     fig.create_figure()
 
     assert len(fig.fig.axes) == 5  # 4 plots + 1 shared cbar
+
+
+@pytest.mark.skipif(not pytest.importorskip("cartopy"), reason="Cartopy missing")
+def test_map_scatter_integer_field_applies_boundarynorm(single_axes):
+    lat = np.array([0, 1, 2, 3])
+    lon = np.array([0, 1, 2, 3])
+    vals = np.array([0, 1, 2, 3])
+
+    layer = MapScatter(latitude=lat, longitude=lon, data=vals)
+    layer.integer_field = True
+    layer.vmin = 0
+    layer.vmax = 3
+
+    plot = CreatePlot(plot_layers=[layer], projection="plcarr", domain="global")
+    fig, ax = single_axes(plot)
+
+    m = fig._last_mappable_for_ax(ax)
+    assert isinstance(m.norm, BoundaryNorm)

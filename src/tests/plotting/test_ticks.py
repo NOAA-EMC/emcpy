@@ -1,10 +1,12 @@
 # tests/plotting/test_ticks.py
 import pytest
+import numpy as np
 from datetime import datetime, timedelta
 import matplotlib.dates as mdates
 from matplotlib.ticker import NullLocator
 
 from emcpy.plots.plots import LinePlot
+from emcpy.plots.map_plots import MapScatter
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
 
@@ -59,3 +61,17 @@ def test_setting_major_ticks_clears_minor_locator_by_default(single_axes):
     plot.set_xticks(ticks=[0, 1, 2])  # should clear minor
     _, ax = single_axes(plot)
     assert isinstance(ax.xaxis.get_minor_locator(), NullLocator)
+
+
+@pytest.mark.skipif(not pytest.importorskip("cartopy"), reason="Cartopy missing")
+def test_geoaxes_ticks_use_cartopy_formatters(single_axes):
+    layer = MapScatter(latitude=np.array([0.0]), longitude=np.array([0.0]))
+    plot = CreatePlot(plot_layers=[layer], projection="plcarr", domain="global")
+    plot.set_xticks(ticks=[-180, -90, 0, 90, 180])
+    plot.set_yticks(ticks=[-90, -45, 0, 45, 90])
+
+    fig, ax = single_axes(plot)
+
+    from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
+    assert isinstance(ax.xaxis.get_major_formatter(), LongitudeFormatter)
+    assert isinstance(ax.yaxis.get_major_formatter(), LatitudeFormatter)

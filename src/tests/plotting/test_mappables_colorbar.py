@@ -4,7 +4,7 @@ from matplotlib.collections import PathCollection, QuadMesh
 from matplotlib.contour import ContourSet
 
 from emcpy.plots import CreatePlot, CreateFigure
-from emcpy.plots.plots import Scatter, GriddedPlot, ContourPlot, FilledContourPlot, LinePlot
+from emcpy.plots.plots import Scatter, GriddedPlot, ContourPlot, FilledContourPlot, LinePlot, BarPlot
 
 
 def test_scatter_with_color_returns_mappable_and_colorbar(single_axes):
@@ -103,3 +103,24 @@ def test_lineplot_produces_no_mappable(single_axes):
     plot = CreatePlot(plot_layers=[lp])
     fig, ax = single_axes(plot)
     assert fig._last_mappable_for_ax(ax) is None
+
+
+def test_colorbar_picks_last_valid_mappable_and_ignores_bar(single_axes):
+    # Non-mappable first
+    bar = BarPlot(x=[0, 1, 2], height=[1, 2, 3])
+    # Mappable second (scatter with 'c' set)
+    sc = Scatter([0, 1, 2], [0.0, 1.0, 0.5])
+    sc.c = np.array([10, 20, 30])
+
+    plot = CreatePlot(plot_layers=[bar, sc])
+    plot.add_colorbar(label="units", fontsize=10)
+
+    fig, ax = single_axes(plot)
+
+    # One extra axes (the colorbar)
+    assert len(fig.fig.axes) == 2
+
+    m = fig._last_mappable_for_ax(ax)
+    assert isinstance(m, PathCollection)
+    arr = m.get_array()
+    assert arr is not None and arr.size == 3

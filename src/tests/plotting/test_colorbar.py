@@ -1,7 +1,7 @@
 # tests/plotting/test_colorbar.py
 import numpy as np
 import pytest
-from emcpy.plots.plots import GriddedPlot
+from emcpy.plots.plots import GriddedPlot, Histogram
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
 
@@ -43,3 +43,21 @@ def test_single_colorbar_on_last_subplot_only():
 
     # 4 plot axes + 1 colorbar axes
     assert len(fig.fig.axes) == 5
+
+
+def test_single_cbar_only_on_last_subplot():
+    left = CreatePlot(plot_layers=[Histogram(np.random.randn(1000))])
+    left.add_colorbar(single_cbar=True, label="left")
+
+    x = np.linspace(0, 1, 6)
+    y = np.linspace(0, 1, 5)
+    Z = np.add.outer(y, x)
+    right = CreatePlot(plot_layers=[GriddedPlot(x, y, Z)])
+    right.add_colorbar(single_cbar=True, label="right")
+
+    fig = CreateFigure(nrows=1, ncols=2, figsize=(6, 3))
+    fig.plot_list = [left, right]
+    fig.create_figure()
+
+    # 2 plot axes + 1 colorbar axes
+    assert len(fig.fig.axes) == 3
