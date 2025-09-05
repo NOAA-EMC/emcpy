@@ -479,10 +479,8 @@ class CreateFigure:
             inputs = self._get_inputs_dict(skip, plotobj)
             cs = ax.scatter(
                 plotobj.longitude, plotobj.latitude,
-                s=plotobj.markersize, **inputs,
-                transform=xform
+                s=plotobj.markersize, **inputs, transform=xform
             )
-
             return cs  # PathCollection (not scalar-mappable)
 
         # scalar-mapped points
@@ -496,14 +494,18 @@ class CreateFigure:
             vmax = inputs.get('vmax')
             if vmin is None or vmax is None:
                 raise ValueError(
-                    "For integer_field=True, both vmin and vmax must " +
-                    "be provided on the MapScatter layer.")
+                    "For integer_field=True, both vmin and vmax must "
+                    "be provided on the MapScatter layer."
+                )
             cmap_name = inputs.get('cmap', 'viridis')
             cmap = _cmaps.get_cmap(cmap_name)
             norm = matplotlib.colors.BoundaryNorm(
                 np.arange(vmin - 0.5, vmax + 0.5, 1), cmap.N
             )
             inputs.setdefault('cmap', cmap)
+            # IMPORTANT: cannot pass vmin/vmax together with a norm
+            inputs.pop('vmin', None)
+            inputs.pop('vmax', None)
 
         # If we’re passing c=..., drop conflicting color keys
         inputs.pop('c', None)
@@ -545,13 +547,10 @@ class CreateFigure:
 
     def _map_contour(self, plotobj, ax):
 
-        skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar']
+        skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar', 'clabel']
         inputs = self._get_inputs_dict(skip, plotobj)
         xform = self._map_transform()
-        cs = ax.contour(
-            plotobj.longitude, plotobj.latitude, plotobj.data,
-            **inputs, transform=xform
-        )
+        cs = ax.contour(plotobj.longitude, plotobj.latitude, plotobj.data, **inputs, transform=xform)
         if getattr(plotobj, 'clabel', False):
             plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
 
@@ -559,13 +558,10 @@ class CreateFigure:
 
     def _map_filled_contour(self, plotobj, ax):
 
-        skip = ['plottype', 'longitude', 'latitude', 'data', 'colorbar']
+        skip = ['plottype', 'longitude', 'latitude', 'data', 'colorbar', 'clabel']
         inputs = self._get_inputs_dict(skip, plotobj)
         xform = self._map_transform()
-        cs = ax.contourf(
-            plotobj.longitude, plotobj.latitude, plotobj.data,
-            **inputs, transform=xform
-        )
+        cs = ax.contourf(plotobj.longitude, plotobj.latitude, plotobj.data, **inputs, transform=xform)
         if getattr(plotobj, 'clabel', False):
             plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
 
