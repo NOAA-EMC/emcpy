@@ -42,7 +42,7 @@ def test_adapter_render_path_smoke(single_axes):
     plot = CreatePlot(plot_layers=[lp])
     fig, ax = single_axes(plot)
     # Line plots don't produce "mappables" (colorbar sources), so last mappable is None.
-    assert fig._last_mappable_for_ax(ax) is 
+    assert fig._last_mappable_for_ax(ax) is None
 
 
 def test_registry_registered_plottypes_exposes_known():
@@ -64,6 +64,7 @@ def test_density_adapter_raises_clear_message_when_seaborn_missing(monkeypatch, 
 
     class _DummyLayer:
         plottype = "density"
+
         def __init__(self):
             self.data = np.random.randn(100)
             self.color = "tab:blue"
