@@ -63,7 +63,7 @@ def test_setting_major_ticks_clears_minor_locator_by_default(single_axes):
     assert isinstance(ax.xaxis.get_minor_locator(), NullLocator)
 
 
-@pytest.mark.skipif(pytest.importorskip("cartopy", reason="Cartopy required") is None, reason="Cartopy missing")
+@pytest.mark.skipif(not pytest.importorskip("cartopy"), reason="Cartopy missing")
 def test_geoaxes_ticks_use_cartopy_formatters(single_axes):
     layer = MapScatter(latitude=np.array([0.0]), longitude=np.array([0.0]))
     plot = CreatePlot(plot_layers=[layer], projection="plcarr", domain="global")
