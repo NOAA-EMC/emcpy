@@ -4,7 +4,7 @@ import cartopy.crs as ccrs
 
 class Domain:
 
-    def __init__(self, domain='global', dd: dd: Optional[Mapping[str, Any]] = None):
+    def __init__(self, domain='global', dd: Optional[Mapping[str, Any]] = None):
         """
         Parameters
         ----------
