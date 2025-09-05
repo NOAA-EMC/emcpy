@@ -3,8 +3,6 @@ import os
 import warnings
 import emcpy
 import numpy as np
-import pandas as pd
-from pandas import Timestamp
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -1080,10 +1078,6 @@ class CreateFigure:
                 "Set ticks appropriately or supply matching labels."
             )
         ax.set_yticklabels(labels, **kwargs)
-
-    def _legacy_bool(val) -> bool:
-        # Treat True / np.bool_ True as legacy use; ignore callables
-        return isinstance(val, (bool, np.bool_)) and bool(val)
 
     def _apply_invert_flags(self, plot_obj, ax):
         """
