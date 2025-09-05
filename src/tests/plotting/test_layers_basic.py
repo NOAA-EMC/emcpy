@@ -7,7 +7,7 @@ from io import StringIO
 from emcpy.plots.plots import (
     LinePlot, Histogram, Density, Scatter, BarPlot, HorizontalBar,
     GriddedPlot, ContourPlot, FilledContourPlot, BoxandWhiskerPlot,
-    HorizontalSpan, SkewT,
+    HorizontalSpan, SkewT
 )
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
@@ -214,6 +214,43 @@ def test_gridded_plot(single_axes):
     assert len(ax.collections) >= 1  # QuadMesh
 
 
+def test_gridded_accepts_1d_centers_and_edges(single_axes):
+    x = np.linspace(0, 3, 4)   # 4 centers
+    y = np.linspace(0, 2, 3)   # 3 centers
+    Zc = np.arange(3 * 4).reshape(3, 4)  # centers (ny, nx)
+    Ze = np.arange(2 * 3).reshape(2, 3)  # edges (ny-1, nx-1)
+
+    for Z in (Zc, Ze):
+        plot = CreatePlot(plot_layers=[GriddedPlot(x, y, Z)])
+        fig, ax = single_axes(plot)
+        assert fig._last_mappable_for_ax(ax) is not None
+
+
+def test_gridded_rejects_incompatible_shapes(single_axes):
+    x = np.linspace(0, 3, 4)
+    y = np.linspace(0, 2, 3)
+    Zbad = np.zeros((5, 5))
+    plot = CreatePlot(plot_layers=[GriddedPlot(x, y, Zbad)])
+    with pytest.raises(ValueError, match="incompatible shapes"):
+        single_axes(plot)
+
+
+def test_gridded_2d_meshgrid_validation(single_axes):
+    xx, yy = np.meshgrid(np.linspace(0, 2, 3), np.linspace(0, 4, 5))
+    Zc = np.arange(5 * 3).reshape(5, 3)  # match X/Y
+    Ze = np.arange(4 * 2).reshape(4, 2)  # edges
+
+    for Z in (Zc, Ze):
+        plot = CreatePlot(plot_layers=[GriddedPlot(xx, yy, Z)])
+        fig, ax = single_axes(plot)
+        assert fig._last_mappable_for_ax(ax) is not None
+
+    Zbad = np.zeros((6, 4))
+    plot_bad = CreatePlot(plot_layers=[GriddedPlot(xx, yy, Zbad)])
+    with pytest.raises(ValueError, match="incompatible shapes"):
+        single_axes(plot_bad)
+
+
 def test_contour_and_contourf_with_colorbar():
     x, y, z = _contourf_data()
     cfp = FilledContourPlot(x, y, z)
@@ -245,6 +282,15 @@ def test_box_and_whisker_orientation_horizontal(single_axes):
     fig, ax = single_axes(plot)
     # sanity: at least one artist was created
     assert ax.artists or ax.lines or ax.patches or ax.collections
+
+
+def test_boxwhisker_tick_labels_length_mismatch_raises(single_axes):
+    data = [[1, 2, 3], [3, 4, 5], [0, 1, 2]]
+    layer = BoxandWhiskerPlot(data)
+    layer.tick_labels = ["A", "B"]  # wrong length
+    plot = CreatePlot(plot_layers=[layer])
+    with pytest.raises(ValueError, match="tick_labels length .* must match number of boxes"):
+        single_axes(plot)
 
 
 def test_horizontal_span(single_axes):
