@@ -1,9 +1,8 @@
 # This work developed by NOAA/NWS/EMC under the Apache 2.0 license.
 import os
+import warnings
 import emcpy
 import numpy as np
-import pandas as pd
-from pandas import Timestamp
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -17,6 +16,7 @@ from typing import Any, List, Optional
 from PIL import Image
 from scipy.interpolate import interpn
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
+from cartopy.mpl.geoaxes import GeoAxes
 from matplotlib import colormaps as _cmaps
 from matplotlib.cm import ScalarMappable
 from matplotlib.contour import ContourSet
@@ -50,10 +50,9 @@ class CreatePlot:
     Creates a figure to plot data as a scatter plot,
     histogram, density or line plot.
     """
-    def __init__(self, plot_layers=[], projection=None,
+    def __init__(self, plot_layers=None, projection=None,
                  domain=None):
-
-        self.plot_layers = plot_layers
+        self.plot_layers = [] if plot_layers is None else list(plot_layers)
 
         ###############################################
         # Need a better way of doing this
@@ -153,9 +152,9 @@ class CreatePlot:
             **kwargs
         }
 
-    def add_map_features(self, feature_list=['coastline']):
+    def add_map_features(self, feature_list=None):
 
-        self.map_features = feature_list
+        self.map_features = ['coastline'] if feature_list is None else feature_list
 
     def set_xlim(self, left=None, right=None):
 
@@ -171,39 +170,39 @@ class CreatePlot:
             'top': top
         }
 
-    def set_xticks(self, ticks=list(), minor=False, formatter=None, date_format=None, clear_minor=True):
+    def set_xticks(self, ticks=None, minor=False, formatter=None, date_format=None, clear_minor=True):
 
         self.xticks = {
-            "ticks": ticks,
+            "ticks": [] if ticks is None else ticks,
             "minor": minor,
             "formatter": formatter,
             "date_format": date_format,
             "clear_minor": clear_minor,
         }
 
-    def set_yticks(self, ticks=list(), minor=False, formatter=None, date_format=None, clear_minor=True):
+    def set_yticks(self, ticks=None, minor=False, formatter=None, date_format=None, clear_minor=True):
 
         self.yticks = {
-            "ticks": ticks,
+            "ticks": [] if ticks is None else ticks,
             "minor": minor,
             "formatter": formatter,
             "date_format": date_format,
             "clear_minor": clear_minor,
         }
 
-    def set_xticklabels(self, labels=list(), minor=False, date_format=None, **kwargs):
+    def set_xticklabels(self, labels=None, minor=False, date_format=None, **kwargs):
 
         self.xticklabels = {
-            "labels": labels,
+            "labels": [] if labels is None else labels,
             "minor": minor,
             "date_format": date_format,
             "kwargs": kwargs,
         }
 
-    def set_yticklabels(self, labels=list(), minor=False, date_format=None, **kwargs):
+    def set_yticklabels(self, labels=None, minor=False, date_format=None, **kwargs):
 
         self.yticklabels = {
-            "labels": labels,
+            "labels": [] if labels is None else labels,
             "minor": minor,
             "date_format": date_format,
             "kwargs": kwargs,
@@ -211,11 +210,11 @@ class CreatePlot:
 
     def invert_xaxis(self):
 
-        self.invert_xaxis = True
+        setattr(self, "_invert_x", True)
 
     def invert_yaxis(self):
 
-        self.invert_yaxis = True
+        setattr(self, "_invert_y", True)
 
     def set_xscale(self, scale):
 
@@ -295,7 +294,6 @@ class CreateFigure:
 
         # Track the last colorbar-capable artist per axes
         # (read by _last_mappable_for_ax in _plot_colorbar)
-        self._ax_last_mappable = {}  # {Axes: mappable}
 
         for i, plot_obj in enumerate(self.plot_list):
             # --- Axes creation (map vs. normal) ---
@@ -338,11 +336,12 @@ class CreateFigure:
                 mappable = adapter.render(self, st, layer)
                 if mappable is not None:
                     st.mappables.append(mappable)
-                    self._ax_last_mappable[ax] = mappable  # used by _plot_colorbar
 
             # --- Plot figure/axes features (title, labels, ticks, colorbar, etc.) ---
             for feat in vars(plot_obj).keys():
                 self._plot_features(plot_obj, feat, ax)
+
+            self._apply_invert_flags(plot_obj, ax)
 
             # --- Shared axes label hiding ---
             if self.sharex:
@@ -432,8 +431,6 @@ class CreateFigure:
             'yticks': self._set_yticks,
             'xticklabels': self._set_xticklabels,
             'yticklabels': self._set_yticklabels,
-            'invert_xaxis': self._invert_xaxis,
-            'invert_yaxis': self._invert_yaxis,
             'xscale': self._set_xscale,
             'yscale': self._set_yscale,
             'map_features': self._add_map_features
@@ -442,9 +439,39 @@ class CreateFigure:
         if feature in feature_dict:
             feature_dict[feature](ax, vars(plot_obj)[feature])
 
+    def _map_transform(self):
+        """
+        Return the CRS to be used as the data transform for map layers.
+
+        Preference order:
+          1) self.projection.transform  (explicit data CRS, e.g., PlateCarree for lat/lon)
+          2) self.projection.projection (axes projection as a fallback)
+          3) cartopy.crs.PlateCarree()  (final fallback with a warning)
+
+        This makes _map_* renderers robust even if MapProjection is extended
+        or customized and one of the attributes is missing.
+        """
+        tr = getattr(self.projection, "transform", None)
+        if tr is not None:
+            return tr
+
+        pr = getattr(self.projection, "projection", None)
+        if pr is not None:
+            return pr
+
+        warnings.warn(
+            "MapProjection has neither 'transform' nor 'projection'; "
+            "defaulting to PlateCarree().",
+            RuntimeWarning,
+            stacklevel=3,
+        )
+
+        return ccrs.PlateCarree()
+
     def _map_scatter(self, plotobj, ax):
 
         integer_field = bool(getattr(plotobj, "integer_field", False))
+        xform = self._map_transform()
 
         if plotobj.data is None:
             # unlabeled points (no scalar mapping)
@@ -453,7 +480,7 @@ class CreateFigure:
             cs = ax.scatter(
                 plotobj.longitude, plotobj.latitude,
                 s=plotobj.markersize, **inputs,
-                transform=self.projection.transform
+                transform=xform
             )
 
             return cs  # PathCollection (not scalar-mappable)
@@ -487,7 +514,7 @@ class CreateFigure:
         cs = ax.scatter(
             plotobj.longitude, plotobj.latitude,
             c=plotobj.data, s=plotobj.markersize,
-            **inputs, norm=norm, transform=self.projection.transform
+            **inputs, norm=norm, transform=xform
         )
 
         return cs
@@ -496,6 +523,7 @@ class CreateFigure:
 
         skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar']
         inputs = self._get_inputs_dict(skip, plotobj)
+        xform = self._map_transform()
 
         cs = None
         if getattr(plotobj.longitude, "ndim", 2) == 3:
@@ -505,12 +533,12 @@ class CreateFigure:
                     plotobj.longitude[:, :, i],
                     plotobj.latitude[:, :, i],
                     plotobj.data[:, :, i],
-                    **inputs, transform=self.projection.transform
+                    **inputs, transform=xform
                 )
         else:
             cs = ax.pcolormesh(
                 plotobj.longitude, plotobj.latitude, plotobj.data,
-                **inputs, transform=self.projection.transform
+                **inputs, transform=xform
             )
 
         return cs  # QuadMesh (last plotted if multiple tiles)
@@ -519,9 +547,10 @@ class CreateFigure:
 
         skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar']
         inputs = self._get_inputs_dict(skip, plotobj)
+        xform = self._map_transform()
         cs = ax.contour(
             plotobj.longitude, plotobj.latitude, plotobj.data,
-            **inputs, transform=self.projection.transform
+            **inputs, transform=xform
         )
         if getattr(plotobj, 'clabel', False):
             plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
@@ -532,9 +561,10 @@ class CreateFigure:
 
         skip = ['plottype', 'longitude', 'latitude', 'data', 'colorbar']
         inputs = self._get_inputs_dict(skip, plotobj)
+        xform = self._map_transform()
         cs = ax.contourf(
             plotobj.longitude, plotobj.latitude, plotobj.data,
-            **inputs, transform=self.projection.projection
+            **inputs, transform=xform
         )
         if getattr(plotobj, 'clabel', False):
             plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
@@ -749,7 +779,7 @@ class CreateFigure:
         """
         Uses BoxandWhiskerPlot object to plot on axis.
         """
-        skip = ['plottype', 'data']
+        skip = ['plottype', 'data', 'labels', 'vert']
         inputs = self._get_inputs_dict(skip, plotobj)
 
         if 'labels' in inputs:  # defensive against old kw
@@ -868,6 +898,9 @@ class CreateFigure:
         Add legend on specified ax.
         """
         leg = ax.legend(**legend)
+
+        if leg is None:
+            return
 
         # Matplotlib versions differ in attribute name
         handles = getattr(leg, "legend_handles", None) or getattr(leg, "legendHandles", [])
@@ -1005,12 +1038,16 @@ class CreateFigure:
         """
         Set x-ticks on specified ax.
         """
+        if isinstance(ax, GeoAxes):
+            latlon = True
         self._apply_ticks(ax, "x", xticks, latlon=latlon)
 
     def _set_yticks(self, ax, yticks, latlon=False):
         """
         Set y-ticks on specified ax.
         """
+        if isinstance(ax, GeoAxes):
+            latlon = True
         self._apply_ticks(ax, "y", yticks, latlon=latlon)
 
     def _set_xticklabels(self, ax, xticklabels):
@@ -1075,18 +1112,44 @@ class CreateFigure:
             )
         ax.set_yticklabels(labels, **kwargs)
 
-    def _invert_xaxis(self, ax, invert_xaxis):
+    def _apply_invert_flags(self, plot_obj, ax):
         """
-        Invert x-axis on specified ax.
-        """
-        if invert_xaxis:
-            ax.invert_xaxis()
+        Apply axis inversion honoring both the new method-based flags
+        (set by CreatePlot.invert_xaxis()/invert_yaxis()) and the legacy
+        boolean attributes (plot.invert_xaxis = True / plot.invert_yaxis = True).
 
-    def _invert_yaxis(self, ax, invert_yaxis):
+        This runs after limits/scales/ticks so inversion is final and does
+        not get undone by later adjustments.
         """
-        Invert y-axis on specified ax.
-        """
-        if invert_yaxis:
+        # New method flags set by CreatePlot.invert_* methods
+        use_x = bool(getattr(plot_obj, "_invert_x", False))
+        use_y = bool(getattr(plot_obj, "_invert_y", False))
+
+        # Legacy attributes: users might have set a boolean directly on the instance
+        legacy_x_attr = getattr(plot_obj, "invert_xaxis", None)
+        legacy_y_attr = getattr(plot_obj, "invert_yaxis", None)
+
+        def _is_legacy_true(v) -> bool:
+            # Accept Python bool and numpy.bool_ as "true"; ignore callables (the method)
+            # and other non-bool types.
+            import numpy as _np  # local import to avoid any surprises at import time
+            return isinstance(v, (bool, _np.bool_)) and bool(v)
+
+        legacy_x = _is_legacy_true(legacy_x_attr) and not use_x
+        legacy_y = _is_legacy_true(legacy_y_attr) and not use_y
+
+        if legacy_x or legacy_y:
+            warnings.warn(
+                "Setting 'invert_xaxis'/'invert_yaxis' as booleans is deprecated; "
+                "call plot.invert_xaxis() / plot.invert_yaxis() instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+
+        # Perform inversion once per axis if any path requests it
+        if use_x or legacy_x:
+            ax.invert_xaxis()
+        if use_y or legacy_y:
             ax.invert_yaxis()
 
     def _set_xscale(self, ax, xscale):
@@ -1169,4 +1232,4 @@ class CreateFigure:
             except KeyError:
                 raise TypeError(f'{feat} is not a valid map feature.' +
                                 'Current map features supported are:\n' +
-                                f'{" | ".join(feature_dict.keys())}"')
+                                f'{" | ".join(feature_dict.keys())}')

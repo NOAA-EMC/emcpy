@@ -42,6 +42,21 @@ def get_adapter(kind: str) -> LayerAdapter:
         raise KeyError(f"Unknown plottype '{kind}'. Registered: {list(_ADAPTERS)}") from e
     return adapter_cls()
 
+
+def registered_plottypes() -> tuple[str, ...]:
+    """
+    Return the names of all registered layer plottypes.
+
+    The order matches adapter registration (dict insertion order in Python 3.7+).
+    Useful for tests, debugging, or surfacing supported `plottype` values.
+
+    Returns
+    -------
+    tuple[str, ...]
+        Registered plottype names, e.g. ("scatter", "line_plot", ...).
+    """
+    return tuple(_ADAPTERS.keys())
+
 # ---------------- Adapters (call existing renderers; add validation) ----------------
 
 
@@ -240,11 +255,16 @@ class BoxWhiskerAdapter:
     plottype = "boxandwhisker"
 
     def render(self, fig, st: AxState, layer):
+        ori = getattr(layer, "orientation", "vertical")
+        if ori not in {"vertical", "horizontal"}:
+            raise ValueError("BoxandWhiskerPlot.orientation must be 'vertical' or 'horizontal'.")
         if getattr(layer, "tick_labels", None) is not None:
             n = len(layer.data) if hasattr(layer.data, "__len__") else None
             if n is not None and len(layer.tick_labels) != n:
-                raise ValueError(f"BoxandWhiskerPlot: tick_labels length {len(layer.tick_labels)} "
-                                 f"must match number of boxes {n}.")
+                raise ValueError(
+                    f"BoxandWhiskerPlot: tick_labels length {len(layer.tick_labels)} "
+                    f"must match number of boxes {n}."
+                )
         return fig._boxandwhisker(layer, st.ax)
 
 

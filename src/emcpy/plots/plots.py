@@ -402,7 +402,7 @@ class BoxandWhiskerPlot:
 
         self.notch = False
         self.sym = None
-        self.vert = True
+        self.orientation = 'vertical'  # NEW: Matplotlib 3.9+ API
         self.whis = 1.5
         self.bootstrap = None
         self.usermedians = None
