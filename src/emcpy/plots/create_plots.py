@@ -439,9 +439,39 @@ class CreateFigure:
         if feature in feature_dict:
             feature_dict[feature](ax, vars(plot_obj)[feature])
 
+    def _map_transform(self):
+        """
+        Return the CRS to be used as the data transform for map layers.
+
+        Preference order:
+          1) self.projection.transform  (explicit data CRS, e.g., PlateCarree for lat/lon)
+          2) self.projection.projection (axes projection as a fallback)
+          3) cartopy.crs.PlateCarree()  (final fallback with a warning)
+
+        This makes _map_* renderers robust even if MapProjection is extended
+        or customized and one of the attributes is missing.
+        """
+        tr = getattr(self.projection, "transform", None)
+        if tr is not None:
+            return tr
+
+        pr = getattr(self.projection, "projection", None)
+        if pr is not None:
+            return pr
+
+        warnings.warn(
+            "MapProjection has neither 'transform' nor 'projection'; "
+            "defaulting to PlateCarree().",
+            RuntimeWarning,
+            stacklevel=3,
+        )
+
+        return ccrs.PlateCarree()
+
     def _map_scatter(self, plotobj, ax):
 
         integer_field = bool(getattr(plotobj, "integer_field", False))
+        xform = self._map_transform()
 
         if plotobj.data is None:
             # unlabeled points (no scalar mapping)
@@ -450,7 +480,7 @@ class CreateFigure:
             cs = ax.scatter(
                 plotobj.longitude, plotobj.latitude,
                 s=plotobj.markersize, **inputs,
-                transform=self.projection.transform
+                transform=xform
             )
 
             return cs  # PathCollection (not scalar-mappable)
@@ -484,7 +514,7 @@ class CreateFigure:
         cs = ax.scatter(
             plotobj.longitude, plotobj.latitude,
             c=plotobj.data, s=plotobj.markersize,
-            **inputs, norm=norm, transform=self.projection.transform
+            **inputs, norm=norm, transform=xform
         )
 
         return cs
@@ -493,6 +523,7 @@ class CreateFigure:
 
         skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar']
         inputs = self._get_inputs_dict(skip, plotobj)
+        xform = self._map_transform()
 
         cs = None
         if getattr(plotobj.longitude, "ndim", 2) == 3:
@@ -502,12 +533,12 @@ class CreateFigure:
                     plotobj.longitude[:, :, i],
                     plotobj.latitude[:, :, i],
                     plotobj.data[:, :, i],
-                    **inputs, transform=self.projection.transform
+                    **inputs, transform=xform
                 )
         else:
             cs = ax.pcolormesh(
                 plotobj.longitude, plotobj.latitude, plotobj.data,
-                **inputs, transform=self.projection.transform
+                **inputs, transform=xform
             )
 
         return cs  # QuadMesh (last plotted if multiple tiles)
@@ -516,9 +547,10 @@ class CreateFigure:
 
         skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar']
         inputs = self._get_inputs_dict(skip, plotobj)
+        xform = self._map_transform()
         cs = ax.contour(
             plotobj.longitude, plotobj.latitude, plotobj.data,
-            **inputs, transform=self.projection.transform
+            **inputs, transform=xform
         )
         if getattr(plotobj, 'clabel', False):
             plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
@@ -529,9 +561,10 @@ class CreateFigure:
 
         skip = ['plottype', 'longitude', 'latitude', 'data', 'colorbar']
         inputs = self._get_inputs_dict(skip, plotobj)
+        xform = self._map_transform()
         cs = ax.contourf(
             plotobj.longitude, plotobj.latitude, plotobj.data,
-            **inputs, transform=self.projection.transform
+            **inputs, transform=xform
         )
         if getattr(plotobj, 'clabel', False):
             plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
