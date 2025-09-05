@@ -1,5 +1,6 @@
 # tests/plotting/test_ticks.py
 import pytest
+import numpy as np
 from datetime import datetime, timedelta
 import matplotlib.dates as mdates
 from matplotlib.ticker import NullLocator
