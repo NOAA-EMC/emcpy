@@ -1,112 +1,70 @@
-# Configuration file for the Sphinx documentation builder.
-#
-# This file only contains a selection of the most common options. For a full
-# list see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
-
-# -- Path setup --------------------------------------------------------------
-
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
+from datetime import date
 import os
 import sys
-from pathlib import Path
-from datetime import datetime
-sys.path.insert(0, str(Path(__file__).parent.resolve()))
-
-import matplotlib
-from sphinx_gallery.sorting import ExplicitOrder
-
-import emcpy
 
 
-# -- Project information -----------------------------------------------------
+# -- Path setup --------------------------------------------------------------
+ROOT = os.path.abspath(os.path.join(__file__, '..', '..'))
+sys.path.insert(0, ROOT)
 
+
+# -- Project info ------------------------------------------------------------
 project = 'EMCPy'
-# copyright = '2023, NOAA EMC'
-# author = 'NOAA EMC'
-
-# The full version, including alpha/beta/rc tags
-# release = '0.0.1'
+author = 'NOAA/EMC'
+year = date.today().year
+copyright = f'{year}, NOAA/EMC'
 
 
-# -- General configuration ---------------------------------------------------
-
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
+# -- General config ----------------------------------------------------------
 extensions = [
-    'myst_parser',
-    'sphinx.ext.githubpages',
-    'sphinx_gallery.gen_gallery'
+    'myst_parser', # Markdown support
+    'myst_nb', # Notebooks as docs (optional, useful later)
+    'sphinx_gallery.gen_gallery', # Build examples gallery from .py scripts
 ]
 
 
-# Sphinx gallery configuration
+# MyST options (so we can use fenced code blocks, admonitions, etc.)
+myst_enable_extensions = [
+    'colon_fence',
+    'deflist',
+    'substitution',
+    'attrs_block',
+]
 
-# Create gallery dirs
-gallery_dirs = ["examples", "plot_types"]
-example_dirs = []
-for gd in gallery_dirs:
-    gd = gd.replace('gallery', 'examples')
-    example_dirs += [f'../galleries/{gd}']
 
-# Sphinx gallery configuration
-subsection_order = ExplicitOrder([
-    '../galleries/plot_types/basic',
-    '../galleries/plot_types/statistical',
-    '../galleries/plot_types/gridded',
-    '../galleries/plot_types/map',
-    '../galleries/examples/line_plots',
-    '../galleries/examples/scatter_plots',
-    '../galleries/examples/histograms',
-    '../galleries/examples/map_plots'
-])
+# Notebook execution (off by default for fast CI; enable per-page later)
+# myst_nb_execute = 'off'
+
+
+# Templates and static files
+html_theme = 'furo'
+html_static_path = ['_static']
+html_css_files = ['css/extra.css']
+
+
+# -- sphinx-gallery configuration -------------------------------------------
+from sphinx_gallery.sorting import FileNameSortKey
+
 
 sphinx_gallery_conf = {
-    'capture_repr': (),
-    'filename_pattern': '^((?!skip_).)*$',
-    'examples_dirs': ['../galleries/examples', '../galleries/plot_types'],
-    'gallery_dirs': ['examples', 'plot_types'],  # path to where to save gallery generated output
-    'backreferences_dir': '../build/backrefs',
-    'subsection_order': subsection_order,
-    'matplotlib_animations': True
+    'examples_dirs': 'examples', # path to your example scripts
+    'gallery_dirs': 'auto_examples', # where to build the gallery
+    'within_subsection_order': FileNameSortKey,
+    'filename_pattern': r'^((?!_skip).)*$', # run all non-skip files
+    'download_all_examples': False,
+    'remove_config_comments': True,
+    # If Cartopy is an issue on CI, you can skip map examples by pattern:
+    # 'ignore_pattern': r'(map_|cartopy)',
 }
-
-# Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
-
-# List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-# This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '.ipynb']
 
 
 # -- Options for HTML output -------------------------------------------------
+html_title = 'EMCPy — Docs & Examples'
+html_show_sourcelink = True
+html_show_sphinx = False
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-html_theme = 'pydata_sphinx_theme'
 
-# Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
-html_theme_options = {
-    "external_links": [],
-    "github_url": "https://github.com/NOAA-EMC/emcpy",
-}
-
-# The name for this set of Sphinx documents.  If None, it defaults to
-# "<project> v<release> documentation".
-html_title = 'EMCPy'
-
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
-
-# If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
-html_show_sphinx = True
+# -- Misc --------------------------------------------------------------------
+exclude_patterns = [
+    '_build', 'Thumbs.db', '.DS_Store',
+]

@@ -1,0 +1,11 @@
+sphinx>=7
+myst-parser>=3
+myst-nb>=1.1.0
+sphinx-gallery>=0.17
+furo>=2024.8.6
+matplotlib
+cartopy
+numpy
+pandas
+# The project itself (editable for import in examples)
+-e .
