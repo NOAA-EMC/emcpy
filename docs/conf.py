@@ -17,7 +17,6 @@ copyright = f'{year}, NOAA/EMC'
 
 # -- General config ----------------------------------------------------------
 extensions = [
-    'myst_parser', # Markdown support
     'myst_nb', # Notebooks as docs (optional, useful later)
     'sphinx_gallery.gen_gallery', # Build examples gallery from .py scripts
 ]
