@@ -24,6 +24,7 @@ get-started/index
 how-to/index
 explanations/index
 contributing/index
+auto_plot_types/index
 auto_examples/index
 
 ```{tip}

@@ -29,6 +29,14 @@ jobs:
         run: |
           sphinx-build -b html docs _build/html
 
+      - name: Environment for headless matplotlib
+        run: |
+          echo "MPLBACKEND=Agg" >> $GITHUB_ENV
+          python - << 'PY'
+        import matplotlib
+        print("Matplotlib backend:", matplotlib.get_backend())
+        PY
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:

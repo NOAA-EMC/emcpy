@@ -45,16 +45,23 @@ html_css_files = ['css/extra.css']
 # -- sphinx-gallery configuration -------------------------------------------
 from sphinx_gallery.sorting import FileNameSortKey
 
-
 sphinx_gallery_conf = {
-    'examples_dirs': 'examples', # path to your example scripts
-    'gallery_dirs': 'auto_examples', # where to build the gallery
-    'within_subsection_order': FileNameSortKey,
-    'filename_pattern': r'^((?!_skip).)*$', # run all non-skip files
-    'download_all_examples': False,
-    'remove_config_comments': True,
-    # If Cartopy is an issue on CI, you can skip map examples by pattern:
-    # 'ignore_pattern': r'(map_|cartopy)',
+    # Source directories in your repo
+    "examples_dirs": [
+        os.path.join(ROOT, "galleries", "plot_types"),
+        os.path.join(ROOT, "galleries", "examples"),
+    ],
+    # Where the built HTML pages & thumbs will go under docs/
+    "gallery_dirs": [
+        "auto_plot_types",
+        "auto_examples",
+    ],
+    "within_subsection_order": FileNameSortKey,
+    "filename_pattern": r"^((?!_skip).)*$",         # run everything that doesn't include '_skip'
+    "download_all_examples": False,
+    "remove_config_comments": True,
+    # Optional: skip heavy notebooks or utils
+    # "ignore_pattern": r"(utils/|_heavy\.ipy?nb$)",
 }
 
 
