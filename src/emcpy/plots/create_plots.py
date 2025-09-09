@@ -774,16 +774,63 @@ class CreateFigure:
     def _boxandwhisker(self, plotobj, ax):
         """
         Uses BoxandWhiskerPlot object to plot on axis.
+        Normalizes 'orientation' -> 'vert' for compatibility with older Matplotlib.
         """
-        skip = ['plottype', 'data', 'labels', 'vert']
+        # Don't skip 'vert' so legacy callers still work
+        skip = ['plottype', 'data', 'labels']
         inputs = self._get_inputs_dict(skip, plotobj)
 
-        if 'labels' in inputs:  # defensive against old kw
-            raise TypeError("BoxandWhiskerPlot no longer supports 'labels'; use 'tick_labels' (Matplotlib 3.9+).")
+        # guard against old kw
+        if 'labels' in inputs:
+            raise TypeError(
+                "BoxandWhiskerPlot no longer supports 'labels'; use 'tick_labels' (Matplotlib 3.9+)."
+            )
 
+        # --- explicit, validated mapping from 'orientation' to 'vert' ---
+        def _orientation_to_vert(orient):
+            if not isinstance(orient, str):
+                raise TypeError(
+                    f"'orientation' must be a string ('vertical'/'v' or 'horizontal'/'h'); got {type(orient).__name__}"
+                )
+            s = orient.strip().lower()
+            mapping = {
+                'vertical': True, 'v': True, 'vert': True,
+                'horizontal': False, 'h': False, 'horiz': False, 'horz': False
+            }
+            try:
+                return mapping[s]
+            except KeyError:
+                raise ValueError(
+                    f"Invalid 'orientation' value {orient!r}; expected one of "
+                    f"{', '.join(sorted(mapping.keys()))}"
+                )
+
+        has_vert = 'vert' in inputs
+        has_orient = 'orientation' in inputs
+
+        if has_vert and has_orient:
+            # If both are provided, ensure they're consistent
+            vert_from_orient = _orientation_to_vert(inputs['orientation'])
+            vert = bool(inputs['vert'])
+            if vert != vert_from_orient:
+                raise ValueError(
+                    f"Conflicting 'vert' ({vert}) and 'orientation' ({inputs['orientation']!r}). "
+                    "Specify only one, or make them consistent."
+                )
+            # Drop 'orientation' (Matplotlib <3.8 doesn't accept it)
+            inputs.pop('orientation', None)
+
+        elif has_orient:
+            # Only orientation provided → convert and drop
+            inputs['vert'] = _orientation_to_vert(inputs.pop('orientation'))
+
+        else:
+            # Only vert provided, or neither (Matplotlib default is vert=True)
+            pass
+
+        # Single, clean call (no fallback needed)
         bp = ax.boxplot(plotobj.data, **inputs)
-
-        return bp  # dict of artists (not a ScalarMappable)
+        return bp  # dict of artists
 
     def _get_inputs_dict(self, skipvars, plotobj):
         """
