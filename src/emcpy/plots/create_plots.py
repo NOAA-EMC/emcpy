@@ -775,15 +775,41 @@ class CreateFigure:
         """
         Uses BoxandWhiskerPlot object to plot on axis.
         """
-        skip = ['plottype', 'data', 'labels', 'vert']
+        # Don't skip 'vert' so legacy callers still work
+        skip = ['plottype', 'data', 'labels']  # removed 'vert'
         inputs = self._get_inputs_dict(skip, plotobj)
-
-        if 'labels' in inputs:  # defensive against old kw
-            raise TypeError("BoxandWhiskerPlot no longer supports 'labels'; use 'tick_labels' (Matplotlib 3.9+).")
-
-        bp = ax.boxplot(plotobj.data, **inputs)
-
-        return bp  # dict of artists (not a ScalarMappable)
+    
+        # guard against old kw
+        if 'labels' in inputs:
+            raise TypeError(
+                "BoxandWhiskerPlot no longer supports 'labels'; "
+                "use 'tick_labels' (Matplotlib 3.9+)."
+            )
+    
+        # ---- compat: translate orientation -> vert for Matplotlib < 3.8 ----
+        # precedence: explicit 'vert' wins; otherwise derive from 'orientation'
+        if 'vert' not in inputs:
+            orient = inputs.pop('orientation', None)
+            if orient is not None:
+                s = str(orient).lower()
+                # 'vertical'/'v' -> True; 'horizontal'/'h' -> False
+                inputs['vert'] = not s.startswith('h')
+        else:
+            # If both present, drop 'orientation' to avoid TypeError on old Matplotlib
+            inputs.pop('orientation', None)
+    
+        try:
+            bp = ax.boxplot(plotobj.data, **inputs)
+        except TypeError as e:
+            # Last-resort fallback if something still passed 'orientation'
+            if "orientation" in str(e):
+                orient = inputs.pop('orientation', 'vertical')
+                inputs['vert'] = str(orient).lower().startswith('v')
+                bp = ax.boxplot(plotobj.data, **inputs)
+            else:
+                raise
+    
+        return bp  # dict of artists
 
     def _get_inputs_dict(self, skipvars, plotobj):
         """
