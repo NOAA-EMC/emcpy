@@ -1,12 +1,14 @@
 sphinx>=7
 myst-parser>=3
-myst-nb>=1.1.0
 sphinx-gallery>=0.17
+sphinx-copybutton>=0.5
+sphinx-design>=0.6
 pydata-sphinx-theme>=0.15
 matplotlib>=3.8
 cartopy
 numpy
 pandas
-seaborn
+seaborn~=0.13
+packaging
 # The project itself (editable for import in examples)
 -e .
