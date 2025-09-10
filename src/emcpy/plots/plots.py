@@ -6,11 +6,13 @@ __all__ = [
     'VerticalLine', 'HorizontalLine', 'HorizontalSpan',
     'BarPlot', 'HorizontalBar', 'SkewT',
     'GriddedPlot', 'ContourPlot', 'FilledContourPlot',
-    'BoxandWhiskerPlot'
+    'BoxandWhiskerPlot', 'FillBetween', 'ErrorBar',
+    'ViolinPlot', 'HexBin', 'Hist2D',
 ]
 
 
 class Scatter:
+
     def __init__(self, x, y):
         """
         Scatter plot layer.
@@ -418,3 +420,163 @@ class BoxandWhiskerPlot:
         self.autorange = False
         self.meanline = False
         self.zorder = None
+
+
+class FillBetween:
+
+    def __init__(self, x, y1, y2):
+        """
+        Area fill between y1 and y2 across x.
+
+        Args:
+            x  : array-like
+            y1 : array-like
+            y2 : array-like
+        """
+        super().__init__()
+        self.plottype = 'fill_between'
+
+        self.x = x
+        self.y1 = y1
+        self.y2 = y2
+
+        self.where = None          # optional boolean mask
+        self.color = 'tab:blue'
+        self.alpha = None
+        self.label = None
+        self.linewidth = None
+        self.linestyle = None
+        self.step = None           # {'pre','post','mid'} or None
+        self.zorder = None
+
+
+class ErrorBar:
+
+    def __init__(self, x, y):
+        """
+        Error bar layer.
+
+        Args:
+            x : array-like
+            y : array-like
+        """
+        super().__init__()
+        self.plottype = 'errorbar'
+
+        self.x = x
+        self.y = y
+
+        # errors
+        self.yerr = None           # float, array-like, or (lower, upper)
+        self.xerr = None           # float, array-like, or (lower, upper)
+
+        # style / markers
+        self.fmt = 'o'
+        self.color = 'darkgray'
+        self.alpha = None
+        self.markersize = 5
+        self.ecolor = 'black'
+        self.elinewidth = 1.0
+        self.capthick = None
+        self.capsize = 0.0
+        self.barsabove = False
+        self.zorder = None
+
+        # label defaults to non-NaN x count (consistent with Scatter/Histogram)
+        self.label = f'n={np.count_nonzero(~np.isnan(x))}'
+
+
+class ViolinPlot:
+
+    def __init__(self, data):
+        """
+        Violin plot layer for 1-D distributions.
+
+        Args:
+            data : sequence of 1-D array-like datasets
+        """
+        super().__init__()
+        self.plottype = 'violin'
+
+        self.data = data
+
+        self.positions = None      # sequence of x positions
+        self.widths = 0.8
+        self.showmeans = False
+        self.showmedians = True
+        self.showextrema = True
+        self.alpha = None
+        self.zorder = None
+
+
+class HexBin:
+
+    def __init__(self, x, y, C=None):
+        """
+        Hexagonal binning layer.
+
+        Args:
+            x : array-like
+            y : array-like
+            C : optional array-like of values to reduce within bins
+        """
+        super().__init__()
+        self.plottype = 'hexbin'
+
+        self.x = x
+        self.y = y
+        self.C = C
+
+        self.gridsize = 30                      # int or (nx, ny)
+        self.reduce_C_function = None           # e.g., np.mean
+        self.extent = None                      # (xmin, xmax, ymin, ymax)
+        self.bins = None                        # None, 'log', or int
+        self.mincnt = None
+        self.linewidths = None
+        self.cmap = 'viridis'
+        self.norm = None                        # optional matplotlib Normalize
+        self.vmin = None
+        self.vmax = None
+        self.alpha = None
+        self.zorder = None
+        self.label = None
+
+        # colorbar controls
+        self.colorbar = False
+        self.colorbar_label = None
+        self.colorbar_location = 'right'
+
+
+class Hist2D:
+
+    def __init__(self, x, y):
+        """
+        2D histogram layer.
+
+        Args:
+            x : array-like
+            y : array-like
+        """
+        super().__init__()
+        self.plottype = 'hist2d'
+
+        self.x = x
+        self.y = y
+
+        self.bins = 30                            # int, (nx, ny), or (xbins, ybins)
+        self.range = None                         # ((xmin, xmax), (ymin, ymax))
+        self.density = False
+        self.cmap = 'viridis'
+        self.norm = None                          # optional matplotlib Normalize
+        self.vmin = None
+        self.vmax = None
+        self.cmin = None
+        self.cmax = None
+        self.alpha = None
+        self.zorder = None
+        self.label = None
+
+        # colorbar controls
+        self.colorbar = True
+        self.colorbar_label = None
+        self.colorbar_location = 'right'

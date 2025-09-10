@@ -268,6 +268,101 @@ class BoxWhiskerAdapter:
         return fig._boxandwhisker(layer, st.ax)
 
 
+@register
+class FillBetweenAdapter:
+    plottype = "fill_between"
+
+    def render(self, fig, st: AxState, layer):
+        x  = np.asarray(layer.x)
+        y1 = np.asarray(layer.y1)
+        y2 = np.asarray(layer.y2)
+        if not (x.shape == y1.shape == y2.shape):
+            raise ValueError(
+                "FillBetween: x, y1, and y2 must share the same shape; "
+                f"got x={x.shape}, y1={y1.shape}, y2={y2.shape}."
+            )
+        if layer.where is not None:
+            w = np.asarray(layer.where, dtype=bool)
+            if w.shape != x.shape:
+                raise ValueError(
+                    f"FillBetween: where mask must match x shape; got {w.shape} vs {x.shape}."
+                )
+        return fig._fillbetween(layer, st.ax)  # returns PolyCollection
+
+
+@register
+class ErrorBarAdapter:
+    plottype = "errorbar"
+
+    def render(self, fig, st: AxState, layer):
+        x = np.asarray(layer.x)
+        y = np.asarray(layer.y)
+        if x.shape != y.shape:
+            raise ValueError(
+                f"ErrorBar: x and y must have same shape; got {x.shape} vs {y.shape}."
+            )
+        # basic sanity: if tuple form for err, ensure length 2
+        for name in ("xerr", "yerr"):
+            err = getattr(layer, name, None)
+            if isinstance(err, tuple) and len(err) != 2:
+                raise ValueError(f"ErrorBar: {name} tuple must be (lower, upper).")
+        return fig._errorbar(layer, st.ax)  # returns ErrorbarContainer
+
+
+@register
+class ViolinAdapter:
+    plottype = "violin"
+
+    def render(self, fig, st: AxState, layer):
+        # allow any iterable of 1-D arrays; positions length (if given) must match
+        data = layer.data
+        try:
+            n = len(data)
+        except Exception:
+            raise ValueError("ViolinPlot: 'data' must be a sequence of 1-D arrays.")
+        if layer.positions is not None and len(layer.positions) != n:
+            raise ValueError(
+                f"ViolinPlot: positions length {len(layer.positions)} must match number of datasets {n}."
+            )
+        return fig._violin(layer, st.ax)  # returns dict of artists from violinplot
+
+
+@register
+class HexBinAdapter:
+    plottype = "hexbin"
+
+    def render(self, fig, st: AxState, layer):
+        x = np.asarray(layer.x)
+        y = np.asarray(layer.y)
+        if x.shape != y.shape:
+            raise ValueError(
+                f"HexBin: x and y must have same shape; got {x.shape} vs {y.shape}."
+            )
+        if layer.C is not None:
+            C = np.asarray(layer.C)
+            if C.shape != x.shape:
+                raise ValueError(
+                    f"HexBin: C must match x/y shape; got {C.shape} vs {x.shape}."
+                )
+        # gridsize may be int or (nx, ny); bins may be None/'log'/int — let MPL validate values
+        return fig._hexbin(layer, st.ax)  # returns PolyCollection (ScalarMappable)
+
+
+@register
+class Hist2DAdapter:
+    plottype = "hist2d"
+
+    def render(self, fig, st: AxState, layer):
+        x = np.asarray(layer.x)
+        y = np.asarray(layer.y)
+        if x.shape != y.shape:
+            raise ValueError(
+                f"Hist2D: x and y must have same shape; got {x.shape} vs {y.shape}."
+            )
+        # bins/range/norm validated by matplotlib; we pass through
+        return fig._hist2d(layer, st.ax)  # returns QuadMesh (ScalarMappable)
+
+
 # Map variants
 @register
 class MapScatterAdapter:

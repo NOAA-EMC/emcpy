@@ -233,6 +233,26 @@ class CreatePlot:
 
         self.yscale = scale
 
+    def set_time_axis(self, major="month", minor="week", fmt="%b %Y", rotate=30, ha="right"):
+        """
+        Configure a time-aware x-axis with common defaults.
+
+        Parameters
+        ----------
+        major : {"year","quarter","month","week","day","hour"}, default "month"
+        minor : {"quarter","month","week","day","hour",None}, default "week"
+        fmt   : str, date format passed to DateFormatter, default "%b %Y"
+        rotate: int, rotation for tick labels, default 30
+        ha    : str, horizontalalignment for tick labels, default "right"
+        """
+        self.time_axis = {
+            "major": major,
+            "minor": minor,
+            "fmt": fmt,
+            "rotate": rotate,
+            "ha": ha,
+        }
+
 
 class CreateFigure:
 
@@ -349,12 +369,37 @@ class CreateFigure:
             if self.sharey:
                 self._sharey(ax)
 
+            # Final per-axes polish (e.g., time-axis formatting)
+            self._finalize_axis(ax, plot_obj)
+
     def add_suptitle(self, text, **kwargs):
         """
         Add super title to figure. Useful for subplots.
         """
         if hasattr(self, 'fig'):
             self.fig.suptitle(text, **kwargs)
+
+    def add_shared_colorbar(self, mappable, axes, *, location: str = "right", label: str | None = None):
+        """
+        Add a single colorbar shared across the given axes (list of Axes).
+
+        Parameters
+        ----------
+        mappable : matplotlib.cm.ScalarMappable
+            The mappable returned by a plotting call (e.g., hexbin, pcolormesh).
+        axes : list[matplotlib.axes.Axes] or matplotlib.axes.Axes
+            Axes to which the colorbar should be associated.
+        location : {"right", "left", "top", "bottom"}, default "right"
+            Where to draw the colorbar relative to the axes grid.
+        label : str, optional
+            Colorbar label text.
+        """
+        if not isinstance(axes, (list, tuple)):
+            axes = [axes]
+        cbar = self.fig.colorbar(mappable, ax=axes, location=location)
+        if label:
+            cbar.set_label(label)
+        return cbar
 
     def plot_logo(self, loc, which='noaa/nws',
                   subplot_orientation='last', zoom=1, alpha=0.5):
@@ -830,7 +875,92 @@ class CreateFigure:
 
         # Single, clean call (no fallback needed)
         bp = ax.boxplot(plotobj.data, **inputs)
-        return bp  # dict of artists
+        return bp  # dict of 
+
+    def _fillbetween(self, plotobj, ax):
+        """
+        Render FillBetween layer.
+        """
+        skip = ['plottype', 'x', 'y1', 'y2']
+        inputs = self._get_inputs_dict(skip, plotobj)
+        poly = ax.fill_between(
+            plotobj.x, plotobj.y1, plotobj.y2,
+            **inputs
+        )
+        return poly  # PolyCollection (not a ScalarMappable)
+
+    def _errorbar(self, plotobj, ax):
+        """
+        Render ErrorBar layer.
+        """
+        skip = ['plottype', 'x', 'y']
+        inputs = self._get_inputs_dict(skip, plotobj)
+        cont = ax.errorbar(
+            plotobj.x, plotobj.y,
+            **inputs
+        )
+        return cont  # ErrorbarContainer (not necessarily a ScalarMappable)
+
+    def _violin(self, plotobj, ax):
+        """
+        Render ViolinPlot layer.
+        """
+        skip = ['plottype', 'data']
+        inputs = self._get_inputs_dict(skip, plotobj)
+
+        vio = ax.violinplot(
+            plotobj.data,
+            positions=inputs.pop('positions', None),
+            widths=inputs.pop('widths', None),
+            showmeans=inputs.pop('showmeans', False),
+            showmedians=inputs.pop('showmedians', True),
+            showextrema=inputs.pop('showextrema', True),
+        )
+
+        # Apply alpha to bodies if requested
+        alpha = inputs.pop('alpha', None)
+        if alpha is not None:
+            for b in vio.get('bodies', []):
+                b.set_alpha(alpha)
+
+        return vio  # dict of artists
+
+    def _hexbin(self, plotobj, ax):
+        """
+        Render HexBin layer.
+        """
+        skip = [
+            'plottype', 'x', 'y', 'C',
+            # colorbar-related fields are handled by CreatePlot.add_colorbar()
+            'colorbar', 'colorbar_label', 'colorbar_location'
+        ]
+        inputs = self._get_inputs_dict(skip, plotobj)
+        hb = ax.hexbin(
+            plotobj.x, plotobj.y, C=getattr(plotobj, 'C', None),
+            **inputs
+        )
+
+        return hb  # PolyCollection (ScalarMappable)
+
+    def _hist2d(self, plotobj, ax):
+        """
+        Render Hist2D layer.
+        """
+        skip = [
+            'plottype', 'x', 'y',
+            # colorbar-related fields are handled by CreatePlot.add_colorbar()
+            'colorbar', 'colorbar_label', 'colorbar_location'
+        ]
+        inputs = self._get_inputs_dict(skip, plotobj)
+        h, xedges, yedges, img = ax.hist2d(
+            plotobj.x, plotobj.y,
+            **inputs
+        )
+        alpha = getattr(plotobj, "alpha", None)
+        if alpha is not None:
+            img.set_alpha(alpha)
+
+        return img  # QuadMesh (ScalarMappable)
 
     def _get_inputs_dict(self, skipvars, plotobj):
         """
@@ -1220,6 +1350,53 @@ class CreateFigure:
         """
         if not self._is_first_col(ax):
             plt.setp(ax.get_yticklabels(), visible=False)
+
+    def _apply_time_axis(self, ax, opts: Optional[dict]):
+        """
+        Apply time-axis locators/formatters to `ax` using options set on the plot
+        via CreatePlot.set_time_axis(...). No-op if opts is None.
+        """
+        if not opts:
+            return
+
+        major_map = {
+            "year": mdates.YearLocator(),
+            "quarter": mdates.MonthLocator(bymonth=[1, 4, 7, 10]),
+            "month": mdates.MonthLocator(),
+            "week": mdates.WeekdayLocator(),  # Monday default
+            "day": mdates.DayLocator(),
+            "hour": mdates.HourLocator(),
+        }
+        minor_map = {
+            "quarter": mdates.MonthLocator(bymonth=[1, 4, 7, 10]),
+            "month": mdates.MonthLocator(),
+            "week": mdates.WeekdayLocator(),
+            "day": mdates.DayLocator(),
+            "hour": mdates.HourLocator(),
+            None: None,
+        }
+
+        major = major_map.get(opts.get("major", "month"), mdates.MonthLocator())
+        minor = minor_map.get(opts.get("minor", "week"))
+
+        ax.xaxis.set_major_locator(major)
+        if minor is not None:
+            ax.xaxis.set_minor_locator(minor)
+
+        ax.xaxis.set_major_formatter(mdates.DateFormatter(opts.get("fmt", "%b %Y")))
+        rotate = int(opts.get("rotate", 30))
+        ha = opts.get("ha", "right")
+
+        for lab in ax.get_xticklabels():
+            lab.set_rotation(rotate)
+            lab.set_ha(ha)
+
+    def _finalize_axis(self, ax, plot_obj):
+        """
+        Final per-axes adjustments that should happen after features,
+        inversion, and shared-label handling.
+        """
+        self._apply_time_axis(ax, getattr(plot_obj, "time_axis", None))
 
     def _subplot_spec(self, ax):
         """
