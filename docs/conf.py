@@ -36,31 +36,48 @@ myst_enable_extensions = [
 
 
 # Templates and static files
-html_theme = 'furo'
+html_theme = 'pydata_sphinx_theme'
 html_static_path = ['_static']
 html_css_files = ['css/extra.css']
 
 
 # -- sphinx-gallery configuration -------------------------------------------
-from sphinx_gallery.sorting import FileNameSortKey
+from sphinx_gallery.sorting import FileNameSortKey, ExplicitOrder
+
+DOCS_DIR = os.path.abspath(os.path.dirname(__file__))
+
+# Helper to create paths relative to docs/ (matches what Sphinx-Gallery reports)
+def rel_to_docs(*parts):
+    return os.path.relpath(os.path.join(ROOT, *parts), DOCS_DIR)
+
+subsection_order = ExplicitOrder([
+    rel_to_docs("galleries", "plot_types", "basic"),
+    rel_to_docs("galleries", "plot_types", "statistical"),
+    rel_to_docs("galleries", "plot_types", "gridded"),
+    rel_to_docs("galleries", "plot_types", "map"),
+    rel_to_docs("galleries", "examples", "line_plots"),
+    rel_to_docs("galleries", "examples", "scatter_plots"),
+    rel_to_docs("galleries", "examples", "histograms"),
+    rel_to_docs("galleries", "examples", "map_plots"),
+    "*",  # catch any not-listed subsections
+])
 
 sphinx_gallery_conf = {
-    # Source directories in your repo
     "examples_dirs": [
         os.path.join(ROOT, "galleries", "plot_types"),
         os.path.join(ROOT, "galleries", "examples"),
     ],
-    # Where the built HTML pages & thumbs will go under docs/
     "gallery_dirs": [
         "auto_plot_types",
         "auto_examples",
     ],
+    "plot_gallery": True,
+    "image_scrapers": ("matplotlib",),
     "within_subsection_order": FileNameSortKey,
-    "filename_pattern": r"^((?!_skip).)*$",         # run everything that doesn't include '_skip'
+    "filename_pattern": r"^((?!_skip).)*$",
     "download_all_examples": False,
     "remove_config_comments": True,
-    # Optional: skip heavy notebooks or utils
-    # "ignore_pattern": r"(utils/|_heavy\.ipy?nb$)",
+    "subsection_order": subsection_order,
 }
 
 

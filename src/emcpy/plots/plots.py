@@ -1,5 +1,8 @@
 # This work developed by NOAA/NWS/EMC under the Apache 2.0 license.
+from __future__ import annotations
 import numpy as np
+from packaging.version import Version
+import matplotlib
 
 __all__ = [
     'Scatter', 'Histogram', 'Density', 'LinePlot',
@@ -395,14 +398,14 @@ class SkewT:
 class BoxandWhiskerPlot:
 
     def __init__(self, data):
-
         self.plottype = 'boxandwhisker'
-
         self.data = data
 
+        # Matplotlib kwargs (modern defaults where applicable)
         self.notch = False
         self.sym = None
-        self.orientation = 'vertical'  # NEW: Matplotlib 3.9+ API
+        self.orientation = 'vertical'   # modern, we’ll map to vert=True/False
+        self.vert = None                # optional legacy explicit override
         self.whis = 1.5
         self.bootstrap = None
         self.usermedians = None
@@ -411,10 +414,79 @@ class BoxandWhiskerPlot:
         self.widths = None
         self.patch_artist = False
 
-        # Use the Matplotlib 3.9+ name only
+        # 3.9+ prefers 'tick_labels'; we’ll down-convert to 'labels' on older MPL
         self.tick_labels = None
 
         self.manage_ticks = True
         self.autorange = False
         self.meanline = False
         self.zorder = None
+
+        # Not supported as a kwarg by MPL 3.7 boxplot(), but we still want legends
+        self.label = None
+
+    # --- NEW: normalization helper to produce Matplotlib-ready kwargs ---
+    def to_mpl_kwargs(self):
+        """
+        Return (kwargs, legend_label) for matplotlib.axes.Axes.boxplot,
+        normalized across Matplotlib versions.
+        """
+
+        # Whitelist: only kwargs boxplot actually understands
+        allowed = {
+            'notch', 'sym', 'vert', 'whis', 'bootstrap', 'usermedians',
+            'conf_intervals', 'positions', 'widths', 'patch_artist',
+            'labels', 'tick_labels',
+            'manage_ticks', 'autorange', 'meanline', 'zorder',
+        }
+        # Start from object attrs
+        inputs = {}
+        for k, v in vars(self).items():
+            if v is None:
+                continue
+            if k in allowed:
+                inputs[k] = v
+
+        # Legend label: strip from kwargs (MPL 3.7 boxplot has no 'label' kw)
+        legend_label = getattr(self, 'label', None)
+
+        # 1) orientation → vert (validated)
+        def _orientation_to_vert(orient: str) -> bool:
+            if not isinstance(orient, str):
+                raise TypeError(
+                    "'orientation' must be a string ('vertical'/'v' or 'horizontal'/'h')"
+                )
+            s = orient.strip().lower()
+            mapping = {
+                'vertical': True, 'v': True, 'vert': True,
+                'horizontal': False, 'h': False, 'horiz': False, 'horz': False,
+            }
+            if s not in mapping:
+                raise ValueError(
+                    f"Invalid 'orientation' value {orient!r}; expected one of "
+                    f"{', '.join(sorted(mapping.keys()))}"
+                )
+            return mapping[s]
+
+        has_vert = ('vert' in inputs)
+        has_orient_attr = (self.orientation is not None)
+
+        if has_vert and has_orient_attr:
+            vert_from_orient = _orientation_to_vert(self.orientation)
+            if bool(inputs['vert']) != vert_from_orient:
+                raise ValueError(
+                    f"Conflicting 'vert' ({inputs['vert']}) and "
+                    f"'orientation' ({self.orientation!r}). Make them consistent."
+                )
+        elif not has_vert and has_orient_attr:
+            inputs['vert'] = _orientation_to_vert(self.orientation)
+        # else: only vert provided or neither → rely on MPL default (True) if missing
+
+        # 2) tick_labels vs labels (runtime dependent)
+        mpl_ver = Version(matplotlib.__version__)
+        if 'tick_labels' in inputs and mpl_ver < Version('3.9'):
+            inputs['labels'] = inputs.pop('tick_labels')
+        elif 'labels' in inputs and mpl_ver >= Version('3.9'):
+            inputs['tick_labels'] = inputs.pop('labels')
+
+        return inputs, legend_label
