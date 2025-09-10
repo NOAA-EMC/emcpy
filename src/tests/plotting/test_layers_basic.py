@@ -429,3 +429,29 @@ def test_time_axis_helper_applies_dateformatter_and_rotation():
         assert pytest.approx(labs[0].get_rotation(), rel=0, abs=0.5) == 15
 
     plt.close(f.fig)
+
+def test_twinx_smoke():
+    # Primary series
+    xs = np.linspace(0, 10, 200)
+    y1 = np.sin(xs)
+
+    # Secondary series on different scale
+    y2 = 50 + 20*np.cos(xs)
+
+    p = CreatePlot(plot_layers=[LinePlot(xs, y1)])
+    # Add secondary axis content
+    p.add_twinx(LinePlot(xs, y2))
+    p.add_twin_ylabel("Right Axis")
+    p.set_twin_ylim(0, 100)
+
+    f = CreateFigure()
+    f.plot_list = [p]
+    f.create_figure()
+
+    # We should have at least 2 Axes (primary + twinx)
+    assert len(f.fig.axes) >= 2
+    # One of them should carry the right-axis label we set
+    assert "Right Axis" in [ax.get_ylabel() for ax in f.fig.axes]
+
+    plt.close(f.fig)
+

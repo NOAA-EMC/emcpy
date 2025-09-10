@@ -233,6 +233,55 @@ class CreatePlot:
 
         self.yscale = scale
 
+    def add_twinx(self, *layers):
+        """
+        Enable a secondary y-axis (twinx). Optionally pass one or more layers
+        that should be rendered on the right-hand axis.
+        """
+        if layers:
+            if not hasattr(self, "twin_layers"):
+                self.twin_layers = []
+            self.twin_layers.extend(layers)
+        self._use_twinx = True
+
+    def add_twin_ylabel(self, ylabel, labelpad=None, loc='center', **kwargs):
+        """
+        Y label for the secondary y-axis.
+        """
+        self.twin_ylabel = {
+            'ylabel': ylabel,
+            'labelpad': labelpad,
+            'loc': loc,
+            **kwargs
+        }
+
+    def set_twin_ylim(self, bottom=None, top=None):
+        self.twin_ylim = {'bottom': bottom, 'top': top}
+
+    def set_twin_yscale(self, scale):
+        valid_scales = ['log', 'linear', 'symlog', 'logit']
+        if scale not in valid_scales:
+            raise ValueError(f'requested scale {scale} is invalid. Valid '
+                             f'choices are: {" | ".join(valid_scales)}')
+        self.twin_yscale = scale
+
+    def set_twin_yticks(self, ticks=None, minor=False, formatter=None, date_format=None, clear_minor=True):
+        self.twin_yticks = {
+            "ticks": [] if ticks is None else ticks,
+            "minor": minor,
+            "formatter": formatter,
+            "date_format": date_format,
+            "clear_minor": clear_minor,
+        }
+
+    def set_twin_yticklabels(self, labels=None, minor=False, date_format=None, **kwargs):
+        self.twin_yticklabels = {
+            "labels": [] if labels is None else labels,
+            "minor": minor,
+            "date_format": date_format,
+            "kwargs": kwargs,
+        }
+
     def set_time_axis(self, major="month", minor="week", fmt="%b %Y", rotate=30, ha="right"):
         """
         Configure a time-aware x-axis with common defaults.
@@ -312,9 +361,6 @@ class CreateFigure:
         gs = gridspec.GridSpec(self.nrows, self.ncols)
         self.fig = plt.figure(figsize=self.figsize)
 
-        # Track the last colorbar-capable artist per axes
-        # (read by _last_mappable_for_ax in _plot_colorbar)
-
         for i, plot_obj in enumerate(self.plot_list):
             # --- Axes creation (map vs. normal) ---
             if hasattr(plot_obj, 'projection'):
@@ -338,7 +384,6 @@ class CreateFigure:
                         ax.yaxis.set_major_formatter(lat_formatter)
                 else:
                     ax.set_extent(self.domain.extent, ccrs.PlateCarree())
-
             else:
                 # Regular Axes (SkewT gets its projection)
                 plot_types = [x.plottype for x in plot_obj.plot_layers]
@@ -347,30 +392,61 @@ class CreateFigure:
                 else:
                     ax = self.fig.add_subplot(gs[i])
 
-            # --- Per-axes rendering state ---
+            # --- Optional secondary y-axis (twinx) ---
+            ax_twin = None
+            if getattr(plot_obj, "_use_twinx", False) or getattr(plot_obj, "twin_layers", None):
+                ax_twin = ax.twinx()
+
+            # --- Per-axes rendering state (primary) ---
             st = AxState(ax=ax)  # adapters append any mappables they create
 
-            # --- Render each layer via the adapter registry ---
+            # --- Render each primary-layer via the adapter registry ---
             for layer in plot_obj.plot_layers:
                 adapter = get_adapter(layer.plottype)  # raises KeyError if unknown
                 mappable = adapter.render(self, st, layer)
                 if mappable is not None:
                     st.mappables.append(mappable)
 
-            # --- Plot figure/axes features (title, labels, ticks, colorbar, etc.) ---
+            # --- Render twinx layers (if any) ---
+            if ax_twin is not None:
+                st_twin = AxState(ax=ax_twin)
+                for layer in getattr(plot_obj, "twin_layers", []):
+                    adapter = get_adapter(layer.plottype)
+                    mappable = adapter.render(self, st_twin, layer)
+                    if mappable is not None:
+                        st_twin.mappables.append(mappable)
+
+            # --- Plot figure/axes features (title, labels, ticks, colorbar, etc.) on primary ---
             for feat in vars(plot_obj).keys():
                 self._plot_features(plot_obj, feat, ax)
 
+            # Apply invert flags on primary
             self._apply_invert_flags(plot_obj, ax)
 
-            # --- Shared axes label hiding ---
+            # --- Shared axes label hiding (primary only) ---
             if self.sharex:
                 self._sharex(ax)
             if self.sharey:
                 self._sharey(ax)
 
-            # Final per-axes polish (e.g., time-axis formatting)
+            # Final per-axes polish (e.g., time-axis formatting) on primary
             self._finalize_axis(ax, plot_obj)
+
+            # --- Apply twin-axis specific features & finalize (if present) ---
+            if ax_twin is not None:
+                if hasattr(plot_obj, 'twin_ylabel'):
+                    self._plot_ylabel(ax_twin, plot_obj.twin_ylabel)
+                if hasattr(plot_obj, 'twin_ylim'):
+                    self._set_ylim(ax_twin, plot_obj.twin_ylim)
+                if hasattr(plot_obj, 'twin_yscale'):
+                    self._set_yscale(ax_twin, plot_obj.twin_yscale)
+                if hasattr(plot_obj, 'twin_yticks'):
+                    self._set_yticks(ax_twin, plot_obj.twin_yticks)
+                if hasattr(plot_obj, 'twin_yticklabels'):
+                    self._set_yticklabels(ax_twin, plot_obj.twin_yticklabels)
+
+                # No sharey logic for twin axis; x is shared implicitly
+                self._finalize_axis(ax_twin, plot_obj)
 
     def add_suptitle(self, text, **kwargs):
         """
