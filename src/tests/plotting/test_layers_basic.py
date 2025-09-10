@@ -317,9 +317,6 @@ def test_skewt_projection(single_axes):
     _, ax = single_axes(plot)
     assert "SkewXAxes" in ax.__class__.__name__
 
-# -------------------------
-# New layer smoke tests
-# -------------------------
 
 def test_fillbetween_smoke():
     x = np.linspace(0, 2 * np.pi, 64)
@@ -430,6 +427,7 @@ def test_time_axis_helper_applies_dateformatter_and_rotation():
 
     plt.close(f.fig)
 
+
 def test_twinx_smoke():
     # Primary series
     xs = np.linspace(0, 10, 200)
@@ -454,4 +452,3 @@ def test_twinx_smoke():
     assert "Right Axis" in [ax.get_ylabel() for ax in f.fig.axes]
 
     plt.close(f.fig)
-

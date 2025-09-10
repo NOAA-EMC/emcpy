@@ -951,7 +951,7 @@ class CreateFigure:
 
         # Single, clean call (no fallback needed)
         bp = ax.boxplot(plotobj.data, **inputs)
-        return bp  # dict of 
+        return bp
 
     def _fillbetween(self, plotobj, ax):
         """

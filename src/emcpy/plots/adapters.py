@@ -273,7 +273,7 @@ class FillBetweenAdapter:
     plottype = "fill_between"
 
     def render(self, fig, st: AxState, layer):
-        x  = np.asarray(layer.x)
+        x = np.asarray(layer.x)
         y1 = np.asarray(layer.y1)
         y2 = np.asarray(layer.y2)
         if not (x.shape == y1.shape == y2.shape):
