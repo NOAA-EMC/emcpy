@@ -318,10 +318,12 @@ def test_skewt_projection(single_axes):
     assert "SkewXAxes" in ax.__class__.__name__
 
 
-def test_fillbetween_smoke():
+def test_fillbetween():
     x = np.linspace(0, 2 * np.pi, 64)
     y = np.sin(x)
-    layer = FillBetween(x=x, y1=y - 0.3, y2=y + 0.3, alpha=0.25, color="C0")
+    layer = FillBetween(x=x, y1=y - 0.3, y2=y + 0.3)
+    layer.alpha = 0.25
+    layer.color = "C0"
 
     p = CreatePlot(plot_layers=[layer])
     f = CreateFigure(nrows=1, ncols=1)
@@ -330,7 +332,7 @@ def test_fillbetween_smoke():
     plt.close(f.fig)
 
 
-def test_errorbar_smoke():
+def test_errorbar():
     x = np.arange(10)
     y = 0.5 * x
     layer = ErrorBar(x=x, y=y)
@@ -344,7 +346,7 @@ def test_errorbar_smoke():
     plt.close(f.fig)
 
 
-def test_violin_smoke():
+def test_violin():
     rng = np.random.default_rng(0)
     data = [rng.normal(loc=mu, scale=0.5, size=120) for mu in (0.0, 1.0, 2.0)]
     layer = ViolinPlot(data=data)
@@ -359,11 +361,13 @@ def test_violin_smoke():
     plt.close(f.fig)
 
 
-def test_hexbin_with_per_axes_colorbar_smoke():
+def test_hexbin_with_per_axes_colorbar():
     rng = np.random.default_rng(1)
     x = rng.standard_normal(1000)
     y = rng.standard_normal(1000)
-    layer = HexBin(x=x, y=y, gridsize=25, cmap="viridis")
+    layer = HexBin(x=x, y=y)
+    layer.gridsize = 25
+    layer.cmap = "viridis"
 
     p = CreatePlot(plot_layers=[layer])
     # Ask framework to add a per-axes colorbar using the last mappable
@@ -375,13 +379,21 @@ def test_hexbin_with_per_axes_colorbar_smoke():
     plt.close(f.fig)
 
 
-def test_hist2d_shared_colorbar_smoke():
+def test_hist2d_shared_colorbar():
     rng = np.random.default_rng(2)
     x = rng.standard_normal(1200)
     y = rng.standard_normal(1200)
 
-    p1 = CreatePlot(plot_layers=[Hist2D(x=x, y=y, bins=30, cmap="magma")])
-    p2 = CreatePlot(plot_layers=[Hist2D(x=0.5 * x, y=0.5 * y, bins=20, cmap="magma")])
+    l1 = Hist2D(x=x, y=y)
+    l1.bins = 30
+    l1.cmap = "magma"
+
+    l2 = Hist2D(x=0.5 * x, y=0.5 * y)
+    l2.bins = 20
+    l2.cmap = "magma"
+
+    p1 = CreatePlot(plot_layers=[l1])
+    p2 = CreatePlot(plot_layers=[l2])
 
     f = CreateFigure(nrows=1, ncols=2)
     f.plot_list = [p1, p2]
@@ -389,7 +401,6 @@ def test_hist2d_shared_colorbar_smoke():
 
     # Grab the QuadMesh (ScalarMappable) from the second axes and attach a shared colorbar
     ax1, ax2 = f.fig.axes[:2]
-    # hist2d adds a QuadMesh to collections
     assert len(ax2.collections) > 0
     mappable = ax2.collections[-1]
     f.add_shared_colorbar(mappable, [ax1, ax2], location="right", label="density")
@@ -399,6 +410,7 @@ def test_hist2d_shared_colorbar_smoke():
 # -------------------------
 # Helper behavior tests
 # -------------------------
+
 
 def test_time_axis_helper_applies_dateformatter_and_rotation():
     # Make a simple time series across several months
@@ -422,19 +434,18 @@ def test_time_axis_helper_applies_dateformatter_and_rotation():
     # If labels exist, they should be rotated ~15 degrees
     labs = ax.get_xticklabels()
     if labs:
-        # rotation may be float; compare numerically
         assert pytest.approx(labs[0].get_rotation(), rel=0, abs=0.5) == 15
 
     plt.close(f.fig)
 
 
-def test_twinx_smoke():
+def test_twinx():
     # Primary series
     xs = np.linspace(0, 10, 200)
     y1 = np.sin(xs)
 
     # Secondary series on different scale
-    y2 = 50 + 20*np.cos(xs)
+    y2 = 50 + 20 * np.cos(xs)
 
     p = CreatePlot(plot_layers=[LinePlot(xs, y1)])
     # Add secondary axis content
