@@ -12,7 +12,6 @@ __all__ = [
 
 
 class Scatter:
-
     def __init__(self, x, y):
         """
         Scatter plot layer.
@@ -65,7 +64,6 @@ class Scatter:
 
 
 class Histogram:
-
     def __init__(self, data):
         """
         Constructor for Histogram.
@@ -96,7 +94,6 @@ class Histogram:
 
 
 class Density():
-
     def __init__(self, data):
         """
         Constructor for Density.
@@ -132,7 +129,6 @@ class Density():
 
 
 class LinePlot:
-
     def __init__(self, x, y):
         """
         Constructor for LinePlot.
@@ -156,7 +152,6 @@ class LinePlot:
 
 
 class GriddedPlot:
-
     def __init__(self, x, y, z):
         """
         Constructor for GriddedPlot.
@@ -183,7 +178,6 @@ class GriddedPlot:
 
 
 class ContourPlot:
-
     def __init__(self, x, y, z):
         """
         Constructor for ContourPlot.
@@ -215,7 +209,6 @@ class ContourPlot:
 
 
 class FilledContourPlot:
-
     def __init__(self, x, y, z):
         """
         Constructor for FilledContourPlot.
@@ -246,7 +239,6 @@ class FilledContourPlot:
 
 
 class VerticalLine:
-
     def __init__(self, x):
         """
         Constructor for VerticalLine
@@ -267,7 +259,6 @@ class VerticalLine:
 
 
 class HorizontalLine:
-
     def __init__(self, y):
         """
         Constructor for HorizontalLine
@@ -288,7 +279,6 @@ class HorizontalLine:
 
 
 class HorizontalSpan:
-
     def __init__(self, ymin, ymax):
         """
         Constructor for HorizontalSpan
@@ -308,7 +298,6 @@ class HorizontalSpan:
 
 
 class BarPlot:
-
     def __init__(self, x, height):
         """
         Constructor for BarPlot.
@@ -339,7 +328,6 @@ class BarPlot:
 
 
 class HorizontalBar:
-
     def __init__(self, y, width):
         """
         Constructor to create a horizontal bar plot.
@@ -370,7 +358,6 @@ class HorizontalBar:
 
 
 class SkewT:
-
     def __init__(self, x, y):
         """
         Constructor to create a Skew T plot.
@@ -395,7 +382,6 @@ class SkewT:
 
 
 class BoxandWhiskerPlot:
-
     def __init__(self, data):
 
         self.plottype = 'boxandwhisker'
@@ -423,7 +409,6 @@ class BoxandWhiskerPlot:
 
 
 class FillBetween:
-
     def __init__(self, x, y1, y2):
         """
         Area fill between y1 and y2 across x.
@@ -451,7 +436,6 @@ class FillBetween:
 
 
 class ErrorBar:
-
     def __init__(self, x, y):
         """
         Error bar layer.
@@ -487,7 +471,6 @@ class ErrorBar:
 
 
 class ViolinPlot:
-
     def __init__(self, data):
         """
         Violin plot layer for 1-D distributions.
@@ -510,7 +493,6 @@ class ViolinPlot:
 
 
 class HexBin:
-
     def __init__(self, x, y, C=None):
         """
         Hexagonal binning layer.
@@ -548,7 +530,6 @@ class HexBin:
 
 
 class Hist2D:
-
     def __init__(self, x, y):
         """
         2D histogram layer.
