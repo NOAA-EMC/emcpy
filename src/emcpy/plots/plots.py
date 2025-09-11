@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 from packaging.version import Version
 import matplotlib
+from ._mpl_compat import boxplot_kwargs
 
 __all__ = [
     'Scatter', 'Histogram', 'Density', 'LinePlot',
@@ -389,11 +390,9 @@ class BoxandWhiskerPlot:
         self.plottype = 'boxandwhisker'
         self.data = data
 
-        # Matplotlib kwargs (modern defaults where applicable)
+        # Core kwargs commonly supported by Matplotlib
         self.notch = False
         self.sym = None
-        self.orientation = 'vertical'   # modern, we’ll map to vert=True/False
-        self.vert = None                # optional legacy explicit override
         self.whis = 1.5
         self.bootstrap = None
         self.usermedians = None
@@ -401,14 +400,21 @@ class BoxandWhiskerPlot:
         self.positions = None
         self.widths = None
         self.patch_artist = False
-
-        # 3.9+ prefers 'tick_labels'; we’ll down-convert to 'labels' on older MPL
-        self.tick_labels = None
-
         self.manage_ticks = True
         self.autorange = False
         self.meanline = False
         self.zorder = None
+
+        if not hasattr(self, "orientation"):
+            self.orientation = "vertical"
+        if not hasattr(self, "tick_labels"):
+            self.tick_labels = None
+        if not hasattr(self, "label"):
+            self.label = None  # legend label; NOT forwarded to mpl
+
+    def to_mpl_kwargs(self):
+        # Centralized Matplotlib compatibility handling
+        return boxplot_kwargs(self)
 
 
 class FillBetween:
