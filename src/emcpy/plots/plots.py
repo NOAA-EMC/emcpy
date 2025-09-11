@@ -9,7 +9,8 @@ __all__ = [
     'VerticalLine', 'HorizontalLine', 'HorizontalSpan',
     'BarPlot', 'HorizontalBar', 'SkewT',
     'GriddedPlot', 'ContourPlot', 'FilledContourPlot',
-    'BoxandWhiskerPlot'
+    'BoxandWhiskerPlot', 'FillBetween', 'ErrorBar',
+    'ViolinPlot', 'HexBin', 'Hist2D',
 ]
 
 
@@ -66,7 +67,6 @@ class Scatter:
 
 
 class Histogram:
-
     def __init__(self, data):
         """
         Constructor for Histogram.
@@ -97,7 +97,6 @@ class Histogram:
 
 
 class Density():
-
     def __init__(self, data):
         """
         Constructor for Density.
@@ -133,7 +132,6 @@ class Density():
 
 
 class LinePlot:
-
     def __init__(self, x, y):
         """
         Constructor for LinePlot.
@@ -157,7 +155,6 @@ class LinePlot:
 
 
 class GriddedPlot:
-
     def __init__(self, x, y, z):
         """
         Constructor for GriddedPlot.
@@ -184,7 +181,6 @@ class GriddedPlot:
 
 
 class ContourPlot:
-
     def __init__(self, x, y, z):
         """
         Constructor for ContourPlot.
@@ -216,7 +212,6 @@ class ContourPlot:
 
 
 class FilledContourPlot:
-
     def __init__(self, x, y, z):
         """
         Constructor for FilledContourPlot.
@@ -247,7 +242,6 @@ class FilledContourPlot:
 
 
 class VerticalLine:
-
     def __init__(self, x):
         """
         Constructor for VerticalLine
@@ -268,7 +262,6 @@ class VerticalLine:
 
 
 class HorizontalLine:
-
     def __init__(self, y):
         """
         Constructor for HorizontalLine
@@ -289,7 +282,6 @@ class HorizontalLine:
 
 
 class HorizontalSpan:
-
     def __init__(self, ymin, ymax):
         """
         Constructor for HorizontalSpan
@@ -309,7 +301,6 @@ class HorizontalSpan:
 
 
 class BarPlot:
-
     def __init__(self, x, height):
         """
         Constructor for BarPlot.
@@ -340,7 +331,6 @@ class BarPlot:
 
 
 class HorizontalBar:
-
     def __init__(self, y, width):
         """
         Constructor to create a horizontal bar plot.
@@ -371,7 +361,6 @@ class HorizontalBar:
 
 
 class SkewT:
-
     def __init__(self, x, y):
         """
         Constructor to create a Skew T plot.
@@ -396,7 +385,6 @@ class SkewT:
 
 
 class BoxandWhiskerPlot:
-
     def __init__(self, data):
         self.plottype = 'boxandwhisker'
         self.data = data
@@ -422,71 +410,157 @@ class BoxandWhiskerPlot:
         self.meanline = False
         self.zorder = None
 
-        # Not supported as a kwarg by MPL 3.7 boxplot(), but we still want legends
+
+class FillBetween:
+    def __init__(self, x, y1, y2):
+        """
+        Area fill between y1 and y2 across x.
+
+        Args:
+            x  : array-like
+            y1 : array-like
+            y2 : array-like
+        """
+        super().__init__()
+        self.plottype = 'fill_between'
+
+        self.x = x
+        self.y1 = y1
+        self.y2 = y2
+
+        self.where = None          # optional boolean mask
+        self.color = 'tab:blue'
+        self.alpha = None
+        self.label = None
+        self.linewidth = None
+        self.linestyle = None
+        self.step = None           # {'pre','post','mid'} or None
+        self.zorder = None
+
+
+class ErrorBar:
+    def __init__(self, x, y):
+        """
+        Error bar layer.
+
+        Args:
+            x : array-like
+            y : array-like
+        """
+        super().__init__()
+        self.plottype = 'errorbar'
+
+        self.x = x
+        self.y = y
+
+        # errors
+        self.yerr = None           # float, array-like, or (lower, upper)
+        self.xerr = None           # float, array-like, or (lower, upper)
+
+        # style / markers
+        self.fmt = 'o'
+        self.color = 'darkgray'
+        self.alpha = None
+        self.markersize = 5
+        self.ecolor = 'black'
+        self.elinewidth = 1.0
+        self.capthick = None
+        self.capsize = 0.0
+        self.barsabove = False
+        self.zorder = None
+
+        # label defaults to non-NaN x count (consistent with Scatter/Histogram)
+        self.label = f'n={np.count_nonzero(~np.isnan(x))}'
+
+
+class ViolinPlot:
+    def __init__(self, data):
+        """
+        Violin plot layer for 1-D distributions.
+
+        Args:
+            data : sequence of 1-D array-like datasets
+        """
+        super().__init__()
+        self.plottype = 'violin'
+
+        self.data = data
+
+        self.positions = None      # sequence of x positions
+        self.widths = 0.8
+        self.showmeans = False
+        self.showmedians = True
+        self.showextrema = True
+        self.alpha = None
+        self.zorder = None
+
+
+class HexBin:
+    def __init__(self, x, y, C=None):
+        """
+        Hexagonal binning layer.
+
+        Args:
+            x : array-like
+            y : array-like
+            C : optional array-like of values to reduce within bins
+        """
+        super().__init__()
+        self.plottype = 'hexbin'
+
+        self.x = x
+        self.y = y
+        self.C = C
+
+        self.gridsize = 30                      # int or (nx, ny)
+        self.reduce_C_function = None           # e.g., np.mean
+        self.extent = None                      # (xmin, xmax, ymin, ymax)
+        self.bins = None                        # None, 'log', or int
+        self.mincnt = None
+        self.linewidths = None
+        self.cmap = 'viridis'
+        self.norm = None                        # optional matplotlib Normalize
+        self.vmin = None
+        self.vmax = None
+        self.alpha = None
+        self.zorder = None
         self.label = None
 
-    # --- NEW: normalization helper to produce Matplotlib-ready kwargs ---
-    def to_mpl_kwargs(self):
+        # colorbar controls
+        self.colorbar = False
+        self.colorbar_label = None
+        self.colorbar_location = 'right'
+
+
+class Hist2D:
+    def __init__(self, x, y):
         """
-        Return (kwargs, legend_label) for matplotlib.axes.Axes.boxplot,
-        normalized across Matplotlib versions.
+        2D histogram layer.
+
+        Args:
+            x : array-like
+            y : array-like
         """
+        super().__init__()
+        self.plottype = 'hist2d'
 
-        # Whitelist: only kwargs boxplot actually understands
-        allowed = {
-            'notch', 'sym', 'vert', 'whis', 'bootstrap', 'usermedians',
-            'conf_intervals', 'positions', 'widths', 'patch_artist',
-            'labels', 'tick_labels',
-            'manage_ticks', 'autorange', 'meanline', 'zorder',
-        }
-        # Start from object attrs
-        inputs = {}
-        for k, v in vars(self).items():
-            if v is None:
-                continue
-            if k in allowed:
-                inputs[k] = v
+        self.x = x
+        self.y = y
 
-        # Legend label: strip from kwargs (MPL 3.7 boxplot has no 'label' kw)
-        legend_label = getattr(self, 'label', None)
+        self.bins = 30                            # int, (nx, ny), or (xbins, ybins)
+        self.range = None                         # ((xmin, xmax), (ymin, ymax))
+        self.density = False
+        self.cmap = 'viridis'
+        self.norm = None                          # optional matplotlib Normalize
+        self.vmin = None
+        self.vmax = None
+        self.cmin = None
+        self.cmax = None
+        self.alpha = None
+        self.zorder = None
+        self.label = None
 
-        # 1) orientation → vert (validated)
-        def _orientation_to_vert(orient: str) -> bool:
-            if not isinstance(orient, str):
-                raise TypeError(
-                    "'orientation' must be a string ('vertical'/'v' or 'horizontal'/'h')"
-                )
-            s = orient.strip().lower()
-            mapping = {
-                'vertical': True, 'v': True, 'vert': True,
-                'horizontal': False, 'h': False, 'horiz': False, 'horz': False,
-            }
-            if s not in mapping:
-                raise ValueError(
-                    f"Invalid 'orientation' value {orient!r}; expected one of "
-                    f"{', '.join(sorted(mapping.keys()))}"
-                )
-            return mapping[s]
-
-        has_vert = ('vert' in inputs)
-        has_orient_attr = (self.orientation is not None)
-
-        if has_vert and has_orient_attr:
-            vert_from_orient = _orientation_to_vert(self.orientation)
-            if bool(inputs['vert']) != vert_from_orient:
-                raise ValueError(
-                    f"Conflicting 'vert' ({inputs['vert']}) and "
-                    f"'orientation' ({self.orientation!r}). Make them consistent."
-                )
-        elif not has_vert and has_orient_attr:
-            inputs['vert'] = _orientation_to_vert(self.orientation)
-        # else: only vert provided or neither → rely on MPL default (True) if missing
-
-        # 2) tick_labels vs labels (runtime dependent)
-        mpl_ver = Version(matplotlib.__version__)
-        if 'tick_labels' in inputs and mpl_ver < Version('3.9'):
-            inputs['labels'] = inputs.pop('tick_labels')
-        elif 'labels' in inputs and mpl_ver >= Version('3.9'):
-            inputs['tick_labels'] = inputs.pop('labels')
-
-        return inputs, legend_label
+        # colorbar controls
+        self.colorbar = True
+        self.colorbar_label = None
+        self.colorbar_location = 'right'

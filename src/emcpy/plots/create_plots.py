@@ -233,6 +233,75 @@ class CreatePlot:
 
         self.yscale = scale
 
+    def add_twinx(self, *layers):
+        """
+        Enable a secondary y-axis (twinx). Optionally pass one or more layers
+        that should be rendered on the right-hand axis.
+        """
+        if layers:
+            if not hasattr(self, "twin_layers"):
+                self.twin_layers = []
+            self.twin_layers.extend(layers)
+        self._use_twinx = True
+
+    def add_twin_ylabel(self, ylabel, labelpad=None, loc='center', **kwargs):
+        """
+        Y label for the secondary y-axis.
+        """
+        self.twin_ylabel = {
+            'ylabel': ylabel,
+            'labelpad': labelpad,
+            'loc': loc,
+            **kwargs
+        }
+
+    def set_twin_ylim(self, bottom=None, top=None):
+        self.twin_ylim = {'bottom': bottom, 'top': top}
+
+    def set_twin_yscale(self, scale):
+        valid_scales = ['log', 'linear', 'symlog', 'logit']
+        if scale not in valid_scales:
+            raise ValueError(f'requested scale {scale} is invalid. Valid '
+                             f'choices are: {" | ".join(valid_scales)}')
+        self.twin_yscale = scale
+
+    def set_twin_yticks(self, ticks=None, minor=False, formatter=None, date_format=None, clear_minor=True):
+        self.twin_yticks = {
+            "ticks": [] if ticks is None else ticks,
+            "minor": minor,
+            "formatter": formatter,
+            "date_format": date_format,
+            "clear_minor": clear_minor,
+        }
+
+    def set_twin_yticklabels(self, labels=None, minor=False, date_format=None, **kwargs):
+        self.twin_yticklabels = {
+            "labels": [] if labels is None else labels,
+            "minor": minor,
+            "date_format": date_format,
+            "kwargs": kwargs,
+        }
+
+    def set_time_axis(self, major="month", minor="week", fmt="%b %Y", rotate=30, ha="right"):
+        """
+        Configure a time-aware x-axis with common defaults.
+
+        Parameters
+        ----------
+        major : {"year","quarter","month","week","day","hour"}, default "month"
+        minor : {"quarter","month","week","day","hour",None}, default "week"
+        fmt   : str, date format passed to DateFormatter, default "%b %Y"
+        rotate: int, rotation for tick labels, default 30
+        ha    : str, horizontalalignment for tick labels, default "right"
+        """
+        self.time_axis = {
+            "major": major,
+            "minor": minor,
+            "fmt": fmt,
+            "rotate": rotate,
+            "ha": ha,
+        }
+
 
 class CreateFigure:
 
@@ -292,9 +361,6 @@ class CreateFigure:
         gs = gridspec.GridSpec(self.nrows, self.ncols)
         self.fig = plt.figure(figsize=self.figsize)
 
-        # Track the last colorbar-capable artist per axes
-        # (read by _last_mappable_for_ax in _plot_colorbar)
-
         for i, plot_obj in enumerate(self.plot_list):
             # --- Axes creation (map vs. normal) ---
             if hasattr(plot_obj, 'projection'):
@@ -318,7 +384,6 @@ class CreateFigure:
                         ax.yaxis.set_major_formatter(lat_formatter)
                 else:
                     ax.set_extent(self.domain.extent, ccrs.PlateCarree())
-
             else:
                 # Regular Axes (SkewT gets its projection)
                 plot_types = [x.plottype for x in plot_obj.plot_layers]
@@ -327,27 +392,61 @@ class CreateFigure:
                 else:
                     ax = self.fig.add_subplot(gs[i])
 
-            # --- Per-axes rendering state ---
+            # --- Optional secondary y-axis (twinx) ---
+            ax_twin = None
+            if getattr(plot_obj, "_use_twinx", False) or getattr(plot_obj, "twin_layers", None):
+                ax_twin = ax.twinx()
+
+            # --- Per-axes rendering state (primary) ---
             st = AxState(ax=ax)  # adapters append any mappables they create
 
-            # --- Render each layer via the adapter registry ---
+            # --- Render each primary-layer via the adapter registry ---
             for layer in plot_obj.plot_layers:
                 adapter = get_adapter(layer.plottype)  # raises KeyError if unknown
                 mappable = adapter.render(self, st, layer)
                 if mappable is not None:
                     st.mappables.append(mappable)
 
-            # --- Plot figure/axes features (title, labels, ticks, colorbar, etc.) ---
+            # --- Render twinx layers (if any) ---
+            if ax_twin is not None:
+                st_twin = AxState(ax=ax_twin)
+                for layer in getattr(plot_obj, "twin_layers", []):
+                    adapter = get_adapter(layer.plottype)
+                    mappable = adapter.render(self, st_twin, layer)
+                    if mappable is not None:
+                        st_twin.mappables.append(mappable)
+
+            # --- Plot figure/axes features (title, labels, ticks, colorbar, etc.) on primary ---
             for feat in vars(plot_obj).keys():
                 self._plot_features(plot_obj, feat, ax)
 
+            # Apply invert flags on primary
             self._apply_invert_flags(plot_obj, ax)
 
-            # --- Shared axes label hiding ---
+            # --- Shared axes label hiding (primary only) ---
             if self.sharex:
                 self._sharex(ax)
             if self.sharey:
                 self._sharey(ax)
+
+            # Final per-axes polish (e.g., time-axis formatting) on primary
+            self._finalize_axis(ax, plot_obj)
+
+            # --- Apply twin-axis specific features & finalize (if present) ---
+            if ax_twin is not None:
+                if hasattr(plot_obj, 'twin_ylabel'):
+                    self._plot_ylabel(ax_twin, plot_obj.twin_ylabel)
+                if hasattr(plot_obj, 'twin_ylim'):
+                    self._set_ylim(ax_twin, plot_obj.twin_ylim)
+                if hasattr(plot_obj, 'twin_yscale'):
+                    self._set_yscale(ax_twin, plot_obj.twin_yscale)
+                if hasattr(plot_obj, 'twin_yticks'):
+                    self._set_yticks(ax_twin, plot_obj.twin_yticks)
+                if hasattr(plot_obj, 'twin_yticklabels'):
+                    self._set_yticklabels(ax_twin, plot_obj.twin_yticklabels)
+
+                # No sharey logic for twin axis; x is shared implicitly
+                self._finalize_axis(ax_twin, plot_obj)
 
     def add_suptitle(self, text, **kwargs):
         """
@@ -355,6 +454,28 @@ class CreateFigure:
         """
         if hasattr(self, 'fig'):
             self.fig.suptitle(text, **kwargs)
+
+    def add_shared_colorbar(self, mappable, axes, *, location: str = "right", label: str | None = None):
+        """
+        Add a single colorbar shared across the given axes (list of Axes).
+
+        Parameters
+        ----------
+        mappable : matplotlib.cm.ScalarMappable
+            The mappable returned by a plotting call (e.g., hexbin, pcolormesh).
+        axes : list[matplotlib.axes.Axes] or matplotlib.axes.Axes
+            Axes to which the colorbar should be associated.
+        location : {"right", "left", "top", "bottom"}, default "right"
+            Where to draw the colorbar relative to the axes grid.
+        label : str, optional
+            Colorbar label text.
+        """
+        if not isinstance(axes, (list, tuple)):
+            axes = [axes]
+        cbar = self.fig.colorbar(mappable, ax=axes, location=location)
+        if label:
+            cbar.set_label(label)
+        return cbar
 
     def plot_logo(self, loc, which='noaa/nws',
                   subplot_orientation='last', zoom=1, alpha=0.5):
@@ -793,6 +914,91 @@ class CreateFigure:
 
         return bp  # dict of artists
 
+    def _fillbetween(self, plotobj, ax):
+        """
+        Render FillBetween layer.
+        """
+        skip = ['plottype', 'x', 'y1', 'y2']
+        inputs = self._get_inputs_dict(skip, plotobj)
+        poly = ax.fill_between(
+            plotobj.x, plotobj.y1, plotobj.y2,
+            **inputs
+        )
+        return poly  # PolyCollection (not a ScalarMappable)
+
+    def _errorbar(self, plotobj, ax):
+        """
+        Render ErrorBar layer.
+        """
+        skip = ['plottype', 'x', 'y']
+        inputs = self._get_inputs_dict(skip, plotobj)
+        cont = ax.errorbar(
+            plotobj.x, plotobj.y,
+            **inputs
+        )
+        return cont  # ErrorbarContainer (not necessarily a ScalarMappable)
+
+    def _violin(self, plotobj, ax):
+        """
+        Render ViolinPlot layer.
+        """
+        skip = ['plottype', 'data']
+        inputs = self._get_inputs_dict(skip, plotobj)
+
+        vio = ax.violinplot(
+            plotobj.data,
+            positions=inputs.pop('positions', None),
+            widths=inputs.pop('widths', None),
+            showmeans=inputs.pop('showmeans', False),
+            showmedians=inputs.pop('showmedians', True),
+            showextrema=inputs.pop('showextrema', True),
+        )
+
+        # Apply alpha to bodies if requested
+        alpha = inputs.pop('alpha', None)
+        if alpha is not None:
+            for b in vio.get('bodies', []):
+                b.set_alpha(alpha)
+
+        return vio  # dict of artists
+
+    def _hexbin(self, plotobj, ax):
+        """
+        Render HexBin layer.
+        """
+        skip = [
+            'plottype', 'x', 'y', 'C',
+            # colorbar-related fields are handled by CreatePlot.add_colorbar()
+            'colorbar', 'colorbar_label', 'colorbar_location'
+        ]
+        inputs = self._get_inputs_dict(skip, plotobj)
+        hb = ax.hexbin(
+            plotobj.x, plotobj.y, C=getattr(plotobj, 'C', None),
+            **inputs
+        )
+
+        return hb  # PolyCollection (ScalarMappable)
+
+    def _hist2d(self, plotobj, ax):
+        """
+        Render Hist2D layer.
+        """
+        skip = [
+            'plottype', 'x', 'y',
+            # colorbar-related fields are handled by CreatePlot.add_colorbar()
+            'colorbar', 'colorbar_label', 'colorbar_location'
+        ]
+        inputs = self._get_inputs_dict(skip, plotobj)
+        h, xedges, yedges, img = ax.hist2d(
+            plotobj.x, plotobj.y,
+            **inputs
+        )
+        alpha = getattr(plotobj, "alpha", None)
+        if alpha is not None:
+            img.set_alpha(alpha)
+
+        return img  # QuadMesh (ScalarMappable)
+
     def _get_inputs_dict(self, skipvars, plotobj):
         """
         Creates dictionary for plot inputs. Skips variables
@@ -1181,6 +1387,53 @@ class CreateFigure:
         """
         if not self._is_first_col(ax):
             plt.setp(ax.get_yticklabels(), visible=False)
+
+    def _apply_time_axis(self, ax, opts: Optional[dict]):
+        """
+        Apply time-axis locators/formatters to `ax` using options set on the plot
+        via CreatePlot.set_time_axis(...). No-op if opts is None.
+        """
+        if not opts:
+            return
+
+        major_map = {
+            "year": mdates.YearLocator(),
+            "quarter": mdates.MonthLocator(bymonth=[1, 4, 7, 10]),
+            "month": mdates.MonthLocator(),
+            "week": mdates.WeekdayLocator(),  # Monday default
+            "day": mdates.DayLocator(),
+            "hour": mdates.HourLocator(),
+        }
+        minor_map = {
+            "quarter": mdates.MonthLocator(bymonth=[1, 4, 7, 10]),
+            "month": mdates.MonthLocator(),
+            "week": mdates.WeekdayLocator(),
+            "day": mdates.DayLocator(),
+            "hour": mdates.HourLocator(),
+            None: None,
+        }
+
+        major = major_map.get(opts.get("major", "month"), mdates.MonthLocator())
+        minor = minor_map.get(opts.get("minor", "week"))
+
+        ax.xaxis.set_major_locator(major)
+        if minor is not None:
+            ax.xaxis.set_minor_locator(minor)
+
+        ax.xaxis.set_major_formatter(mdates.DateFormatter(opts.get("fmt", "%b %Y")))
+        rotate = int(opts.get("rotate", 30))
+        ha = opts.get("ha", "right")
+
+        for lab in ax.get_xticklabels():
+            lab.set_rotation(rotate)
+            lab.set_ha(ha)
+
+    def _finalize_axis(self, ax, plot_obj):
+        """
+        Final per-axes adjustments that should happen after features,
+        inversion, and shared-label handling.
+        """
+        self._apply_time_axis(ax, getattr(plot_obj, "time_axis", None))
 
     def _subplot_spec(self, ax):
         """
