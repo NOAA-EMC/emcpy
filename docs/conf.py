@@ -100,7 +100,7 @@ sphinx_gallery_conf = {
     "download_all_examples": False,
     "remove_config_comments": True,
     "subsection_order": subsection_order,
-    "min_reported_time": 0, 
+    "min_reported_time": 0,
 }
 
 
