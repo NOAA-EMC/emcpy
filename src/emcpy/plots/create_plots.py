@@ -370,12 +370,20 @@ class CreateFigure:
                 else:
                     self.domain = Domain(plot_obj.domain)
 
-                self.projection = MapProjection(plot_obj.projection)
+                cenlon = getattr(plot_obj, "cenlon", None)
+                cenlat = getattr(plot_obj, "cenlat", None)
+                # fall back to domain defaults if not set on the plot
+                if cenlon is None:
+                    cenlon = getattr(self.domain, "cenlon", None)
+                if cenlat is None:
+                    cenlat = getattr(self.domain, "cenlat", None)
+                self.projection = MapProjection(plot_obj.projection, cenlon=cenlon, cenlat=cenlat)
                 ax = self.fig.add_subplot(gs[i], projection=self.projection.projection)
 
+                # fixed
                 if str(self.projection) not in ['npstere', 'spstere']:
-                    ax.set_extent(self.domain.extent)
-                    if str(self.projection) not in ['lamconf']:
+                    ax.set_extent(self.domain.extent, crs=ccrs.PlateCarree())
+                    if str(self.projection) not in ['lambert']:
                         ax.set_xticks(self.domain.xticks, crs=ccrs.PlateCarree())
                         ax.set_yticks(self.domain.yticks, crs=ccrs.PlateCarree())
                         lon_formatter = LongitudeFormatter(zero_direction_label=False)
@@ -383,7 +391,7 @@ class CreateFigure:
                         ax.xaxis.set_major_formatter(lon_formatter)
                         ax.yaxis.set_major_formatter(lat_formatter)
                 else:
-                    ax.set_extent(self.domain.extent, ccrs.PlateCarree())
+                    ax.set_extent(self.domain.extent, crs=ccrs.PlateCarree())
             else:
                 # Regular Axes (SkewT gets its projection)
                 plot_types = [x.plottype for x in plot_obj.plot_layers]
@@ -562,41 +570,24 @@ class CreateFigure:
 
     def _map_transform(self):
         """
-        Return the CRS to be used as the data transform for map layers.
-
-        Preference order:
-          1) self.projection.transform  (explicit data CRS, e.g., PlateCarree for lat/lon)
-          2) self.projection.projection (axes projection as a fallback)
-          3) cartopy.crs.PlateCarree()  (final fallback with a warning)
-
-        This makes _map_* renderers robust even if MapProjection is extended
-        or customized and one of the attributes is missing.
+        Always treat map-layer inputs as geographic lon/lat.
         """
-        tr = getattr(self.projection, "transform", None)
-        if tr is not None:
-            return tr
-
-        pr = getattr(self.projection, "projection", None)
-        if pr is not None:
-            return pr
-
-        warnings.warn(
-            "MapProjection has neither 'transform' nor 'projection'; "
-            "defaulting to PlateCarree().",
-            RuntimeWarning,
-            stacklevel=3,
-        )
-
         return ccrs.PlateCarree()
 
     def _map_scatter(self, plotobj, ax):
-
-        integer_field = bool(getattr(plotobj, "integer_field", False))
+        """
+        Render MapScatter layer.
+    
+        - Supports unlabeled (solid-color) points when data is None.
+        - If integer_field=True, builds a discrete BoundaryNorm automatically
+          (derives vmin/vmax from data when not provided).
+        """
         xform = self._map_transform()
 
+        # --- Unlabeled points (no scalar mapping/colorbar) ---
         if plotobj.data is None:
-            # unlabeled points (no scalar mapping)
-            skip = ['plottype', 'longitude', 'latitude', 'markersize', 'integer_field', 'colorbar']
+            skip = ['plottype', 'longitude', 'latitude', 'markersize',
+                    'integer_field', 'colorbar']
             inputs = self._get_inputs_dict(skip, plotobj)
             cs = ax.scatter(
                 plotobj.longitude, plotobj.latitude,
@@ -604,29 +595,10 @@ class CreateFigure:
             )
             return cs  # PathCollection (not scalar-mappable)
 
-        # scalar-mapped points
+        # --- Scalar-mapped points ---
         skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize',
                 'colorbar', 'normalize', 'integer_field']
         inputs = self._get_inputs_dict(skip, plotobj)
-
-        norm = None
-        if integer_field:
-            vmin = inputs.get('vmin')
-            vmax = inputs.get('vmax')
-            if vmin is None or vmax is None:
-                raise ValueError(
-                    "For integer_field=True, both vmin and vmax must "
-                    "be provided on the MapScatter layer."
-                )
-            cmap_name = inputs.get('cmap', 'viridis')
-            cmap = _cmaps.get_cmap(cmap_name)
-            norm = matplotlib.colors.BoundaryNorm(
-                np.arange(vmin - 0.5, vmax + 0.5, 1), cmap.N
-            )
-            inputs.setdefault('cmap', cmap)
-            # IMPORTANT: cannot pass vmin/vmax together with a norm
-            inputs.pop('vmin', None)
-            inputs.pop('vmax', None)
 
         # If we’re passing c=..., drop conflicting color keys
         inputs.pop('c', None)
@@ -634,37 +606,104 @@ class CreateFigure:
         inputs.pop('facecolor', None)
         inputs.pop('facecolors', None)
 
+        # Optional discrete (integer) coloring
+        norm = None
+        if bool(getattr(plotobj, "integer_field", False)):
+            vals = np.asarray(plotobj.data)
+            finite = vals[np.isfinite(vals)]
+            if finite.size == 0:
+                raise ValueError("MapScatter: integer_field=True requires non-empty numeric data.")
+            vmin = inputs.get('vmin'); vmax = inputs.get('vmax')
+            if vmin is None or vmax is None:
+                vmin = int(np.floor(finite.min()))
+                vmax = int(np.ceil(finite.max()))
+            # Build discrete boundaries [vmin-0.5, ..., vmax+0.5]
+            cmap_name = inputs.get('cmap', 'viridis')
+            cmap = _cmaps.get_cmap(cmap_name)
+            boundaries = np.arange(vmin - 0.5, vmax + 1.5, 1)
+            norm = matplotlib.colors.BoundaryNorm(boundaries, cmap.N)
+            inputs.setdefault('cmap', cmap)
+            # IMPORTANT: cannot pass vmin/vmax with a norm
+            inputs.pop('vmin', None)
+            inputs.pop('vmax', None)
+
         cs = ax.scatter(
             plotobj.longitude, plotobj.latitude,
             c=plotobj.data, s=plotobj.markersize,
             **inputs, norm=norm, transform=xform
         )
-
-        return cs
+        return cs  # PathCollection (ScalarMappable)
 
     def _map_gridded(self, plotobj, ax):
-
+        """
+        Render MapGridded layer (pcolormesh).
+    
+        - Accepts center grids (ny, nx[, t]) or edge grids (ny+1, nx+1[, t]).
+        - Auto-sets shading='flat' for edge grids unless user specified.
+        - If integer_field=True, builds a discrete BoundaryNorm automatically.
+        - Supports tiled data in the last dimension (loops tiles).
+        """
+        xform = self._map_transform()
         skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar']
         inputs = self._get_inputs_dict(skip, plotobj)
-        xform = self._map_transform()
+
+        # Choose shading default based on edge vs center grid (2D case)
+        try:
+            lat_shape = np.shape(plotobj.latitude)
+            dat_shape = np.shape(plotobj.data)
+            is_2d = (len(lat_shape) == 2 and len(dat_shape) == 2)
+            edges_ok = is_2d and (lat_shape[0] == dat_shape[0] + 1 and lat_shape[1] == dat_shape[1] + 1)
+            if 'shading' not in inputs:
+                inputs['shading'] = 'flat' if edges_ok else 'auto'
+        except Exception:
+            inputs.setdefault('shading', 'auto')
+
+        # Optional discrete (integer) coloring
+        norm = None
+        if bool(getattr(plotobj, "integer_field", False)):
+            vals = np.asarray(plotobj.data)
+            finite = vals[np.isfinite(vals)]
+            if finite.size == 0:
+                raise ValueError("MapGridded: integer_field=True requires non-empty numeric data.")
+            vmin = inputs.get("vmin"); vmax = inputs.get("vmax")
+            if vmin is None or vmax is None:
+                vmin = int(np.floor(finite.min()))
+                vmax = int(np.ceil(finite.max()))
+            cmap_name = inputs.get("cmap", "viridis")
+            cmap = _cmaps.get_cmap(cmap_name)
+            boundaries = np.arange(vmin - 0.5, vmax + 1.5, 1)
+            norm = matplotlib.colors.BoundaryNorm(boundaries, cmap.N)
+            inputs.setdefault("cmap", cmap)
+            # IMPORTANT: cannot pass vmin/vmax with a norm
+            inputs.pop("vmin", None)
+            inputs.pop("vmax", None)
+
+        # Remove potential conflicting color args (rare, but safe)
+        inputs.pop('c', None)
+        inputs.pop('color', None)
+        inputs.pop('facecolor', None)
+        inputs.pop('facecolors', None)
 
         cs = None
+        # Tiled longitude/latitude grids (tiles in last dim)
         if getattr(plotobj.longitude, "ndim", 2) == 3:
             tiles = plotobj.longitude.shape[-1]
             for i in range(tiles):
+                # data may be 2D or 3D (match tile if present)
+                Z = plotobj.data[..., i] if getattr(plotobj.data, "ndim", 2) == 3 else plotobj.data
                 cs = ax.pcolormesh(
                     plotobj.longitude[:, :, i],
                     plotobj.latitude[:, :, i],
-                    plotobj.data[:, :, i],
-                    **inputs, transform=xform
+                    Z,
+                    **inputs, transform=xform, norm=norm
                 )
         else:
             cs = ax.pcolormesh(
                 plotobj.longitude, plotobj.latitude, plotobj.data,
-                **inputs, transform=xform
+                **inputs, transform=xform, norm=norm
             )
 
-        return cs  # QuadMesh (last plotted if multiple tiles)
+        return cs  # QuadMesh (ScalarMappable)
 
     def _map_contour(self, plotobj, ax):
 

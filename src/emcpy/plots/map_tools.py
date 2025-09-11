@@ -85,7 +85,7 @@ class Domain:
     def _south(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
-        for arctic domain.
+        for antarctic domain.
         """
         self.extent = (-180, 180, -90, -50)
         self.xticks = dd.get('xticks', (-180, -90, -30, 0,
@@ -93,7 +93,7 @@ class Domain:
         self.yticks = dd.get('yticks', (-90, -75, -50))
 
         self.cenlon = dd.get('cenlon', 0)
-        self.cenlat = dd.get('cenlat', 90)
+        self.cenlat = dd.get('cenlat', -90)
 
     def _north_america(self, *, dd: Mapping[str, Any]) -> None:
         """
@@ -388,17 +388,15 @@ class MapProjection:
         self.transform = self.projection
 
     def _lambertconformal(self):
-        """Creates projection using Lambert Conformal from Cartopy."""
-
         if self.cenlon is None or self.cenlat is None:
-            raise TypeError("Need 'cenlon' and cenlat to plot Lambert "
-                            "Conformal projection. This projection also "
-                            "does not work for a global domain.")
+            raise TypeError("Need 'cenlon' and cenlat to plot Lambert Conformal...")
+    
+        self.projection = ccrs.LambertConformal(
+            central_longitude=self.cenlon,
+            central_latitude=self.cenlat
+        )
 
-        self.projection = ccrs.LambertConformal(central_longitude=self.cenlon,
-                                                central_latitude=self.cenlat)
-
-        self.transform = self.projection
+        self.transform = ccrs.PlateCarree()
 
     def _npstereo(self):
         """
