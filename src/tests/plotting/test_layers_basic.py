@@ -12,7 +12,7 @@ from emcpy.plots.plots import (
     LinePlot, Histogram, Density, Scatter, BarPlot, HorizontalBar,
     GriddedPlot, ContourPlot, FilledContourPlot, BoxandWhiskerPlot,
     HorizontalSpan, SkewT, FillBetween, ErrorBar, ViolinPlot,
-    HexBin, Hist2D, LinePlot,
+    HexBin, Hist2D,
 )
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
