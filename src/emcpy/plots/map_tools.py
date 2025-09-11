@@ -390,7 +390,7 @@ class MapProjection:
     def _lambertconformal(self):
         if self.cenlon is None or self.cenlat is None:
             raise TypeError("Need 'cenlon' and cenlat to plot Lambert Conformal...")
-    
+
         self.projection = ccrs.LambertConformal(
             central_longitude=self.cenlon,
             central_latitude=self.cenlat

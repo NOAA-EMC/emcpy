@@ -31,7 +31,8 @@ cl.linewidths = 0.6
 p.plot_layers.append(cl)
 
 p.add_title("Filled contours + line overlays")
-p.add_xlabel("x"); p.add_ylabel("y")
+p.add_xlabel("x")
+p.add_ylabel("y")
 p.add_grid()
 p.add_colorbar(label="Z")
 

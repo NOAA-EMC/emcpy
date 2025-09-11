@@ -19,7 +19,9 @@ dates = np.array([start + dt.timedelta(days=i) for i in range(170)])
 y = 10 + np.sin(np.linspace(0, 6*np.pi, dates.size)) + 0.2*np.random.randn(dates.size)
 
 p = CreatePlot()
-lp = LinePlot(dates, y); lp.linewidth=1.8; lp.label="series"
+lp = LinePlot(dates, y)
+lp.linewidth = 1.8
+lp.label = "series"
 p.plot_layers = [lp]
 p.add_title("Datetime axis (monthly majors, weekly minors)")
 p.add_ylabel("value")

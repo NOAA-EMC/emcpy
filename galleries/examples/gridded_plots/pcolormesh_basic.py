@@ -21,7 +21,8 @@ g.cmap = "viridis"
 p.plot_layers = [g]
 
 p.add_title("pcolormesh (Gridded)")
-p.add_xlabel("x"); p.add_ylabel("y")
+p.add_xlabel("x")
+p.add_ylabel("y")
 p.add_grid()
 p.add_colorbar(label="value")
 

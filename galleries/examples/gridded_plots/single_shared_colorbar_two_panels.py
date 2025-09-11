@@ -39,7 +39,9 @@ gr.vmin = vmin
 gr.vmax = vmax
 
 right.plot_layers = [gr]
-right.add_title("Panel B"); right.add_xlabel("x"); right.add_ylabel("y")
+right.add_title("Panel B")
+right.add_xlabel("x")
+right.add_ylabel("y")
 right.add_grid()
 
 # Ask for a single colorbar (EMCPy will place it under the bottom-right axes)

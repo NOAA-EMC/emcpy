@@ -25,7 +25,8 @@ cf.cmap = "Spectral_r"
 p.plot_layers = [cf]
 
 p.add_title("Discrete filled contours")
-p.add_xlabel("x"); p.add_ylabel("y")
+p.add_xlabel("x")
+p.add_ylabel("y")
 p.add_grid()
 p.add_colorbar(label="Z")
 

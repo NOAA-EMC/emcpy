@@ -23,7 +23,8 @@ hb.mincnt = 1
 
 p_left.plot_layers = [hb]
 p_left.add_title("Hexbin")
-p_left.add_xlabel("x"); p_left.add_ylabel("y")
+p_left.add_xlabel("x")
+p_left.add_ylabel("y")
 p_left.add_grid()
 p_left.add_colorbar(label="counts")        # EMCPy per-axes colorbar
 
@@ -33,7 +34,8 @@ h2 = Hist2D(x, y)
 h2.bins = 40
 p_right.plot_layers = [h2]
 p_right.add_title("2D Histogram")
-p_right.add_xlabel("x"); p_right.add_ylabel("y")
+p_right.add_xlabel("x")
+p_right.add_ylabel("y")
 p_right.add_grid()
 p_right.add_colorbar(label="counts")
 

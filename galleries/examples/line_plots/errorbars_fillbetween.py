@@ -33,8 +33,8 @@ layers.append(fb)
 
 # Model line
 lp = LinePlot(xx, y_model)
-lp.linewidth=2
-lp.label="model"
+lp.linewidth = 2
+lp.label = "model"
 layers.append(lp)
 
 # Observations with asymmetric error bars
@@ -42,7 +42,7 @@ eb = ErrorBar(x, y_obs)
 eb.yerr = [err_lo, err_hi]
 eb.fmt = "o"
 eb.capsize = 3
-eb.label="observations"
+eb.label = "observations"
 layers.append(eb)
 
 

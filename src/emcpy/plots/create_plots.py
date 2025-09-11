@@ -577,7 +577,7 @@ class CreateFigure:
     def _map_scatter(self, plotobj, ax):
         """
         Render MapScatter layer.
-    
+
         - Supports unlabeled (solid-color) points when data is None.
         - If integer_field=True, builds a discrete BoundaryNorm automatically
           (derives vmin/vmax from data when not provided).
@@ -613,7 +613,8 @@ class CreateFigure:
             finite = vals[np.isfinite(vals)]
             if finite.size == 0:
                 raise ValueError("MapScatter: integer_field=True requires non-empty numeric data.")
-            vmin = inputs.get('vmin'); vmax = inputs.get('vmax')
+            vmin = inputs.get('vmin')
+            vmax = inputs.get('vmax')
             if vmin is None or vmax is None:
                 vmin = int(np.floor(finite.min()))
                 vmax = int(np.ceil(finite.max()))
@@ -637,7 +638,7 @@ class CreateFigure:
     def _map_gridded(self, plotobj, ax):
         """
         Render MapGridded layer (pcolormesh).
-    
+
         - Accepts center grids (ny, nx[, t]) or edge grids (ny+1, nx+1[, t]).
         - Auto-sets shading='flat' for edge grids unless user specified.
         - If integer_field=True, builds a discrete BoundaryNorm automatically.
@@ -665,7 +666,8 @@ class CreateFigure:
             finite = vals[np.isfinite(vals)]
             if finite.size == 0:
                 raise ValueError("MapGridded: integer_field=True requires non-empty numeric data.")
-            vmin = inputs.get("vmin"); vmax = inputs.get("vmax")
+            vmin = inputs.get("vmin")
+            vmax = inputs.get("vmax")
             if vmin is None or vmax is None:
                 vmin = int(np.floor(finite.min()))
                 vmax = int(np.ceil(finite.max()))

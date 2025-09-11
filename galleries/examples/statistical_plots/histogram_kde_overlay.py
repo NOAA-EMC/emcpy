@@ -33,7 +33,8 @@ kde.linewidth = 2
 p.plot_layers.append(kde)
 
 p.add_title("Histogram + KDE (density)")
-p.add_xlabel("value"); p.add_ylabel("density")
+p.add_xlabel("value")
+p.add_ylabel("density")
 p.add_grid()
 p.add_legend(loc="upper left", frameon=False)
 

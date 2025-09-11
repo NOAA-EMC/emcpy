@@ -25,7 +25,8 @@ sc.linear_regression = {"linewidth": 2, "color": "tab:orange"}  # style for the 
 p.plot_layers = [sc]
 
 p.add_title("Scatter with regression fit")
-p.add_xlabel("x"); p.add_ylabel("y")
+p.add_xlabel("x")
+p.add_ylabel("y")
 p.add_grid()
 p.add_legend(loc="upper left", frameon=False)
 

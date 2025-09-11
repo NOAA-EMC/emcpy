@@ -21,33 +21,34 @@ plot = CreatePlot()
 layers = []
 
 lp = LinePlot(x, y1)
-lp.color="tab:blue"
-lp.linestyle="-"
-lp.linewidth=2
-lp.label="sin(x)"
+lp.color = "tab:blue"
+lp.linestyle = "-"
+lp.linewidth = 2
+lp.label = "sin(x)"
 layers.append(lp)
 
 lp = LinePlot(x, y2)
-lp.color="tab:orange"
-lp.linestyle="--"
-lp.linewidth=1.8
-lp.marker="o"
-lp.markersize=3
-lp.label="0.7 cos(x) + noise"
+lp.color = "tab:orange"
+lp.linestyle = "--"
+lp.linewidth = 1.8
+lp.marker = "o"
+lp.markersize = 3
+lp.label = "0.7 cos(x) + noise"
 layers.append(lp)
 
 lp = LinePlot(x, y3)
-lp.color="tab:green"
-lp.linestyle="-."
-lp.linewidth=2
-lp.marker="s"
-lp.markersize=3
-lp.label="0.4 sin(2x)"
+lp.color = "tab:green"
+lp.linestyle = "-."
+lp.linewidth = 2
+lp.marker = "s"
+lp.markersize = 3
+lp.label = "0.4 sin(2x)"
 layers.append(lp)
 
 plot.plot_layers = layers
 plot.add_title("Line styles & markers (EMCPy)")
-plot.add_xlabel("x"); plot.add_ylabel("value")
+plot.add_xlabel("x")
+plot.add_ylabel("value")
 plot.add_grid()
 plot.add_legend(loc="center left", bbox_to_anchor=(1.02, 0.5), frameon=False)
 
