@@ -85,8 +85,7 @@ subsection_order = ExplicitOrder([
     "../galleries/plot_types/gridded",
     "../galleries/plot_types/map",
     "../galleries/examples/line_plots",
-    "../galleries/examples/scatter_plots",
-    "../galleries/examples/histograms",
+    "../galleries/examples/statistical_plots",
     "../galleries/examples/map_plots",
     "*",  # catch any new/extra subsections so builds don't error
 ])
