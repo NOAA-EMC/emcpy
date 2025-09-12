@@ -80,93 +80,110 @@ class MapGridded:
     Parameters
     ----------
     latitude : array-like
-        Either a 2D array of **edges** (ny+1, nx+1) or **centers** (ny, nx).
-        For tiled data, may be 3D with tiles in the last dimension.
+        - 1D **edges** of length ny+1 (paired with 1D longitude edges), or
+        - 2D/3D arrays (ny[, nx[, ntile]]) of **centers** or **edges**.
     longitude : array-like
         Same shape rules as `latitude`.
     data : array-like
-        If `latitude/longitude` are centers: shape (ny, nx) or (ny, nx, ntile).
-        If they are edges: shape (ny, nx) or (ny, nx, ntile).
+        - If latitude/longitude are 1D edges: shape (ny, nx).
+        - If latitude/longitude are 2D/3D: either centers (ny, nx[, ntile])
+          or edges (ny+1, nx+1[, ntile]).
 
     Notes
     -----
-    This class validates:
-      - latitude/longitude shapes match each other.
-      - Either CENTER grids (same shape as data) or EDGE grids (one larger
-        in each spatial dimension than data).
-      - Latitude values plausibly within [-90, 90]; if not, a helpful error
-        suggests swapping the constructor order.
+    - Validates that latitude/longitude shapes match (for 2D/3D), or are both 1D.
+    - Supports tiled data when lat/lon are 2D/3D with tiles in the last dim.
+    - Latitude plausibility check helps catch swapped (lon, lat) order.
     """
 
     def __init__(self, latitude, longitude, data):
+
         self.plottype = 'map_gridded'
 
-        self.latitude = np.asarray(latitude)
-        self.longitude = np.asarray(longitude)
-        self.data = np.asarray(data)
+        lat = np.asarray(latitude)
+        lon = np.asarray(longitude)
+        Z = np.asarray(data)
 
-        # ---- shape checks ----
-        if self.latitude.shape != self.longitude.shape:
-            raise ValueError(
-                "MapGridded: latitude and longitude must have the same shape "
-                "(either centers (ny, nx[, t]) or edges (ny+1, nx+1[, t]))."
-            )
+        # ---- accept 1D edge arrays (lon, lat) with 2D centers Z ----
+        if lat.ndim == 1 and lon.ndim == 1:
+            ny = lat.size - 1
+            nx = lon.size - 1
+            if ny <= 0 or nx <= 0:
+                raise ValueError("MapGridded: 1D edge arrays must have length >= 2.")
 
-        lat_shape = self.latitude.shape
-        data_shape = self.data.shape
+            if Z.ndim != 2 or Z.shape != (ny, nx):
+                raise ValueError(
+                    "MapGridded: with 1D edge latitude/longitude, "
+                    "data must be 2D with shape (len(lat)-1, len(lon)-1)."
+                )
 
-        def _spatial(shape):
-            # Return (ny, nx, ntile) with ntile=1 if 2D
-            if len(shape) == 2:
-                return shape[0], shape[1], 1
-            if len(shape) == 3:
-                return shape[0], shape[1], shape[2]
-            raise ValueError("MapGridded: arrays must be 2D or 3D (tiles in last dim).")
+            self.latitude = lat
+            self.longitude = lon
+            self.data = Z
 
-        lat_ny, lat_nx, lat_nt = _spatial(lat_shape)
-        dat_ny, dat_nx, dat_nt = _spatial(data_shape)
+        else:
+            # ---- 2D/3D center/edge grids (tiles in last dim allowed) ----
+            if lat.shape != lon.shape:
+                raise ValueError(
+                    "MapGridded: latitude and longitude must have the same shape "
+                    "(either centers (ny, nx[, t]) or edges (ny+1, nx+1[, t]))."
+                )
+            if lat.ndim not in (2, 3):
+                raise ValueError("MapGridded: latitude/longitude must be 2D or 3D.")
 
-        # Same tiling or no tiles
-        if not (lat_nt == 1 or dat_nt == 1 or lat_nt == dat_nt):
-            raise ValueError(
-                "MapGridded: tile count mismatch between lat/lon and data "
-                f"(lat/lon tiles={lat_nt}, data tiles={dat_nt})."
-            )
+            # Extract spatial/tile dims
+            lat_ny, lat_nx = lat.shape[0], lat.shape[1]
+            lat_nt = 1 if lat.ndim == 2 else lat.shape[2]
 
-        centers_ok = (lat_ny == dat_ny and lat_nx == dat_nx)
-        edges_ok = (lat_ny == dat_ny + 1 and lat_nx == dat_nx + 1)
+            if Z.ndim == 2:
+                dat_ny, dat_nx, dat_nt = Z.shape[0], Z.shape[1], 1
+            elif Z.ndim == 3:
+                dat_ny, dat_nx, dat_nt = Z.shape
+            else:
+                raise ValueError("MapGridded: data must be 2D or 3D.")
 
-        if not (centers_ok or edges_ok):
-            raise ValueError(
-                "MapGridded: latitude/longitude must be either CENTER grids "
-                f"(same size as data: {dat_ny}x{dat_nx}) or EDGE grids "
-                f"({dat_ny+1}x{dat_nx+1}). Got lat/lon {lat_ny}x{lat_nx}."
-            )
+            # Same tiling (or broadcastable)
+            if not (lat_nt == 1 or dat_nt == 1 or lat_nt == dat_nt):
+                raise ValueError(
+                    "MapGridded: tile count mismatch between lat/lon and data "
+                    f"(lat/lon tiles={lat_nt}, data tiles={dat_nt})."
+                )
 
-        # ---- plausibility check for swapped lat/lon ----
-        lat_abs_max = np.nanmax(np.abs(self.latitude)) if self.latitude.size else 0
-        lon_abs_max = np.nanmax(np.abs(self.longitude)) if self.longitude.size else 0
-        if lat_abs_max > 90 and lon_abs_max <= 180:
-            raise ValueError(
-                "MapGridded: latitude values exceed 90°, which suggests you passed "
-                "longitude first. Constructor order is (latitude, longitude, data)."
-            )
+            centers_ok = (lat_ny == dat_ny and lat_nx == dat_nx)
+            edges_ok = (lat_ny == dat_ny + 1 and lat_nx == dat_nx + 1)
+
+            if not (centers_ok or edges_ok):
+                raise ValueError(
+                    "MapGridded: latitude/longitude must be either CENTER grids "
+                    f"(same size as data: {dat_ny}x{dat_nx}) or EDGE grids "
+                    f"({dat_ny+1}x{dat_nx+1}). Got lat/lon {lat_ny}x{lat_nx}."
+                )
+
+            self.latitude = lat
+            self.longitude = lon
+            self.data = Z
+
+        # ---- plausibility check for swapped inputs ----
+        try:
+            lat_abs_max = np.nanmax(np.abs(self.latitude))
+            lon_abs_max = np.nanmax(np.abs(self.longitude))
+            if lat_abs_max > 90 and lon_abs_max <= 180:
+                raise ValueError(
+                    "MapGridded: latitude values exceed 90°, which suggests you passed "
+                    "longitude first. Constructor order is (latitude, longitude, data)."
+                )
+        except ValueError:
+            # empty arrays or all-nan; ignore
+            pass
 
         # ---- plotting defaults ----
         self.cmap = 'viridis'
-        # Give a helpful default for pcolormesh; renderer passes through if present
-        self.shading = 'auto'
-
-        if self.latitude.ndim == 3:
-            # Provide defaults that make tiled plots consistent
-            self.vmin = np.nanmin(self.data)
-            self.vmax = np.nanmax(self.data)
-        else:
-            self.vmin = None
-            self.vmax = None
-
+        self.shading = 'auto'     # good default for pcolormesh
+        self.vmin = None
+        self.vmax = None
         self.alpha = None
         self.colorbar = True
+        self.integer_field = False
 
 
 class MapContour:
