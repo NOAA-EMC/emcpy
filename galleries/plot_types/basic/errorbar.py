@@ -1,6 +1,6 @@
 """
-Error Bars (EMCPy)
-==================
+Error Bars
+==========
 
 Asymmetric error bars using the :class:`ErrorBar` layer.
 """

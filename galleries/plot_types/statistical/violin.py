@@ -1,6 +1,6 @@
 """
-Violin Plot (EMCPy)
-===================
+Violin Plot
+===========
 
 Distribution comparison using :class:`ViolinPlot`.
 """

@@ -1,6 +1,6 @@
 """
-2D Histogram (EMCPy)
-====================
+2D Histogram
+============
 
 Bivariate histogram using :class:`Hist2D` with a colorbar.
 """

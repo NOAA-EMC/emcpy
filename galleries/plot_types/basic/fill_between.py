@@ -1,6 +1,6 @@
 """
-Fill Between (EMCPy)
-====================
+Fill Between
+============
 
 A shaded band between two curves using the :class:`FillBetween` layer.
 """

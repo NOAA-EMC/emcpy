@@ -1,6 +1,6 @@
 """
-HexBin (EMCPy)
-==============
+HexBin
+======
 
 Density of points with :class:`HexBin` and a colorbar.
 """
