@@ -15,6 +15,5 @@ plt.show()
 ```
 ---
 ## Next steps
-- Explore the [Examples gallery](../auto_examples/index.rst) for real-world plots.
-- Try a [How-to guide](../how-to/index.md) for quick solutions.
+- Explore the [Examples gallery](../examples/index) for real-world plots.
 - Read [Explanations](../explanations/index.md) to understand design choices.

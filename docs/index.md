@@ -21,13 +21,12 @@ This documentation is structured to help you at every stage:
 :hidden:
 
 get-started/index
-how-to/index
 explanations/index
 contributing/index
-auto_plot_types/index
-auto_examples/index
+plot_types/index
+examples/index
 
 ```{tip}
 If you’re new, start with [Get started](get-started/index.md).
 
-If you just want working code, jump to the [How-to guides](how-to/index.md) or [Examples gallery](auto_examples/index.rst).```
+If you just want working code, jump to the [How-to guides](how-to/index.md) or [Examples gallery](../examples/index).```

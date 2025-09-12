@@ -4,8 +4,10 @@ import sys
 
 
 # -- Path setup --------------------------------------------------------------
-ROOT = os.path.abspath(os.path.join(__file__, '..', '..'))
-sys.path.insert(0, ROOT)
+HERE = os.path.dirname(__file__)              # .../docs
+ROOT = os.path.abspath(os.path.join(HERE, '..'))
+SRC = os.path.join(ROOT, 'src')
+sys.path.insert(0, SRC)
 
 
 # -- Project info ------------------------------------------------------------
@@ -66,41 +68,40 @@ html_css_files = ['css/extra.css']
 # -- sphinx-gallery configuration -------------------------------------------
 from sphinx_gallery.sorting import FileNameSortKey, ExplicitOrder
 
-# Source dirs (outside docs/)
-examples_dirs = [
-    os.path.join(ROOT, "galleries", "plot_types"),
-    os.path.join(ROOT, "galleries", "examples"),
-]
+# input example roots (relative to docs/)
+examples_dirs = ['../galleries/plot_types', '../galleries/examples']
 
-# Destination dirs (inside docs/) — these become URLs
-gallery_dirs = [
-    "plot_types",
-    "examples",
-]
+# output gallery roots (inside docs/)
+gallery_dirs  = ['plot_types', 'examples']
 
-# If you want a specific subsection order:
+# explicit subsection order (MUST match discovery strings byte-for-byte)
 subsection_order = ExplicitOrder([
-    "../galleries/plot_types/basic",
-    "../galleries/plot_types/statistical",
-    "../galleries/plot_types/gridded",
-    "../galleries/plot_types/map",
-    "../galleries/examples/line_plots",
-    "../galleries/examples/statistical_plots",
-    "../galleries/examples/map_plots",
-    "*",  # catch any new/extra subsections so builds don't error
+    # plot_types
+    '../galleries/plot_types/basic',
+    '../galleries/plot_types/statistical',
+    '../galleries/plot_types/gridded',
+    '../galleries/plot_types/map',
+
+    # examples
+    '../galleries/examples/line_plots',
+    '../galleries/examples/statistical_plots',
+    '../galleries/examples/gridded_plots',
+    '../galleries/examples/map_plots',
+
+    # catch anything new you add later so builds don't fail
+    '*',
 ])
 
 sphinx_gallery_conf = {
-    "examples_dirs": examples_dirs,
-    "gallery_dirs": gallery_dirs,
-    "plot_gallery": True,
-    "image_scrapers": ("matplotlib",),
-    "within_subsection_order": FileNameSortKey,
-    "filename_pattern": r"^((?!_skip).)*$",
-    "download_all_examples": False,
-    "remove_config_comments": True,
-    "subsection_order": subsection_order,
-    "min_reported_time": 0,
+    'examples_dirs': examples_dirs,
+    'gallery_dirs': gallery_dirs,
+    'plot_gallery': True,
+    'within_subsection_order': FileNameSortKey,
+    'filename_pattern': r'^((?!skip_|_skip).)*$',
+    'download_all_examples': False,
+    'remove_config_comments': True,
+    'subsection_order': subsection_order,
+    'min_reported_time': 0,
 }
 
 
@@ -112,5 +113,7 @@ html_show_sphinx = False
 
 # -- Misc --------------------------------------------------------------------
 exclude_patterns = [
-    '_build', 'Thumbs.db', '.DS_Store',
+    '_build',
+    'Thumbs.db', '.DS_Store',
+    '**/.ipynb_checkpoints/*',
 ]
