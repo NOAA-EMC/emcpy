@@ -636,76 +636,39 @@ class CreateFigure:
         return cs  # PathCollection (ScalarMappable)
 
     def _map_gridded(self, plotobj, ax):
-        """
-        Render MapGridded layer (pcolormesh).
 
-        - Accepts center grids (ny, nx[, t]) or edge grids (ny+1, nx+1[, t]).
-        - Auto-sets shading='flat' for edge grids unless user specified.
-        - If integer_field=True, builds a discrete BoundaryNorm automatically.
-        - Supports tiled data in the last dimension (loops tiles).
-        """
-        xform = self._map_transform()
-        skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar']
+        # Do NOT pass EMCPy-internal flags to Matplotlib
+        skip = [
+            'plottype', 'longitude', 'latitude', 'data',
+            'markersize', 'colorbar', 'integer_field', 'normalize'
+        ]
         inputs = self._get_inputs_dict(skip, plotobj)
+        xform = self._map_transform()
 
-        # Choose shading default based on edge vs center grid (2D case)
-        try:
-            lat_shape = np.shape(plotobj.latitude)
-            dat_shape = np.shape(plotobj.data)
-            is_2d = (len(lat_shape) == 2 and len(dat_shape) == 2)
-            edges_ok = is_2d and (lat_shape[0] == dat_shape[0] + 1 and lat_shape[1] == dat_shape[1] + 1)
-            if 'shading' not in inputs:
-                inputs['shading'] = 'flat' if edges_ok else 'auto'
-        except Exception:
-            inputs.setdefault('shading', 'auto')
-
-        # Optional discrete (integer) coloring
+        # Optional discrete classes
         norm = None
-        if bool(getattr(plotobj, "integer_field", False)):
-            vals = np.asarray(plotobj.data)
-            finite = vals[np.isfinite(vals)]
-            if finite.size == 0:
-                raise ValueError("MapGridded: integer_field=True requires non-empty numeric data.")
-            vmin = inputs.get("vmin")
-            vmax = inputs.get("vmax")
+        if getattr(plotobj, "integer_field", False):
+            vmin = inputs.get('vmin')
+            vmax = inputs.get('vmax')
             if vmin is None or vmax is None:
-                vmin = int(np.floor(finite.min()))
-                vmax = int(np.ceil(finite.max()))
-            cmap_name = inputs.get("cmap", "viridis")
-            cmap = _cmaps.get_cmap(cmap_name)
+                dmin = np.nanmin(plotobj.data)
+                dmax = np.nanmax(plotobj.data)
+                vmin = int(np.floor(dmin))
+                vmax = int(np.ceil(dmax))
             boundaries = np.arange(vmin - 0.5, vmax + 1.5, 1)
+            cmap_name = inputs.get('cmap', 'viridis')
+            cmap = _cmaps.get_cmap(cmap_name)
             norm = matplotlib.colors.BoundaryNorm(boundaries, cmap.N)
-            inputs.setdefault("cmap", cmap)
-            # IMPORTANT: cannot pass vmin/vmax with a norm
-            inputs.pop("vmin", None)
-            inputs.pop("vmax", None)
+            inputs.setdefault('cmap', cmap)
+            inputs.pop('vmin', None)
+            inputs.pop('vmax', None)
 
-        # Remove potential conflicting color args (rare, but safe)
-        inputs.pop('c', None)
-        inputs.pop('color', None)
-        inputs.pop('facecolor', None)
-        inputs.pop('facecolors', None)
+        cs = ax.pcolormesh(
+            plotobj.longitude, plotobj.latitude, plotobj.data,
+            norm=norm, transform=xform, **inputs
+        )
 
-        cs = None
-        # Tiled longitude/latitude grids (tiles in last dim)
-        if getattr(plotobj.longitude, "ndim", 2) == 3:
-            tiles = plotobj.longitude.shape[-1]
-            for i in range(tiles):
-                # data may be 2D or 3D (match tile if present)
-                Z = plotobj.data[..., i] if getattr(plotobj.data, "ndim", 2) == 3 else plotobj.data
-                cs = ax.pcolormesh(
-                    plotobj.longitude[:, :, i],
-                    plotobj.latitude[:, :, i],
-                    Z,
-                    **inputs, transform=xform, norm=norm
-                )
-        else:
-            cs = ax.pcolormesh(
-                plotobj.longitude, plotobj.latitude, plotobj.data,
-                **inputs, transform=xform, norm=norm
-            )
-
-        return cs  # QuadMesh (ScalarMappable)
+        return cs
 
     def _map_contour(self, plotobj, ax):
 
