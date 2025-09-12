@@ -29,4 +29,5 @@ examples/index
 ```{tip}
 If you’re new, start with [Get started](get-started/index.md).
 
-If you just want working code, jump to the [How-to guides](how-to/index.md) or [Examples gallery](../examples/index).```
+If you just want working code, jump to the [How-to guides](how-to/index.md) or [Examples gallery](../examples/index).
+```

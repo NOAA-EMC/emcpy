@@ -3,7 +3,8 @@ Common issues and their solutions when working with EMCPy.
 ---
 ## Maps lack coastlines or borders
 Cartopy requires shapefile data. If coastlines don’t render:
-- Ensure Cartopy has downloaded the required Natural Earth data files.
+- Ensure Cartopy has downloaded the required Natural Earth data files. Files can be downloaded here: https://www.naturalearthdata.com/downloads/
+- Further instructions on shapefiles can be found here: https://scitools.org.uk/cartopy/docs/v0.15/tutorials/using_the_shapereader.html
 - Clear the Cartopy cache if files are corrupted.
 ```python
 import cartopy
