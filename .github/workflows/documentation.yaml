@@ -25,17 +25,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r docs/requirements.txt
 
-      - name: Build docs
-        run: |
-          sphinx-build -b html docs _build/html
+      - name: Set MPL backend for headless build
+        run: echo "MPLBACKEND=Agg" >> $GITHUB_ENV
 
-      - name: Environment for headless matplotlib
-        run: |
-          echo "MPLBACKEND=Agg" >> $GITHUB_ENV
-          python - << 'PY'
-        import matplotlib
-        print("Matplotlib backend:", matplotlib.get_backend())
-        PY
+      - name: Build docs
+        run: sphinx-build -b html docs _build/html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
