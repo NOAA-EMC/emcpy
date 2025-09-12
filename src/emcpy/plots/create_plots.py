@@ -650,15 +650,31 @@ class CreateFigure:
         if getattr(plotobj, "integer_field", False):
             vmin = inputs.get('vmin')
             vmax = inputs.get('vmax')
+
             if vmin is None or vmax is None:
-                dmin = np.nanmin(plotobj.data)
-                dmax = np.nanmax(plotobj.data)
-                vmin = int(np.floor(dmin))
-                vmax = int(np.ceil(dmax))
-            boundaries = np.arange(vmin - 0.5, vmax + 1.5, 1)
+                vals = np.asarray(plotobj.data)
+                vals = vals[~np.isnan(vals)]
+                if vals.size == 0:
+                    kmin, kmax = 0, 1
+                else:
+                    kmin = int(np.floor(vals.min()))
+                    kmax = int(np.ceil(vals.max()))
+            else:
+                kmin = int(np.floor(vmin))
+                kmax = int(np.ceil(vmax))
+
+            # Ensure at least 3 boundaries even for a constant class
+            if kmin == kmax:
+                boundaries = np.array([kmin - 0.5, kmin + 0.5, kmin + 1.5])
+            else:
+                # Inclusive upper edge (+1.5) so the last bin is complete
+                boundaries = np.arange(kmin - 0.5, kmax + 1.5, 1)
+
             cmap_name = inputs.get('cmap', 'viridis')
             cmap = _cmaps.get_cmap(cmap_name)
             norm = matplotlib.colors.BoundaryNorm(boundaries, cmap.N)
+
+            # Avoid conflicts with norm
             inputs.setdefault('cmap', cmap)
             inputs.pop('vmin', None)
             inputs.pop('vmax', None)
