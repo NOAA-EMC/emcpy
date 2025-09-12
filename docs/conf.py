@@ -72,7 +72,7 @@ from sphinx_gallery.sorting import FileNameSortKey, ExplicitOrder
 examples_dirs = ['../galleries/plot_types', '../galleries/examples']
 
 # output gallery roots (inside docs/)
-gallery_dirs  = ['plot_types', 'examples']
+gallery_dirs = ['plot_types', 'examples']
 
 # explicit subsection order (MUST match discovery strings byte-for-byte)
 subsection_order = ExplicitOrder([
