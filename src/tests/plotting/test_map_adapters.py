@@ -133,7 +133,7 @@ def test_map_contour_returns_contourset_and_colorbar(single_axes):
     LON, LAT = np.meshgrid(lon, lat)
     Z = np.cos(np.deg2rad(LAT)) * np.cos(2 * np.deg2rad(LON))
 
-    c = MapContour(LON, LAT, Z)
+    c = MapContour(LAT, LON, Z)
     c.levels = np.linspace(-1.0, 1.0, 11)
     c.colors = "k"
 
@@ -155,7 +155,7 @@ def test_map_filled_contour_single_cbar_last_subplot():
         LON, LAT = np.meshgrid(lon, lat)
         Z = rng.rand(*LON.shape)
 
-        cf = MapFilledContour(LON, LAT, Z)
+        cf = MapFilledContour(LAT, LON, Z)
         cf.cmap = "viridis"
 
         p = _basic_map_plot(cf)
