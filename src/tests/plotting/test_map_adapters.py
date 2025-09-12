@@ -100,7 +100,7 @@ def test_map_gridded_edges_ok_and_colorbar(single_axes):
 
 def test_map_gridded_integer_field_auto_bounds():
     lon = np.linspace(-100, -90, 21)
-    lat = np.linspace(30,  40, 11)
+    lat = np.linspace(30, 40, 11)
     LON, LAT = np.meshgrid(lon, lat)
     Z = np.floor(3 * np.sin(np.radians(LAT)) + 3).astype(int)  # integers 0..5
 
