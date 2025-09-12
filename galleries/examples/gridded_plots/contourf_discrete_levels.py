@@ -1,6 +1,6 @@
 """
-Discrete filled contours (EMCPy)
-================================
+Discrete filled contours
+========================
 
 Use an explicit set of levels to control banding.
 """

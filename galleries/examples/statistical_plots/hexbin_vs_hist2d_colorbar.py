@@ -1,6 +1,6 @@
 """
-Hexbin vs 2D Histogram with Colorbars (EMCPy)
-=============================================
+Hexbin vs 2D Histogram with Colorbars
+=====================================
 
 Two dense 2D binning approaches with per-axes colorbars.
 """

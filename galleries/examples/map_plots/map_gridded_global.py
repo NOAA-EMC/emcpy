@@ -1,6 +1,6 @@
 """
-Global gridded (PlateCarree) with coastlines (EMCPy)
-====================================================
+Global gridded (PlateCarree) with coastlines
+============================================
 
 A simple global pcolormesh with a per-axes colorbar.
 """

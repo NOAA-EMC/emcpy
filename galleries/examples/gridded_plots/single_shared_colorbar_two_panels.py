@@ -1,6 +1,6 @@
 """
-Two panels with one shared colorbar (EMCPy)
-==========================================
+Two panels with one shared colorbar
+===================================
 
 Both panels use the same scale; a single horizontal colorbar is placed
 below the grid using EMCPy's single_cbar option.

@@ -1,6 +1,6 @@
 """
-Log and symlog scales (EMCPy)
-=============================
+Log and symlog scales
+=====================
 
 Left: log–log scaling. Right: symmetric log (symlog) for data crossing zero.
 All axis scaling done via EMCPy helpers.

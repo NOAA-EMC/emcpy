@@ -1,6 +1,6 @@
 """
-Datetime axis with monthly majors and weekly minors (EMCPy)
-==========================================================
+Datetime axis with monthly majors and weekly minors
+===================================================
 
 Configure a time-aware x-axis entirely through EMCPy:
 - Monthly major ticks with labels (e.g., "Oct 2024")

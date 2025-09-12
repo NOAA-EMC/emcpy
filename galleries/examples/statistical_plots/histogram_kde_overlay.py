@@ -1,6 +1,6 @@
 """
-Histogram with KDE Overlay (EMCPy)
-==================================
+Histogram with KDE Overlay
+==========================
 
 Show a normalized histogram with a smooth KDE overlay.
 """

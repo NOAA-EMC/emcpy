@@ -1,6 +1,6 @@
 """
-Scatter with Linear Regression Fit (EMCPy)
-==========================================
+Scatter with Linear Regression Fit
+==================================
 
 Plot points and automatically add a regression line with R², slope, intercept.
 """

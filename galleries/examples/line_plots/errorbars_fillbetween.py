@@ -1,6 +1,6 @@
 """
-Error bars & shaded confidence band (EMCPy)
-===========================================
+Error bars & shaded confidence band
+===================================
 
 Shaded 95% band plus asymmetric error bars — implemented with EMCPy
 layers only (FillBetween, LinePlot, ErrorBar).

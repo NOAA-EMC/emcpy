@@ -1,6 +1,6 @@
 """
-Filled contours with line overlays (EMCPy)
-=========================================
+Filled contours with line overlays
+==================================
 
 Discrete filled contours with contour-line overlays sharing the same levels.
 """

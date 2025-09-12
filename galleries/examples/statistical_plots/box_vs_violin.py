@@ -1,6 +1,6 @@
 """
-Box vs Violin (EMCPy)
-=====================
+Box vs Violin
+=============
 
 Compare distribution shape with a classic box-and-whisker vs. violin plot.
 """

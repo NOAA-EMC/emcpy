@@ -1,6 +1,6 @@
 """
-Pcolormesh (EMCPy)
-==================
+Pcolormesh
+==========
 
 Basic gridded heatmap with a per-axes colorbar.
 """

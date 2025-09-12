@@ -1,6 +1,6 @@
 """
-Line styles & legend outside (EMCPy)
-====================================
+Line styles & legend outside
+============================
 
 Multiple lines with different markers/linestyles and a legend placed
 outside the axes using EMCPy helpers only.

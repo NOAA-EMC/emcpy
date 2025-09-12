@@ -1,6 +1,6 @@
 """
-Dual y-axes (EMCPy twinx)
-=========================
+Dual y-axes (twinx)
+===================
 
 Plot two series sharing the same x-axis with a secondary y-axis created
 via EMCPy's twinx helpers. No direct Matplotlib calls.
