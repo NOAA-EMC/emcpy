@@ -17,17 +17,18 @@ This documentation is structured to help you at every stage:
 - **Contributing** — how to add new examples and improve the docs.  
 
 ```{toctree}
-:maxdepth: 2
-:hidden:
+:maxdepth: 1
+:caption: EMCPy
 
 get-started/index
 explanations/index
 contributing/index
 plot_types/index
 examples/index
+```
 
 ```{tip}
-If you’re new, start with [Get started](get-started/index.md).
-
-If you just want working code, jump to the [How-to guides](how-to/index.md) or [Examples gallery](../examples/index).
+If you’re new, start with Get started → {doc}`get-started/index`.
+```
+If you want working code quickly, see the Examples gallery → {doc}`examples/index`.
 ```
