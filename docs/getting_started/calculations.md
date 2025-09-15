@@ -1,3 +1,0 @@
-## Calculations
-
-Coming soon!

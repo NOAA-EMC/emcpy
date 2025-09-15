@@ -370,12 +370,20 @@ class CreateFigure:
                 else:
                     self.domain = Domain(plot_obj.domain)
 
-                self.projection = MapProjection(plot_obj.projection)
+                cenlon = getattr(plot_obj, "cenlon", None)
+                cenlat = getattr(plot_obj, "cenlat", None)
+                # fall back to domain defaults if not set on the plot
+                if cenlon is None:
+                    cenlon = getattr(self.domain, "cenlon", None)
+                if cenlat is None:
+                    cenlat = getattr(self.domain, "cenlat", None)
+                self.projection = MapProjection(plot_obj.projection, cenlon=cenlon, cenlat=cenlat)
                 ax = self.fig.add_subplot(gs[i], projection=self.projection.projection)
 
+                # fixed
                 if str(self.projection) not in ['npstere', 'spstere']:
-                    ax.set_extent(self.domain.extent)
-                    if str(self.projection) not in ['lamconf']:
+                    ax.set_extent(self.domain.extent, crs=ccrs.PlateCarree())
+                    if str(self.projection) not in ['lambert']:
                         ax.set_xticks(self.domain.xticks, crs=ccrs.PlateCarree())
                         ax.set_yticks(self.domain.yticks, crs=ccrs.PlateCarree())
                         lon_formatter = LongitudeFormatter(zero_direction_label=False)
@@ -383,7 +391,7 @@ class CreateFigure:
                         ax.xaxis.set_major_formatter(lon_formatter)
                         ax.yaxis.set_major_formatter(lat_formatter)
                 else:
-                    ax.set_extent(self.domain.extent, ccrs.PlateCarree())
+                    ax.set_extent(self.domain.extent, crs=ccrs.PlateCarree())
             else:
                 # Regular Axes (SkewT gets its projection)
                 plot_types = [x.plottype for x in plot_obj.plot_layers]
@@ -562,41 +570,24 @@ class CreateFigure:
 
     def _map_transform(self):
         """
-        Return the CRS to be used as the data transform for map layers.
-
-        Preference order:
-          1) self.projection.transform  (explicit data CRS, e.g., PlateCarree for lat/lon)
-          2) self.projection.projection (axes projection as a fallback)
-          3) cartopy.crs.PlateCarree()  (final fallback with a warning)
-
-        This makes _map_* renderers robust even if MapProjection is extended
-        or customized and one of the attributes is missing.
+        Always treat map-layer inputs as geographic lon/lat.
         """
-        tr = getattr(self.projection, "transform", None)
-        if tr is not None:
-            return tr
-
-        pr = getattr(self.projection, "projection", None)
-        if pr is not None:
-            return pr
-
-        warnings.warn(
-            "MapProjection has neither 'transform' nor 'projection'; "
-            "defaulting to PlateCarree().",
-            RuntimeWarning,
-            stacklevel=3,
-        )
-
         return ccrs.PlateCarree()
 
     def _map_scatter(self, plotobj, ax):
+        """
+        Render MapScatter layer.
 
-        integer_field = bool(getattr(plotobj, "integer_field", False))
+        - Supports unlabeled (solid-color) points when data is None.
+        - If integer_field=True, builds a discrete BoundaryNorm automatically
+          (derives vmin/vmax from data when not provided).
+        """
         xform = self._map_transform()
 
+        # --- Unlabeled points (no scalar mapping/colorbar) ---
         if plotobj.data is None:
-            # unlabeled points (no scalar mapping)
-            skip = ['plottype', 'longitude', 'latitude', 'markersize', 'integer_field', 'colorbar']
+            skip = ['plottype', 'longitude', 'latitude', 'markersize',
+                    'integer_field', 'colorbar']
             inputs = self._get_inputs_dict(skip, plotobj)
             cs = ax.scatter(
                 plotobj.longitude, plotobj.latitude,
@@ -604,29 +595,10 @@ class CreateFigure:
             )
             return cs  # PathCollection (not scalar-mappable)
 
-        # scalar-mapped points
+        # --- Scalar-mapped points ---
         skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize',
                 'colorbar', 'normalize', 'integer_field']
         inputs = self._get_inputs_dict(skip, plotobj)
-
-        norm = None
-        if integer_field:
-            vmin = inputs.get('vmin')
-            vmax = inputs.get('vmax')
-            if vmin is None or vmax is None:
-                raise ValueError(
-                    "For integer_field=True, both vmin and vmax must "
-                    "be provided on the MapScatter layer."
-                )
-            cmap_name = inputs.get('cmap', 'viridis')
-            cmap = _cmaps.get_cmap(cmap_name)
-            norm = matplotlib.colors.BoundaryNorm(
-                np.arange(vmin - 0.5, vmax + 0.5, 1), cmap.N
-            )
-            inputs.setdefault('cmap', cmap)
-            # IMPORTANT: cannot pass vmin/vmax together with a norm
-            inputs.pop('vmin', None)
-            inputs.pop('vmax', None)
 
         # If we’re passing c=..., drop conflicting color keys
         inputs.pop('c', None)
@@ -634,37 +606,85 @@ class CreateFigure:
         inputs.pop('facecolor', None)
         inputs.pop('facecolors', None)
 
+        # Optional discrete (integer) coloring
+        norm = None
+        if bool(getattr(plotobj, "integer_field", False)):
+            vals = np.asarray(plotobj.data)
+            finite = vals[np.isfinite(vals)]
+            if finite.size == 0:
+                raise ValueError("MapScatter: integer_field=True requires non-empty numeric data.")
+            vmin = inputs.get('vmin')
+            vmax = inputs.get('vmax')
+            if vmin is None or vmax is None:
+                vmin = int(np.floor(finite.min()))
+                vmax = int(np.ceil(finite.max()))
+            # Build discrete boundaries [vmin-0.5, ..., vmax+0.5]
+            cmap_name = inputs.get('cmap', 'viridis')
+            cmap = _cmaps.get_cmap(cmap_name)
+            boundaries = np.arange(vmin - 0.5, vmax + 1.5, 1)
+            norm = matplotlib.colors.BoundaryNorm(boundaries, cmap.N)
+            inputs.setdefault('cmap', cmap)
+            # IMPORTANT: cannot pass vmin/vmax with a norm
+            inputs.pop('vmin', None)
+            inputs.pop('vmax', None)
+
         cs = ax.scatter(
             plotobj.longitude, plotobj.latitude,
             c=plotobj.data, s=plotobj.markersize,
             **inputs, norm=norm, transform=xform
         )
-
-        return cs
+        return cs  # PathCollection (ScalarMappable)
 
     def _map_gridded(self, plotobj, ax):
 
-        skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar']
+        # Do NOT pass EMCPy-internal flags to Matplotlib
+        skip = [
+            'plottype', 'longitude', 'latitude', 'data',
+            'markersize', 'colorbar', 'integer_field', 'normalize'
+        ]
         inputs = self._get_inputs_dict(skip, plotobj)
         xform = self._map_transform()
 
-        cs = None
-        if getattr(plotobj.longitude, "ndim", 2) == 3:
-            tiles = plotobj.longitude.shape[-1]
-            for i in range(tiles):
-                cs = ax.pcolormesh(
-                    plotobj.longitude[:, :, i],
-                    plotobj.latitude[:, :, i],
-                    plotobj.data[:, :, i],
-                    **inputs, transform=xform
-                )
-        else:
-            cs = ax.pcolormesh(
-                plotobj.longitude, plotobj.latitude, plotobj.data,
-                **inputs, transform=xform
-            )
+        # Optional discrete classes
+        norm = None
+        if getattr(plotobj, "integer_field", False):
+            vmin = inputs.get('vmin')
+            vmax = inputs.get('vmax')
 
-        return cs  # QuadMesh (last plotted if multiple tiles)
+            if vmin is None or vmax is None:
+                vals = np.asarray(plotobj.data)
+                vals = vals[~np.isnan(vals)]
+                if vals.size == 0:
+                    kmin, kmax = 0, 1
+                else:
+                    kmin = int(np.floor(vals.min()))
+                    kmax = int(np.ceil(vals.max()))
+            else:
+                kmin = int(np.floor(vmin))
+                kmax = int(np.ceil(vmax))
+
+            # Ensure at least 3 boundaries even for a constant class
+            if kmin == kmax:
+                boundaries = np.array([kmin - 0.5, kmin + 0.5, kmin + 1.5])
+            else:
+                # Inclusive upper edge (+1.5) so the last bin is complete
+                boundaries = np.arange(kmin - 0.5, kmax + 1.5, 1)
+
+            cmap_name = inputs.get('cmap', 'viridis')
+            cmap = _cmaps.get_cmap(cmap_name)
+            norm = matplotlib.colors.BoundaryNorm(boundaries, cmap.N)
+
+            # Avoid conflicts with norm
+            inputs.setdefault('cmap', cmap)
+            inputs.pop('vmin', None)
+            inputs.pop('vmax', None)
+
+        cs = ax.pcolormesh(
+            plotobj.longitude, plotobj.latitude, plotobj.data,
+            norm=norm, transform=xform, **inputs
+        )
+
+        return cs
 
     def _map_contour(self, plotobj, ax):
 
@@ -895,63 +915,24 @@ class CreateFigure:
     def _boxandwhisker(self, plotobj, ax):
         """
         Uses BoxandWhiskerPlot object to plot on axis.
-        Normalizes 'orientation' -> 'vert' for compatibility with older Matplotlib.
         """
-        # Don't skip 'vert' so legacy callers still work
-        skip = ['plottype', 'data', 'labels']
-        inputs = self._get_inputs_dict(skip, plotobj)
+        # Let the object produce Matplotlib-ready kwargs
+        inputs, legend_label = plotobj.to_mpl_kwargs()
 
-        # guard against old kw
-        if 'labels' in inputs:
-            raise TypeError(
-                "BoxandWhiskerPlot no longer supports 'labels'; use 'tick_labels' (Matplotlib 3.9+)."
-            )
-
-        # --- explicit, validated mapping from 'orientation' to 'vert' ---
-        def _orientation_to_vert(orient):
-            if not isinstance(orient, str):
-                raise TypeError(
-                    f"'orientation' must be a string ('vertical'/'v' or 'horizontal'/'h'); got {type(orient).__name__}"
-                )
-            s = orient.strip().lower()
-            mapping = {
-                'vertical': True, 'v': True, 'vert': True,
-                'horizontal': False, 'h': False, 'horiz': False, 'horz': False
-            }
-            try:
-                return mapping[s]
-            except KeyError:
-                raise ValueError(
-                    f"Invalid 'orientation' value {orient!r}; expected one of "
-                    f"{', '.join(sorted(mapping.keys()))}"
-                )
-
-        has_vert = 'vert' in inputs
-        has_orient = 'orientation' in inputs
-
-        if has_vert and has_orient:
-            # If both are provided, ensure they're consistent
-            vert_from_orient = _orientation_to_vert(inputs['orientation'])
-            vert = bool(inputs['vert'])
-            if vert != vert_from_orient:
-                raise ValueError(
-                    f"Conflicting 'vert' ({vert}) and 'orientation' ({inputs['orientation']!r}). "
-                    "Specify only one, or make them consistent."
-                )
-            # Drop 'orientation' (Matplotlib <3.8 doesn't accept it)
-            inputs.pop('orientation', None)
-
-        elif has_orient:
-            # Only orientation provided → convert and drop
-            inputs['vert'] = _orientation_to_vert(inputs.pop('orientation'))
-
-        else:
-            # Only vert provided, or neither (Matplotlib default is vert=True)
-            pass
-
-        # Single, clean call (no fallback needed)
+        # Single call to Matplotlib (no version-specific kwargs left)
         bp = ax.boxplot(plotobj.data, **inputs)
-        return bp
+
+        # Reattach legend label to an artist so add_legend() works
+        if legend_label is not None:
+            try:
+                if bp.get('boxes'):
+                    bp['boxes'][0].set_label(legend_label)
+                elif bp.get('medians'):
+                    bp['medians'][0].set_label(legend_label)
+            except Exception:
+                pass
+
+        return bp  # dict of artists
 
     def _fillbetween(self, plotobj, ax):
         """

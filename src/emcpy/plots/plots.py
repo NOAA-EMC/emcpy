@@ -1,5 +1,9 @@
 # This work developed by NOAA/NWS/EMC under the Apache 2.0 license.
+from __future__ import annotations
 import numpy as np
+from packaging.version import Version
+import matplotlib
+from ._mpl_compat import boxplot_kwargs
 
 __all__ = [
     'Scatter', 'Histogram', 'Density', 'LinePlot',
@@ -383,14 +387,12 @@ class SkewT:
 
 class BoxandWhiskerPlot:
     def __init__(self, data):
-
         self.plottype = 'boxandwhisker'
-
         self.data = data
 
+        # Core kwargs commonly supported by Matplotlib
         self.notch = False
         self.sym = None
-        self.orientation = 'vertical'  # NEW: Matplotlib 3.9+ API
         self.whis = 1.5
         self.bootstrap = None
         self.usermedians = None
@@ -398,14 +400,21 @@ class BoxandWhiskerPlot:
         self.positions = None
         self.widths = None
         self.patch_artist = False
-
-        # Use the Matplotlib 3.9+ name only
-        self.tick_labels = None
-
         self.manage_ticks = True
         self.autorange = False
         self.meanline = False
         self.zorder = None
+
+        if not hasattr(self, "orientation"):
+            self.orientation = "vertical"
+        if not hasattr(self, "tick_labels"):
+            self.tick_labels = None
+        if not hasattr(self, "label"):
+            self.label = None  # legend label; NOT forwarded to mpl
+
+    def to_mpl_kwargs(self):
+        # Centralized Matplotlib compatibility handling
+        return boxplot_kwargs(self)
 
 
 class FillBetween:
