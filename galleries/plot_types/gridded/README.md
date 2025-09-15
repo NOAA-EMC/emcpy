@@ -1,4 +1,4 @@
-.. _gridded
+.. _plot-types-gridded:
 
 Gridded
 =======

@@ -1,4 +1,4 @@
-.. _line_plots:
+.. _examples-line-plots:
 
 Line Plots
 ==========

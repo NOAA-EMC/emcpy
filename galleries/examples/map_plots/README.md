@@ -1,4 +1,4 @@
-.. _map_plot_types:
+.. _examples-map-plots:
 
 Map Plots
 =========

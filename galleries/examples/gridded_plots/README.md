@@ -1,4 +1,4 @@
-.. _gridded_plots:
+.. _examples-gridded-plots:
 
 Gridded Plots
 =============

@@ -1,4 +1,4 @@
-.. _basic:
+.. plot-types-basic:
 
 Basic
 =====
