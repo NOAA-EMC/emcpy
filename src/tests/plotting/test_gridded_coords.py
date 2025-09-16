@@ -1,6 +1,6 @@
 import numpy as np
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
-from emcpy.plots.plots import Gridded
+from emcpy.plots.plots import GriddedPlot
 
 
 def _run(fig):
@@ -13,7 +13,7 @@ def test_pcolormesh_1d_centers():
     y = np.linspace(0, 1, 4)
     X, Y = np.meshgrid(x, y)
     Z = np.sin(X*Y)
-    p = CreatePlot(plot_layers=[Gridded(x, y, Z)])
+    p = CreatePlot(plot_layers=[GriddedPlot(x, y, Z)])
     fig = CreateFigure(1, 1)
     fig.plot_list = [p]
     _run(fig)
@@ -27,7 +27,7 @@ def test_pcolormesh_2d_edges():
     yc = 0.5*(ye[:-1]+ye[1:])
     Xc, Yc = np.meshgrid(xc, yc)
     Z = np.cos(2*np.pi*Xc)*np.sin(2*np.pi*Yc)
-    p = CreatePlot(plot_layers=[Gridded(Xe, Ye, Z)])
+    p = CreatePlot(plot_layers=[GriddedPlot(Xe, Ye, Z)])
     fig = CreateFigure(1, 1)
     fig.plot_list = [p]
     _run(fig)
