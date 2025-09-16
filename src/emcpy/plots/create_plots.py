@@ -29,6 +29,7 @@ from emcpy.plots.adapters import get_adapter
 from emcpy.plots.map_tools import Domain, MapProjection
 from emcpy.plots.skewt_projection import SkewXAxes
 from emcpy.plots._norms import compute_norm
+from emcpy.plots._validate import require_1d, require_2d, require_same_length, require_same_shape2d
 from emcpy.stats.stats import get_linear_regression
 
 __all__ = ['CreateFigure', 'CreatePlot']
@@ -597,17 +598,31 @@ class CreateFigure:
         if plotobj.data is None:
             skip = ['plottype', 'longitude', 'latitude', 'markersize', 'integer_field', 'colorbar']
             inputs = self._get_inputs_dict(skip, plotobj)
-            # ensure we don't pass stray 'c' keys
+
+            lon = require_1d("longitude", plotobj.longitude)
+            lat = require_1d("latitude",  plotobj.latitude)
+            require_same_length("longitude", lon, "latitude", lat)
+
+            ms = getattr(plotobj, "markersize", None)
+            if ms is not None and hasattr(ms, "__len__"):
+                require_same_length("markersize", ms, "longitude", lon)
+
             for k in ('c', 'color', 'facecolor', 'facecolors'):
                 inputs.pop(k, None)
-            return ax.scatter(plotobj.longitude, plotobj.latitude,
-                              s=plotobj.markersize, transform=xform, **inputs)
+
+            return ax.scatter(lon, lat, s=plotobj.markersize, transform=xform, **inputs)
 
         # Scalar-mapped points
         skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar', 'normalize', 'integer_field']
         inputs = self._get_inputs_dict(skip, plotobj)
 
-        # Remove conflicting color keys; we'll pass c= explicitly
+        lon = require_1d("longitude", plotobj.longitude)
+        lat = require_1d("latitude",  plotobj.latitude)
+        require_same_length("longitude", lon, "latitude", lat)
+
+        if hasattr(plotobj.data, "__len__"):
+            require_same_length("data", plotobj.data, "longitude", lon)
+
         for k in ('c', 'color', 'facecolor', 'facecolors'):
             inputs.pop(k, None)
 
@@ -617,22 +632,22 @@ class CreateFigure:
             is_numeric = arr.ndim > 0 and arr.dtype.kind in {'i', 'u', 'f'}
         except Exception:
             is_numeric = False
-
         if is_numeric:
             self._apply_norm_from_layer(inputs, plotobj)
 
-        cs = ax.scatter(plotobj.longitude, plotobj.latitude,
-                        c=plotobj.data, s=plotobj.markersize,
-                        transform=xform, **inputs)
+        cs = ax.scatter(lon, lat, c=plotobj.data, s=plotobj.markersize, transform=xform, **inputs)
 
         return cs  # PathCollection (ScalarMappable)
 
     def _map_gridded(self, plotobj, ax):
         """
         Plot gridded data on a map with consistent normalization.
+        Accepts:
+          - 1D lon/lat (centers or edges)
+          - 2D lon/lat same shape as Z (centers)
+          - 2D lon/lat with shape (Z.shape[0]+1, Z.shape[1]+1) (edges)
         Returns the mappable from pcolormesh.
         """
-        # Do NOT pass EMCPy-internal flags to Matplotlib
         skip = [
             "plottype", "longitude", "latitude", "data",
             "markersize", "colorbar", "integer_field", "normalize",
@@ -640,65 +655,116 @@ class CreateFigure:
         inputs: dict[str, Any] = self._get_inputs_dict(skip, plotobj)
         xform = self._map_transform()
 
-        # --- Normalize consistently (integer categories -> BoundaryNorm; else Normalize)
+        # Validate data
+        Z = require_2d("data", plotobj.data)
+        nrows, ncols = Z.shape
+
+        # Coords can be 1D or 2D
+        lon = np.asarray(plotobj.longitude)
+        lat = np.asarray(plotobj.latitude)
+
+        # Decide allowed shapes and set shading appropriately
+        if lon.ndim == 2 or lat.ndim == 2:
+            if not (lon.ndim == 2 and lat.ndim == 2):
+                raise ValueError("MapGridded: when using 2D coordinates, both longitude and latitude must be 2D.")
+            # 2D centers: same shape as Z
+            if lon.shape == (nrows, ncols) and lat.shape == (nrows, ncols):
+                # centers; let 'auto' decide or keep user-provided shading
+                inputs.setdefault("shading", "auto")
+                X, Y = lon, lat
+            # 2D edges: one larger in both dims
+            elif lon.shape == (nrows + 1, ncols + 1) and lat.shape == (nrows + 1, ncols + 1):
+                # edges require flat shading to avoid seams
+                inputs.setdefault("shading", "flat")
+                X, Y = lon, lat
+            else:
+                raise ValueError(
+                    "MapGridded: 2D longitude/latitude must either match Z.shape "
+                    f"({nrows}, {ncols}) or be edges with shape ({nrows+1}, {ncols+1}); "
+                    f"got lon {lon.shape}, lat {lat.shape}, Z {Z.shape}."
+                )
+        else:
+            # 1D centers or edges are fine: lengths can be N or N+1
+            lon = require_1d("longitude", lon)
+            lat = require_1d("latitude",  lat)
+            nx_ok = len(lon) in {ncols, ncols + 1}
+            ny_ok = len(lat) in {nrows, nrows + 1}
+            if not (nx_ok and ny_ok):
+                raise ValueError(
+                    "MapGridded: for 1D longitude/latitude, expected len(lon) in "
+                    f"{{{ncols}, {ncols+1}}} and len(lat) in {{{nrows}, {nrows+1}}}; "
+                    f"got len(lon)={len(lon)}, len(lat)={len(lat)}, Z.shape={Z.shape}."
+                )
+            # Let MPL infer; but encourage seam-free for edges
+            if len(lon) == ncols + 1 and len(lat) == nrows + 1:
+                inputs.setdefault("shading", "flat")
+            else:
+                inputs.setdefault("shading", "auto")
+            X, Y = lon, lat
+
+        # Normalization policy (integer categories -> BoundaryNorm; else Normalize)
         integer_field = bool(getattr(plotobj, "integer_field", False))
         vmin = inputs.get("vmin", getattr(plotobj, "vmin", None))
         vmax = inputs.get("vmax", getattr(plotobj, "vmax", None))
         levels = inputs.get("levels", getattr(plotobj, "levels", None))
 
-        norm = compute_norm(
-            integer_field=integer_field,
-            vmin=vmin,
-            vmax=vmax,
-            levels=levels,
-            # ncolors=None -> default (256); you can wire cmap.N if you prefer
-        )
+        norm = compute_norm(integer_field=integer_field, vmin=vmin, vmax=vmax, levels=levels)
         if norm is not None:
             inputs["norm"] = norm
-            # Avoid double-specifying scaling once a norm is set
             inputs.pop("vmin", None)
             inputs.pop("vmax", None)
             inputs.pop("levels", None)
 
-        # --- Robust data handling
-        Z = np.ma.masked_invalid(np.asarray(plotobj.data))
-
-        cs = ax.pcolormesh(
-            np.asarray(plotobj.longitude),
-            np.asarray(plotobj.latitude),
-            Z,
-            transform=xform,
-            **inputs,
-        )
-        return cs
+        Zm = np.ma.masked_invalid(np.asarray(Z))
+        return ax.pcolormesh(X, Y, Zm, transform=xform, **inputs)
 
     def _map_contour(self, plotobj, ax):
-
+        """
+        Render MapContour layer.
+        """
         skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar', 'clabel']
         inputs = self._get_inputs_dict(skip, plotobj)
         xform = self._map_transform()
 
-        # Keep 'levels' for contour; still compute a consistent norm (integer_field etc.)
+        Z = require_2d("data", plotobj.data)
+        lon = np.asarray(plotobj.longitude)
+        lat = np.asarray(plotobj.latitude)
+        if lon.ndim == 2 or lat.ndim == 2:
+            require_same_shape2d("longitude", lon, "data", Z)
+            require_same_shape2d("latitude",  lat, "data", Z)
+        else:
+            lon = require_1d("longitude", lon)
+            lat = require_1d("latitude",  lat)
+
         self._apply_norm_from_layer(inputs, plotobj, keep_levels=True)
 
-        Z = np.asarray(plotobj.data)
-        cs = ax.contour(plotobj.longitude, plotobj.latitude, Z, transform=xform, **inputs)
-
+        cs = ax.contour(lon, lat, np.asarray(Z), transform=xform, **inputs)
         if getattr(plotobj, 'clabel', False):
             plt.clabel(cs, levels=getattr(plotobj, 'levels', None), use_clabeltext=True)
 
         return cs
 
     def _map_filled_contour(self, plotobj, ax):
+        """
+        Render MapFilledContour layer.
+        """
         skip = ['plottype', 'longitude', 'latitude', 'data', 'colorbar', 'clabel']
         inputs = self._get_inputs_dict(skip, plotobj)
         xform = self._map_transform()
 
+        Z = require_2d("data", plotobj.data)
+        lon = np.asarray(plotobj.longitude)
+        lat = np.asarray(plotobj.latitude)
+        if lon.ndim == 2 or lat.ndim == 2:
+            require_same_shape2d("longitude", lon, "data", Z)
+            require_same_shape2d("latitude",  lat, "data", Z)
+        else:
+            lon = require_1d("longitude", lon)
+            lat = require_1d("latitude",  lat)
+
         self._apply_norm_from_layer(inputs, plotobj, keep_levels=True)
 
-        Z = np.asarray(plotobj.data)
-        cs = ax.contourf(plotobj.longitude, plotobj.latitude, Z, transform=xform, **inputs)
-
+        cs = ax.contourf(lon, lat, np.asarray(Z), transform=xform, **inputs)
         if getattr(plotobj, 'clabel', False):
             plt.clabel(cs, levels=getattr(plotobj, 'levels', None), use_clabeltext=True)
 
@@ -749,40 +815,43 @@ class CreateFigure:
         Uses Scatter object to plot on axis.
         Returns the PathCollection (mappable when `c` is provided).
         """
-        # density mode uses a different path
         if hasattr(plotobj, "density"):
             return self._density_scatter(plotobj, ax)
 
-        skipvars = [
-            "plottype", "plot_ax", "x", "y",
-            "markersize", "do_linear_regression",
-            "linear_regression", "density", "channel",
-        ]
+        skipvars = ["plottype", "plot_ax", "x", "y", "markersize", "do_linear_regression",
+                    "linear_regression", "density", "channel"]
         inputs: dict[str, Any] = self._get_inputs_dict(skipvars, plotobj)
 
-        # If layer provides numeric colors via `c`, add a consistent norm.
+        x = require_1d("x", plotobj.x)
+        y = require_1d("y", plotobj.y)
+        require_same_length("x", x, "y", y)
+
+        ms = getattr(plotobj, "markersize", None)
+        if ms is not None and hasattr(ms, "__len__"):
+            require_same_length("markersize", ms, "x", x)
+
         c_val = getattr(plotobj, "c", None)
+        if c_val is not None and hasattr(c_val, "__len__"):
+            require_same_length("c", c_val, "x", x)
+
         if self._is_numeric_arraylike(c_val):
             self._apply_norm_from_layer(inputs, plotobj)
-            # remove any conflicting color keys we might have picked up
             inputs.pop("c", None)
             inputs.pop("color", None)
             inputs.pop("facecolor", None)
             inputs.pop("facecolors", None)
-            cs = ax.scatter(plotobj.x, plotobj.y, s=plotobj.markersize, c=c_val, **inputs)
+            cs = ax.scatter(x, y, s=plotobj.markersize, c=c_val, **inputs)
         else:
-            # Named color / RGB tuple / no `c`: ensure we don't pass a stray `c`
             inputs.pop("c", None)
-            cs = ax.scatter(plotobj.x, plotobj.y, s=plotobj.markersize, **inputs)
+            cs = ax.scatter(x, y, s=plotobj.markersize, **inputs)
 
-        # Optional regression line (copy style to avoid mutating the layer's dict)
-        if getattr(plotobj, "do_linear_regression", False) and len(plotobj.x) and len(plotobj.y):
-            y_pred, r_sq, intercept, slope = get_linear_regression(plotobj.x, plotobj.y)
+        if getattr(plotobj, "do_linear_regression", False) and len(x) and len(y):
+            y_pred, r_sq, intercept, slope = get_linear_regression(x, y)
             label = f"y = {slope:.4f}x + {intercept:.4f}\nR\u00b2 : {r_sq:.4f}"
             style = dict(getattr(plotobj, "linear_regression", {}) or {})
             if "color" not in style and hasattr(plotobj, "color"):
                 style["color"] = plotobj.color
-            ax.plot(plotobj.x, y_pred, label=label, **style)
+            ax.plot(x, y_pred, label=label, **style)
 
         return cs
 
@@ -792,33 +861,98 @@ class CreateFigure:
         """
         skip = ['plottype', 'plot_ax', 'x', 'y', 'z', 'colorbar']
         inputs = self._get_inputs_dict(skip, plotobj)
+        inputs.setdefault("shading", "auto")
+
+        Z = require_2d("z", plotobj.z)
+        x_arr = np.asarray(plotobj.x)
+        y_arr = np.asarray(plotobj.y)
+
+        if x_arr.ndim == 2 or y_arr.ndim == 2:
+            if not (x_arr.ndim == 2 and y_arr.ndim == 2):
+                raise ValueError("Gridded: when using 2D coordinates, both x and y must be 2D.")
+            require_same_shape2d("x", x_arr, "z", Z)
+            require_same_shape2d("y", y_arr, "z", Z)
+            X, Y = x_arr, y_arr
+        else:
+            # Accept centers (N, M) or edges (N+1, M+1)
+            x1 = require_1d("x", x_arr)
+            y1 = require_1d("y", y_arr)
+            nrows, ncols = Z.shape
+            nx_ok = len(x1) in {ncols, ncols + 1}
+            ny_ok = len(y1) in {nrows, nrows + 1}
+            if not (nx_ok and ny_ok):
+                raise ValueError(
+                    "Gridded: for 1D x/y, expected len(x) in {Z.shape[1], Z.shape[1]+1} and "
+                    "len(y) in {Z.shape[0], Z.shape[0]+1}; "
+                    f"got len(x)={len(x1)}, len(y)={len(y1)}, Z.shape={Z.shape}."
+                )
+            X, Y = x1, y1
 
         self._apply_norm_from_layer(inputs, plotobj)  # continuous or integer_field
+        Zm = np.ma.masked_invalid(np.asarray(Z))
+        qm = ax.pcolormesh(X, Y, Zm, **inputs)
 
-        Z = np.ma.masked_invalid(np.asarray(plotobj.z))
-        cs = ax.pcolormesh(plotobj.x, plotobj.y, Z, **inputs)
-
-        return cs  # QuadMesh
+        return qm  # QuadMesh
 
     def _contour(self, plotobj, ax):
+        """
+        Render Contour layer.
+        """
         skip = ['plottype', 'x', 'y', 'z', 'colorbar']
         inputs = self._get_inputs_dict(skip, plotobj)
 
-        self._apply_norm_from_layer(inputs, plotobj, keep_levels=True)
+        Z = require_2d("z", plotobj.z)
+        x_arr = np.asarray(plotobj.x)
+        y_arr = np.asarray(plotobj.y)
 
-        Z = np.asarray(plotobj.z)
-        cs = ax.contour(plotobj.x, plotobj.y, Z, **inputs)
+        if x_arr.ndim == 1 and y_arr.ndim == 1:
+            nrows, ncols = Z.shape
+            if len(x_arr) != ncols or len(y_arr) != nrows:
+                raise ValueError(
+                    "Contour: for 1D x/y, expected len(x)==Z.shape[1] and len(y)==Z.shape[0]; "
+                    f"got len(x)={len(x_arr)}, len(y)={len(y_arr)}, Z.shape={Z.shape}."
+                )
+            X, Y = x_arr, y_arr
+        elif x_arr.ndim == 2 and y_arr.ndim == 2:
+            require_same_shape2d("x", x_arr, "z", Z)
+            require_same_shape2d("y", y_arr, "z", Z)
+            X, Y = x_arr, y_arr
+        else:
+            raise ValueError("Contour: x and y must both be 1D or both be 2D to match Z.")
+
+        self._apply_norm_from_layer(inputs, plotobj, keep_levels=True)
+        cs = ax.contour(X, Y, np.asarray(Z), **inputs)
 
         return cs  # ContourSet
 
     def _contourf(self, plotobj, ax):
+        """
+        Render FilledContourPlot layer.
+        """
         skip = ['plottype', 'x', 'y', 'z', 'colorbar']
         inputs = self._get_inputs_dict(skip, plotobj)
 
-        self._apply_norm_from_layer(inputs, plotobj, keep_levels=True)
+        Z = require_2d("z", plotobj.z)
+        x_arr = np.asarray(plotobj.x)
+        y_arr = np.asarray(plotobj.y)
 
-        Z = np.asarray(plotobj.z)
-        cs = ax.contourf(plotobj.x, plotobj.y, Z, **inputs)
+        if x_arr.ndim == 1 and y_arr.ndim == 1:
+            nrows, ncols = Z.shape
+            if len(x_arr) != ncols or len(y_arr) != nrows:
+                raise ValueError(
+                    "FilledContour: for 1D x/y, expected len(x)==Z.shape[1] and len(y)==Z.shape[0]; "
+                    f"got len(x)={len(x_arr)}, len(y)={len(y_arr)}, Z.shape={Z.shape}."
+                )
+            X, Y = x_arr, y_arr
+        elif x_arr.ndim == 2 and y_arr.ndim == 2:
+            require_same_shape2d("x", x_arr, "z", Z)
+            require_same_shape2d("y", y_arr, "z", Z)
+            X, Y = x_arr, y_arr
+        else:
+            raise ValueError("FilledContour: x and y must both be 1D or both be 2D to match Z.")
+
+        self._apply_norm_from_layer(inputs, plotobj, keep_levels=True)
+        cs = ax.contourf(X, Y, np.asarray(Z), **inputs)
 
         return cs  # ContourSet
 
@@ -849,8 +983,12 @@ class CreateFigure:
         """
         skip = ['plottype', 'plot_ax', 'x', 'y']
         inputs = self._get_inputs_dict(skip, plotobj)
-        lines = ax.plot(plotobj.x, plotobj.y, **inputs)
 
+        x = require_1d("x", plotobj.x)
+        y = require_1d("y", plotobj.y)
+        require_same_length("x", x, "y", y)
+
+        lines = ax.plot(x, y, **inputs)
         return lines[0] if lines else None  # Line2D (not a ScalarMappable)
 
     def _skewt(self, plotobj, ax):
@@ -859,8 +997,13 @@ class CreateFigure:
         """
         skip = ['plottype', 'plot_ax', 'x', 'y']
         inputs = self._get_inputs_dict(skip, plotobj)
+
+        x = require_1d("x", plotobj.x)
+        y = require_1d("y", plotobj.y)
+        require_same_length("x", x, "y", y)
+
         # Plot data using log scaling Y
-        lines = ax.semilogy(plotobj.x, plotobj.y, **inputs)
+        lines = ax.semilogy(x, y, **inputs)
 
         # Disables the log-formatting that comes with semilogy
         ax.yaxis.set_major_formatter(ScalarFormatter())
@@ -911,7 +1054,33 @@ class CreateFigure:
         """
         skip = ['plottype', 'plot_ax', 'x', 'height']
         inputs = self._get_inputs_dict(skip, plotobj)
-        cont = ax.bar(plotobj.x, plotobj.height, **inputs)
+
+        x = require_1d("x", plotobj.x)
+        h = require_1d("height", plotobj.height)
+        require_same_length("x", x, "height", h)
+
+        # Optional shape checks for array-like kwargs
+        yerr = inputs.get("yerr", None)
+        if yerr is not None and hasattr(yerr, "__len__"):
+            ye = np.asarray(yerr)
+            if not (ye.shape == (len(h),) or (ye.ndim == 2 and ye.shape == (2, len(h)))):
+                raise ValueError(
+                    f"yerr must be length-N or shape (2, N); got shape {ye.shape} for N={len(h)}."
+                )
+
+        xerr = inputs.get("xerr", None)
+        if xerr is not None and hasattr(xerr, "__len__"):
+            xe = np.asarray(xerr)
+            if not (xe.shape == (len(h),) or (xe.ndim == 2 and xe.shape == (2, len(h)))):
+                raise ValueError(
+                    f"xerr must be length-N or shape (2, N); got shape {xe.shape} for N={len(h)}."
+                )
+
+        bottom = inputs.get("bottom", None)
+        if bottom is not None and hasattr(bottom, "__len__"):
+            require_same_length("bottom", bottom, "height", h)
+
+        cont = ax.bar(x, h, **inputs)
 
         return cont  # BarContainer (not a ScalarMappable)
 
@@ -921,8 +1090,33 @@ class CreateFigure:
         """
         skip = ['plottype', 'plot_ax', 'y', 'width']
         inputs = self._get_inputs_dict(skip, plotobj)
-        cont = ax.barh(plotobj.y, plotobj.width, **inputs)
 
+        y = require_1d("y", plotobj.y)
+        w = require_1d("width", plotobj.width)
+        require_same_length("y", y, "width", w)
+
+        # Optional shape checks for array-like kwargs
+        xerr = inputs.get("xerr", None)
+        if xerr is not None and hasattr(xerr, "__len__"):
+            xe = np.asarray(xerr)
+            if not (xe.shape == (len(w),) or (xe.ndim == 2 and xe.shape == (2, len(w)))):
+                raise ValueError(
+                    f"xerr must be length-N or shape (2, N); got shape {xe.shape} for N={len(w)}."
+                )
+
+        yerr = inputs.get("yerr", None)
+        if yerr is not None and hasattr(yerr, "__len__"):
+            ye = np.asarray(yerr)
+            if not (ye.shape == (len(w),) or (ye.ndim == 2 and ye.shape == (2, len(w)))):
+                raise ValueError(
+                    f"yerr must be length-N or shape (2, N); got shape {ye.shape} for N={len(w)}."
+                )
+
+        left = inputs.get("left", None)
+        if left is not None and hasattr(left, "__len__"):
+            require_same_length("left", left, "width", w)
+
+        cont = ax.barh(y, w, **inputs)
         return cont  # BarContainer (not a ScalarMappable)
 
     def _boxandwhisker(self, plotobj, ax):
@@ -953,10 +1147,15 @@ class CreateFigure:
         """
         skip = ['plottype', 'x', 'y1', 'y2']
         inputs = self._get_inputs_dict(skip, plotobj)
-        poly = ax.fill_between(
-            plotobj.x, plotobj.y1, plotobj.y2,
-            **inputs
-        )
+
+        x  = require_1d("x",  plotobj.x)
+        y1 = require_1d("y1", plotobj.y1)
+        y2 = require_1d("y2", plotobj.y2)
+        require_same_length("x", x, "y1", y1)
+        require_same_length("x", x, "y2", y2)
+
+        poly = ax.fill_between(x, y1, y2, **inputs)
+
         return poly  # PolyCollection (not a ScalarMappable)
 
     def _errorbar(self, plotobj, ax):
@@ -965,10 +1164,30 @@ class CreateFigure:
         """
         skip = ['plottype', 'x', 'y']
         inputs = self._get_inputs_dict(skip, plotobj)
-        cont = ax.errorbar(
-            plotobj.x, plotobj.y,
-            **inputs
-        )
+
+        x = require_1d("x", plotobj.x)
+        y = require_1d("y", plotobj.y)
+        require_same_length("x", x, "y", y)
+
+        # Optional: validate xerr/yerr if they are array-like (not scalars)
+        xerr = inputs.get("xerr", None)
+        if xerr is not None and hasattr(xerr, "__len__"):
+            xe = np.asarray(xerr)
+            # Accept shape (N,) or (2, N) for asymmetric errors
+            if not (xe.shape == (len(x),) or (xe.ndim == 2 and xe.shape == (2, len(x)))):
+                raise ValueError(
+                    f"xerr must be length-N or shape (2, N); got shape {xe.shape} for N={len(x)}."
+                )
+
+        yerr = inputs.get("yerr", None)
+        if yerr is not None and hasattr(yerr, "__len__"):
+            ye = np.asarray(yerr)
+            if not (ye.shape == (len(y),) or (ye.ndim == 2 and ye.shape == (2, len(y)))):
+                raise ValueError(
+                    f"yerr must be length-N or shape (2, N); got shape {ye.shape} for N={len(y)}."
+                )
+
+        cont = ax.errorbar(x, y, **inputs)
         return cont  # ErrorbarContainer (not necessarily a ScalarMappable)
 
     def _violin(self, plotobj, ax):
@@ -999,15 +1218,21 @@ class CreateFigure:
         """
         Render HexBin layer.
         """
-        skip = [
-            'plottype', 'x', 'y', 'C',
-            'colorbar', 'colorbar_label', 'colorbar_location'
-        ]
+        skip = ['plottype', 'x', 'y', 'C', 'colorbar', 'colorbar_label', 'colorbar_location']
         inputs = self._get_inputs_dict(skip, plotobj)
 
-        self._apply_norm_from_layer(inputs, plotobj)
+        x = require_1d("x", plotobj.x)
+        y = require_1d("y", plotobj.y)
+        require_same_length("x", x, "y", y)
 
-        hb = ax.hexbin(plotobj.x, plotobj.y, C=getattr(plotobj, 'C', None), **inputs)
+        C = getattr(plotobj, "C", None)
+        if C is not None and hasattr(C, "__len__"):
+            require_same_length("C", C, "x", x)
+            if inputs.get("bins") == "log" and np.any(np.asarray(C) <= 0):
+                raise ValueError("HexBin with bins='log' requires C > 0.")
+
+        self._apply_norm_from_layer(inputs, plotobj)
+        hb = ax.hexbin(x, y, C=getattr(plotobj, 'C', None), **inputs)
 
         return hb  # PolyCollection (ScalarMappable)
 
@@ -1015,16 +1240,16 @@ class CreateFigure:
         """
         Render Hist2D layer.
         """
-        skip = [
-            'plottype', 'x', 'y',
-            'colorbar', 'colorbar_label', 'colorbar_location'
-        ]
+        skip = ['plottype', 'x', 'y', 'colorbar', 'colorbar_label', 'colorbar_location']
         inputs = self._get_inputs_dict(skip, plotobj)
+
+        x = require_1d("x", plotobj.x)
+        y = require_1d("y", plotobj.y)
+        require_same_length("x", x, "y", y)
 
         self._apply_norm_from_layer(inputs, plotobj)
 
-        h, xedges, yedges, img = ax.hist2d(plotobj.x, plotobj.y, **inputs)
-
+        h, xedges, yedges, img = ax.hist2d(x, y, **inputs)
         alpha = getattr(plotobj, "alpha", None)
         if alpha is not None:
             img.set_alpha(alpha)
