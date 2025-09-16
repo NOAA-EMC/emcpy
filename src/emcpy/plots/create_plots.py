@@ -13,7 +13,6 @@ import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import datetime as datetime
 from dataclasses import dataclass, field
-from typing import Any, List, Optional
 from PIL import Image
 from scipy.interpolate import interpn
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
@@ -25,7 +24,7 @@ from matplotlib.offsetbox import OffsetImage, AnchoredOffsetbox
 from matplotlib.ticker import MultipleLocator, FixedLocator, NullLocator
 from matplotlib.ticker import NullFormatter, ScalarFormatter
 from matplotlib.projections import register_projection
-from typing import Any, Mapping, MutableMapping, Optional
+from typing import Any, List, Optional, Mapping, MutableMapping
 from emcpy.plots.adapters import get_adapter
 from emcpy.plots.map_tools import Domain, MapProjection
 from emcpy.plots.skewt_projection import SkewXAxes
@@ -1157,6 +1156,88 @@ class CreateFigure:
             if not keep_levels:
                 inputs.pop("levels", None)
 
+    def _apply_integer_colorbar_ticks(self, cbar) -> None:
+        """
+        If the mappable uses BoundaryNorm with ~unit-spaced boundaries, set
+        integer-centered ticks and labels: bins [k, k+1) → tick at k+0.5 labeled 'k'.
+        No-op for non-BoundaryNorm or non-uniform boundaries.
+        """
+        m = cbar.mappable
+        norm = getattr(m, "norm", None)
+        try:
+            from matplotlib.colors import BoundaryNorm
+            import numpy as _np
+        except Exception:
+            return
+
+        if not isinstance(norm, BoundaryNorm):
+            return
+
+        boundaries = _np.asarray(norm.boundaries, dtype=float)
+        if boundaries.ndim != 1 or boundaries.size < 2:
+            return
+
+        # Only do the nice integer look when bins are ~1 apart
+        diffs = _np.diff(boundaries)
+        if not _np.allclose(diffs, diffs[0]) or not _np.isclose(diffs[0], 1.0):
+            return
+
+        centers = 0.5 * (boundaries[:-1] + boundaries[1:])
+        labels = [str(int(round(b))) for b in boundaries[:-1]]
+
+        # Works for both orientations
+        cbar.set_ticks(centers)
+        cbar.set_ticklabels(labels)
+
+    def _auto_extend_for_colorbar(self, cbar) -> None:
+        """
+        Infer extend={'neither','min','max','both'} from mappable vs. norm boundaries.
+        """
+        try:
+            from matplotlib.colors import BoundaryNorm
+            import numpy as _np
+        except Exception:
+            return
+
+        m = cbar.mappable
+        arr = m.get_array()
+        if arr is None:
+            return
+        arr = _np.asarray(arr)
+        arr = arr[_np.isfinite(arr)]
+        if arr.size == 0:
+            return
+
+        extend = "neither"
+        n = getattr(m, "norm", None)
+
+        # Continuous: compare vs. Normalize limits if present
+        vmin = getattr(n, "vmin", None)
+        vmax = getattr(n, "vmax", None)
+        if vmin is not None and vmax is not None:
+            if arr.min() < vmin and arr.max() > vmax:
+                extend = "both"
+            elif arr.min() < vmin:
+                extend = "min"
+            elif arr.max() > vmax:
+                extend = "max"
+
+        # BoundaryNorm: compare vs. first/last boundary
+        from matplotlib.colors import BoundaryNorm
+        if isinstance(n, BoundaryNorm):
+            lo, hi = float(n.boundaries[0]), float(n.boundaries[-1])
+            if arr.min() < lo and arr.max() > hi:
+                extend = "both"
+            elif arr.min() < lo:
+                extend = "min"
+            elif arr.max() > hi:
+                extend = "max"
+
+        try:
+            cbar.set_extend(extend)
+        except Exception:
+            pass
+
     def _plot_colorbar(self, ax, colorbar):
         """
         Add colorbar on specified ax or for total figure (single_cbar).
@@ -1166,17 +1247,22 @@ class CreateFigure:
         if mappable is None:
             return
 
+        # Single shared colorbar on the designated subplot only
         if colorbar['single_cbar']:
-            # Only on the bottom-right subplot
             if self._is_last_subplot(ax):
                 cbar_ax = self.fig.add_axes(colorbar['cbar_loc'])
                 cb = self.fig.colorbar(mappable, cax=cbar_ax, **colorbar['kwargs'])
+                # Integer-friendly ticks if applicable
+                self._apply_integer_colorbar_ticks(cb)
+                self._auto_extend_for_colorbar(cb)
                 if colorbar['label'] is not None:
                     cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
             return
 
-        # per-axes colorbar
+        # Per-axes colorbar
         cb = self.fig.colorbar(mappable, ax=ax, **colorbar['kwargs'])
+        self._apply_integer_colorbar_ticks(cb)
+        self._auto_extend_for_colorbar(cb)
         if colorbar['label'] is not None:
             cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
 

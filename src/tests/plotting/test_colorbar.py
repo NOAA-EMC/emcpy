@@ -61,3 +61,23 @@ def test_single_cbar_only_on_last_subplot():
 
     # 2 plot axes + 1 colorbar axes
     assert len(fig.fig.axes) == 3
+
+def test_colorbar_ticks_integer_boundarynorm(tmp_path):
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from matplotlib.colors import BoundaryNorm
+
+    fig, ax = plt.subplots()
+    Z = np.arange(16).reshape(4, 4)
+    boundaries = np.arange(0, 5)  # 0..4 → 4 bins of width 1
+    m = ax.imshow(Z, norm=BoundaryNorm(boundaries, 256))
+
+    cb = fig.colorbar(m, ax=ax, orientation="vertical")
+    # call your helper directly if convenient, or rely on _plot_colorbar path
+    # create_figure_instance._apply_integer_colorbar_ticks(cb)
+
+    ticks = cb.get_ticks()
+    labels = [t.get_text() for t in cb.ax.get_yticklabels()]
+    assert np.allclose(ticks, [0.5, 1.5, 2.5, 3.5])
+    assert labels == ["0", "1", "2", "3"]
+
