@@ -28,7 +28,6 @@ examples/index
 ```
 
 ```{tip}
-If you’re new, start with Get started → {doc}`get-started/index`.
-```
-If you want working code quickly, see the Examples gallery → {doc}`examples/index`.
+If you’re new, start with **Get started** → {doc}`get-started/index`.
+If you want working code quickly, jump to the **Examples gallery** → {doc}`examples/index`.
 ```
