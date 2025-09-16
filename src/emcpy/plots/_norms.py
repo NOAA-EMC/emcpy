@@ -3,6 +3,7 @@ from typing import Iterable, Optional, Sequence
 import numpy as np
 from matplotlib.colors import Normalize, BoundaryNorm
 
+
 def compute_norm(
     *,
     integer_field: bool,
