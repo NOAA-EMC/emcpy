@@ -115,15 +115,23 @@ class CreatePlot:
             'kwargs': kwargs
         }
 
-    def add_stats_dict(self, stats_dict={}, xloc=0.5,
-                       yloc=-0.1, ha='center', **kwargs):
+    def add_stats_dict(
+        self,
+        stats_dict: Optional[Mapping[str, Any]] = None,
+        xloc: float = 0.5,
+        yloc: float = -0.1,
+        ha: str = "center",
+        **kwargs: Any) -> None:
+
+        stats: MutableMapping[str, Any] = dict(stats_dict) if stats_dict is not None else {}
+        kw: dict[str, Any] = dict(kwargs) if kwargs else {}
 
         self.stats = {
-            'stats': stats_dict,
-            'xloc': xloc,
-            'yloc': yloc,
-            'ha': ha,
-            'kwargs': kwargs
+            "stats": stats,
+            "xloc": float(xloc),
+            "yloc": float(yloc),
+            "ha": ha,
+            "kwargs": kw,
         }
 
     def add_legend(self, **kwargs):
