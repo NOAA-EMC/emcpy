@@ -29,6 +29,7 @@ from typing import Any, Mapping, MutableMapping, Optional
 from emcpy.plots.adapters import get_adapter
 from emcpy.plots.map_tools import Domain, MapProjection
 from emcpy.plots.skewt_projection import SkewXAxes
+from emcpy.plots._norms import compute_norm
 from emcpy.stats.stats import get_linear_regression
 
 __all__ = ['CreateFigure', 'CreatePlot']
@@ -588,113 +589,88 @@ class CreateFigure:
     def _map_scatter(self, plotobj, ax):
         """
         Render MapScatter layer.
-
-        - Supports unlabeled (solid-color) points when data is None.
-        - If integer_field=True, builds a discrete BoundaryNorm automatically
-          (derives vmin/vmax from data when not provided).
+        - If `plotobj.data` is None: solid-color points (no colormap).
+        - If numeric: apply shared normalization policy (BoundaryNorm for integer_field).
         """
         xform = self._map_transform()
 
-        # --- Unlabeled points (no scalar mapping/colorbar) ---
+        # Unlabeled points (no scalar mapping/colorbar)
         if plotobj.data is None:
-            skip = ['plottype', 'longitude', 'latitude', 'markersize',
-                    'integer_field', 'colorbar']
+            skip = ['plottype', 'longitude', 'latitude', 'markersize', 'integer_field', 'colorbar']
             inputs = self._get_inputs_dict(skip, plotobj)
-            cs = ax.scatter(
-                plotobj.longitude, plotobj.latitude,
-                s=plotobj.markersize, **inputs, transform=xform
-            )
-            return cs  # PathCollection (not scalar-mappable)
+            # ensure we don't pass stray 'c' keys
+            for k in ('c', 'color', 'facecolor', 'facecolors'):
+                inputs.pop(k, None)
+            return ax.scatter(plotobj.longitude, plotobj.latitude,
+                              s=plotobj.markersize, transform=xform, **inputs)
 
-        # --- Scalar-mapped points ---
-        skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize',
-                'colorbar', 'normalize', 'integer_field']
+        # Scalar-mapped points
+        skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar', 'normalize', 'integer_field']
         inputs = self._get_inputs_dict(skip, plotobj)
 
-        # If we’re passing c=..., drop conflicting color keys
-        inputs.pop('c', None)
-        inputs.pop('color', None)
-        inputs.pop('facecolor', None)
-        inputs.pop('facecolors', None)
+        # Remove conflicting color keys; we'll pass c= explicitly
+        for k in ('c', 'color', 'facecolor', 'facecolors'):
+            inputs.pop(k, None)
 
-        # Optional discrete (integer) coloring
-        norm = None
-        if bool(getattr(plotobj, "integer_field", False)):
-            vals = np.asarray(plotobj.data)
-            finite = vals[np.isfinite(vals)]
-            if finite.size == 0:
-                raise ValueError("MapScatter: integer_field=True requires non-empty numeric data.")
-            vmin = inputs.get('vmin')
-            vmax = inputs.get('vmax')
-            if vmin is None or vmax is None:
-                vmin = int(np.floor(finite.min()))
-                vmax = int(np.ceil(finite.max()))
-            # Build discrete boundaries [vmin-0.5, ..., vmax+0.5]
-            cmap_name = inputs.get('cmap', 'viridis')
-            cmap = _cmaps.get_cmap(cmap_name)
-            boundaries = np.arange(vmin - 0.5, vmax + 1.5, 1)
-            norm = matplotlib.colors.BoundaryNorm(boundaries, cmap.N)
-            inputs.setdefault('cmap', cmap)
-            # IMPORTANT: cannot pass vmin/vmax with a norm
-            inputs.pop('vmin', None)
-            inputs.pop('vmax', None)
+        # Apply norm only if data are numeric
+        try:
+            arr = np.asarray(plotobj.data)
+            is_numeric = arr.ndim > 0 and arr.dtype.kind in {'i', 'u', 'f'}
+        except Exception:
+            is_numeric = False
 
-        cs = ax.scatter(
-            plotobj.longitude, plotobj.latitude,
-            c=plotobj.data, s=plotobj.markersize,
-            **inputs, norm=norm, transform=xform
-        )
+        if is_numeric:
+            self._apply_norm_from_layer(inputs, plotobj)
+
+        cs = ax.scatter(plotobj.longitude, plotobj.latitude,
+                        c=plotobj.data, s=plotobj.markersize,
+                        transform=xform, **inputs)
+
         return cs  # PathCollection (ScalarMappable)
 
     def _map_gridded(self, plotobj, ax):
-
+        """
+        Plot gridded data on a map with consistent normalization.
+        Returns the mappable from pcolormesh.
+        """
         # Do NOT pass EMCPy-internal flags to Matplotlib
         skip = [
-            'plottype', 'longitude', 'latitude', 'data',
-            'markersize', 'colorbar', 'integer_field', 'normalize'
+            "plottype", "longitude", "latitude", "data",
+            "markersize", "colorbar", "integer_field", "normalize",
         ]
-        inputs = self._get_inputs_dict(skip, plotobj)
+        inputs: dict[str, Any] = self._get_inputs_dict(skip, plotobj)
         xform = self._map_transform()
 
-        # Optional discrete classes
-        norm = None
-        if getattr(plotobj, "integer_field", False):
-            vmin = inputs.get('vmin')
-            vmax = inputs.get('vmax')
+        # --- Normalize consistently (integer categories -> BoundaryNorm; else Normalize)
+        integer_field = bool(getattr(plotobj, "integer_field", False))
+        vmin = inputs.get("vmin", getattr(plotobj, "vmin", None))
+        vmax = inputs.get("vmax", getattr(plotobj, "vmax", None))
+        levels = inputs.get("levels", getattr(plotobj, "levels", None))
 
-            if vmin is None or vmax is None:
-                vals = np.asarray(plotobj.data)
-                vals = vals[~np.isnan(vals)]
-                if vals.size == 0:
-                    kmin, kmax = 0, 1
-                else:
-                    kmin = int(np.floor(vals.min()))
-                    kmax = int(np.ceil(vals.max()))
-            else:
-                kmin = int(np.floor(vmin))
-                kmax = int(np.ceil(vmax))
+        norm = compute_norm(
+            integer_field=integer_field,
+            vmin=vmin,
+            vmax=vmax,
+            levels=levels,
+            # ncolors=None -> default (256); you can wire cmap.N if you prefer
+        )
+        if norm is not None:
+            inputs["norm"] = norm
+            # Avoid double-specifying scaling once a norm is set
+            inputs.pop("vmin", None)
+            inputs.pop("vmax", None)
+            inputs.pop("levels", None)
 
-            # Ensure at least 3 boundaries even for a constant class
-            if kmin == kmax:
-                boundaries = np.array([kmin - 0.5, kmin + 0.5, kmin + 1.5])
-            else:
-                # Inclusive upper edge (+1.5) so the last bin is complete
-                boundaries = np.arange(kmin - 0.5, kmax + 1.5, 1)
-
-            cmap_name = inputs.get('cmap', 'viridis')
-            cmap = _cmaps.get_cmap(cmap_name)
-            norm = matplotlib.colors.BoundaryNorm(boundaries, cmap.N)
-
-            # Avoid conflicts with norm
-            inputs.setdefault('cmap', cmap)
-            inputs.pop('vmin', None)
-            inputs.pop('vmax', None)
+        # --- Robust data handling
+        Z = np.ma.masked_invalid(np.asarray(plotobj.data))
 
         cs = ax.pcolormesh(
-            plotobj.longitude, plotobj.latitude, plotobj.data,
-            norm=norm, transform=xform, **inputs
+            np.asarray(plotobj.longitude),
+            np.asarray(plotobj.latitude),
+            Z,
+            transform=xform,
+            **inputs,
         )
-
         return cs
 
     def _map_contour(self, plotobj, ax):
@@ -702,20 +678,30 @@ class CreateFigure:
         skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar', 'clabel']
         inputs = self._get_inputs_dict(skip, plotobj)
         xform = self._map_transform()
-        cs = ax.contour(plotobj.longitude, plotobj.latitude, plotobj.data, **inputs, transform=xform)
-        if getattr(plotobj, 'clabel', False):
-            plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
 
-        return cs  # ContourSet
+        # Keep 'levels' for contour; still compute a consistent norm (integer_field etc.)
+        self._apply_norm_from_layer(inputs, plotobj, keep_levels=True)
+
+        Z = np.asarray(plotobj.data)
+        cs = ax.contour(plotobj.longitude, plotobj.latitude, Z, transform=xform, **inputs)
+
+        if getattr(plotobj, 'clabel', False):
+            plt.clabel(cs, levels=getattr(plotobj, 'levels', None), use_clabeltext=True)
+
+        return cs
 
     def _map_filled_contour(self, plotobj, ax):
-
         skip = ['plottype', 'longitude', 'latitude', 'data', 'colorbar', 'clabel']
         inputs = self._get_inputs_dict(skip, plotobj)
         xform = self._map_transform()
-        cs = ax.contourf(plotobj.longitude, plotobj.latitude, plotobj.data, **inputs, transform=xform)
+
+        self._apply_norm_from_layer(inputs, plotobj, keep_levels=True)
+
+        Z = np.asarray(plotobj.data)
+        cs = ax.contourf(plotobj.longitude, plotobj.latitude, Z, transform=xform, **inputs)
+
         if getattr(plotobj, 'clabel', False):
-            plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
+            plt.clabel(cs, levels=getattr(plotobj, 'levels', None), use_clabeltext=True)
 
         return cs  # ContourSet
 
@@ -752,41 +738,52 @@ class CreateFigure:
 
         return cs  # PathCollection
 
-    def _scatter(self, plotobj, ax):
+    def _is_numeric_arraylike(self, x: Any) -> bool:
+        try:
+            a = np.asarray(x)
+            return a.ndim > 0 and a.dtype.kind in {"i", "u", "f"}  # int/uint/float
+        except Exception:
+            return False
+
+    def _scatter(self, plotobj, ax: Axes) -> PathCollection:
         """
         Uses Scatter object to plot on axis.
         Returns the PathCollection (mappable when `c` is provided).
         """
         # density mode uses a different path
-        if hasattr(plotobj, 'density'):
+        if hasattr(plotobj, "density"):
             return self._density_scatter(plotobj, ax)
 
-        skipvars = ['plottype', 'plot_ax', 'x', 'y',
-                    'markersize', 'do_linear_regression',
-                    'linear_regression', 'density', 'channel']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
+        skipvars = [
+            "plottype", "plot_ax", "x", "y",
+            "markersize", "do_linear_regression",
+            "linear_regression", "density", "channel",
+        ]
+        inputs: dict[str, Any] = self._get_inputs_dict(skipvars, plotobj)
 
-        # If the layer provided a scalar/array color via `c`, remove conflicting color keys
-        c_val = getattr(plotobj, 'c', None)
-        if c_val is not None:
-            # kill all conflicting color sources
-            inputs.pop('c', None)
-            inputs.pop('color', None)
-            inputs.pop('facecolor', None)
-            inputs.pop('facecolors', None)
+        # If layer provides numeric colors via `c`, add a consistent norm.
+        c_val = getattr(plotobj, "c", None)
+        if self._is_numeric_arraylike(c_val):
+            self._apply_norm_from_layer(inputs, plotobj)
+            # remove any conflicting color keys we might have picked up
+            inputs.pop("c", None)
+            inputs.pop("color", None)
+            inputs.pop("facecolor", None)
+            inputs.pop("facecolors", None)
             cs = ax.scatter(plotobj.x, plotobj.y, s=plotobj.markersize, c=c_val, **inputs)
         else:
+            # Named color / RGB tuple / no `c`: ensure we don't pass a stray `c`
+            inputs.pop("c", None)
             cs = ax.scatter(plotobj.x, plotobj.y, s=plotobj.markersize, **inputs)
 
-        # Optional regression line
-        if getattr(plotobj, "do_linear_regression", False):
-            if len(plotobj.x) and len(plotobj.y):
-                y_pred, r_sq, intercept, slope = get_linear_regression(plotobj.x, plotobj.y)
-                label = f"y = {slope:.4f}x + {intercept:.4f}\nR\u00b2 : {r_sq:.4f}"
-                style = getattr(plotobj, "linear_regression", {})
-                if "color" not in style and hasattr(plotobj, "color"):
-                    style["color"] = plotobj.color
-                ax.plot(plotobj.x, y_pred, label=label, **style)
+        # Optional regression line (copy style to avoid mutating the layer's dict)
+        if getattr(plotobj, "do_linear_regression", False) and len(plotobj.x) and len(plotobj.y):
+            y_pred, r_sq, intercept, slope = get_linear_regression(plotobj.x, plotobj.y)
+            label = f"y = {slope:.4f}x + {intercept:.4f}\nR\u00b2 : {r_sq:.4f}"
+            style = dict(getattr(plotobj, "linear_regression", {}) or {})
+            if "color" not in style and hasattr(plotobj, "color"):
+                style["color"] = plotobj.color
+            ax.plot(plotobj.x, y_pred, label=label, **style)
 
         return cs
 
@@ -796,27 +793,33 @@ class CreateFigure:
         """
         skip = ['plottype', 'plot_ax', 'x', 'y', 'z', 'colorbar']
         inputs = self._get_inputs_dict(skip, plotobj)
-        cs = ax.pcolormesh(plotobj.x, plotobj.y, plotobj.z, **inputs)
+
+        self._apply_norm_from_layer(inputs, plotobj)  # continuous or integer_field
+
+        Z = np.ma.masked_invalid(np.asarray(plotobj.z))
+        cs = ax.pcolormesh(plotobj.x, plotobj.y, Z, **inputs)
 
         return cs  # QuadMesh
 
     def _contour(self, plotobj, ax):
-        """
-        Uses ContourPlot object to plot on axis.
-        """
         skip = ['plottype', 'x', 'y', 'z', 'colorbar']
         inputs = self._get_inputs_dict(skip, plotobj)
-        cs = ax.contour(plotobj.x, plotobj.y, plotobj.z, **inputs)
+
+        self._apply_norm_from_layer(inputs, plotobj, keep_levels=True)
+
+        Z = np.asarray(plotobj.z)
+        cs = ax.contour(plotobj.x, plotobj.y, Z, **inputs)
 
         return cs  # ContourSet
 
     def _contourf(self, plotobj, ax):
-        """
-        Use FilledContourPlot object to plot on axis.
-        """
         skip = ['plottype', 'x', 'y', 'z', 'colorbar']
         inputs = self._get_inputs_dict(skip, plotobj)
-        cs = ax.contourf(plotobj.x, plotobj.y, plotobj.z, **inputs)
+
+        self._apply_norm_from_layer(inputs, plotobj, keep_levels=True)
+
+        Z = np.asarray(plotobj.z)
+        cs = ax.contourf(plotobj.x, plotobj.y, Z, **inputs)
 
         return cs  # ContourSet
 
@@ -999,14 +1002,13 @@ class CreateFigure:
         """
         skip = [
             'plottype', 'x', 'y', 'C',
-            # colorbar-related fields are handled by CreatePlot.add_colorbar()
             'colorbar', 'colorbar_label', 'colorbar_location'
         ]
         inputs = self._get_inputs_dict(skip, plotobj)
-        hb = ax.hexbin(
-            plotobj.x, plotobj.y, C=getattr(plotobj, 'C', None),
-            **inputs
-        )
+
+        self._apply_norm_from_layer(inputs, plotobj)
+
+        hb = ax.hexbin(plotobj.x, plotobj.y, C=getattr(plotobj, 'C', None), **inputs)
 
         return hb  # PolyCollection (ScalarMappable)
 
@@ -1016,14 +1018,14 @@ class CreateFigure:
         """
         skip = [
             'plottype', 'x', 'y',
-            # colorbar-related fields are handled by CreatePlot.add_colorbar()
             'colorbar', 'colorbar_label', 'colorbar_location'
         ]
         inputs = self._get_inputs_dict(skip, plotobj)
-        h, xedges, yedges, img = ax.hist2d(
-            plotobj.x, plotobj.y,
-            **inputs
-        )
+
+        self._apply_norm_from_layer(inputs, plotobj)
+
+        h, xedges, yedges, img = ax.hist2d(plotobj.x, plotobj.y, **inputs)
+
         alpha = getattr(plotobj, "alpha", None)
         if alpha is not None:
             img.set_alpha(alpha)
@@ -1097,6 +1099,63 @@ class CreateFigure:
                 return m
 
         return None
+
+    def _apply_norm_from_layer(self, inputs: dict[str, Any], layer: Any, *, keep_levels: bool = False) -> None:
+        """
+        Mutate `inputs` in-place to include a Matplotlib `norm` derived from the layer.
+
+        - Reads: layer.integer_field, layer.vmin, layer.vmax, layer.levels (if present)
+        - If integer_field and neither levels nor (vmin & vmax) are provided, infer
+          vmin/vmax from numeric data on the layer: c/data/z/C.
+        - If a norm is added, removes vmin/vmax from `inputs` to avoid double-specification.
+        - For contour/contourf, pass keep_levels=True to preserve 'levels' in `inputs`.
+        """
+        if "norm" in inputs:
+            return  # caller already set a norm explicitly
+
+        integer_field = bool(getattr(layer, "integer_field", False))
+        vmin = inputs.get("vmin", getattr(layer, "vmin", None))
+        vmax = inputs.get("vmax", getattr(layer, "vmax", None))
+        levels = inputs.get("levels", getattr(layer, "levels", None))
+
+        # If integer categories and nothing provided, try to infer from data
+        if integer_field and levels is None and (vmin is None or vmax is None):
+            # Candidate data arrays in priority order
+            candidates = [
+                inputs.get("c", None),           # if caller passed through
+                getattr(layer, "c", None),       # scatter-style
+                getattr(layer, "data", None),    # map_scatter / map_gridded
+                getattr(layer, "z", None),       # gridded
+                getattr(layer, "C", None),       # hexbin w/ C
+            ]
+            arr = None
+            for cand in candidates:
+                if cand is not None:
+                    try:
+                        arr = np.asarray(cand)
+                        break
+                    except Exception:
+                        arr = None
+            if arr is not None:
+                with np.errstate(invalid="ignore"):
+                    arr = arr[np.isfinite(arr)]
+                if arr.size:
+                    vmin = float(np.floor(arr.min()))
+                    vmax = float(np.ceil(arr.max()))
+
+        # Let the centralized policy build the norm (raises if still insufficient)
+        norm = compute_norm(
+            integer_field=integer_field,
+            vmin=vmin,
+            vmax=vmax,
+            levels=levels,
+        )
+        if norm is not None:
+            inputs["norm"] = norm
+            inputs.pop("vmin", None)
+            inputs.pop("vmax", None)
+            if not keep_levels:
+                inputs.pop("levels", None)
 
     def _plot_colorbar(self, ax, colorbar):
         """
