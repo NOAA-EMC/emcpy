@@ -123,7 +123,8 @@ class CreatePlot:
         xloc: float = 0.5,
         yloc: float = -0.1,
         ha: str = "center",
-        **kwargs: Any) -> None:
+        **kwargs: Any
+    ) -> None:
 
         stats: MutableMapping[str, Any] = dict(stats_dict) if stats_dict is not None else {}
         kw: dict[str, Any] = dict(kwargs) if kwargs else {}
