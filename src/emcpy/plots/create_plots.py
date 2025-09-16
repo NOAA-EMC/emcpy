@@ -600,7 +600,7 @@ class CreateFigure:
             inputs = self._get_inputs_dict(skip, plotobj)
 
             lon = require_1d("longitude", plotobj.longitude)
-            lat = require_1d("latitude",  plotobj.latitude)
+            lat = require_1d("latitude", plotobj.latitude)
             require_same_length("longitude", lon, "latitude", lat)
 
             ms = getattr(plotobj, "markersize", None)
@@ -617,7 +617,7 @@ class CreateFigure:
         inputs = self._get_inputs_dict(skip, plotobj)
 
         lon = require_1d("longitude", plotobj.longitude)
-        lat = require_1d("latitude",  plotobj.latitude)
+        lat = require_1d("latitude", plotobj.latitude)
         require_same_length("longitude", lon, "latitude", lat)
 
         if hasattr(plotobj.data, "__len__"):
@@ -686,7 +686,7 @@ class CreateFigure:
         else:
             # 1D centers or edges are fine: lengths can be N or N+1
             lon = require_1d("longitude", lon)
-            lat = require_1d("latitude",  lat)
+            lat = require_1d("latitude", lat)
             nx_ok = len(lon) in {ncols, ncols + 1}
             ny_ok = len(lat) in {nrows, nrows + 1}
             if not (nx_ok and ny_ok):
@@ -731,10 +731,10 @@ class CreateFigure:
         lat = np.asarray(plotobj.latitude)
         if lon.ndim == 2 or lat.ndim == 2:
             require_same_shape2d("longitude", lon, "data", Z)
-            require_same_shape2d("latitude",  lat, "data", Z)
+            require_same_shape2d("latitude", lat, "data", Z)
         else:
             lon = require_1d("longitude", lon)
-            lat = require_1d("latitude",  lat)
+            lat = require_1d("latitude", lat)
 
         self._apply_norm_from_layer(inputs, plotobj, keep_levels=True)
 
@@ -757,10 +757,10 @@ class CreateFigure:
         lat = np.asarray(plotobj.latitude)
         if lon.ndim == 2 or lat.ndim == 2:
             require_same_shape2d("longitude", lon, "data", Z)
-            require_same_shape2d("latitude",  lat, "data", Z)
+            require_same_shape2d("latitude", lat, "data", Z)
         else:
             lon = require_1d("longitude", lon)
-            lat = require_1d("latitude",  lat)
+            lat = require_1d("latitude", lat)
 
         self._apply_norm_from_layer(inputs, plotobj, keep_levels=True)
 
@@ -1148,7 +1148,7 @@ class CreateFigure:
         skip = ['plottype', 'x', 'y1', 'y2']
         inputs = self._get_inputs_dict(skip, plotobj)
 
-        x  = require_1d("x",  plotobj.x)
+        x = require_1d("x", plotobj.x)
         y1 = require_1d("y1", plotobj.y1)
         y2 = require_1d("y2", plotobj.y2)
         require_same_length("x", x, "y1", y1)

@@ -4,11 +4,13 @@ import numpy as np
 
 __all__ = ["require_1d", "require_2d", "require_same_length", "require_same_shape2d"]
 
+
 def require_1d(name, a):
     arr = np.asarray(a)
     if arr.ndim != 1:
         raise ValueError(f"{name} must be 1D; got shape {arr.shape}.")
     return arr
+
 
 def require_2d(name, a):
     arr = np.asarray(a)
@@ -16,10 +18,12 @@ def require_2d(name, a):
         raise ValueError(f"{name} must be 2D; got shape {arr.shape}.")
     return arr
 
+
 def require_same_length(a_name, a, b_name, b):
     if np.asarray(a).shape[0] != np.asarray(b).shape[0]:
         raise ValueError(f"{a_name} and {b_name} must have same length; "
                          f"got {len(a)} vs {len(b)}.")
+
 
 def require_same_shape2d(A_name, A, B_name, B):
     if np.asarray(A).shape != np.asarray(B).shape:

@@ -62,6 +62,7 @@ def test_single_cbar_only_on_last_subplot():
     # 2 plot axes + 1 colorbar axes
     assert len(fig.fig.axes) == 3
 
+
 def test_colorbar_ticks_integer_boundarynorm(tmp_path):
     import matplotlib.pyplot as plt
     import numpy as np
@@ -80,4 +81,3 @@ def test_colorbar_ticks_integer_boundarynorm(tmp_path):
     labels = [t.get_text() for t in cb.ax.get_yticklabels()]
     assert np.allclose(ticks, [0.5, 1.5, 2.5, 3.5])
     assert labels == ["0", "1", "2", "3"]
-
