@@ -1,4 +1,5 @@
 # This work developed by NOAA/NWS/EMC under the Apache 2.0 license.
+from __future__ import annotations
 import os
 import warnings
 import emcpy
@@ -24,6 +25,7 @@ from matplotlib.offsetbox import OffsetImage, AnchoredOffsetbox
 from matplotlib.ticker import MultipleLocator, FixedLocator, NullLocator
 from matplotlib.ticker import NullFormatter, ScalarFormatter
 from matplotlib.projections import register_projection
+from typing import Any, Mapping, MutableMapping, Optional
 from emcpy.plots.adapters import get_adapter
 from emcpy.plots.map_tools import Domain, MapProjection
 from emcpy.plots.skewt_projection import SkewXAxes
