@@ -5,12 +5,11 @@ from matplotlib.colors import Normalize, BoundaryNorm
 
 
 def compute_norm(
-    *,
-    integer_field: bool,
-    vmin: Optional[float] = None,
-    vmax: Optional[float] = None,
-    levels: Optional[Sequence[float]] = None,
-    ncolors: Optional[int] = None,
+    *, integer_field: bool,
+    vmin: float | None,
+    vmax: float | None,
+    levels: Optional[np.ndarray] = None,
+    ncolors: int | None = None,
     clip: bool = False,
 ):
     """
@@ -26,33 +25,36 @@ def compute_norm(
         - If vmin == vmax -> ValueError
         - Else -> Normalize(vmin, vmax)
     """
+    # Integer categories → discrete bins with half-step edges
     if integer_field:
         if levels is not None:
-            boundaries = np.asarray(levels, dtype=float)
-            if boundaries.ndim != 1 or boundaries.size < 2:
-                raise ValueError("`levels` must be a 1D sequence with at least 2 values.")
-            # ensure monotonic
-            if not (np.all(np.diff(boundaries) > 0) or np.all(np.diff(boundaries) < 0)):
-                raise ValueError("`levels` must be strictly monotonic for BoundaryNorm.")
-            # ascending order is standard
-            if boundaries[0] > boundaries[-1]:
-                boundaries = boundaries[::-1]
+            b = np.asarray(levels, dtype=float)
+            if b.ndim != 1 or b.size < 2:
+                return None
+            # If the levels look like integer class centers, convert to edges
+            if np.allclose(b, np.round(b)):
+                lo = int(np.floor(b.min()))
+                hi = int(np.ceil(b.max()))
+                boundaries = np.arange(lo - 0.5, hi + 1.5, 1.0)
+            else:
+                # Already explicit edges; trust the caller
+                boundaries = b
             return BoundaryNorm(boundaries, ncolors or 256, clip=clip)
 
-        # No levels; derive integer bin edges from vmin/vmax
         if vmin is None or vmax is None:
             raise ValueError("integer_field=True requires `levels` or both `vmin` and `vmax`.")
-        if vmin == vmax:
-            raise ValueError("`vmin` must differ from `vmax` for integer_field=True.")
         lo = int(np.floor(vmin))
         hi = int(np.ceil(vmax))
-        # +2 because BoundaryNorm expects boundaries length = nbins + 1
-        boundaries = np.arange(lo, hi + 2, dtype=float)
+        boundaries = np.arange(lo - 0.5, hi + 1.5, 1.0)
         return BoundaryNorm(boundaries, ncolors or 256, clip=clip)
 
     # Continuous case
+    if levels is not None:
+        b = np.asarray(levels, dtype=float)
+        if b.ndim == 1 and b.size >= 2:
+            return BoundaryNorm(b, ncolors or 256, clip=clip)
+
     if vmin is None or vmax is None:
-        return Normalize()
-    if vmin == vmax:
-        raise ValueError("`vmin` must differ from `vmax` for continuous normalization.")
-    return Normalize(vmin=vmin, vmax=vmax)
+        return None
+    return Normalize(vmin=vmin, vmax=vmax, clip=clip)
+    
