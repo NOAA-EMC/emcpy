@@ -1357,6 +1357,12 @@ class CreateFigure:
                     vmin = float(np.floor(arr.min()))
                     vmax = float(np.ceil(arr.max()))
 
+        # If we inferred an integer range that collapses to a single value,
+        # widen it by 1 so we get at least one bin (three boundaries).
+        if integer_field and levels is None and (vmin is not None) and (vmax is not None):
+            if np.isclose(vmin, vmax):
+                vmax = vmin + 1.0
+
         # Let the centralized policy build the norm (raises if still insufficient)
         norm = compute_norm(
             integer_field=integer_field,
