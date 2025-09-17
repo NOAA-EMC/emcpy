@@ -1,4 +1,4 @@
-.. _statistical_distributions
+.. _plot-types-statistical:
 
 Statistical distributions
 =========================

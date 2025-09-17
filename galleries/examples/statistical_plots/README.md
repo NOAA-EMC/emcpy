@@ -1,4 +1,4 @@
-.. _statistical_plots:
+.. _examples-statistical-plots:
 
 Statistical Plots
 =================

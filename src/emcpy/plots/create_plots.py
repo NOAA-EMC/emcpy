@@ -1,6 +1,8 @@
 # This work developed by NOAA/NWS/EMC under the Apache 2.0 license.
+from __future__ import annotations
 import os
 import warnings
+import inspect
 import emcpy
 import numpy as np
 import matplotlib
@@ -12,7 +14,6 @@ import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import datetime as datetime
 from dataclasses import dataclass, field
-from typing import Any, List, Optional
 from PIL import Image
 from scipy.interpolate import interpn
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
@@ -24,9 +25,12 @@ from matplotlib.offsetbox import OffsetImage, AnchoredOffsetbox
 from matplotlib.ticker import MultipleLocator, FixedLocator, NullLocator
 from matplotlib.ticker import NullFormatter, ScalarFormatter
 from matplotlib.projections import register_projection
+from typing import Any, List, Optional, Mapping, MutableMapping
 from emcpy.plots.adapters import get_adapter
 from emcpy.plots.map_tools import Domain, MapProjection
 from emcpy.plots.skewt_projection import SkewXAxes
+from emcpy.plots._norms import compute_norm
+from emcpy.plots._validate import require_1d, require_2d, require_same_length, require_same_shape2d
 from emcpy.stats.stats import get_linear_regression
 
 __all__ = ['CreateFigure', 'CreatePlot']
@@ -115,15 +119,24 @@ class CreatePlot:
             'kwargs': kwargs
         }
 
-    def add_stats_dict(self, stats_dict={}, xloc=0.5,
-                       yloc=-0.1, ha='center', **kwargs):
+    def add_stats_dict(
+        self,
+        stats_dict: Optional[Mapping[str, Any]] = None,
+        xloc: float = 0.5,
+        yloc: float = -0.1,
+        ha: str = "center",
+        **kwargs: Any
+    ) -> None:
+
+        stats: MutableMapping[str, Any] = dict(stats_dict) if stats_dict is not None else {}
+        kw: dict[str, Any] = dict(kwargs) if kwargs else {}
 
         self.stats = {
-            'stats': stats_dict,
-            'xloc': xloc,
-            'yloc': yloc,
-            'ha': ha,
-            'kwargs': kwargs
+            "stats": stats,
+            "xloc": float(xloc),
+            "yloc": float(yloc),
+            "ha": ha,
+            "kwargs": kw,
         }
 
     def add_legend(self, **kwargs):
@@ -577,134 +590,174 @@ class CreateFigure:
     def _map_scatter(self, plotobj, ax):
         """
         Render MapScatter layer.
-
-        - Supports unlabeled (solid-color) points when data is None.
-        - If integer_field=True, builds a discrete BoundaryNorm automatically
-          (derives vmin/vmax from data when not provided).
+        - If `plotobj.data` is None: solid-color points (no colormap).
+        - If numeric: apply shared normalization policy (BoundaryNorm for integer_field).
         """
         xform = self._map_transform()
 
-        # --- Unlabeled points (no scalar mapping/colorbar) ---
+        # Unlabeled points (no scalar mapping/colorbar)
         if plotobj.data is None:
-            skip = ['plottype', 'longitude', 'latitude', 'markersize',
-                    'integer_field', 'colorbar']
+            skip = ['plottype', 'longitude', 'latitude', 'markersize', 'integer_field', 'colorbar']
             inputs = self._get_inputs_dict(skip, plotobj)
-            cs = ax.scatter(
-                plotobj.longitude, plotobj.latitude,
-                s=plotobj.markersize, **inputs, transform=xform
-            )
-            return cs  # PathCollection (not scalar-mappable)
 
-        # --- Scalar-mapped points ---
-        skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize',
-                'colorbar', 'normalize', 'integer_field']
+            lon = require_1d("longitude", plotobj.longitude)
+            lat = require_1d("latitude", plotobj.latitude)
+            require_same_length("longitude", lon, "latitude", lat)
+
+            ms = getattr(plotobj, "markersize", None)
+            if ms is not None and hasattr(ms, "__len__"):
+                require_same_length("markersize", ms, "longitude", lon)
+
+            for k in ('c', 'color', 'facecolor', 'facecolors'):
+                inputs.pop(k, None)
+
+            return ax.scatter(lon, lat, s=plotobj.markersize, transform=xform, **inputs)
+
+        # Scalar-mapped points
+        skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar', 'normalize', 'integer_field']
         inputs = self._get_inputs_dict(skip, plotobj)
 
-        # If we’re passing c=..., drop conflicting color keys
-        inputs.pop('c', None)
-        inputs.pop('color', None)
-        inputs.pop('facecolor', None)
-        inputs.pop('facecolors', None)
+        lon = require_1d("longitude", plotobj.longitude)
+        lat = require_1d("latitude", plotobj.latitude)
+        require_same_length("longitude", lon, "latitude", lat)
 
-        # Optional discrete (integer) coloring
-        norm = None
-        if bool(getattr(plotobj, "integer_field", False)):
-            vals = np.asarray(plotobj.data)
-            finite = vals[np.isfinite(vals)]
-            if finite.size == 0:
-                raise ValueError("MapScatter: integer_field=True requires non-empty numeric data.")
-            vmin = inputs.get('vmin')
-            vmax = inputs.get('vmax')
-            if vmin is None or vmax is None:
-                vmin = int(np.floor(finite.min()))
-                vmax = int(np.ceil(finite.max()))
-            # Build discrete boundaries [vmin-0.5, ..., vmax+0.5]
-            cmap_name = inputs.get('cmap', 'viridis')
-            cmap = _cmaps.get_cmap(cmap_name)
-            boundaries = np.arange(vmin - 0.5, vmax + 1.5, 1)
-            norm = matplotlib.colors.BoundaryNorm(boundaries, cmap.N)
-            inputs.setdefault('cmap', cmap)
-            # IMPORTANT: cannot pass vmin/vmax with a norm
-            inputs.pop('vmin', None)
-            inputs.pop('vmax', None)
+        if hasattr(plotobj.data, "__len__"):
+            require_same_length("data", plotobj.data, "longitude", lon)
 
-        cs = ax.scatter(
-            plotobj.longitude, plotobj.latitude,
-            c=plotobj.data, s=plotobj.markersize,
-            **inputs, norm=norm, transform=xform
-        )
+        for k in ('c', 'color', 'facecolor', 'facecolors'):
+            inputs.pop(k, None)
+
+        # Apply norm only if data are numeric
+        try:
+            arr = np.asarray(plotobj.data)
+            is_numeric = arr.ndim > 0 and arr.dtype.kind in {'i', 'u', 'f'}
+        except Exception:
+            is_numeric = False
+        if is_numeric:
+            self._apply_norm_from_layer(inputs, plotobj)
+
+        cs = ax.scatter(lon, lat, c=plotobj.data, s=plotobj.markersize, transform=xform, **inputs)
+
         return cs  # PathCollection (ScalarMappable)
 
     def _map_gridded(self, plotobj, ax):
-
-        # Do NOT pass EMCPy-internal flags to Matplotlib
+        """
+        Plot gridded data on a map with consistent normalization.
+        Accepts:
+          - 1D lon/lat (centers or edges)
+          - 2D lon/lat same shape as Z (centers)
+          - 2D lon/lat with shape (Z.shape[0]+1, Z.shape[1]+1) (edges)
+        Returns the mappable from pcolormesh.
+        """
         skip = [
-            'plottype', 'longitude', 'latitude', 'data',
-            'markersize', 'colorbar', 'integer_field', 'normalize'
+            "plottype", "longitude", "latitude", "data",
+            "markersize", "colorbar", "integer_field", "normalize",
         ]
-        inputs = self._get_inputs_dict(skip, plotobj)
+        inputs: dict[str, Any] = self._get_inputs_dict(skip, plotobj)
         xform = self._map_transform()
 
-        # Optional discrete classes
-        norm = None
-        if getattr(plotobj, "integer_field", False):
-            vmin = inputs.get('vmin')
-            vmax = inputs.get('vmax')
+        # Validate data
+        Z = require_2d("data", plotobj.data)
+        nrows, ncols = Z.shape
 
-            if vmin is None or vmax is None:
-                vals = np.asarray(plotobj.data)
-                vals = vals[~np.isnan(vals)]
-                if vals.size == 0:
-                    kmin, kmax = 0, 1
-                else:
-                    kmin = int(np.floor(vals.min()))
-                    kmax = int(np.ceil(vals.max()))
+        # Coords can be 1D or 2D
+        lon = np.asarray(plotobj.longitude)
+        lat = np.asarray(plotobj.latitude)
+
+        # Decide allowed shapes and set shading appropriately
+        if lon.ndim == 2 or lat.ndim == 2:
+            if not (lon.ndim == 2 and lat.ndim == 2):
+                raise ValueError("MapGridded: when using 2D coordinates, both longitude and latitude must be 2D.")
+            # 2D centers: same shape as Z
+            if lon.shape == (nrows, ncols) and lat.shape == (nrows, ncols):
+                # centers; let 'auto' decide or keep user-provided shading
+                inputs.setdefault("shading", "auto")
+                X, Y = lon, lat
+            # 2D edges: one larger in both dims
+            elif lon.shape == (nrows + 1, ncols + 1) and lat.shape == (nrows + 1, ncols + 1):
+                # edges require flat shading to avoid seams
+                inputs.setdefault("shading", "flat")
+                X, Y = lon, lat
             else:
-                kmin = int(np.floor(vmin))
-                kmax = int(np.ceil(vmax))
-
-            # Ensure at least 3 boundaries even for a constant class
-            if kmin == kmax:
-                boundaries = np.array([kmin - 0.5, kmin + 0.5, kmin + 1.5])
+                raise ValueError(
+                    "MapGridded: 2D longitude/latitude must either match Z.shape "
+                    f"({nrows}, {ncols}) or be edges with shape ({nrows+1}, {ncols+1}); "
+                    f"got lon {lon.shape}, lat {lat.shape}, Z {Z.shape}."
+                )
+        else:
+            # 1D centers or edges are fine: lengths can be N or N+1
+            lon = require_1d("longitude", lon)
+            lat = require_1d("latitude", lat)
+            nx_ok = len(lon) in {ncols, ncols + 1}
+            ny_ok = len(lat) in {nrows, nrows + 1}
+            if not (nx_ok and ny_ok):
+                raise ValueError(
+                    "MapGridded: for 1D longitude/latitude, expected len(lon) in "
+                    f"{{{ncols}, {ncols+1}}} and len(lat) in {{{nrows}, {nrows+1}}}; "
+                    f"got len(lon)={len(lon)}, len(lat)={len(lat)}, Z.shape={Z.shape}."
+                )
+            # Let MPL infer; but encourage seam-free for edges
+            if len(lon) == ncols + 1 and len(lat) == nrows + 1:
+                inputs.setdefault("shading", "flat")
             else:
-                # Inclusive upper edge (+1.5) so the last bin is complete
-                boundaries = np.arange(kmin - 0.5, kmax + 1.5, 1)
+                inputs.setdefault("shading", "auto")
+            X, Y = lon, lat
 
-            cmap_name = inputs.get('cmap', 'viridis')
-            cmap = _cmaps.get_cmap(cmap_name)
-            norm = matplotlib.colors.BoundaryNorm(boundaries, cmap.N)
+        # Normalize consistently (also infers bounds from data for integer_field)
+        self._apply_norm_from_layer(inputs, plotobj)
 
-            # Avoid conflicts with norm
-            inputs.setdefault('cmap', cmap)
-            inputs.pop('vmin', None)
-            inputs.pop('vmax', None)
-
-        cs = ax.pcolormesh(
-            plotobj.longitude, plotobj.latitude, plotobj.data,
-            norm=norm, transform=xform, **inputs
-        )
-
-        return cs
+        Zm = np.ma.masked_invalid(np.asarray(Z))
+        return ax.pcolormesh(X, Y, Zm, transform=xform, **inputs)
 
     def _map_contour(self, plotobj, ax):
-
+        """
+        Render MapContour layer.
+        """
         skip = ['plottype', 'longitude', 'latitude', 'data', 'markersize', 'colorbar', 'clabel']
         inputs = self._get_inputs_dict(skip, plotobj)
         xform = self._map_transform()
-        cs = ax.contour(plotobj.longitude, plotobj.latitude, plotobj.data, **inputs, transform=xform)
-        if getattr(plotobj, 'clabel', False):
-            plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
 
-        return cs  # ContourSet
+        Z = require_2d("data", plotobj.data)
+        lon = np.asarray(plotobj.longitude)
+        lat = np.asarray(plotobj.latitude)
+        if lon.ndim == 2 or lat.ndim == 2:
+            require_same_shape2d("longitude", lon, "data", Z)
+            require_same_shape2d("latitude", lat, "data", Z)
+        else:
+            lon = require_1d("longitude", lon)
+            lat = require_1d("latitude", lat)
+
+        self._apply_norm_from_layer(inputs, plotobj, keep_levels=True)
+
+        cs = ax.contour(lon, lat, np.asarray(Z), transform=xform, **inputs)
+        if getattr(plotobj, 'clabel', False):
+            plt.clabel(cs, levels=getattr(plotobj, 'levels', None), use_clabeltext=True)
+
+        return cs
 
     def _map_filled_contour(self, plotobj, ax):
-
+        """
+        Render MapFilledContour layer.
+        """
         skip = ['plottype', 'longitude', 'latitude', 'data', 'colorbar', 'clabel']
         inputs = self._get_inputs_dict(skip, plotobj)
         xform = self._map_transform()
-        cs = ax.contourf(plotobj.longitude, plotobj.latitude, plotobj.data, **inputs, transform=xform)
+
+        Z = require_2d("data", plotobj.data)
+        lon = np.asarray(plotobj.longitude)
+        lat = np.asarray(plotobj.latitude)
+        if lon.ndim == 2 or lat.ndim == 2:
+            require_same_shape2d("longitude", lon, "data", Z)
+            require_same_shape2d("latitude", lat, "data", Z)
+        else:
+            lon = require_1d("longitude", lon)
+            lat = require_1d("latitude", lat)
+
+        self._apply_norm_from_layer(inputs, plotobj, keep_levels=True)
+
+        cs = ax.contourf(lon, lat, np.asarray(Z), transform=xform, **inputs)
         if getattr(plotobj, 'clabel', False):
-            plt.clabel(cs, levels=plotobj.levels, use_clabeltext=True)
+            plt.clabel(cs, levels=getattr(plotobj, 'levels', None), use_clabeltext=True)
 
         return cs  # ContourSet
 
@@ -741,41 +794,55 @@ class CreateFigure:
 
         return cs  # PathCollection
 
-    def _scatter(self, plotobj, ax):
+    def _is_numeric_arraylike(self, x: Any) -> bool:
+        try:
+            a = np.asarray(x)
+            return a.ndim > 0 and a.dtype.kind in {"i", "u", "f"}  # int/uint/float
+        except Exception:
+            return False
+
+    def _scatter(self, plotobj, ax: Axes) -> PathCollection:
         """
         Uses Scatter object to plot on axis.
         Returns the PathCollection (mappable when `c` is provided).
         """
-        # density mode uses a different path
-        if hasattr(plotobj, 'density'):
+        if hasattr(plotobj, "density"):
             return self._density_scatter(plotobj, ax)
 
-        skipvars = ['plottype', 'plot_ax', 'x', 'y',
-                    'markersize', 'do_linear_regression',
-                    'linear_regression', 'density', 'channel']
-        inputs = self._get_inputs_dict(skipvars, plotobj)
+        skipvars = ["plottype", "plot_ax", "x", "y", "markersize", "do_linear_regression",
+                    "linear_regression", "density", "channel"]
+        inputs: dict[str, Any] = self._get_inputs_dict(skipvars, plotobj)
 
-        # If the layer provided a scalar/array color via `c`, remove conflicting color keys
-        c_val = getattr(plotobj, 'c', None)
-        if c_val is not None:
-            # kill all conflicting color sources
-            inputs.pop('c', None)
-            inputs.pop('color', None)
-            inputs.pop('facecolor', None)
-            inputs.pop('facecolors', None)
-            cs = ax.scatter(plotobj.x, plotobj.y, s=plotobj.markersize, c=c_val, **inputs)
+        x = require_1d("x", plotobj.x)
+        y = require_1d("y", plotobj.y)
+        require_same_length("x", x, "y", y)
+
+        ms = getattr(plotobj, "markersize", None)
+        if ms is not None and hasattr(ms, "__len__"):
+            require_same_length("markersize", ms, "x", x)
+
+        c_val = getattr(plotobj, "c", None)
+        if c_val is not None and hasattr(c_val, "__len__"):
+            require_same_length("c", c_val, "x", x)
+
+        if self._is_numeric_arraylike(c_val):
+            self._apply_norm_from_layer(inputs, plotobj)
+            inputs.pop("c", None)
+            inputs.pop("color", None)
+            inputs.pop("facecolor", None)
+            inputs.pop("facecolors", None)
+            cs = ax.scatter(x, y, s=plotobj.markersize, c=c_val, **inputs)
         else:
-            cs = ax.scatter(plotobj.x, plotobj.y, s=plotobj.markersize, **inputs)
+            inputs.pop("c", None)
+            cs = ax.scatter(x, y, s=plotobj.markersize, **inputs)
 
-        # Optional regression line
-        if getattr(plotobj, "do_linear_regression", False):
-            if len(plotobj.x) and len(plotobj.y):
-                y_pred, r_sq, intercept, slope = get_linear_regression(plotobj.x, plotobj.y)
-                label = f"y = {slope:.4f}x + {intercept:.4f}\nR\u00b2 : {r_sq:.4f}"
-                style = getattr(plotobj, "linear_regression", {})
-                if "color" not in style and hasattr(plotobj, "color"):
-                    style["color"] = plotobj.color
-                ax.plot(plotobj.x, y_pred, label=label, **style)
+        if getattr(plotobj, "do_linear_regression", False) and len(x) and len(y):
+            y_pred, r_sq, intercept, slope = get_linear_regression(x, y)
+            label = f"y = {slope:.4f}x + {intercept:.4f}\nR\u00b2 : {r_sq:.4f}"
+            style = dict(getattr(plotobj, "linear_regression", {}) or {})
+            if "color" not in style and hasattr(plotobj, "color"):
+                style["color"] = plotobj.color
+            ax.plot(x, y_pred, label=label, **style)
 
         return cs
 
@@ -785,27 +852,98 @@ class CreateFigure:
         """
         skip = ['plottype', 'plot_ax', 'x', 'y', 'z', 'colorbar']
         inputs = self._get_inputs_dict(skip, plotobj)
-        cs = ax.pcolormesh(plotobj.x, plotobj.y, plotobj.z, **inputs)
+        inputs.setdefault("shading", "auto")
 
-        return cs  # QuadMesh
+        Z = require_2d("z", plotobj.z)
+        x_arr = np.asarray(plotobj.x)
+        y_arr = np.asarray(plotobj.y)
+
+        if x_arr.ndim == 2 or y_arr.ndim == 2:
+            if not (x_arr.ndim == 2 and y_arr.ndim == 2):
+                raise ValueError("Gridded: when using 2D coordinates, both x and y must be 2D.")
+            require_same_shape2d("x", x_arr, "z", Z)
+            require_same_shape2d("y", y_arr, "z", Z)
+            X, Y = x_arr, y_arr
+        else:
+            # Accept centers (N, M) or edges (N+1, M+1)
+            x1 = require_1d("x", x_arr)
+            y1 = require_1d("y", y_arr)
+            nrows, ncols = Z.shape
+            nx_ok = len(x1) in {ncols, ncols + 1}
+            ny_ok = len(y1) in {nrows, nrows + 1}
+            if not (nx_ok and ny_ok):
+                raise ValueError(
+                    "Gridded: for 1D x/y, expected len(x) in {Z.shape[1], Z.shape[1]+1} and "
+                    "len(y) in {Z.shape[0], Z.shape[0]+1}; "
+                    f"got len(x)={len(x1)}, len(y)={len(y1)}, Z.shape={Z.shape}."
+                )
+            X, Y = x1, y1
+
+        self._apply_norm_from_layer(inputs, plotobj)  # continuous or integer_field
+        Zm = np.ma.masked_invalid(np.asarray(Z))
+        qm = ax.pcolormesh(X, Y, Zm, **inputs)
+
+        return qm  # QuadMesh
 
     def _contour(self, plotobj, ax):
         """
-        Uses ContourPlot object to plot on axis.
+        Render Contour layer.
         """
         skip = ['plottype', 'x', 'y', 'z', 'colorbar']
         inputs = self._get_inputs_dict(skip, plotobj)
-        cs = ax.contour(plotobj.x, plotobj.y, plotobj.z, **inputs)
+
+        Z = require_2d("z", plotobj.z)
+        x_arr = np.asarray(plotobj.x)
+        y_arr = np.asarray(plotobj.y)
+
+        if x_arr.ndim == 1 and y_arr.ndim == 1:
+            nrows, ncols = Z.shape
+            if len(x_arr) != ncols or len(y_arr) != nrows:
+                raise ValueError(
+                    "Contour: for 1D x/y, expected len(x)==Z.shape[1] and len(y)==Z.shape[0]; "
+                    f"got len(x)={len(x_arr)}, len(y)={len(y_arr)}, Z.shape={Z.shape}."
+                )
+            X, Y = x_arr, y_arr
+        elif x_arr.ndim == 2 and y_arr.ndim == 2:
+            require_same_shape2d("x", x_arr, "z", Z)
+            require_same_shape2d("y", y_arr, "z", Z)
+            X, Y = x_arr, y_arr
+        else:
+            raise ValueError("Contour: x and y must both be 1D or both be 2D to match Z.")
+
+        self._apply_norm_from_layer(inputs, plotobj, keep_levels=True)
+        cs = ax.contour(X, Y, np.asarray(Z), **inputs)
 
         return cs  # ContourSet
 
     def _contourf(self, plotobj, ax):
         """
-        Use FilledContourPlot object to plot on axis.
+        Render FilledContourPlot layer.
         """
         skip = ['plottype', 'x', 'y', 'z', 'colorbar']
         inputs = self._get_inputs_dict(skip, plotobj)
-        cs = ax.contourf(plotobj.x, plotobj.y, plotobj.z, **inputs)
+
+        Z = require_2d("z", plotobj.z)
+        x_arr = np.asarray(plotobj.x)
+        y_arr = np.asarray(plotobj.y)
+
+        if x_arr.ndim == 1 and y_arr.ndim == 1:
+            nrows, ncols = Z.shape
+            if len(x_arr) != ncols or len(y_arr) != nrows:
+                raise ValueError(
+                    "FilledContour: for 1D x/y, expected len(x)==Z.shape[1] and len(y)==Z.shape[0]; "
+                    f"got len(x)={len(x_arr)}, len(y)={len(y_arr)}, Z.shape={Z.shape}."
+                )
+            X, Y = x_arr, y_arr
+        elif x_arr.ndim == 2 and y_arr.ndim == 2:
+            require_same_shape2d("x", x_arr, "z", Z)
+            require_same_shape2d("y", y_arr, "z", Z)
+            X, Y = x_arr, y_arr
+        else:
+            raise ValueError("FilledContour: x and y must both be 1D or both be 2D to match Z.")
+
+        self._apply_norm_from_layer(inputs, plotobj, keep_levels=True)
+        cs = ax.contourf(X, Y, np.asarray(Z), **inputs)
 
         return cs  # ContourSet
 
@@ -836,8 +974,12 @@ class CreateFigure:
         """
         skip = ['plottype', 'plot_ax', 'x', 'y']
         inputs = self._get_inputs_dict(skip, plotobj)
-        lines = ax.plot(plotobj.x, plotobj.y, **inputs)
 
+        x = require_1d("x", plotobj.x)
+        y = require_1d("y", plotobj.y)
+        require_same_length("x", x, "y", y)
+
+        lines = ax.plot(x, y, **inputs)
         return lines[0] if lines else None  # Line2D (not a ScalarMappable)
 
     def _skewt(self, plotobj, ax):
@@ -846,8 +988,13 @@ class CreateFigure:
         """
         skip = ['plottype', 'plot_ax', 'x', 'y']
         inputs = self._get_inputs_dict(skip, plotobj)
+
+        x = require_1d("x", plotobj.x)
+        y = require_1d("y", plotobj.y)
+        require_same_length("x", x, "y", y)
+
         # Plot data using log scaling Y
-        lines = ax.semilogy(plotobj.x, plotobj.y, **inputs)
+        lines = ax.semilogy(x, y, **inputs)
 
         # Disables the log-formatting that comes with semilogy
         ax.yaxis.set_major_formatter(ScalarFormatter())
@@ -898,7 +1045,33 @@ class CreateFigure:
         """
         skip = ['plottype', 'plot_ax', 'x', 'height']
         inputs = self._get_inputs_dict(skip, plotobj)
-        cont = ax.bar(plotobj.x, plotobj.height, **inputs)
+
+        x = require_1d("x", plotobj.x)
+        h = require_1d("height", plotobj.height)
+        require_same_length("x", x, "height", h)
+
+        # Optional shape checks for array-like kwargs
+        yerr = inputs.get("yerr", None)
+        if yerr is not None and hasattr(yerr, "__len__"):
+            ye = np.asarray(yerr)
+            if not (ye.shape == (len(h),) or (ye.ndim == 2 and ye.shape == (2, len(h)))):
+                raise ValueError(
+                    f"yerr must be length-N or shape (2, N); got shape {ye.shape} for N={len(h)}."
+                )
+
+        xerr = inputs.get("xerr", None)
+        if xerr is not None and hasattr(xerr, "__len__"):
+            xe = np.asarray(xerr)
+            if not (xe.shape == (len(h),) or (xe.ndim == 2 and xe.shape == (2, len(h)))):
+                raise ValueError(
+                    f"xerr must be length-N or shape (2, N); got shape {xe.shape} for N={len(h)}."
+                )
+
+        bottom = inputs.get("bottom", None)
+        if bottom is not None and hasattr(bottom, "__len__"):
+            require_same_length("bottom", bottom, "height", h)
+
+        cont = ax.bar(x, h, **inputs)
 
         return cont  # BarContainer (not a ScalarMappable)
 
@@ -908,21 +1081,53 @@ class CreateFigure:
         """
         skip = ['plottype', 'plot_ax', 'y', 'width']
         inputs = self._get_inputs_dict(skip, plotobj)
-        cont = ax.barh(plotobj.y, plotobj.width, **inputs)
 
+        y = require_1d("y", plotobj.y)
+        w = require_1d("width", plotobj.width)
+        require_same_length("y", y, "width", w)
+
+        # Optional shape checks for array-like kwargs
+        xerr = inputs.get("xerr", None)
+        if xerr is not None and hasattr(xerr, "__len__"):
+            xe = np.asarray(xerr)
+            if not (xe.shape == (len(w),) or (xe.ndim == 2 and xe.shape == (2, len(w)))):
+                raise ValueError(
+                    f"xerr must be length-N or shape (2, N); got shape {xe.shape} for N={len(w)}."
+                )
+
+        yerr = inputs.get("yerr", None)
+        if yerr is not None and hasattr(yerr, "__len__"):
+            ye = np.asarray(yerr)
+            if not (ye.shape == (len(w),) or (ye.ndim == 2 and ye.shape == (2, len(w)))):
+                raise ValueError(
+                    f"yerr must be length-N or shape (2, N); got shape {ye.shape} for N={len(w)}."
+                )
+
+        left = inputs.get("left", None)
+        if left is not None and hasattr(left, "__len__"):
+            require_same_length("left", left, "width", w)
+
+        cont = ax.barh(y, w, **inputs)
         return cont  # BarContainer (not a ScalarMappable)
 
     def _boxandwhisker(self, plotobj, ax):
         """
         Uses BoxandWhiskerPlot object to plot on axis.
         """
-        # Let the object produce Matplotlib-ready kwargs
         inputs, legend_label = plotobj.to_mpl_kwargs()
 
-        # Single call to Matplotlib (no version-specific kwargs left)
+        # Normalize kwargs based on what this Matplotlib build supports
+        supports_orientation = self._supports_kw(ax.boxplot, "orientation")
+        if supports_orientation and "vert" in inputs and "orientation" not in inputs:
+            # Upgrade: avoid PendingDeprecationWarning on newer MPL
+            inputs["orientation"] = "vertical" if inputs.pop("vert") else "horizontal"
+        elif (not supports_orientation) and "orientation" in inputs:
+            # Downgrade: MPL < 3.8 expects vert=
+            orient = str(inputs.pop("orientation")).lower()
+            inputs["vert"] = orient.startswith("v")
+
         bp = ax.boxplot(plotobj.data, **inputs)
 
-        # Reattach legend label to an artist so add_legend() works
         if legend_label is not None:
             try:
                 if bp.get('boxes'):
@@ -940,10 +1145,15 @@ class CreateFigure:
         """
         skip = ['plottype', 'x', 'y1', 'y2']
         inputs = self._get_inputs_dict(skip, plotobj)
-        poly = ax.fill_between(
-            plotobj.x, plotobj.y1, plotobj.y2,
-            **inputs
-        )
+
+        x = require_1d("x", plotobj.x)
+        y1 = require_1d("y1", plotobj.y1)
+        y2 = require_1d("y2", plotobj.y2)
+        require_same_length("x", x, "y1", y1)
+        require_same_length("x", x, "y2", y2)
+
+        poly = ax.fill_between(x, y1, y2, **inputs)
+
         return poly  # PolyCollection (not a ScalarMappable)
 
     def _errorbar(self, plotobj, ax):
@@ -952,10 +1162,30 @@ class CreateFigure:
         """
         skip = ['plottype', 'x', 'y']
         inputs = self._get_inputs_dict(skip, plotobj)
-        cont = ax.errorbar(
-            plotobj.x, plotobj.y,
-            **inputs
-        )
+
+        x = require_1d("x", plotobj.x)
+        y = require_1d("y", plotobj.y)
+        require_same_length("x", x, "y", y)
+
+        # Optional: validate xerr/yerr if they are array-like (not scalars)
+        xerr = inputs.get("xerr", None)
+        if xerr is not None and hasattr(xerr, "__len__"):
+            xe = np.asarray(xerr)
+            # Accept shape (N,) or (2, N) for asymmetric errors
+            if not (xe.shape == (len(x),) or (xe.ndim == 2 and xe.shape == (2, len(x)))):
+                raise ValueError(
+                    f"xerr must be length-N or shape (2, N); got shape {xe.shape} for N={len(x)}."
+                )
+
+        yerr = inputs.get("yerr", None)
+        if yerr is not None and hasattr(yerr, "__len__"):
+            ye = np.asarray(yerr)
+            if not (ye.shape == (len(y),) or (ye.ndim == 2 and ye.shape == (2, len(y)))):
+                raise ValueError(
+                    f"yerr must be length-N or shape (2, N); got shape {ye.shape} for N={len(y)}."
+                )
+
+        cont = ax.errorbar(x, y, **inputs)
         return cont  # ErrorbarContainer (not necessarily a ScalarMappable)
 
     def _violin(self, plotobj, ax):
@@ -986,16 +1216,21 @@ class CreateFigure:
         """
         Render HexBin layer.
         """
-        skip = [
-            'plottype', 'x', 'y', 'C',
-            # colorbar-related fields are handled by CreatePlot.add_colorbar()
-            'colorbar', 'colorbar_label', 'colorbar_location'
-        ]
+        skip = ['plottype', 'x', 'y', 'C', 'colorbar', 'colorbar_label', 'colorbar_location']
         inputs = self._get_inputs_dict(skip, plotobj)
-        hb = ax.hexbin(
-            plotobj.x, plotobj.y, C=getattr(plotobj, 'C', None),
-            **inputs
-        )
+
+        x = require_1d("x", plotobj.x)
+        y = require_1d("y", plotobj.y)
+        require_same_length("x", x, "y", y)
+
+        C = getattr(plotobj, "C", None)
+        if C is not None and hasattr(C, "__len__"):
+            require_same_length("C", C, "x", x)
+            if inputs.get("bins") == "log" and np.any(np.asarray(C) <= 0):
+                raise ValueError("HexBin with bins='log' requires C > 0.")
+
+        self._apply_norm_from_layer(inputs, plotobj)
+        hb = ax.hexbin(x, y, C=getattr(plotobj, 'C', None), **inputs)
 
         return hb  # PolyCollection (ScalarMappable)
 
@@ -1003,21 +1238,27 @@ class CreateFigure:
         """
         Render Hist2D layer.
         """
-        skip = [
-            'plottype', 'x', 'y',
-            # colorbar-related fields are handled by CreatePlot.add_colorbar()
-            'colorbar', 'colorbar_label', 'colorbar_location'
-        ]
+        skip = ['plottype', 'x', 'y', 'colorbar', 'colorbar_label', 'colorbar_location']
         inputs = self._get_inputs_dict(skip, plotobj)
-        h, xedges, yedges, img = ax.hist2d(
-            plotobj.x, plotobj.y,
-            **inputs
-        )
+
+        x = require_1d("x", plotobj.x)
+        y = require_1d("y", plotobj.y)
+        require_same_length("x", x, "y", y)
+
+        self._apply_norm_from_layer(inputs, plotobj)
+
+        h, xedges, yedges, img = ax.hist2d(x, y, **inputs)
         alpha = getattr(plotobj, "alpha", None)
         if alpha is not None:
             img.set_alpha(alpha)
 
         return img  # QuadMesh (ScalarMappable)
+
+    def _supports_kw(self, func, name: str) -> bool:
+        try:
+            return name in inspect.signature(func).parameters
+        except (ValueError, TypeError):
+            return False
 
     def _get_inputs_dict(self, skipvars, plotobj):
         """
@@ -1087,6 +1328,150 @@ class CreateFigure:
 
         return None
 
+    def _apply_norm_from_layer(self, inputs: dict[str, Any], layer: Any, *, keep_levels: bool = False) -> None:
+        """
+        Mutate `inputs` in-place to include a Matplotlib `norm` derived from the layer.
+
+        - Reads: layer.integer_field, layer.vmin, layer.vmax, layer.levels (if present)
+        - If integer_field and neither levels nor (vmin & vmax) are provided, infer
+          vmin/vmax from numeric data on the layer: c/data/z/C.
+        - If a norm is added, removes vmin/vmax from `inputs` to avoid double-specification.
+        - For contour/contourf, pass keep_levels=True to preserve 'levels' in `inputs`.
+        """
+        if "norm" in inputs:
+            return  # caller already set a norm explicitly
+
+        integer_field = bool(getattr(layer, "integer_field", False))
+        vmin = inputs.get("vmin", getattr(layer, "vmin", None))
+        vmax = inputs.get("vmax", getattr(layer, "vmax", None))
+        levels = inputs.get("levels", getattr(layer, "levels", None))
+
+        # If integer categories and nothing provided, try to infer from data
+        if integer_field and levels is None and (vmin is None or vmax is None):
+            # Candidate data arrays in priority order
+            candidates = [
+                inputs.get("c", None),           # if caller passed through
+                getattr(layer, "c", None),       # scatter-style
+                getattr(layer, "data", None),    # map_scatter / map_gridded
+                getattr(layer, "z", None),       # gridded
+                getattr(layer, "C", None),       # hexbin w/ C
+            ]
+            arr = None
+            for cand in candidates:
+                if cand is not None:
+                    try:
+                        arr = np.asarray(cand)
+                        break
+                    except Exception:
+                        arr = None
+            if arr is not None:
+                with np.errstate(invalid="ignore"):
+                    arr = arr[np.isfinite(arr)]
+                if arr.size:
+                    vmin = float(np.floor(arr.min()))
+                    vmax = float(np.ceil(arr.max()))
+
+        # If we inferred an integer range that collapses to a single value,
+        # widen it by 1 so we get at least one bin (three boundaries).
+        if integer_field and levels is None and (vmin is not None) and (vmax is not None):
+            if np.isclose(vmin, vmax):
+                vmax = vmin + 1.0
+
+        # Let the centralized policy build the norm (raises if still insufficient)
+        norm = compute_norm(
+            integer_field=integer_field,
+            vmin=vmin,
+            vmax=vmax,
+            levels=levels,
+        )
+        if norm is not None:
+            inputs["norm"] = norm
+            inputs.pop("vmin", None)
+            inputs.pop("vmax", None)
+            if not keep_levels:
+                inputs.pop("levels", None)
+
+    def _apply_integer_colorbar_ticks(self, cbar) -> None:
+        """
+        If the mappable uses BoundaryNorm with ~unit-spaced boundaries, set
+        integer-centered ticks and labels: bins [k, k+1) → tick at k+0.5 labeled 'k'.
+        No-op for non-BoundaryNorm or non-uniform boundaries.
+        """
+        m = cbar.mappable
+        norm = getattr(m, "norm", None)
+        try:
+            from matplotlib.colors import BoundaryNorm
+        except (ValueError, TypeError):
+            return
+
+        if not isinstance(norm, BoundaryNorm):
+            return
+
+        boundaries = np.asarray(norm.boundaries, dtype=float)
+        if boundaries.ndim != 1 or boundaries.size < 2:
+            return
+
+        # Only do the nice integer look when bins are ~1 apart
+        diffs = np.diff(boundaries)
+        if not np.allclose(diffs, diffs[0]) or not np.isclose(diffs[0], 1.0):
+            return
+
+        centers = 0.5 * (boundaries[:-1] + boundaries[1:])
+        labels = [str(int(round(b))) for b in boundaries[:-1]]
+
+        # Works for both orientations
+        cbar.set_ticks(centers)
+        cbar.set_ticklabels(labels)
+
+    def _auto_extend_for_colorbar(self, cbar) -> None:
+        """
+        Infer extend={'neither','min','max','both'} from mappable vs. norm boundaries.
+        """
+        try:
+            from matplotlib.colors import BoundaryNorm
+            import numpy as _np
+        except Exception:
+            return
+
+        m = cbar.mappable
+        arr = m.get_array()
+        if arr is None:
+            return
+        arr = _np.asarray(arr)
+        arr = arr[_np.isfinite(arr)]
+        if arr.size == 0:
+            return
+
+        extend = "neither"
+        n = getattr(m, "norm", None)
+
+        # Continuous: compare vs. Normalize limits if present
+        vmin = getattr(n, "vmin", None)
+        vmax = getattr(n, "vmax", None)
+        if vmin is not None and vmax is not None:
+            if arr.min() < vmin and arr.max() > vmax:
+                extend = "both"
+            elif arr.min() < vmin:
+                extend = "min"
+            elif arr.max() > vmax:
+                extend = "max"
+
+        # BoundaryNorm: compare vs. first/last boundary
+        from matplotlib.colors import BoundaryNorm
+        if isinstance(n, BoundaryNorm):
+            lo, hi = float(n.boundaries[0]), float(n.boundaries[-1])
+            if arr.min() < lo and arr.max() > hi:
+                extend = "both"
+            elif arr.min() < lo:
+                extend = "min"
+            elif arr.max() > hi:
+                extend = "max"
+
+        try:
+            cbar.set_extend(extend)
+        except Exception:
+            pass
+
     def _plot_colorbar(self, ax, colorbar):
         """
         Add colorbar on specified ax or for total figure (single_cbar).
@@ -1096,17 +1481,22 @@ class CreateFigure:
         if mappable is None:
             return
 
+        # Single shared colorbar on the designated subplot only
         if colorbar['single_cbar']:
-            # Only on the bottom-right subplot
             if self._is_last_subplot(ax):
                 cbar_ax = self.fig.add_axes(colorbar['cbar_loc'])
                 cb = self.fig.colorbar(mappable, cax=cbar_ax, **colorbar['kwargs'])
+                # Integer-friendly ticks if applicable
+                self._apply_integer_colorbar_ticks(cb)
+                self._auto_extend_for_colorbar(cb)
                 if colorbar['label'] is not None:
                     cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
             return
 
-        # per-axes colorbar
+        # Per-axes colorbar
         cb = self.fig.colorbar(mappable, ax=ax, **colorbar['kwargs'])
+        self._apply_integer_colorbar_ticks(cb)
+        self._auto_extend_for_colorbar(cb)
         if colorbar['label'] is not None:
             cb.set_label(colorbar['label'], fontsize=colorbar['fontsize'])
 

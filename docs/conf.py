@@ -104,7 +104,6 @@ sphinx_gallery_conf = {
     'min_reported_time': 0,
 }
 
-
 # -- Options for HTML output -------------------------------------------------
 html_title = 'EMCPy — Docs & Examples'
 html_show_sourcelink = True
@@ -115,5 +114,10 @@ html_show_sphinx = False
 exclude_patterns = [
     '_build',
     'Thumbs.db', '.DS_Store',
+    '.ipynb_checkpoints/*',
     '**/.ipynb_checkpoints/*',
+    '**/.ipynb_checkpoints/**',
 ]
+
+# Quiet the “cannot cache unpickleable configuration value” warning
+suppress_warnings = list(globals().get("suppress_warnings", [])) + ["config.cache"]
