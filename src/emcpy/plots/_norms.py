@@ -57,4 +57,3 @@ def compute_norm(
     if vmin is None or vmax is None:
         return None
     return Normalize(vmin=vmin, vmax=vmax, clip=clip)
-    
