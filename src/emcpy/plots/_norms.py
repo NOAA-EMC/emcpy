@@ -8,7 +8,7 @@ def compute_norm(
     *, integer_field: bool,
     vmin: float | None,
     vmax: float | None,
-    levels: Optional[np.ndarray] = None,
+    levels: Sequence[float] | None = None,
     ncolors: int | None = None,
     clip: bool = False,
 ):

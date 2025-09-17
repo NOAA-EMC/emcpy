@@ -20,9 +20,9 @@ def require_2d(name, a):
 
 
 def require_same_length(a_name, a, b_name, b):
-    if np.asarray(a).shape[0] != np.asarray(b).shape[0]:
+    if len(np.asarray(a)) != len(np.asarray(b)):
         raise ValueError(f"{a_name} and {b_name} must have same length; "
-                         f"got {len(a)} vs {len(b)}.")
+                         f"got {len(np.asarray(a))} vs {len(np.asarray(b))}.")
 
 
 def require_same_shape2d(A_name, A, B_name, B):

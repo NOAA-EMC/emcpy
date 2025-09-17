@@ -1256,7 +1256,7 @@ class CreateFigure:
     def _supports_kw(self, func, name: str) -> bool:
         try:
             return name in inspect.signature(func).parameters
-        except Exception:
+        except (ValueError, TypeError):
             return False
 
     def _get_inputs_dict(self, skipvars, plotobj):
@@ -1400,20 +1400,19 @@ class CreateFigure:
         norm = getattr(m, "norm", None)
         try:
             from matplotlib.colors import BoundaryNorm
-            import numpy as _np
-        except Exception:
+        except (ValueError, TypeError):
             return
 
         if not isinstance(norm, BoundaryNorm):
             return
 
-        boundaries = _np.asarray(norm.boundaries, dtype=float)
+        boundaries = np.asarray(norm.boundaries, dtype=float)
         if boundaries.ndim != 1 or boundaries.size < 2:
             return
 
         # Only do the nice integer look when bins are ~1 apart
-        diffs = _np.diff(boundaries)
-        if not _np.allclose(diffs, diffs[0]) or not _np.isclose(diffs[0], 1.0):
+        diffs = np.diff(boundaries)
+        if not np.allclose(diffs, diffs[0]) or not np.isclose(diffs[0], 1.0):
             return
 
         centers = 0.5 * (boundaries[:-1] + boundaries[1:])
