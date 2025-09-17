@@ -2,6 +2,7 @@
 from __future__ import annotations
 import os
 import warnings
+import inspect
 import emcpy
 import numpy as np
 import matplotlib
