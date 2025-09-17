@@ -19,6 +19,7 @@ from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 from cartopy.mpl.geoaxes import GeoAxes
 from matplotlib import colormaps as _cmaps
 from matplotlib.cm import ScalarMappable
+from matplotlib.colors import BoundaryNorm
 from matplotlib.contour import ContourSet
 from matplotlib.offsetbox import OffsetImage, AnchoredOffsetbox
 from matplotlib.ticker import MultipleLocator, FixedLocator, NullLocator
