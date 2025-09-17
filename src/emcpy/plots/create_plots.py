@@ -1113,13 +1113,20 @@ class CreateFigure:
         """
         Uses BoxandWhiskerPlot object to plot on axis.
         """
-        # Let the object produce Matplotlib-ready kwargs
         inputs, legend_label = plotobj.to_mpl_kwargs()
 
-        # Single call to Matplotlib (no version-specific kwargs left)
+        # Normalize kwargs based on what this Matplotlib build supports
+        supports_orientation = self._supports_kw(ax.boxplot, "orientation")
+        if supports_orientation and "vert" in inputs and "orientation" not in inputs:
+            # Upgrade: avoid PendingDeprecationWarning on newer MPL
+            inputs["orientation"] = "vertical" if inputs.pop("vert") else "horizontal"
+        elif (not supports_orientation) and "orientation" in inputs:
+            # Downgrade: MPL < 3.8 expects vert=
+            orient = str(inputs.pop("orientation")).lower()
+            inputs["vert"] = orient.startswith("v")
+
         bp = ax.boxplot(plotobj.data, **inputs)
 
-        # Reattach legend label to an artist so add_legend() works
         if legend_label is not None:
             try:
                 if bp.get('boxes'):
@@ -1245,6 +1252,12 @@ class CreateFigure:
             img.set_alpha(alpha)
 
         return img  # QuadMesh (ScalarMappable)
+
+    def _supports_kw(self, func, name: str) -> bool:
+        try:
+            return name in inspect.signature(func).parameters
+        except Exception:
+            return False
 
     def _get_inputs_dict(self, skipvars, plotobj):
         """

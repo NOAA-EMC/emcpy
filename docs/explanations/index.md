@@ -4,5 +4,6 @@ Unlike the quick how-to guides, these pages explain the *why* behind EMCPy’s f
 
 ```{toctree}
 :maxdepth: 1
+fields_and_colorbars
 troubleshooting
 ```
