@@ -702,18 +702,8 @@ class CreateFigure:
                 inputs.setdefault("shading", "auto")
             X, Y = lon, lat
 
-        # Normalization policy (integer categories -> BoundaryNorm; else Normalize)
-        integer_field = bool(getattr(plotobj, "integer_field", False))
-        vmin = inputs.get("vmin", getattr(plotobj, "vmin", None))
-        vmax = inputs.get("vmax", getattr(plotobj, "vmax", None))
-        levels = inputs.get("levels", getattr(plotobj, "levels", None))
-
-        norm = compute_norm(integer_field=integer_field, vmin=vmin, vmax=vmax, levels=levels)
-        if norm is not None:
-            inputs["norm"] = norm
-            inputs.pop("vmin", None)
-            inputs.pop("vmax", None)
-            inputs.pop("levels", None)
+        # Normalize consistently (also infers bounds from data for integer_field)
+        self._apply_norm_from_layer(inputs, plotobj)
 
         Zm = np.ma.masked_invalid(np.asarray(Z))
         return ax.pcolormesh(X, Y, Zm, transform=xform, **inputs)
