@@ -6,6 +6,12 @@ import matplotlib.colors as mcolors
 pytest.importorskip("cartopy")  # skip entire module if cartopy missing
 
 from matplotlib.collections import PathCollection, QuadMesh
+try:
+    # Matplotlib 3.9+ (pcolormesh now returns PolyQuadMesh)
+    from matplotlib.collections import PolyQuadMesh  # type: ignore
+    _MESH_TYPES = (QuadMesh, PolyQuadMesh)
+except Exception:
+    _MESH_TYPES = (QuadMesh,)
 from matplotlib.contour import ContourSet
 from matplotlib.colors import BoundaryNorm
 
@@ -94,7 +100,7 @@ def test_map_gridded_edges_ok_and_colorbar(single_axes):
     fig, ax = single_axes(plot)
 
     m = fig._last_mappable_for_ax(ax)
-    assert isinstance(m, QuadMesh)
+    assert isinstance(m, _MESH_TYPES)
     assert len(fig.fig.axes) == 2
 
 
