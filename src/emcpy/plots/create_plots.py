@@ -19,6 +19,7 @@ from scipy.interpolate import interpn
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 from cartopy.mpl.geoaxes import GeoAxes
 from matplotlib import colormaps as _cmaps
+from matplotlib.colors import BoundaryNorm
 from matplotlib.cm import ScalarMappable
 from matplotlib.contour import ContourSet
 from matplotlib.offsetbox import OffsetImage, AnchoredOffsetbox
@@ -127,6 +128,25 @@ class CreatePlot:
         ha: str = "center",
         **kwargs: Any
     ) -> None:
+        """
+        Add a dictionary of statistics to the plot, with location and formatting options.
+        Defensive copies of `stats_dict` and `kwargs` are made to avoid accidental mutation
+        of the input arguments after this method is called. This ensures that changes to the
+        original dictionaries outside this method do not affect the stored statistics or their
+        formatting in the plot.
+        Parameters
+        ----------
+        stats_dict : Optional[Mapping[str, Any]]
+            Dictionary of statistics to display. A copy is made internally.
+        xloc : float, default 0.5
+            X location for the statistics text.
+        yloc : float, default -0.1
+            Y location for the statistics text.
+        ha : str, default "center"
+            Horizontal alignment.
+        **kwargs : Any
+            Additional keyword arguments for formatting. A copy is made internally.
+        """
 
         stats: MutableMapping[str, Any] = dict(stats_dict) if stats_dict is not None else {}
         kw: dict[str, Any] = dict(kwargs) if kwargs else {}
@@ -1427,18 +1447,12 @@ class CreateFigure:
         """
         Infer extend={'neither','min','max','both'} from mappable vs. norm boundaries.
         """
-        try:
-            from matplotlib.colors import BoundaryNorm
-            import numpy as _np
-        except Exception:
-            return
-
         m = cbar.mappable
         arr = m.get_array()
         if arr is None:
             return
-        arr = _np.asarray(arr)
-        arr = arr[_np.isfinite(arr)]
+        arr = np.asarray(arr)
+        arr = arr[np.isfinite(arr)]
         if arr.size == 0:
             return
 
@@ -1457,7 +1471,6 @@ class CreateFigure:
                 extend = "max"
 
         # BoundaryNorm: compare vs. first/last boundary
-        from matplotlib.colors import BoundaryNorm
         if isinstance(n, BoundaryNorm):
             lo, hi = float(n.boundaries[0]), float(n.boundaries[-1])
             if arr.min() < lo and arr.max() > hi:
@@ -1752,8 +1765,7 @@ class CreateFigure:
         def _is_legacy_true(v) -> bool:
             # Accept Python bool and numpy.bool_ as "true"; ignore callables (the method)
             # and other non-bool types.
-            import numpy as _np  # local import to avoid any surprises at import time
-            return isinstance(v, (bool, _np.bool_)) and bool(v)
+            return isinstance(v, (bool, np.bool_)) and bool(v)
 
         legacy_x = _is_legacy_true(legacy_x_attr) and not use_x
         legacy_y = _is_legacy_true(legacy_y_attr) and not use_y

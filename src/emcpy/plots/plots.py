@@ -39,7 +39,7 @@ class Scatter:
         self.edgecolors = None
         self.label = f'n={np.count_nonzero(~np.isnan(x))}'
         self.do_linear_regression = False
-        # Optional style overrides for the regression line; kept empty by default.
+        # Optional style overrides for the regression line; initialized as an empty dictionary.
         # The renderer will default to the scatter color if 'color' isn't provided.
         self.linear_regression = {}
 

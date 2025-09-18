@@ -10,9 +10,10 @@ from emcpy.plots.plots import ViolinPlot
 from emcpy.plots.create_plots import CreatePlot, CreateFigure
 
 rng = np.random.default_rng(0)
-groups = [rng.normal(0.0, 1.0, 400),
-          rng.normal(0.5, 0.8, 400),
-          rng.normal(-0.3, 1.2, 400)]
+n_samples = 400
+groups = [rng.normal(0.0, 1.0, n_samples),
+          rng.normal(0.5, 0.8, n_samples),
+          rng.normal(-0.3, 1.2, n_samples)]
 
 p = CreatePlot()
 layers = []

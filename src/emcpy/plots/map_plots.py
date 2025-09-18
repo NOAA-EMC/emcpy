@@ -3,6 +3,40 @@ import numpy as np
 __all__ = ['MapScatter', 'MapGridded', 'MapContour', 'MapFilledContour']
 
 
+def _nanabsmax(a) -> float:
+    """Return nan-robust max(|a|). For empty/all-nan, return -inf."""
+    try:
+        return float(np.nanmax(np.abs(a)))
+    except ValueError:
+        # Raised when array is empty; treat as "no signal"
+        return float("-inf")
+
+
+def _assert_latlon_not_swapped(latitude, longitude, context: str) -> None:
+    """
+    Heuristic check that helps catch swapped (lon, lat) inputs.
+
+    If the latitude magnitude exceeds 90° while the longitude magnitude is
+    within 180°, we assume the user passed (lon, lat) and raise a helpful error.
+
+    Parameters
+    ----------
+    latitude, longitude : array-like
+        Arrays to test (not modified).
+    context : str
+        Prefix for the error message (e.g., 'MapScatter', 'MapGridded', ...).
+    """
+    lat_abs_max = _nanabsmax(latitude)
+    lon_abs_max = _nanabsmax(longitude)
+
+    # Only trigger when we have a meaningful signal
+    if lat_abs_max > 90 and lon_abs_max <= 180:
+        raise ValueError(
+            f"{context}: latitude values exceed 90°, which suggests you passed "
+            f"longitude first. Constructor order is (latitude, longitude, data)."
+        )
+
+
 class MapScatter:
     """
     Scatter points on a map.
@@ -44,13 +78,7 @@ class MapScatter:
                 )
 
         # ---- plausibility check for swapped lat/lon ----
-        lat_abs_max = np.nanmax(np.abs(self.latitude)) if self.latitude.size else 0
-        lon_abs_max = np.nanmax(np.abs(self.longitude)) if self.longitude.size else 0
-        if lat_abs_max > 90 and lon_abs_max <= 180:
-            raise ValueError(
-                "MapScatter: latitude values exceed 90°, which suggests you passed "
-                "longitude first. Constructor order is (latitude, longitude, data)."
-            )
+        _assert_latlon_not_swapped(self.latitude, self.longitude, "MapScatter")
 
         # ---- plotting defaults ----
         self.marker = 'o'
@@ -164,14 +192,8 @@ class MapGridded:
             self.data = Z
 
         # ---- plausibility check for swapped inputs ----
-        try:
-            lat_abs_max = np.nanmax(np.abs(self.latitude))
-            lon_abs_max = np.nanmax(np.abs(self.longitude))
-            if lat_abs_max > 90 and lon_abs_max <= 180:
-                raise ValueError(
-                    "MapGridded: latitude values exceed 90°, which suggests you passed "
-                    "longitude first. Constructor order is (latitude, longitude, data)."
-                )
+        _assert_latlon_not_swapped(self.latitude, self.longitude, "MapGridded")
+
         except ValueError:
             # empty arrays or all-nan; ignore
             pass
@@ -219,13 +241,7 @@ class MapContour:
             )
 
         # ---- plausibility check for swapped lat/lon ----
-        lat_abs_max = np.nanmax(np.abs(self.latitude)) if self.latitude.size else 0
-        lon_abs_max = np.nanmax(np.abs(self.longitude)) if self.longitude.size else 0
-        if lat_abs_max > 90 and lon_abs_max <= 180:
-            raise ValueError(
-                "MapContour: latitude values exceed 90°, which suggests you passed "
-                "longitude first. Constructor order is (latitude, longitude, data)."
-            )
+        _assert_latlon_not_swapped(self.latitude, self.longitude, "MapContour")
 
         # ---- plotting defaults ----
         self.levels = None
@@ -273,13 +289,7 @@ class MapFilledContour:
             )
 
         # ---- plausibility check for swapped lat/lon ----
-        lat_abs_max = np.nanmax(np.abs(self.latitude)) if self.latitude.size else 0
-        lon_abs_max = np.nanmax(np.abs(self.longitude)) if self.longitude.size else 0
-        if lat_abs_max > 90 and lon_abs_max <= 180:
-            raise ValueError(
-                "MapFilledContour: latitude values exceed 90°, which suggests you passed "
-                "longitude first. Constructor order is (latitude, longitude, data)."
-            )
+        _assert_latlon_not_swapped(self.latitude, self.longitude, "MapFilledContour")
 
         # ---- plotting defaults ----
         self.levels = None
