@@ -53,6 +53,7 @@ docs = [
   "pillow",
   "pandas",
   "netcdf4",
+  "seaborn~=0.13",
 ]
 test = [
   "pytest>=7",
