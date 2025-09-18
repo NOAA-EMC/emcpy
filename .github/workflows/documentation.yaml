@@ -21,10 +21,16 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
 
-      - name: Install docs deps
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r docs/requirements.txt
+      - name: Upgrade pip/wheel/setuptools
+        run: python -m pip install -U pip wheel setuptools
+
+#      - name: Install docs deps
+#        run: |
+#          python -m pip install --upgrade pip
+#          pip install -r docs/requirements.txt
+
+      - name: Install package with docs extras
+        run: pip install .[docs]
 
       - name: Build docs (fail on warnings)
         run: sphinx-build -b html -W -q docs _build/html
