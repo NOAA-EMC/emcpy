@@ -51,6 +51,8 @@ docs = [
 
   # Misc used in examples
   "pillow",
+  "pandas",
+  "netcdf4",
 ]
 test = [
   "pytest>=7",
