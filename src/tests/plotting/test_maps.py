@@ -72,7 +72,7 @@ def test_plot_map_scatter_2d_no_colorbar():
 def test_plot_map_gridded_global():
     lats = np.linspace(25, 50, 25)
     lons = np.linspace(245, 290, 45)
-    X, Y = np.meshgrid(lons, lats)
+    X, Y = np.meshgrid(lats, lons)
     Z = np.random.normal(size=X.shape)
     gridded = MapGridded(X, Y, Z)
     plot = CreatePlot(plot_layers=[gridded])
