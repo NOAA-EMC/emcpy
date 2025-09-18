@@ -86,7 +86,7 @@ def test_map_gridded_edges_ok_and_colorbar(single_axes):
     lat = np.linspace(-90, 90, 51)  # edges
     Z = np.random.RandomState(0).rand(50, 50)  # centers
 
-    g = MapGridded(lon, lat, Z)
+    g = MapGridded(lat, lon, Z)
     g.cmap = "plasma"
 
     plot = _basic_map_plot(g)
@@ -101,7 +101,7 @@ def test_map_gridded_edges_ok_and_colorbar(single_axes):
 def test_map_gridded_integer_field_auto_bounds():
     lon = np.linspace(-100, -90, 21)
     lat = np.linspace(30, 40, 11)
-    LON, LAT = np.meshgrid(lon, lat)
+    LON, LAT = np.meshgrid(lat, lon)
     Z = np.floor(3 * np.sin(np.radians(LAT)) + 3).astype(int)  # integers 0..5
 
     g = MapGridded(latitude=LAT, longitude=LON, data=Z)
@@ -130,7 +130,7 @@ def test_map_gridded_integer_field_auto_bounds():
 def test_map_contour_returns_contourset_and_colorbar(single_axes):
     lon = np.linspace(0, 360, 40)
     lat = np.linspace(-60, 60, 30)
-    LON, LAT = np.meshgrid(lon, lat)
+    LON, LAT = np.meshgrid(lat, lon)
     Z = np.cos(np.deg2rad(LAT)) * np.cos(2 * np.deg2rad(LON))
 
     c = MapContour(LAT, LON, Z)
