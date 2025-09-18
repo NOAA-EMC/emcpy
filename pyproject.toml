@@ -28,19 +28,29 @@ classifiers = [
 dependencies = [
   "numpy>=1.22",
   "matplotlib>=3.6",
-  "scipy>=1.9",
 ]
 
 [project.optional-dependencies]
 docs = [
+  # Sphinx & extensions
   "sphinx>=7",
   "myst-parser>=2",
+  "sphinx-gallery>=0.13",     # or your current
   "sphinx-copybutton",
   "sphinx-design",
-  "sphinx-gallery",
-  "pillow",
-  # cartopy is large/optional; include for docs/examples that render maps
+  "pydata-sphinx-theme>=0.15",
+
+  # Examples/galleries need these:
+  "scipy>=1.9",
+  "scikit-learn>=1.2",
+
+  # Mapping examples
   "cartopy",
+  "shapely",          # cartopy runtime
+  "pyproj",           # cartopy runtime
+
+  # Misc used in examples
+  "pillow",
 ]
 test = [
   "pytest>=7",
