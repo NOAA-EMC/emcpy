@@ -194,10 +194,6 @@ class MapGridded:
         # ---- plausibility check for swapped inputs ----
         _assert_latlon_not_swapped(self.latitude, self.longitude, "MapGridded")
 
-        except ValueError:
-            # empty arrays or all-nan; ignore
-            pass
-
         # ---- plotting defaults ----
         self.cmap = 'viridis'
         self.shading = 'auto'     # good default for pcolormesh
