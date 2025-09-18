@@ -1,6 +1,12 @@
 from datetime import date
 import os
 import sys
+import warnings
+try:
+    from cartopy.io import DownloadWarning
+    warnings.filterwarnings("ignore", category=DownloadWarning)
+except Exception:
+    pass
 
 
 # -- Path setup --------------------------------------------------------------
