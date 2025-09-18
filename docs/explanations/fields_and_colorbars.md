@@ -1,5 +1,5 @@
-Discrete fields and colorbars
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Discrete fields and colorbars
+---
 
 Many EMCPy layers support integer (categorical) fields via ``integer_field=True``.
 When enabled, EMCPy builds a discrete colormap using ``BoundaryNorm`` and
