@@ -125,7 +125,7 @@ def test_plot_map_filled_contour_global():
 def test_plot_map_multidata_conus_with_colorbar():
     lats = np.linspace(25, 50, 25)
     lons = np.linspace(245, 290, 45)
-    X, Y = np.meshgrid(lons, lats)
+    X, Y = np.meshgrid(lats, lons)
     Z = np.random.normal(size=X.shape)
     gridded = MapGridded(X, Y, Z)
     scatter = MapScatter(
