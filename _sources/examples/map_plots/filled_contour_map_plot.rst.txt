@@ -34,21 +34,8 @@ contour lines that are filled.
    :class: sphx-glr-single-img
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    /usr/share/miniconda/lib/python3.12/site-packages/cartopy/mpl/geoaxes.py:1646: UserWarning: The following kwargs were not used by contour: 'clabel'
-      result = super().contourf(*args, **kwargs)
-    /usr/share/miniconda/lib/python3.12/site-packages/cartopy/mpl/geoaxes.py:1600: UserWarning: The following kwargs were not used by contour: 'clabel'
-      result = super().contour(*args, **kwargs)
 
 
-
-
-
-
-|
 
 .. code-block:: Python
 
@@ -109,7 +96,7 @@ contour lines that are filled.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.140 seconds)
+   **Total running time of the script:** (0 minutes 0.273 seconds)
 
 
 .. _sphx_glr_download_examples_map_plots_filled_contour_map_plot.py:

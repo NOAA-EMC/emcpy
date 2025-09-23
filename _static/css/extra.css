@@ -1,0 +1,33 @@
+/* docs/_static/css/extra.css */
+
+/* Hide filename under each thumbnail */
+.sphx-glr-thumbcontainer .sphx-glr-thumbnail-subtitle {
+  display: none !important;
+}
+
+/* Allow titles to wrap to two lines, then ellipsis */
+.sphx-glr-thumbcontainer .sphx-glr-thumbnail-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;       /* show up to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.25;
+  min-height: 2.6em;           /* keep tile heights consistent */
+  margin-top: 0.35rem;
+}
+
+/* Optional: tighten grid and enforce a comfortable tile width */
+.sphx-glr-thumbcontainer {
+  width: 280px;                /* or 300px if you want wider tiles */
+  max-width: 100%;
+}
+.sphx-glr-thumbcontainer img {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Safety: make sure thumbnails remain clickable */
+.sphx-glr-thumbcontainer a {
+  display: block;
+  pointer-events: auto;
+}

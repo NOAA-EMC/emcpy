@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:01.866** total execution time for 4 files **from examples/map_plots**:
+**00:07.133** total execution time for 9 files **from examples/map_plots**:
 
 .. container::
 
@@ -32,15 +32,30 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr_examples_map_plots_map_scatter_2D.py` (``map_scatter_2D.py``)
-     - 00:00.857
+   * - :ref:`sphx_glr_examples_map_plots_map_filled_contour_lambert_conus.py` (``map_filled_contour_lambert_conus.py``)
+     - 00:03.075
+     - 0.0
+   * - :ref:`sphx_glr_examples_map_plots_map_gridded_global.py` (``map_gridded_global.py``)
+     - 00:01.575
      - 0.0
    * - :ref:`sphx_glr_examples_map_plots_map_plot_no_data.py` (``map_plot_no_data.py``)
-     - 00:00.806
-     - 0.0
-   * - :ref:`sphx_glr_examples_map_plots_filled_contour_map_plot.py` (``filled_contour_map_plot.py``)
-     - 00:00.140
+     - 00:00.900
      - 0.0
    * - :ref:`sphx_glr_examples_map_plots_custom_map_domain.py` (``custom_map_domain.py``)
-     - 00:00.063
+     - 00:00.681
+     - 0.0
+   * - :ref:`sphx_glr_examples_map_plots_filled_contour_map_plot.py` (``filled_contour_map_plot.py``)
+     - 00:00.273
+     - 0.0
+   * - :ref:`sphx_glr_examples_map_plots_map_scatter_integer_categories.py` (``map_scatter_integer_categories.py``)
+     - 00:00.182
+     - 0.0
+   * - :ref:`sphx_glr_examples_map_plots_overlay_fc_contour_scatter.py` (``overlay_fc_contour_scatter.py``)
+     - 00:00.174
+     - 0.0
+   * - :ref:`sphx_glr_examples_map_plots_map_scatter_basic.py` (``map_scatter_basic.py``)
+     - 00:00.165
+     - 0.0
+   * - :ref:`sphx_glr_examples_map_plots_map_scatter_2D_example.py` (``map_scatter_2D_example.py``)
+     - 00:00.108
      - 0.0

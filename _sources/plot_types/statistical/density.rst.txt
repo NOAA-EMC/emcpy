@@ -88,7 +88,7 @@ histogram plot using EMCPy's plotting method.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.167 seconds)
+   **Total running time of the script:** (0 minutes 0.217 seconds)
 
 
 .. _sphx_glr_download_plot_types_statistical_density.py:

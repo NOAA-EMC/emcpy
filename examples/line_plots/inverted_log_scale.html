@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Invert log scale &#8212; EMCPy</title>
+    <title>Invert log scale &#8212; EMCPy — Docs &amp; Examples</title>
   
   
   
@@ -30,11 +30,14 @@
   <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/extra.css?v=12fe023d" />
   
   <!-- So that users can add custom icons -->
   <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -45,11 +48,14 @@
     <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=c16b8e3a"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/line_plots/inverted_log_scale';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Plotting multiple lines on a single plot" href="multi_line_plot.html" />
-    <link rel="prev" title="Line Plots" href="index.html" />
+    <link rel="next" title="Line Plot Options" href="line_plot_options.html" />
+    <link rel="prev" title="Error bars &amp; shaded confidence band" href="errorbars_fillbetween.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -129,8 +135,22 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../getting_started/index.html">
-    Getting Started
+  <a class="nav-link nav-internal" href="../../get-started/index.html">
+    Get started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../explanations/index.html">
+    Explanations
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../contributing/index.html">
+    Contributing
   </a>
 </li>
 
@@ -145,13 +165,6 @@
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../index.html">
     Examples
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../installing.html">
-    Installation
   </a>
 </li>
 
@@ -193,7 +206,7 @@
           
           
           
-          <a href="https://github.com/NOAA-EMC/emcpy" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/NOAA-EMC/emcpy" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -245,8 +258,22 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../getting_started/index.html">
-    Getting Started
+  <a class="nav-link nav-internal" href="../../get-started/index.html">
+    Get started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../explanations/index.html">
+    Explanations
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../contributing/index.html">
+    Contributing
   </a>
 </li>
 
@@ -261,13 +288,6 @@
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../index.html">
     Examples
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../installing.html">
-    Installation
   </a>
 </li>
 
@@ -300,7 +320,7 @@
           
           
           
-          <a href="https://github.com/NOAA-EMC/emcpy" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/NOAA-EMC/emcpy" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -316,25 +336,42 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Line Plots</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Invert log scale</a></li>
-<li class="toctree-l2"><a class="reference internal" href="multi_line_plot.html">Plotting multiple lines on a single plot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="line_plot_options.html">Line Plot Options</a></li>
 <li class="toctree-l2"><a class="reference internal" href="SkewT.html">Creating a Skew-T Log-p Plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dual_y_axes.html">Dual y-axes (twinx)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errorbars_fillbetween.html">Error bars &amp; shaded confidence band</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Invert log scale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="line_plot_options.html">Line Plot Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="line_styles_legend.html">Line styles &amp; legend outside</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log_and_symlog.html">Log and symlog scales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_line_plot.html">Plotting multiple lines on a single plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="time_axis_locators.html">Datetime axis with monthly majors and weekly minors</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../scatter_plots/index.html">Scatter Plots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../scatter_plots/scatter_with_regression_line.html">Creating a Scatter Plot with a Regression Line</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../statistical_plots/index.html">Statistical Plots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../statistical_plots/box_vs_violin.html">Box vs Violin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../statistical_plots/hexbin_vs_hist2d_colorbar.html">Hexbin vs 2D Histogram with Colorbars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../statistical_plots/histogram_kde_overlay.html">Histogram with KDE Overlay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../statistical_plots/layered_histogram.html">Layered histograms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../statistical_plots/scatter_with_regression.html">Scatter with Linear Regression Fit</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../histograms/index.html">Histogram Plots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../histograms/layered_histogram.html">Layered histograms</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../gridded_plots/index.html">Gridded Plots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../gridded_plots/contourf_discrete_levels.html">Discrete filled contours</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gridded_plots/contourf_with_contour.html">Filled contours with line overlays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gridded_plots/pcolormesh_basic.html">Pcolormesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gridded_plots/single_shared_colorbar_two_panels.html">Two panels with one shared colorbar</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../map_plots/index.html">Map Plots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../map_plots/map_plot_no_data.html">Creating a map plot with no data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../map_plots/map_scatter_2D.html">Plotting 2D scatter data on map plot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../map_plots/custom_map_domain.html">Create a custom map domain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../map_plots/filled_contour_map_plot.html">Plotting contours on a map plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../map_plots/map_filled_contour_lambert_conus.html">Filled contours (Lambert CONUS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../map_plots/map_gridded_global.html">Global gridded (PlateCarree) with coastlines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../map_plots/map_plot_no_data.html">Creating a map plot with no data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../map_plots/map_scatter_2D_example.html">Plotting 2D scatter data on map plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../map_plots/map_scatter_basic.html">Map scatter (basic)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../map_plots/map_scatter_integer_categories.html">Map scatter (integer categories)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../map_plots/overlay_fc_contour_scatter.html">Overlay: filled contour + contour + scatter</a></li>
 </ul>
 </details></li>
 </ul>
@@ -411,21 +448,21 @@ to download the full example code.</p>
 y-axis that also uses a log scale. This is useful
 if you are looking at a column of data throughout
 the atmosphere and the y-axis is pressure.</p>
-<img src="../../_images/sphx_glr_inverted_log_scale_001.png" srcset="../../_images/sphx_glr_inverted_log_scale_001.png" alt="Test Line Plot, Inverted Log Scale" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/.local/lib/python3.12/site-packages/emcpy/plots/create_plots.py:873: UserWarning: set_ticklabels() should only be used with a fixed number of ticks, i.e. after set_ticks() or using a FixedLocator.
-  ax.set_yticklabels(yticklabels[&#39;labels&#39;],
+<img src="../../_images/sphx_glr_inverted_log_scale_001.png" srcset="../../_images/sphx_glr_inverted_log_scale_001.png" alt="Test Line Plot, Inverted Log Scale" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/emcpy/emcpy/src/emcpy/plots/create_plots.py:1746: UserWarning: set_ticklabels() should only be used with a fixed number of ticks, i.e. after set_ticks() or using a FixedLocator.
+  ax.set_yticklabels(labels, **kwargs)
 </pre></div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
-<span class="kn">from</span> <span class="nn">emcpy.plots.plots</span> <span class="kn">import</span> <span class="n">LinePlot</span>
-<span class="kn">from</span> <span class="nn">emcpy.plots.create_plots</span> <span class="kn">import</span> <span class="n">CreatePlot</span><span class="p">,</span> <span class="n">CreateFigure</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">emcpy.plots.plots</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinePlot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">emcpy.plots.create_plots</span><span class="w"> </span><span class="kn">import</span> <span class="n">CreatePlot</span><span class="p">,</span> <span class="n">CreateFigure</span>
 
 
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
 
     <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="mi">1039</span><span class="p">,</span> <span class="mi">2774</span><span class="p">,</span> <span class="mi">2408</span><span class="p">,</span> <span class="mi">512</span><span class="p">]</span>
     <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">225</span><span class="p">,</span> <span class="mi">510</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="mi">1820</span><span class="p">]</span>
@@ -460,7 +497,7 @@ the atmosphere and the y-axis is pressure.</p>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.118 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.094 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-line-plots-inverted-log-scale-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/9c4b99055f0359495044215bc2cd1564/inverted_log_scale.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">inverted_log_scale.ipynb</span></code></a></p>
@@ -481,30 +518,6 @@ the atmosphere and the y-axis is pressure.</p>
               
               
               
-              
-                <footer class="prev-next-footer d-print-none">
-                  
-<div class="prev-next-area">
-    <a class="left-prev"
-       href="index.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Line Plots</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="multi_line_plot.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Plotting multiple lines on a single plot</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
-</div>
-                </footer>
               
             </div>
             
@@ -546,9 +559,11 @@ the atmosphere and the y-axis is pressure.</p>
       
         <div class="footer-item">
 
-  <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
-    <br/>
+  <p class="copyright">
+    
+      © Copyright 2025, NOAA/EMC.
+      <br/>
+    
   </p>
 </div>
       

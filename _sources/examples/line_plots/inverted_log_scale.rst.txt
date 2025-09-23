@@ -40,8 +40,8 @@ the atmosphere and the y-axis is pressure.
 
  .. code-block:: none
 
-    /home/runner/.local/lib/python3.12/site-packages/emcpy/plots/create_plots.py:873: UserWarning: set_ticklabels() should only be used with a fixed number of ticks, i.e. after set_ticks() or using a FixedLocator.
-      ax.set_yticklabels(yticklabels['labels'],
+    /home/runner/work/emcpy/emcpy/src/emcpy/plots/create_plots.py:1746: UserWarning: set_ticklabels() should only be used with a fixed number of ticks, i.e. after set_ticks() or using a FixedLocator.
+      ax.set_yticklabels(labels, **kwargs)
 
 
 
@@ -97,7 +97,7 @@ the atmosphere and the y-axis is pressure.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.118 seconds)
+   **Total running time of the script:** (0 minutes 0.094 seconds)
 
 
 .. _sphx_glr_download_examples_line_plots_inverted_log_scale.py:

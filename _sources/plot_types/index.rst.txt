@@ -35,35 +35,69 @@ Basic
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a basic line plot using EMCPy&#x27;s plotting method.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a bar plot using EMCPy&#x27;s plotting method.">
 
 .. only:: html
 
-  .. image:: /plot_types/basic/images/thumb/sphx_glr_line_thumb.png
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_bar_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_basic_line.py`
+  :ref:`sphx_glr_plot_types_basic_bar.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Line Plot</div>
+      <div class="sphx-glr-thumbnail-title">Bar Plot</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a vertical line using EMCPy&#x27;s plotting method.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Asymmetric error bars using the ErrorBar layer.">
 
 .. only:: html
 
-  .. image:: /plot_types/basic/images/thumb/sphx_glr_vertical_line_thumb.png
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_errorbar_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_basic_vertical_line.py`
+  :ref:`sphx_glr_plot_types_basic_errorbar.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Vertical Line Plot</div>
+      <div class="sphx-glr-thumbnail-title">Error Bars</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="A shaded band between two curves using the FillBetween layer.">
+
+.. only:: html
+
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_fill_between_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_basic_fill_between.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Fill Between</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a horizontal bar plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_horizontal_bar_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_basic_horizontal_bar.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Horizontal Bar Plot</div>
     </div>
 
 
@@ -86,6 +120,23 @@ Basic
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a basic line plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_line_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_basic_line.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Line Plot</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a basic scatter plot using EMCPy&#x27;s plotting method.">
 
 .. only:: html
@@ -103,35 +154,18 @@ Basic
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a bar plot using EMCPy&#x27;s plotting method.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a vertical line using EMCPy&#x27;s plotting method.">
 
 .. only:: html
 
-  .. image:: /plot_types/basic/images/thumb/sphx_glr_bar_thumb.png
+  .. image:: /plot_types/basic/images/thumb/sphx_glr_vertical_line_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_basic_bar.py`
+  :ref:`sphx_glr_plot_types_basic_vertical_line.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Bar Plot</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a horizontal bar plot using EMCPy&#x27;s plotting method.">
-
-.. only:: html
-
-  .. image:: /plot_types/basic/images/thumb/sphx_glr_horizontal_bar_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_plot_types_basic_horizontal_bar.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Horizontal Bar Plot</div>
+      <div class="sphx-glr-thumbnail-title">Vertical Line Plot</div>
     </div>
 
 
@@ -141,7 +175,6 @@ Basic
 
     </div>
 
-.. _statistical_distributions
 
 Statistical distributions
 =========================
@@ -156,18 +189,18 @@ Statistical distributions
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to create a density scatter plot.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a box plot using EMCPy&#x27;s plotting method.">
 
 .. only:: html
 
-  .. image:: /plot_types/statistical/images/thumb/sphx_glr_density_scatter_thumb.png
+  .. image:: /plot_types/statistical/images/thumb/sphx_glr_boxplot_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_statistical_density_scatter.py`
+  :ref:`sphx_glr_plot_types_statistical_boxplot.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Density Scatter Plot</div>
+      <div class="sphx-glr-thumbnail-title">Box Plot</div>
     </div>
 
 
@@ -190,6 +223,57 @@ Statistical distributions
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to create a density scatter plot.">
+
+.. only:: html
+
+  .. image:: /plot_types/statistical/images/thumb/sphx_glr_density_scatter_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_statistical_density_scatter.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Density Scatter Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Density of points with HexBin and a colorbar.">
+
+.. only:: html
+
+  .. image:: /plot_types/statistical/images/thumb/sphx_glr_hexbin_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_statistical_hexbin.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">HexBin</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Bivariate histogram using Hist2D with a colorbar.">
+
+.. only:: html
+
+  .. image:: /plot_types/statistical/images/thumb/sphx_glr_hist2d_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_statistical_hist2d.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">2D Histogram</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a histogram using EMCPy&#x27;s plotting method.">
 
 .. only:: html
@@ -207,18 +291,18 @@ Statistical distributions
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a box plot using EMCPy&#x27;s plotting method.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Distribution comparison using ViolinPlot.">
 
 .. only:: html
 
-  .. image:: /plot_types/statistical/images/thumb/sphx_glr_boxplot_thumb.png
+  .. image:: /plot_types/statistical/images/thumb/sphx_glr_violin_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_statistical_boxplot.py`
+  :ref:`sphx_glr_plot_types_statistical_violin.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Box Plot</div>
+      <div class="sphx-glr-thumbnail-title">Violin Plot</div>
     </div>
 
 
@@ -228,7 +312,6 @@ Statistical distributions
 
     </div>
 
-.. _gridded
 
 Gridded
 =======
@@ -312,23 +395,6 @@ Map Plots
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot 2D data on a map plot using EMCPy&#x27;s plotting method.">
-
-.. only:: html
-
-  .. image:: /plot_types/map/images/thumb/sphx_glr_map_scatter_2D_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_plot_types_map_map_scatter_2D.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">2D Scatter Map Plot</div>
-    </div>
-
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot gridded data on a map plot using EMCPy&#x27;s plotting method.">
 
 .. only:: html
@@ -361,6 +427,23 @@ Map Plots
     </div>
 
 
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot 2D data on a map plot using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/map/images/thumb/sphx_glr_map_scatter_2D_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_plot_types_map_map_scatter_2D.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">2D Scatter Map Plot</div>
+    </div>
+
+
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -378,18 +461,6 @@ Map Plots
    /plot_types/gridded/index.rst
    /plot_types/map/index.rst
 
-
-.. only:: html
-
-  .. container:: sphx-glr-footer sphx-glr-footer-gallery
-
-    .. container:: sphx-glr-download sphx-glr-download-python
-
-      :download:`Download all examples in Python source code: plot_types_python.zip </plot_types/plot_types_python.zip>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download all examples in Jupyter notebooks: plot_types_jupyter.zip </plot_types/plot_types_jupyter.zip>`
 
 
 .. only:: html

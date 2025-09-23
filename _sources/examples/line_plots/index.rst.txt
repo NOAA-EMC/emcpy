@@ -2,7 +2,7 @@
 
 .. _sphx_glr_examples_line_plots:
 
-.. _line_plots:
+.. _examples-line-plots:
 
 Line Plots
 ==========
@@ -13,6 +13,57 @@ Line Plots
     <div class="sphx-glr-thumbnails">
 
 .. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="EMCPy has a method to produce skew-T log-p plots. Given pressure, temperature, and dewpoint temperature data, users can call the SkewT() method to create a plot with the appropriate x and y axes.">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_SkewT_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_SkewT.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a Skew-T Log-p Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Plot two series sharing the same x-axis with a secondary y-axis created via EMCPy&#x27;s twinx helpers. No direct Matplotlib calls.">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_dual_y_axes_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_dual_y_axes.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Dual y-axes (twinx)</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Shaded 95% band plus asymmetric error bars — implemented with EMCPy layers only (FillBetween, LinePlot, ErrorBar).">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_errorbars_fillbetween_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_errorbars_fillbetween.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Error bars & shaded confidence band</div>
+    </div>
+
 
 .. raw:: html
 
@@ -28,23 +79,6 @@ Line Plots
 .. raw:: html
 
       <div class="sphx-glr-thumbnail-title">Invert log scale</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use EMCPy&#x27;s method to plot several lines on a single subplot. The user creates three separate objects using different data and plots them on the same layer.">
-
-.. only:: html
-
-  .. image:: /examples/line_plots/images/thumb/sphx_glr_multi_line_plot_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_examples_line_plots_multi_line_plot.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Plotting multiple lines on a single plot</div>
     </div>
 
 
@@ -67,18 +101,69 @@ Line Plots
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="EMCPy has a method to produce skew-T log-p plots. Given pressure, temperature, and dewpoint temperature data, users can call the SkewT() method to create a plot with the appropriate x and y axes.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Multiple lines with different markers/linestyles and a legend placed outside the axes using EMCPy helpers only.">
 
 .. only:: html
 
-  .. image:: /examples/line_plots/images/thumb/sphx_glr_SkewT_thumb.png
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_line_styles_legend_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_line_plots_SkewT.py`
+  :ref:`sphx_glr_examples_line_plots_line_styles_legend.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Creating a Skew-T Log-p Plot</div>
+      <div class="sphx-glr-thumbnail-title">Line styles & legend outside</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Left: log–log scaling. Right: symmetric log (symlog) for data crossing zero. All axis scaling done via EMCPy helpers.">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_log_and_symlog_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_log_and_symlog.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Log and symlog scales</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use EMCPy&#x27;s method to plot several lines on a single subplot. The user creates three separate objects using different data and plots them on the same layer.">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_multi_line_plot_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_multi_line_plot.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Plotting multiple lines on a single plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Configure a time-aware x-axis entirely through EMCPy: - Monthly major ticks with labels (e.g., &quot;Oct 2024&quot;) - Weekly minor ticks - Rotated, right-aligned labels">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_time_axis_locators_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_time_axis_locators.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Datetime axis with monthly majors and weekly minors</div>
     </div>
 
 
@@ -92,8 +177,13 @@ Line Plots
 .. toctree::
    :hidden:
 
-   /examples/line_plots/inverted_log_scale
-   /examples/line_plots/multi_line_plot
-   /examples/line_plots/line_plot_options
    /examples/line_plots/SkewT
+   /examples/line_plots/dual_y_axes
+   /examples/line_plots/errorbars_fillbetween
+   /examples/line_plots/inverted_log_scale
+   /examples/line_plots/line_plot_options
+   /examples/line_plots/line_styles_legend
+   /examples/line_plots/log_and_symlog
+   /examples/line_plots/multi_line_plot
+   /examples/line_plots/time_axis_locators
 

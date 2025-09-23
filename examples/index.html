@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Examples &#8212; EMCPy</title>
+    <title>Examples &#8212; EMCPy — Docs &amp; Examples</title>
   
   
   
@@ -30,11 +30,14 @@
   <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/extra.css?v=12fe023d" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -45,11 +48,14 @@
     <script src="../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=c16b8e3a"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/index';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Line Plots" href="line_plots/index.html" />
-    <link rel="prev" title="Scatter Map Plot" href="../plot_types/map/map_scatter.html" />
+    <link rel="prev" title="2D Scatter Map Plot" href="../plot_types/map/map_scatter_2D.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -129,8 +135,22 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../getting_started/index.html">
-    Getting Started
+  <a class="nav-link nav-internal" href="../get-started/index.html">
+    Get started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations/index.html">
+    Explanations
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../contributing/index.html">
+    Contributing
   </a>
 </li>
 
@@ -145,13 +165,6 @@
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="#">
     Examples
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../installing.html">
-    Installation
   </a>
 </li>
 
@@ -193,7 +206,7 @@
           
           
           
-          <a href="https://github.com/NOAA-EMC/emcpy" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/NOAA-EMC/emcpy" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -245,8 +258,22 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../getting_started/index.html">
-    Getting Started
+  <a class="nav-link nav-internal" href="../get-started/index.html">
+    Get started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations/index.html">
+    Explanations
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../contributing/index.html">
+    Contributing
   </a>
 </li>
 
@@ -261,13 +288,6 @@
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="#">
     Examples
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../installing.html">
-    Installation
   </a>
 </li>
 
@@ -300,7 +320,7 @@
           
           
           
-          <a href="https://github.com/NOAA-EMC/emcpy" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/NOAA-EMC/emcpy" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -316,25 +336,42 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="line_plots/index.html">Line Plots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="line_plots/inverted_log_scale.html">Invert log scale</a></li>
-<li class="toctree-l2"><a class="reference internal" href="line_plots/multi_line_plot.html">Plotting multiple lines on a single plot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="line_plots/line_plot_options.html">Line Plot Options</a></li>
 <li class="toctree-l2"><a class="reference internal" href="line_plots/SkewT.html">Creating a Skew-T Log-p Plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="line_plots/dual_y_axes.html">Dual y-axes (twinx)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="line_plots/errorbars_fillbetween.html">Error bars &amp; shaded confidence band</a></li>
+<li class="toctree-l2"><a class="reference internal" href="line_plots/inverted_log_scale.html">Invert log scale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="line_plots/line_plot_options.html">Line Plot Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="line_plots/line_styles_legend.html">Line styles &amp; legend outside</a></li>
+<li class="toctree-l2"><a class="reference internal" href="line_plots/log_and_symlog.html">Log and symlog scales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="line_plots/multi_line_plot.html">Plotting multiple lines on a single plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="line_plots/time_axis_locators.html">Datetime axis with monthly majors and weekly minors</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="scatter_plots/index.html">Scatter Plots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="scatter_plots/scatter_with_regression_line.html">Creating a Scatter Plot with a Regression Line</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="statistical_plots/index.html">Statistical Plots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="statistical_plots/box_vs_violin.html">Box vs Violin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="statistical_plots/hexbin_vs_hist2d_colorbar.html">Hexbin vs 2D Histogram with Colorbars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="statistical_plots/histogram_kde_overlay.html">Histogram with KDE Overlay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="statistical_plots/layered_histogram.html">Layered histograms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="statistical_plots/scatter_with_regression.html">Scatter with Linear Regression Fit</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="histograms/index.html">Histogram Plots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="histograms/layered_histogram.html">Layered histograms</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gridded_plots/index.html">Gridded Plots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gridded_plots/contourf_discrete_levels.html">Discrete filled contours</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gridded_plots/contourf_with_contour.html">Filled contours with line overlays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gridded_plots/pcolormesh_basic.html">Pcolormesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gridded_plots/single_shared_colorbar_two_panels.html">Two panels with one shared colorbar</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="map_plots/index.html">Map Plots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="map_plots/map_plot_no_data.html">Creating a map plot with no data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="map_plots/map_scatter_2D.html">Plotting 2D scatter data on map plot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="map_plots/custom_map_domain.html">Create a custom map domain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="map_plots/filled_contour_map_plot.html">Plotting contours on a map plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map_plots/map_filled_contour_lambert_conus.html">Filled contours (Lambert CONUS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map_plots/map_gridded_global.html">Global gridded (PlateCarree) with coastlines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map_plots/map_plot_no_data.html">Creating a map plot with no data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map_plots/map_scatter_2D_example.html">Plotting 2D scatter data on map plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map_plots/map_scatter_basic.html">Map scatter (basic)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map_plots/map_scatter_integer_categories.html">Map scatter (integer categories)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map_plots/overlay_fc_contour_scatter.html">Overlay: filled contour + contour + scatter</a></li>
 </ul>
 </details></li>
 </ul>
@@ -401,54 +438,99 @@ give reference to what can be done with these collection of tools. Please
 do not hesitate to issue a pull request to add further examples!</p>
 <div class="sphx-glr-thumbnails"></div><section id="line-plots">
 <h2>Line Plots<a class="headerlink" href="#line-plots" title="Link to this heading">#</a></h2>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to create an inverted y-axis that also uses a log scale. This is useful if you are looking at a column of data throughout the atmosphere and the y-axis is pressure."><img alt="" src="../_images/sphx_glr_inverted_log_scale_thumb.png" />
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="EMCPy has a method to produce skew-T log-p plots. Given pressure, temperature, and dewpoint temperature data, users can call the SkewT() method to create a plot with the appropriate x and y axes."><img alt="" src="../_images/sphx_glr_SkewT_thumb.png" />
+<p><a class="reference internal" href="line_plots/SkewT.html#sphx-glr-examples-line-plots-skewt-py"><span class="std std-ref">Creating a Skew-T Log-p Plot</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Creating a Skew-T Log-p Plot</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Plot two series sharing the same x-axis with a secondary y-axis created via EMCPy&#x27;s twinx helpers. No direct Matplotlib calls."><img alt="" src="../_images/sphx_glr_dual_y_axes_thumb.png" />
+<p><a class="reference internal" href="line_plots/dual_y_axes.html#sphx-glr-examples-line-plots-dual-y-axes-py"><span class="std std-ref">Dual y-axes (twinx)</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Dual y-axes (twinx)</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Shaded 95% band plus asymmetric error bars — implemented with EMCPy layers only (FillBetween, LinePlot, ErrorBar)."><img alt="" src="../_images/sphx_glr_errorbars_fillbetween_thumb.png" />
+<p><a class="reference internal" href="line_plots/errorbars_fillbetween.html#sphx-glr-examples-line-plots-errorbars-fillbetween-py"><span class="std std-ref">Error bars &amp; shaded confidence band</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Error bars & shaded confidence band</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to create an inverted y-axis that also uses a log scale. This is useful if you are looking at a column of data throughout the atmosphere and the y-axis is pressure."><img alt="" src="../_images/sphx_glr_inverted_log_scale_thumb.png" />
 <p><a class="reference internal" href="line_plots/inverted_log_scale.html#sphx-glr-examples-line-plots-inverted-log-scale-py"><span class="std std-ref">Invert log scale</span></a></p>
   <div class="sphx-glr-thumbnail-title">Invert log scale</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use EMCPy&#x27;s method to plot several lines on a single subplot. The user creates three separate objects using different data and plots them on the same layer."><img alt="" src="../_images/sphx_glr_multi_line_plot_thumb.png" />
-<p><a class="reference internal" href="line_plots/multi_line_plot.html#sphx-glr-examples-line-plots-multi-line-plot-py"><span class="std std-ref">Plotting multiple lines on a single plot</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Plotting multiple lines on a single plot</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="This script shows several examples of the many different line plot options. They follow the same options as matplotlib."><img alt="" src="../_images/sphx_glr_line_plot_options_thumb.png" />
 <p><a class="reference internal" href="line_plots/line_plot_options.html#sphx-glr-examples-line-plots-line-plot-options-py"><span class="std std-ref">Line Plot Options</span></a></p>
   <div class="sphx-glr-thumbnail-title">Line Plot Options</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="EMCPy has a method to produce skew-T log-p plots. Given pressure, temperature, and dewpoint temperature data, users can call the SkewT() method to create a plot with the appropriate x and y axes."><img alt="" src="../_images/sphx_glr_SkewT_thumb.png" />
-<p><a class="reference internal" href="line_plots/SkewT.html#sphx-glr-examples-line-plots-skewt-py"><span class="std std-ref">Creating a Skew-T Log-p Plot</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Creating a Skew-T Log-p Plot</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Multiple lines with different markers/linestyles and a legend placed outside the axes using EMCPy helpers only."><img alt="" src="../_images/sphx_glr_line_styles_legend_thumb.png" />
+<p><a class="reference internal" href="line_plots/line_styles_legend.html#sphx-glr-examples-line-plots-line-styles-legend-py"><span class="std std-ref">Line styles &amp; legend outside</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Line styles & legend outside</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Left: log–log scaling. Right: symmetric log (symlog) for data crossing zero. All axis scaling done via EMCPy helpers."><img alt="" src="../_images/sphx_glr_log_and_symlog_thumb.png" />
+<p><a class="reference internal" href="line_plots/log_and_symlog.html#sphx-glr-examples-line-plots-log-and-symlog-py"><span class="std std-ref">Log and symlog scales</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Log and symlog scales</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use EMCPy&#x27;s method to plot several lines on a single subplot. The user creates three separate objects using different data and plots them on the same layer."><img alt="" src="../_images/sphx_glr_multi_line_plot_thumb.png" />
+<p><a class="reference internal" href="line_plots/multi_line_plot.html#sphx-glr-examples-line-plots-multi-line-plot-py"><span class="std std-ref">Plotting multiple lines on a single plot</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Plotting multiple lines on a single plot</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Configure a time-aware x-axis entirely through EMCPy: - Monthly major ticks with labels (e.g., &quot;Oct 2024&quot;) - Weekly minor ticks - Rotated, right-aligned labels"><img alt="" src="../_images/sphx_glr_time_axis_locators_thumb.png" />
+<p><a class="reference internal" href="line_plots/time_axis_locators.html#sphx-glr-examples-line-plots-time-axis-locators-py"><span class="std std-ref">Datetime axis with monthly majors and weekly minors</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Datetime axis with monthly majors and weekly minors</div>
 </div></div></section>
-<section id="scatter-plots">
-<h2>Scatter Plots<a class="headerlink" href="#scatter-plots" title="Link to this heading">#</a></h2>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="The following is an example of how to plot data as a scatter plot and include a linear regression line. Calling the linear regression function will give the user the y=mx+b equation as well as the R-squared value if the user specifies a legend."><img alt="" src="../_images/sphx_glr_scatter_with_regression_line_thumb.png" />
-<p><a class="reference internal" href="scatter_plots/scatter_with_regression_line.html#sphx-glr-examples-scatter-plots-scatter-with-regression-line-py"><span class="std std-ref">Creating a Scatter Plot with a Regression Line</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Creating a Scatter Plot with a Regression Line</div>
-</div></div></section>
-<section id="histogram-plots">
-<h2>Histogram Plots<a class="headerlink" href="#histogram-plots" title="Link to this heading">#</a></h2>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to plot multiple histograms as layers on single plot."><img alt="" src="../_images/sphx_glr_layered_histogram_thumb.png" />
-<p><a class="reference internal" href="histograms/layered_histogram.html#sphx-glr-examples-histograms-layered-histogram-py"><span class="std std-ref">Layered histograms</span></a></p>
+<section id="statistical-plots">
+<h2>Statistical Plots<a class="headerlink" href="#statistical-plots" title="Link to this heading">#</a></h2>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Compare distribution shape with a classic box-and-whisker vs. violin plot."><img alt="" src="../_images/sphx_glr_box_vs_violin_thumb.png" />
+<p><a class="reference internal" href="statistical_plots/box_vs_violin.html#sphx-glr-examples-statistical-plots-box-vs-violin-py"><span class="std std-ref">Box vs Violin</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Box vs Violin</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Two dense 2D binning approaches with per-axes colorbars."><img alt="" src="../_images/sphx_glr_hexbin_vs_hist2d_colorbar_thumb.png" />
+<p><a class="reference internal" href="statistical_plots/hexbin_vs_hist2d_colorbar.html#sphx-glr-examples-statistical-plots-hexbin-vs-hist2d-colorbar-py"><span class="std std-ref">Hexbin vs 2D Histogram with Colorbars</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Hexbin vs 2D Histogram with Colorbars</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Show a normalized histogram with a smooth KDE overlay."><img alt="" src="../_images/sphx_glr_histogram_kde_overlay_thumb.png" />
+<p><a class="reference internal" href="statistical_plots/histogram_kde_overlay.html#sphx-glr-examples-statistical-plots-histogram-kde-overlay-py"><span class="std std-ref">Histogram with KDE Overlay</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Histogram with KDE Overlay</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to plot multiple histograms as layers on single plot."><img alt="" src="../_images/sphx_glr_layered_histogram_thumb.png" />
+<p><a class="reference internal" href="statistical_plots/layered_histogram.html#sphx-glr-examples-statistical-plots-layered-histogram-py"><span class="std std-ref">Layered histograms</span></a></p>
   <div class="sphx-glr-thumbnail-title">Layered histograms</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Plot points and automatically add a regression line with R², slope, intercept."><img alt="" src="../_images/sphx_glr_scatter_with_regression_thumb.png" />
+<p><a class="reference internal" href="statistical_plots/scatter_with_regression.html#sphx-glr-examples-statistical-plots-scatter-with-regression-py"><span class="std std-ref">Scatter with Linear Regression Fit</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Scatter with Linear Regression Fit</div>
+</div></div></section>
+<section id="gridded-plots">
+<h2>Gridded Plots<a class="headerlink" href="#gridded-plots" title="Link to this heading">#</a></h2>
+<p>Discrete fields <cite>GriddedPlot</cite>, <cite>Contour</cite>, and <cite>Contourf</cite> support <cite>integer_field=True</cite>. See note in Explanations.</p>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Use an explicit set of levels to control banding."><img alt="" src="../_images/sphx_glr_contourf_discrete_levels_thumb.png" />
+<p><a class="reference internal" href="gridded_plots/contourf_discrete_levels.html#sphx-glr-examples-gridded-plots-contourf-discrete-levels-py"><span class="std std-ref">Discrete filled contours</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Discrete filled contours</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Discrete filled contours with contour-line overlays sharing the same levels."><img alt="" src="../_images/sphx_glr_contourf_with_contour_thumb.png" />
+<p><a class="reference internal" href="gridded_plots/contourf_with_contour.html#sphx-glr-examples-gridded-plots-contourf-with-contour-py"><span class="std std-ref">Filled contours with line overlays</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Filled contours with line overlays</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Basic gridded heatmap with a per-axes colorbar."><img alt="" src="../_images/sphx_glr_pcolormesh_basic_thumb.png" />
+<p><a class="reference internal" href="gridded_plots/pcolormesh_basic.html#sphx-glr-examples-gridded-plots-pcolormesh-basic-py"><span class="std std-ref">Pcolormesh</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Pcolormesh</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Both panels use the same scale; a single horizontal colorbar is placed below the grid using EMCPy&#x27;s single_cbar option."><img alt="" src="../_images/sphx_glr_single_shared_colorbar_two_panels_thumb.png" />
+<p><a class="reference internal" href="gridded_plots/single_shared_colorbar_two_panels.html#sphx-glr-examples-gridded-plots-single-shared-colorbar-two-panels-py"><span class="std std-ref">Two panels with one shared colorbar</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Two panels with one shared colorbar</div>
 </div></div></section>
 <section id="map-plots">
 <h2>Map Plots<a class="headerlink" href="#map-plots" title="Link to this heading">#</a></h2>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use the map features in EMCPy. The map feature underlying source code comes from Cartopy."><img alt="" src="../_images/sphx_glr_map_plot_no_data_thumb.png" />
-<p><a class="reference internal" href="map_plots/map_plot_no_data.html#sphx-glr-examples-map-plots-map-plot-no-data-py"><span class="std std-ref">Creating a map plot with no data</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Creating a map plot with no data</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="Sometimes, users only want to look at the locations of their data on a map and do not care about the actual values. Below is an example of how to just plot lat and lon values on map."><img alt="" src="../_images/sphx_glr_map_scatter_2D_thumb.png" />
-<p><a class="reference internal" href="map_plots/map_scatter_2D.html#sphx-glr-examples-map-plots-map-scatter-2d-py"><span class="std std-ref">Plotting 2D scatter data on map plot</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Plotting 2D scatter data on map plot</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="EMCPy&#x27;s map domain includes a feature to create a custom dictionary with specified lat and lon inputs to create a specific map domain. This is helpful for users who want to look at a specific domain that is not included in EMCPy."><img alt="" src="../_images/sphx_glr_custom_map_domain_thumb.png" />
+<p>Discrete fields in <cite>MapGridded</cite> and <cite>MapScatter</cite> support <cite>integer_field=True</cite>. See note in Explanations.</p>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="EMCPy&#x27;s map domain includes a feature to create a custom dictionary with specified lat and lon inputs to create a specific map domain. This is helpful for users who want to look at a specific domain that is not included in EMCPy."><img alt="" src="../_images/sphx_glr_custom_map_domain_thumb.png" />
 <p><a class="reference internal" href="map_plots/custom_map_domain.html#sphx-glr-examples-map-plots-custom-map-domain-py"><span class="std std-ref">Create a custom map domain</span></a></p>
   <div class="sphx-glr-thumbnail-title">Create a custom map domain</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="The below example shows a map with plotted contour lines that are filled."><img alt="" src="../_images/sphx_glr_filled_contour_map_plot_thumb.png" />
 <p><a class="reference internal" href="map_plots/filled_contour_map_plot.html#sphx-glr-examples-map-plots-filled-contour-map-plot-py"><span class="std std-ref">Plotting contours on a map plot</span></a></p>
   <div class="sphx-glr-thumbnail-title">Plotting contours on a map plot</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Lambert Conformal over CONUS. Centers are forwarded from the domain, so no extra setup needed."><img alt="" src="../_images/sphx_glr_map_filled_contour_lambert_conus_thumb.png" />
+<p><a class="reference internal" href="map_plots/map_filled_contour_lambert_conus.html#sphx-glr-examples-map-plots-map-filled-contour-lambert-conus-py"><span class="std std-ref">Filled contours (Lambert CONUS)</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Filled contours (Lambert CONUS)</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="A simple global pcolormesh with a per-axes colorbar."><img alt="" src="../_images/sphx_glr_map_gridded_global_thumb.png" />
+<p><a class="reference internal" href="map_plots/map_gridded_global.html#sphx-glr-examples-map-plots-map-gridded-global-py"><span class="std std-ref">Global gridded (PlateCarree) with coastlines</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Global gridded (PlateCarree) with coastlines</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use the map features in EMCPy. The map feature underlying source code comes from Cartopy."><img alt="" src="../_images/sphx_glr_map_plot_no_data_thumb.png" />
+<p><a class="reference internal" href="map_plots/map_plot_no_data.html#sphx-glr-examples-map-plots-map-plot-no-data-py"><span class="std std-ref">Creating a map plot with no data</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Creating a map plot with no data</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Sometimes, users only want to look at the locations of their data on a map and do not care about the actual values. Below is an example of how to just plot lat and lon values on map."><img alt="" src="../_images/sphx_glr_map_scatter_2D_example_thumb.png" />
+<p><a class="reference internal" href="map_plots/map_scatter_2D_example.html#sphx-glr-examples-map-plots-map-scatter-2d-example-py"><span class="std std-ref">Plotting 2D scatter data on map plot</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Plotting 2D scatter data on map plot</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Unlabeled points (solid color) over the CONUS domain."><img alt="" src="../_images/sphx_glr_map_scatter_basic_thumb.png" />
+<p><a class="reference internal" href="map_plots/map_scatter_basic.html#sphx-glr-examples-map-plots-map-scatter-basic-py"><span class="std std-ref">Map scatter (basic)</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Map scatter (basic)</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Integer categories with an automatic discrete color scale and colorbar."><img alt="" src="../_images/sphx_glr_map_scatter_integer_categories_thumb.png" />
+<p><a class="reference internal" href="map_plots/map_scatter_integer_categories.html#sphx-glr-examples-map-plots-map-scatter-integer-categories-py"><span class="std std-ref">Map scatter (integer categories)</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Map scatter (integer categories)</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="Demonstrates layering multiple EMCPy map types."><img alt="" src="../_images/sphx_glr_overlay_fc_contour_scatter_thumb.png" />
+<p><a class="reference internal" href="map_plots/overlay_fc_contour_scatter.html#sphx-glr-examples-map-plots-overlay-fc-contour-scatter-py"><span class="std std-ref">Overlay: filled contour + contour + scatter</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Overlay: filled contour + contour + scatter</div>
 </div></div><div class="toctree-wrapper compound">
-</div>
-<div class="sphx-glr-footer sphx-glr-footer-gallery docutils container">
-<div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/bc82bea3a5dd7bdba60b65220891d9e5/examples_python.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">examples_python.zip</span></code></a></p>
-</div>
-<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/fb625db3c50d423b1b7881136ffdeec8/examples_jupyter.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Jupyter</span> <span class="pre">notebooks:</span> <span class="pre">examples_jupyter.zip</span></code></a></p>
-</div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
@@ -460,30 +542,6 @@ do not hesitate to issue a pull request to add further examples!</p>
               
               
               
-              
-                <footer class="prev-next-footer d-print-none">
-                  
-<div class="prev-next-area">
-    <a class="left-prev"
-       href="../plot_types/map/map_scatter.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Scatter Map Plot</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="line_plots/index.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Line Plots</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
-</div>
-                </footer>
               
             </div>
             
@@ -502,8 +560,8 @@ do not hesitate to issue a pull request to add further examples!</p>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#line-plots">Line Plots</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scatter-plots">Scatter Plots</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#histogram-plots">Histogram Plots</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-plots">Statistical Plots</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gridded-plots">Gridded Plots</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#map-plots">Map Plots</a></li>
 </ul>
   </nav></div>
@@ -540,9 +598,11 @@ do not hesitate to issue a pull request to add further examples!</p>
       
         <div class="footer-item">
 
-  <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
-    <br/>
+  <p class="copyright">
+    
+      © Copyright 2025, NOAA/EMC.
+      <br/>
+    
   </p>
 </div>
       

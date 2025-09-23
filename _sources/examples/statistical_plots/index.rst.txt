@@ -1,0 +1,117 @@
+
+
+.. _sphx_glr_examples_statistical_plots:
+
+.. _examples-statistical-plots:
+
+Statistical Plots
+=================
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Compare distribution shape with a classic box-and-whisker vs. violin plot.">
+
+.. only:: html
+
+  .. image:: /examples/statistical_plots/images/thumb/sphx_glr_box_vs_violin_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_statistical_plots_box_vs_violin.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Box vs Violin</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Two dense 2D binning approaches with per-axes colorbars.">
+
+.. only:: html
+
+  .. image:: /examples/statistical_plots/images/thumb/sphx_glr_hexbin_vs_hist2d_colorbar_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_statistical_plots_hexbin_vs_hist2d_colorbar.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Hexbin vs 2D Histogram with Colorbars</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Show a normalized histogram with a smooth KDE overlay.">
+
+.. only:: html
+
+  .. image:: /examples/statistical_plots/images/thumb/sphx_glr_histogram_kde_overlay_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_statistical_plots_histogram_kde_overlay.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Histogram with KDE Overlay</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to plot multiple histograms as layers on single plot.">
+
+.. only:: html
+
+  .. image:: /examples/statistical_plots/images/thumb/sphx_glr_layered_histogram_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_statistical_plots_layered_histogram.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Layered histograms</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Plot points and automatically add a regression line with R², slope, intercept.">
+
+.. only:: html
+
+  .. image:: /examples/statistical_plots/images/thumb/sphx_glr_scatter_with_regression_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_statistical_plots_scatter_with_regression.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Scatter with Linear Regression Fit</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/statistical_plots/box_vs_violin
+   /examples/statistical_plots/hexbin_vs_hist2d_colorbar
+   /examples/statistical_plots/histogram_kde_overlay
+   /examples/statistical_plots/layered_histogram
+   /examples/statistical_plots/scatter_with_regression
+

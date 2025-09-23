@@ -1,0 +1,49 @@
+
+:orphan:
+
+.. _sphx_glr_examples_statistical_plots_sg_execution_times:
+
+
+Computation times
+=================
+**00:00.717** total execution time for 5 files **from examples/statistical_plots**:
+
+.. container::
+
+  .. raw:: html
+
+    <style scoped>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript" class="init">
+    $(document).ready( function () {
+        $('table.sg-datatable').DataTable({order: [[1, 'desc']]});
+    } );
+    </script>
+
+  .. list-table::
+   :header-rows: 1
+   :class: table table-striped sg-datatable
+
+   * - Example
+     - Time
+     - Mem (MB)
+   * - :ref:`sphx_glr_examples_statistical_plots_hexbin_vs_hist2d_colorbar.py` (``hexbin_vs_hist2d_colorbar.py``)
+     - 00:00.237
+     - 0.0
+   * - :ref:`sphx_glr_examples_statistical_plots_box_vs_violin.py` (``box_vs_violin.py``)
+     - 00:00.154
+     - 0.0
+   * - :ref:`sphx_glr_examples_statistical_plots_histogram_kde_overlay.py` (``histogram_kde_overlay.py``)
+     - 00:00.151
+     - 0.0
+   * - :ref:`sphx_glr_examples_statistical_plots_scatter_with_regression.py` (``scatter_with_regression.py``)
+     - 00:00.106
+     - 0.0
+   * - :ref:`sphx_glr_examples_statistical_plots_layered_histogram.py` (``layered_histogram.py``)
+     - 00:00.068
+     - 0.0

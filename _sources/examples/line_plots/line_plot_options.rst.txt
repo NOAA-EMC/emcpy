@@ -25,7 +25,7 @@ This script shows several examples of the many
 different line plot options. They follow the same
 options as matplotlib.
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-111
+.. GENERATED FROM PYTHON SOURCE LINES 9-124
 
 
 
@@ -58,75 +58,89 @@ options as matplotlib.
         y3 = [5, 4, 3, 2, 1]
 
         # Top plot
-        plot1 = CreatePlot()  # Create  Plot
-        plt_list = []  # initialize emtpy plot list
-        lp = LinePlot(x1, y1)  # Create line plot object
-        lp.color = "green"  # line color
-        lp.linestyle = "-"  # line style
-        lp.linewidth = 1.5  # line width
-        lp.marker = "o"  # marker type
-        lp.markersize = 4  # markersize
-        lp.alpha = None  # transparency
-        lp.label = "line1"  # give it a label
-        plt_list.append(lp)  # Add line plot object to list
+        plot1 = CreatePlot()
+        plt_list = []
+        lp = LinePlot(x1, y1)
+        lp.color = "green"
+        lp.linestyle = "-"
+        lp.linewidth = 1.5
+        lp.marker = "o"
+        lp.markersize = 4
+        lp.alpha = None
+        lp.label = "line1"
+        plt_list.append(lp)
 
-        lp = LinePlot(x2, y2)  # Create line plot object
-        lp.color = "red"  # line color
-        lp.linestyle = "-"  # line style
-        lp.linewidth = 1.5  # line width
-        lp.marker = "o"  # marker type
-        lp.markersize = 4  # markersize
-        lp.alpha = None  # transparency
-        lp.label = "line2"  # give it a label
-        plt_list.append(lp)  # Add line plot object to list
+        lp = LinePlot(x2, y2)
+        lp.color = "red"
+        lp.linestyle = "-"
+        lp.linewidth = 1.5
+        lp.marker = "o"
+        lp.markersize = 4
+        lp.alpha = None
+        lp.label = "line2"
+        plt_list.append(lp)
 
         # Bottom plot
-        plot2 = CreatePlot()  # Create Plot
-        plt_list2 = []  # initialize empty plot list
-        lp = LinePlot(x3, y3)  # Create line plot object
-        lp.color = "blue"  # line color
-        lp.linestyle = "-"  # line style
-        lp.linewidth = 1.5  # line width
-        lp.marker = "o"  # marker type
-        lp.markersize = 4  # markersize
-        lp.alpha = None  # transparency
-        lp.label = "line3"  # give it a label
-        plt_list2.append(lp)  # Add line plot object to list
+        plot2 = CreatePlot()
+        plt_list2 = []
+        lp = LinePlot(x3, y3)
+        lp.color = "blue"
+        lp.linestyle = "-"
+        lp.linewidth = 1.5
+        lp.marker = "o"
+        lp.markersize = 4
+        lp.alpha = None
+        lp.label = "line3"
+        plt_list2.append(lp)
 
-        lp = HorizontalLine(1)  # Draw horizontal line
-        lp.color = "black"  # line color
-        lp.linestyle = "-"  # line style
-        lp.linewidth = 1.5  # line width
-        lp.marker = None  # marker type
-        lp.alpha = None  # transparency
-        lp.label = None  # give it a label
-        plt_list2.append(lp)  # Add line plot object to list
+        lp = HorizontalLine(1)
+        lp.color = "black"
+        lp.linestyle = "-"
+        lp.linewidth = 1.5
+        lp.marker = None
+        lp.alpha = None
+        lp.label = None
+        plt_list2.append(lp)
 
-        plot1.plot_layers = plt_list  # draw plot1 (the top plot)
-        plot2.plot_layers = plt_list2  # draw plot2 (the bottom plot)
+        plot1.plot_layers = plt_list
+        plot2.plot_layers = plt_list2
 
-        # Add plot features
+        # ---------- Plot 1 features ----------
         plot1.add_title(label="Test Line Plot 1")
         plot1.add_xlabel(xlabel="X Axis Label 1")
         plot1.add_ylabel(ylabel="Y Axis Label 1")
         plot1.add_grid()
+
         plot1.set_xticks(x1)
         plot1.set_xticklabels([str(item) for item in x1], rotation=0)
-        yticks = np.arange(np.min(y2), np.max(y2) + 1, 1)
-        plot1.set_yticks(yticks)
-        plot1.set_yticklabels([str(item) for item in yticks], rotation=0)
+
+        # FLAT, 1-D yticks for plot1 (cover y1 and y2 range)
+        lo1 = int(np.floor(min(min(y1), min(y2))))
+        hi1 = int(np.ceil(max(max(y1), max(y2))))
+        yticks1 = list(range(lo1, hi1 + 1))
+
+        plot1.set_yticks(yticks1)
+        plot1.set_yticklabels([str(item) for item in yticks1], rotation=0)
+
         plot1.add_legend(loc="upper left", fancybox=True, framealpha=0.80)
 
-        # Add plot features
+        # ---------- Plot 2 features ----------
         plot2.add_title(label="Test Line Plot 2")
         plot2.add_xlabel(xlabel="X Axis Label 2")
         plot2.add_ylabel(ylabel="Y Axis Label 2")
         plot2.add_grid()
+
         plot2.set_xticks(x2)
         plot2.set_xticklabels([str(item) for item in x2], rotation=0)
-        yticks = np.arange(np.min(y2), np.max(y2) + 1, 1)
-        plot2.set_yticks(yticks)
-        plot2.set_yticklabels([str(item) for item in yticks], rotation=0)
+
+        # FLAT, 1-D yticks for plot2 (cover y3 and the horiz line at 1)
+        lo2 = int(np.floor(min(min(y3), 1)))
+        hi2 = int(np.ceil(max(max(y3), 1)))
+        yticks2 = list(range(lo2, hi2 + 1))
+
+        plot2.set_yticks(yticks2)
+        plot2.set_yticklabels([str(item) for item in yticks2], rotation=0)
+
         plot2.add_legend(loc="upper left", fancybox=True, framealpha=0.80)
 
         # Return matplotlib figure
@@ -145,7 +159,7 @@ options as matplotlib.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.148 seconds)
+   **Total running time of the script:** (0 minutes 0.140 seconds)
 
 
 .. _sphx_glr_download_examples_line_plots_line_plot_options.py:

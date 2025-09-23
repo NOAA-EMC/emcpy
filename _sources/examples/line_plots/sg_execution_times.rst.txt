@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.490** total execution time for 4 files **from examples/line_plots**:
+**00:01.277** total execution time for 9 files **from examples/line_plots**:
 
 .. container::
 
@@ -32,15 +32,30 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
+   * - :ref:`sphx_glr_examples_line_plots_log_and_symlog.py` (``log_and_symlog.py``)
+     - 00:00.344
+     - 0.0
    * - :ref:`sphx_glr_examples_line_plots_SkewT.py` (``SkewT.py``)
      - 00:00.156
      - 0.0
    * - :ref:`sphx_glr_examples_line_plots_line_plot_options.py` (``line_plot_options.py``)
-     - 00:00.148
+     - 00:00.140
+     - 0.0
+   * - :ref:`sphx_glr_examples_line_plots_dual_y_axes.py` (``dual_y_axes.py``)
+     - 00:00.136
+     - 0.0
+   * - :ref:`sphx_glr_examples_line_plots_time_axis_locators.py` (``time_axis_locators.py``)
+     - 00:00.135
+     - 0.0
+   * - :ref:`sphx_glr_examples_line_plots_line_styles_legend.py` (``line_styles_legend.py``)
+     - 00:00.105
+     - 0.0
+   * - :ref:`sphx_glr_examples_line_plots_errorbars_fillbetween.py` (``errorbars_fillbetween.py``)
+     - 00:00.100
      - 0.0
    * - :ref:`sphx_glr_examples_line_plots_inverted_log_scale.py` (``inverted_log_scale.py``)
-     - 00:00.118
+     - 00:00.094
      - 0.0
    * - :ref:`sphx_glr_examples_line_plots_multi_line_plot.py` (``multi_line_plot.py``)
-     - 00:00.068
+     - 00:00.067
      - 0.0

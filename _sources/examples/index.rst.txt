@@ -36,6 +36,57 @@ Line Plots
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="EMCPy has a method to produce skew-T log-p plots. Given pressure, temperature, and dewpoint temperature data, users can call the SkewT() method to create a plot with the appropriate x and y axes.">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_SkewT_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_SkewT.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a Skew-T Log-p Plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Plot two series sharing the same x-axis with a secondary y-axis created via EMCPy&#x27;s twinx helpers. No direct Matplotlib calls.">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_dual_y_axes_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_dual_y_axes.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Dual y-axes (twinx)</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Shaded 95% band plus asymmetric error bars — implemented with EMCPy layers only (FillBetween, LinePlot, ErrorBar).">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_errorbars_fillbetween_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_errorbars_fillbetween.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Error bars & shaded confidence band</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to create an inverted y-axis that also uses a log scale. This is useful if you are looking at a column of data throughout the atmosphere and the y-axis is pressure.">
 
 .. only:: html
@@ -48,23 +99,6 @@ Line Plots
 .. raw:: html
 
       <div class="sphx-glr-thumbnail-title">Invert log scale</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use EMCPy&#x27;s method to plot several lines on a single subplot. The user creates three separate objects using different data and plots them on the same layer.">
-
-.. only:: html
-
-  .. image:: /examples/line_plots/images/thumb/sphx_glr_multi_line_plot_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_examples_line_plots_multi_line_plot.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Plotting multiple lines on a single plot</div>
     </div>
 
 
@@ -87,18 +121,69 @@ Line Plots
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="EMCPy has a method to produce skew-T log-p plots. Given pressure, temperature, and dewpoint temperature data, users can call the SkewT() method to create a plot with the appropriate x and y axes.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Multiple lines with different markers/linestyles and a legend placed outside the axes using EMCPy helpers only.">
 
 .. only:: html
 
-  .. image:: /examples/line_plots/images/thumb/sphx_glr_SkewT_thumb.png
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_line_styles_legend_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_line_plots_SkewT.py`
+  :ref:`sphx_glr_examples_line_plots_line_styles_legend.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Creating a Skew-T Log-p Plot</div>
+      <div class="sphx-glr-thumbnail-title">Line styles & legend outside</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Left: log–log scaling. Right: symmetric log (symlog) for data crossing zero. All axis scaling done via EMCPy helpers.">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_log_and_symlog_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_log_and_symlog.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Log and symlog scales</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use EMCPy&#x27;s method to plot several lines on a single subplot. The user creates three separate objects using different data and plots them on the same layer.">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_multi_line_plot_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_multi_line_plot.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Plotting multiple lines on a single plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Configure a time-aware x-axis entirely through EMCPy: - Monthly major ticks with labels (e.g., &quot;Oct 2024&quot;) - Weekly minor ticks - Rotated, right-aligned labels">
+
+.. only:: html
+
+  .. image:: /examples/line_plots/images/thumb/sphx_glr_time_axis_locators_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_line_plots_time_axis_locators.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Datetime axis with monthly majors and weekly minors</div>
     </div>
 
 
@@ -109,8 +194,8 @@ Line Plots
     </div>
 
 
-Scatter Plots
-=============
+Statistical Plots
+=================
 
 
 .. raw:: html
@@ -121,37 +206,54 @@ Scatter Plots
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="The following is an example of how to plot data as a scatter plot and include a linear regression line. Calling the linear regression function will give the user the y=mx+b equation as well as the R-squared value if the user specifies a legend.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Compare distribution shape with a classic box-and-whisker vs. violin plot.">
 
 .. only:: html
 
-  .. image:: /examples/scatter_plots/images/thumb/sphx_glr_scatter_with_regression_line_thumb.png
+  .. image:: /examples/statistical_plots/images/thumb/sphx_glr_box_vs_violin_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_scatter_plots_scatter_with_regression_line.py`
+  :ref:`sphx_glr_examples_statistical_plots_box_vs_violin.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Creating a Scatter Plot with a Regression Line</div>
+      <div class="sphx-glr-thumbnail-title">Box vs Violin</div>
     </div>
 
 
-.. thumbnail-parent-div-close
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Two dense 2D binning approaches with per-axes colorbars.">
+
+.. only:: html
+
+  .. image:: /examples/statistical_plots/images/thumb/sphx_glr_hexbin_vs_hist2d_colorbar_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_statistical_plots_hexbin_vs_hist2d_colorbar.py`
 
 .. raw:: html
 
+      <div class="sphx-glr-thumbnail-title">Hexbin vs 2D Histogram with Colorbars</div>
     </div>
 
 
-Histogram Plots
-===============
+.. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Show a normalized histogram with a smooth KDE overlay.">
+
+.. only:: html
+
+  .. image:: /examples/statistical_plots/images/thumb/sphx_glr_histogram_kde_overlay_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_statistical_plots_histogram_kde_overlay.py`
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbnails">
+      <div class="sphx-glr-thumbnail-title">Histogram with KDE Overlay</div>
+    </div>
 
-.. thumbnail-parent-div-open
 
 .. raw:: html
 
@@ -159,14 +261,117 @@ Histogram Plots
 
 .. only:: html
 
-  .. image:: /examples/histograms/images/thumb/sphx_glr_layered_histogram_thumb.png
+  .. image:: /examples/statistical_plots/images/thumb/sphx_glr_layered_histogram_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_histograms_layered_histogram.py`
+  :ref:`sphx_glr_examples_statistical_plots_layered_histogram.py`
 
 .. raw:: html
 
       <div class="sphx-glr-thumbnail-title">Layered histograms</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Plot points and automatically add a regression line with R², slope, intercept.">
+
+.. only:: html
+
+  .. image:: /examples/statistical_plots/images/thumb/sphx_glr_scatter_with_regression_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_statistical_plots_scatter_with_regression.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Scatter with Linear Regression Fit</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+Gridded Plots
+=============
+Discrete fields `GriddedPlot`, `Contour`, and `Contourf` support `integer_field=True`. See note in Explanations.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Use an explicit set of levels to control banding.">
+
+.. only:: html
+
+  .. image:: /examples/gridded_plots/images/thumb/sphx_glr_contourf_discrete_levels_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gridded_plots_contourf_discrete_levels.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Discrete filled contours</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Discrete filled contours with contour-line overlays sharing the same levels.">
+
+.. only:: html
+
+  .. image:: /examples/gridded_plots/images/thumb/sphx_glr_contourf_with_contour_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gridded_plots_contourf_with_contour.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Filled contours with line overlays</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Basic gridded heatmap with a per-axes colorbar.">
+
+.. only:: html
+
+  .. image:: /examples/gridded_plots/images/thumb/sphx_glr_pcolormesh_basic_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gridded_plots_pcolormesh_basic.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Pcolormesh</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Both panels use the same scale; a single horizontal colorbar is placed below the grid using EMCPy&#x27;s single_cbar option.">
+
+.. only:: html
+
+  .. image:: /examples/gridded_plots/images/thumb/sphx_glr_single_shared_colorbar_two_panels_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gridded_plots_single_shared_colorbar_two_panels.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Two panels with one shared colorbar</div>
     </div>
 
 
@@ -179,6 +384,7 @@ Histogram Plots
 
 Map Plots
 =========
+Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. See note in Explanations.
 
 
 .. raw:: html
@@ -186,40 +392,6 @@ Map Plots
     <div class="sphx-glr-thumbnails">
 
 .. thumbnail-parent-div-open
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use the map features in EMCPy. The map feature underlying source code comes from Cartopy.">
-
-.. only:: html
-
-  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_plot_no_data_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_examples_map_plots_map_plot_no_data.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Creating a map plot with no data</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Sometimes, users only want to look at the locations of their data on a map and do not care about the actual values. Below is an example of how to just plot lat and lon values on map.">
-
-.. only:: html
-
-  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_scatter_2D_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_examples_map_plots_map_scatter_2D.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Plotting 2D scatter data on map plot</div>
-    </div>
-
 
 .. raw:: html
 
@@ -255,6 +427,125 @@ Map Plots
     </div>
 
 
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Lambert Conformal over CONUS. Centers are forwarded from the domain, so no extra setup needed.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_filled_contour_lambert_conus_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_map_filled_contour_lambert_conus.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Filled contours (Lambert CONUS)</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="A simple global pcolormesh with a per-axes colorbar.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_gridded_global_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_map_gridded_global.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Global gridded (PlateCarree) with coastlines</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use the map features in EMCPy. The map feature underlying source code comes from Cartopy.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_plot_no_data_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_map_plot_no_data.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a map plot with no data</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Sometimes, users only want to look at the locations of their data on a map and do not care about the actual values. Below is an example of how to just plot lat and lon values on map.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_scatter_2D_example_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_map_scatter_2D_example.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Plotting 2D scatter data on map plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Unlabeled points (solid color) over the CONUS domain.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_scatter_basic_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_map_scatter_basic.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Map scatter (basic)</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Integer categories with an automatic discrete color scale and colorbar.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_scatter_integer_categories_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_map_scatter_integer_categories.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Map scatter (integer categories)</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Demonstrates layering multiple EMCPy map types.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_overlay_fc_contour_scatter_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_overlay_fc_contour_scatter.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Overlay: filled contour + contour + scatter</div>
+    </div>
+
+
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -268,22 +559,10 @@ Map Plots
 
 
    /examples/line_plots/index.rst
-   /examples/scatter_plots/index.rst
-   /examples/histograms/index.rst
+   /examples/statistical_plots/index.rst
+   /examples/gridded_plots/index.rst
    /examples/map_plots/index.rst
 
-
-.. only:: html
-
-  .. container:: sphx-glr-footer sphx-glr-footer-gallery
-
-    .. container:: sphx-glr-download sphx-glr-download-python
-
-      :download:`Download all examples in Python source code: examples_python.zip </examples/examples_python.zip>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download all examples in Jupyter notebooks: examples_jupyter.zip </examples/examples_jupyter.zip>`
 
 
 .. only:: html

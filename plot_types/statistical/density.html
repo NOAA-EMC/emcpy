@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Density &#8212; EMCPy</title>
+    <title>Density &#8212; EMCPy — Docs &amp; Examples</title>
   
   
   
@@ -30,11 +30,14 @@
   <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/extra.css?v=12fe023d" />
   
   <!-- So that users can add custom icons -->
   <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -45,11 +48,14 @@
     <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=c16b8e3a"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'plot_types/statistical/density';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Histogram" href="histogram.html" />
-    <link rel="prev" title="Density Scatter Plot" href="density_scatter.html" />
+    <link rel="next" title="Density Scatter Plot" href="density_scatter.html" />
+    <link rel="prev" title="Box Plot" href="boxplot.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -129,8 +135,22 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../getting_started/index.html">
-    Getting Started
+  <a class="nav-link nav-internal" href="../../get-started/index.html">
+    Get started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../explanations/index.html">
+    Explanations
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../contributing/index.html">
+    Contributing
   </a>
 </li>
 
@@ -145,13 +165,6 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../examples/index.html">
     Examples
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../installing.html">
-    Installation
   </a>
 </li>
 
@@ -193,7 +206,7 @@
           
           
           
-          <a href="https://github.com/NOAA-EMC/emcpy" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/NOAA-EMC/emcpy" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -245,8 +258,22 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../getting_started/index.html">
-    Getting Started
+  <a class="nav-link nav-internal" href="../../get-started/index.html">
+    Get started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../explanations/index.html">
+    Explanations
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../contributing/index.html">
+    Contributing
   </a>
 </li>
 
@@ -261,13 +288,6 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../examples/index.html">
     Examples
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../installing.html">
-    Installation
   </a>
 </li>
 
@@ -300,7 +320,7 @@
           
           
           
-          <a href="https://github.com/NOAA-EMC/emcpy" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+          <a href="https://github.com/NOAA-EMC/emcpy" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
 </ul></div>
@@ -316,19 +336,24 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../basic/index.html">Basic</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../basic/line.html">Line Plot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../basic/vertical_line.html">Vertical Line Plot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../basic/horizontal_line.html">Horizontal Line Plot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../basic/scatter.html">Scatter Plot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../basic/bar.html">Bar Plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/errorbar.html">Error Bars</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/fill_between.html">Fill Between</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../basic/horizontal_bar.html">Horizontal Bar Plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/horizontal_line.html">Horizontal Line Plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/line.html">Line Plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/scatter.html">Scatter Plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic/vertical_line.html">Vertical Line Plot</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Statistical distributions</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="density_scatter.html">Density Scatter Plot</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Density</a></li>
-<li class="toctree-l2"><a class="reference internal" href="histogram.html">Histogram</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boxplot.html">Box Plot</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Density</a></li>
+<li class="toctree-l2"><a class="reference internal" href="density_scatter.html">Density Scatter Plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hexbin.html">HexBin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hist2d.html">2D Histogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="histogram.html">Histogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="violin.html">Violin Plot</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../gridded/index.html">Gridded</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -338,9 +363,9 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../map/index.html">Map Plots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../map/map_scatter_2D.html">2D Scatter Map Plot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../map/map_gridded.html">Gridded Map Plot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../map/map_scatter.html">Scatter Map Plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../map/map_scatter_2D.html">2D Scatter Map Plot</a></li>
 </ul>
 </details></li>
 </ul>
@@ -415,14 +440,14 @@ to download the full example code.</p>
 <span id="sphx-glr-plot-types-statistical-density-py"></span><h1>Density<a class="headerlink" href="#density" title="Link to this heading">#</a></h1>
 <p>Below is an example of how to plot a density
 histogram plot using EMCPy’s plotting method.</p>
-<img src="../../_images/sphx_glr_density_001.png" srcset="../../_images/sphx_glr_density_001.png" alt="Density Plot" class = "sphx-glr-single-img"/><div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<img src="../../_images/sphx_glr_density_001.png" srcset="../../_images/sphx_glr_density_001.png" alt="Density Plot" class = "sphx-glr-single-img"/><div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
-<span class="kn">from</span> <span class="nn">emcpy.plots.plots</span> <span class="kn">import</span> <span class="n">Density</span>
-<span class="kn">from</span> <span class="nn">emcpy.plots.create_plots</span> <span class="kn">import</span> <span class="n">CreatePlot</span><span class="p">,</span> <span class="n">CreateFigure</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">emcpy.plots.plots</span><span class="w"> </span><span class="kn">import</span> <span class="n">Density</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">emcpy.plots.create_plots</span><span class="w"> </span><span class="kn">import</span> <span class="n">CreatePlot</span><span class="p">,</span> <span class="n">CreateFigure</span>
 
 
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
     <span class="c1"># Test density plot</span>
 
     <span class="c1"># Grab sample data</span>
@@ -447,7 +472,7 @@ histogram plot using EMCPy’s plotting method.</p>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">_getHistData</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_getHistData</span><span class="p">():</span>
     <span class="c1"># Generate test data for histogram plots</span>
 
     <span class="n">mu</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># mean of distribution</span>
@@ -461,7 +486,7 @@ histogram plot using EMCPy’s plotting method.</p>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.167 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.217 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-plot-types-statistical-density-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/17885bce065293fca3b45c6d25bfd758/density.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">density.ipynb</span></code></a></p>
@@ -482,30 +507,6 @@ histogram plot using EMCPy’s plotting method.</p>
               
               
               
-              
-                <footer class="prev-next-footer d-print-none">
-                  
-<div class="prev-next-area">
-    <a class="left-prev"
-       href="density_scatter.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Density Scatter Plot</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="histogram.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Histogram</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
-</div>
-                </footer>
               
             </div>
             
@@ -547,9 +548,11 @@ histogram plot using EMCPy’s plotting method.</p>
       
         <div class="footer-item">
 
-  <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
-    <br/>
+  <p class="copyright">
+    
+      © Copyright 2025, NOAA/EMC.
+      <br/>
+    
   </p>
 </div>
       

@@ -1,0 +1,100 @@
+
+
+.. _sphx_glr_examples_gridded_plots:
+
+.. _examples-gridded-plots:
+
+Gridded Plots
+=============
+Discrete fields `GriddedPlot`, `Contour`, and `Contourf` support `integer_field=True`. See note in Explanations.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Use an explicit set of levels to control banding.">
+
+.. only:: html
+
+  .. image:: /examples/gridded_plots/images/thumb/sphx_glr_contourf_discrete_levels_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gridded_plots_contourf_discrete_levels.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Discrete filled contours</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Discrete filled contours with contour-line overlays sharing the same levels.">
+
+.. only:: html
+
+  .. image:: /examples/gridded_plots/images/thumb/sphx_glr_contourf_with_contour_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gridded_plots_contourf_with_contour.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Filled contours with line overlays</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Basic gridded heatmap with a per-axes colorbar.">
+
+.. only:: html
+
+  .. image:: /examples/gridded_plots/images/thumb/sphx_glr_pcolormesh_basic_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gridded_plots_pcolormesh_basic.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Pcolormesh</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Both panels use the same scale; a single horizontal colorbar is placed below the grid using EMCPy&#x27;s single_cbar option.">
+
+.. only:: html
+
+  .. image:: /examples/gridded_plots/images/thumb/sphx_glr_single_shared_colorbar_two_panels_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_gridded_plots_single_shared_colorbar_two_panels.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Two panels with one shared colorbar</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/gridded_plots/contourf_discrete_levels
+   /examples/gridded_plots/contourf_with_contour
+   /examples/gridded_plots/pcolormesh_basic
+   /examples/gridded_plots/single_shared_colorbar_two_panels
+

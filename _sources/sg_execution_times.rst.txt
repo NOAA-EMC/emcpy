@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:03.767** total execution time for 26 files **from all galleries**:
+**00:14.425** total execution time for 48 files **from all galleries**:
 
 .. container::
 
@@ -32,81 +32,147 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr_examples_map_plots_map_scatter_2D.py` (``../galleries/examples/map_plots/map_scatter_2D.py``)
-     - 00:00.857
+   * - :ref:`sphx_glr_examples_map_plots_map_filled_contour_lambert_conus.py` (``../galleries/examples/map_plots/map_filled_contour_lambert_conus.py``)
+     - 00:03.075
+     - 0.0
+   * - :ref:`sphx_glr_examples_map_plots_map_gridded_global.py` (``../galleries/examples/map_plots/map_gridded_global.py``)
+     - 00:01.575
+     - 0.0
+   * - :ref:`sphx_glr_plot_types_map_map_scatter.py` (``../galleries/plot_types/map/map_scatter.py``)
+     - 00:01.201
+     - 0.0
+   * - :ref:`sphx_glr_plot_types_basic_bar.py` (``../galleries/plot_types/basic/bar.py``)
+     - 00:00.987
+     - 0.0
+   * - :ref:`sphx_glr_plot_types_map_map_gridded.py` (``../galleries/plot_types/map/map_gridded.py``)
+     - 00:00.964
      - 0.0
    * - :ref:`sphx_glr_examples_map_plots_map_plot_no_data.py` (``../galleries/examples/map_plots/map_plot_no_data.py``)
-     - 00:00.806
+     - 00:00.900
+     - 0.0
+   * - :ref:`sphx_glr_examples_map_plots_custom_map_domain.py` (``../galleries/examples/map_plots/custom_map_domain.py``)
+     - 00:00.681
+     - 0.0
+   * - :ref:`sphx_glr_examples_line_plots_log_and_symlog.py` (``../galleries/examples/line_plots/log_and_symlog.py``)
+     - 00:00.344
+     - 0.0
+   * - :ref:`sphx_glr_examples_map_plots_filled_contour_map_plot.py` (``../galleries/examples/map_plots/filled_contour_map_plot.py``)
+     - 00:00.273
+     - 0.0
+   * - :ref:`sphx_glr_examples_statistical_plots_hexbin_vs_hist2d_colorbar.py` (``../galleries/examples/statistical_plots/hexbin_vs_hist2d_colorbar.py``)
+     - 00:00.237
      - 0.0
    * - :ref:`sphx_glr_plot_types_statistical_density.py` (``../galleries/plot_types/statistical/density.py``)
-     - 00:00.167
+     - 00:00.217
+     - 0.0
+   * - :ref:`sphx_glr_examples_map_plots_map_scatter_integer_categories.py` (``../galleries/examples/map_plots/map_scatter_integer_categories.py``)
+     - 00:00.182
+     - 0.0
+   * - :ref:`sphx_glr_examples_map_plots_overlay_fc_contour_scatter.py` (``../galleries/examples/map_plots/overlay_fc_contour_scatter.py``)
+     - 00:00.174
+     - 0.0
+   * - :ref:`sphx_glr_examples_map_plots_map_scatter_basic.py` (``../galleries/examples/map_plots/map_scatter_basic.py``)
+     - 00:00.165
+     - 0.0
+   * - :ref:`sphx_glr_examples_gridded_plots_single_shared_colorbar_two_panels.py` (``../galleries/examples/gridded_plots/single_shared_colorbar_two_panels.py``)
+     - 00:00.159
      - 0.0
    * - :ref:`sphx_glr_examples_line_plots_SkewT.py` (``../galleries/examples/line_plots/SkewT.py``)
      - 00:00.156
      - 0.0
-   * - :ref:`sphx_glr_examples_line_plots_line_plot_options.py` (``../galleries/examples/line_plots/line_plot_options.py``)
-     - 00:00.148
+   * - :ref:`sphx_glr_examples_statistical_plots_box_vs_violin.py` (``../galleries/examples/statistical_plots/box_vs_violin.py``)
+     - 00:00.154
      - 0.0
-   * - :ref:`sphx_glr_examples_map_plots_filled_contour_map_plot.py` (``../galleries/examples/map_plots/filled_contour_map_plot.py``)
+   * - :ref:`sphx_glr_examples_gridded_plots_pcolormesh_basic.py` (``../galleries/examples/gridded_plots/pcolormesh_basic.py``)
+     - 00:00.152
+     - 0.0
+   * - :ref:`sphx_glr_examples_gridded_plots_contourf_with_contour.py` (``../galleries/examples/gridded_plots/contourf_with_contour.py``)
+     - 00:00.151
+     - 0.0
+   * - :ref:`sphx_glr_examples_statistical_plots_histogram_kde_overlay.py` (``../galleries/examples/statistical_plots/histogram_kde_overlay.py``)
+     - 00:00.151
+     - 0.0
+   * - :ref:`sphx_glr_examples_gridded_plots_contourf_discrete_levels.py` (``../galleries/examples/gridded_plots/contourf_discrete_levels.py``)
+     - 00:00.141
+     - 0.0
+   * - :ref:`sphx_glr_examples_line_plots_line_plot_options.py` (``../galleries/examples/line_plots/line_plot_options.py``)
      - 00:00.140
      - 0.0
-   * - :ref:`sphx_glr_examples_line_plots_inverted_log_scale.py` (``../galleries/examples/line_plots/inverted_log_scale.py``)
+   * - :ref:`sphx_glr_examples_line_plots_dual_y_axes.py` (``../galleries/examples/line_plots/dual_y_axes.py``)
+     - 00:00.136
+     - 0.0
+   * - :ref:`sphx_glr_examples_line_plots_time_axis_locators.py` (``../galleries/examples/line_plots/time_axis_locators.py``)
+     - 00:00.135
+     - 0.0
+   * - :ref:`sphx_glr_plot_types_statistical_hexbin.py` (``../galleries/plot_types/statistical/hexbin.py``)
+     - 00:00.135
+     - 0.0
+   * - :ref:`sphx_glr_plot_types_statistical_hist2d.py` (``../galleries/plot_types/statistical/hist2d.py``)
      - 00:00.118
      - 0.0
-   * - :ref:`sphx_glr_plot_types_map_map_scatter.py` (``../galleries/plot_types/map/map_scatter.py``)
-     - 00:00.109
+   * - :ref:`sphx_glr_examples_map_plots_map_scatter_2D_example.py` (``../galleries/examples/map_plots/map_scatter_2D_example.py``)
+     - 00:00.108
      - 0.0
-   * - :ref:`sphx_glr_plot_types_map_map_gridded.py` (``../galleries/plot_types/map/map_gridded.py``)
-     - 00:00.103
+   * - :ref:`sphx_glr_examples_statistical_plots_scatter_with_regression.py` (``../galleries/examples/statistical_plots/scatter_with_regression.py``)
+     - 00:00.106
+     - 0.0
+   * - :ref:`sphx_glr_examples_line_plots_line_styles_legend.py` (``../galleries/examples/line_plots/line_styles_legend.py``)
+     - 00:00.105
+     - 0.0
+   * - :ref:`sphx_glr_examples_line_plots_errorbars_fillbetween.py` (``../galleries/examples/line_plots/errorbars_fillbetween.py``)
+     - 00:00.100
      - 0.0
    * - :ref:`sphx_glr_plot_types_gridded_contourf.py` (``../galleries/plot_types/gridded/contourf.py``)
      - 00:00.095
      - 0.0
-   * - :ref:`sphx_glr_plot_types_map_map_scatter_2D.py` (``../galleries/plot_types/map/map_scatter_2D.py``)
-     - 00:00.088
+   * - :ref:`sphx_glr_examples_line_plots_inverted_log_scale.py` (``../galleries/examples/line_plots/inverted_log_scale.py``)
+     - 00:00.094
+     - 0.0
+   * - :ref:`sphx_glr_plot_types_basic_errorbar.py` (``../galleries/plot_types/basic/errorbar.py``)
+     - 00:00.090
+     - 0.0
+   * - :ref:`sphx_glr_plot_types_basic_fill_between.py` (``../galleries/plot_types/basic/fill_between.py``)
+     - 00:00.087
      - 0.0
    * - :ref:`sphx_glr_plot_types_gridded_contour.py` (``../galleries/plot_types/gridded/contour.py``)
-     - 00:00.085
+     - 00:00.084
      - 0.0
-   * - :ref:`sphx_glr_examples_histograms_layered_histogram.py` (``../galleries/examples/histograms/layered_histogram.py``)
-     - 00:00.078
+   * - :ref:`sphx_glr_plot_types_map_map_scatter_2D.py` (``../galleries/plot_types/map/map_scatter_2D.py``)
+     - 00:00.082
+     - 0.0
+   * - :ref:`sphx_glr_plot_types_statistical_violin.py` (``../galleries/plot_types/statistical/violin.py``)
+     - 00:00.081
      - 0.0
    * - :ref:`sphx_glr_plot_types_statistical_density_scatter.py` (``../galleries/plot_types/statistical/density_scatter.py``)
-     - 00:00.076
+     - 00:00.077
      - 0.0
    * - :ref:`sphx_glr_plot_types_gridded_gridded.py` (``../galleries/plot_types/gridded/gridded.py``)
      - 00:00.075
      - 0.0
-   * - :ref:`sphx_glr_examples_scatter_plots_scatter_with_regression_line.py` (``../galleries/examples/scatter_plots/scatter_with_regression_line.py``)
-     - 00:00.068
-     - 0.0
-   * - :ref:`sphx_glr_examples_line_plots_multi_line_plot.py` (``../galleries/examples/line_plots/multi_line_plot.py``)
+   * - :ref:`sphx_glr_examples_statistical_plots_layered_histogram.py` (``../galleries/examples/statistical_plots/layered_histogram.py``)
      - 00:00.068
      - 0.0
    * - :ref:`sphx_glr_plot_types_basic_line.py` (``../galleries/plot_types/basic/line.py``)
-     - 00:00.068
+     - 00:00.067
+     - 0.0
+   * - :ref:`sphx_glr_examples_line_plots_multi_line_plot.py` (``../galleries/examples/line_plots/multi_line_plot.py``)
+     - 00:00.067
      - 0.0
    * - :ref:`sphx_glr_plot_types_statistical_boxplot.py` (``../galleries/plot_types/statistical/boxplot.py``)
-     - 00:00.064
-     - 0.0
-   * - :ref:`sphx_glr_examples_map_plots_custom_map_domain.py` (``../galleries/examples/map_plots/custom_map_domain.py``)
-     - 00:00.063
-     - 0.0
-   * - :ref:`sphx_glr_plot_types_statistical_histogram.py` (``../galleries/plot_types/statistical/histogram.py``)
      - 00:00.061
      - 0.0
-   * - :ref:`sphx_glr_plot_types_basic_scatter.py` (``../galleries/plot_types/basic/scatter.py``)
-     - 00:00.056
+   * - :ref:`sphx_glr_plot_types_statistical_histogram.py` (``../galleries/plot_types/statistical/histogram.py``)
+     - 00:00.059
      - 0.0
    * - :ref:`sphx_glr_plot_types_basic_horizontal_bar.py` (``../galleries/plot_types/basic/horizontal_bar.py``)
      - 00:00.055
      - 0.0
-   * - :ref:`sphx_glr_plot_types_basic_bar.py` (``../galleries/plot_types/basic/bar.py``)
+   * - :ref:`sphx_glr_plot_types_basic_scatter.py` (``../galleries/plot_types/basic/scatter.py``)
      - 00:00.055
      - 0.0
-   * - :ref:`sphx_glr_plot_types_basic_vertical_line.py` (``../galleries/plot_types/basic/vertical_line.py``)
-     - 00:00.054
-     - 0.0
    * - :ref:`sphx_glr_plot_types_basic_horizontal_line.py` (``../galleries/plot_types/basic/horizontal_line.py``)
-     - 00:00.054
+     - 00:00.053
+     - 0.0
+   * - :ref:`sphx_glr_plot_types_basic_vertical_line.py` (``../galleries/plot_types/basic/vertical_line.py``)
+     - 00:00.053
      - 0.0

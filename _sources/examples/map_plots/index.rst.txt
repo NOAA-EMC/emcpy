@@ -2,10 +2,11 @@
 
 .. _sphx_glr_examples_map_plots:
 
-.. _map_plots:
+.. _examples-map-plots:
 
 Map Plots
 =========
+Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. See note in Explanations.
 
 
 .. raw:: html
@@ -13,40 +14,6 @@ Map Plots
     <div class="sphx-glr-thumbnails">
 
 .. thumbnail-parent-div-open
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use the map features in EMCPy. The map feature underlying source code comes from Cartopy.">
-
-.. only:: html
-
-  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_plot_no_data_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_examples_map_plots_map_plot_no_data.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Creating a map plot with no data</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Sometimes, users only want to look at the locations of their data on a map and do not care about the actual values. Below is an example of how to just plot lat and lon values on map.">
-
-.. only:: html
-
-  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_scatter_2D_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_examples_map_plots_map_scatter_2D.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Plotting 2D scatter data on map plot</div>
-    </div>
-
 
 .. raw:: html
 
@@ -82,6 +49,125 @@ Map Plots
     </div>
 
 
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Lambert Conformal over CONUS. Centers are forwarded from the domain, so no extra setup needed.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_filled_contour_lambert_conus_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_map_filled_contour_lambert_conus.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Filled contours (Lambert CONUS)</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="A simple global pcolormesh with a per-axes colorbar.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_gridded_global_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_map_gridded_global.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Global gridded (PlateCarree) with coastlines</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The following example shows how to use the map features in EMCPy. The map feature underlying source code comes from Cartopy.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_plot_no_data_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_map_plot_no_data.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Creating a map plot with no data</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Sometimes, users only want to look at the locations of their data on a map and do not care about the actual values. Below is an example of how to just plot lat and lon values on map.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_scatter_2D_example_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_map_scatter_2D_example.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Plotting 2D scatter data on map plot</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Unlabeled points (solid color) over the CONUS domain.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_scatter_basic_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_map_scatter_basic.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Map scatter (basic)</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Integer categories with an automatic discrete color scale and colorbar.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_map_scatter_integer_categories_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_map_scatter_integer_categories.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Map scatter (integer categories)</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Demonstrates layering multiple EMCPy map types.">
+
+.. only:: html
+
+  .. image:: /examples/map_plots/images/thumb/sphx_glr_overlay_fc_contour_scatter_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_map_plots_overlay_fc_contour_scatter.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Overlay: filled contour + contour + scatter</div>
+    </div>
+
+
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -92,8 +178,13 @@ Map Plots
 .. toctree::
    :hidden:
 
-   /examples/map_plots/map_plot_no_data
-   /examples/map_plots/map_scatter_2D
    /examples/map_plots/custom_map_domain
    /examples/map_plots/filled_contour_map_plot
+   /examples/map_plots/map_filled_contour_lambert_conus
+   /examples/map_plots/map_gridded_global
+   /examples/map_plots/map_plot_no_data
+   /examples/map_plots/map_scatter_2D_example
+   /examples/map_plots/map_scatter_basic
+   /examples/map_plots/map_scatter_integer_categories
+   /examples/map_plots/overlay_fc_contour_scatter
 
