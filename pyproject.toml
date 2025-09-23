@@ -1,0 +1,90 @@
+[build-system]
+requires = ["setuptools>=69", "setuptools_scm[toml]>=8", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "emcpy"
+version = "2.0.0" 
+description = "EMC Python tools and utilities"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.9"
+license = { text = "LGPL-2.1-or-later" }
+authors = [{ name = "NOAA-EMC", email = "emc.code@noaa.gov" }]
+keywords = ["meteorology", "visualization", "cartopy", "matplotlib", "EMC"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Atmospheric Science",
+]
+
+# Keep runtime deps lean; heavy libs belong in optional extras.
+dependencies = [
+  "numpy>=1.22",
+  "matplotlib>=3.6",
+]
+
+[project.optional-dependencies]
+docs = [
+  # Sphinx & extensions
+  "sphinx>=7",
+  "myst-parser>=2",
+  "sphinx-gallery>=0.13",     # or your current
+  "sphinx-copybutton",
+  "sphinx-design",
+  "pydata-sphinx-theme>=0.15",
+
+  # Examples/galleries need these:
+  "scipy>=1.9",
+  "scikit-learn>=1.2",
+
+  # Mapping examples
+  "cartopy",
+  "shapely",          # cartopy runtime
+  "pyproj",           # cartopy runtime
+
+  # Misc used in examples
+  "pillow",
+  "pandas",
+  "netcdf4",
+  "seaborn~=0.13",
+]
+test = [
+  "pytest>=7",
+  "pytest-cov",
+  "ruff",
+  "mypy",
+]
+dev = [
+  "pre-commit",
+]
+
+[project.urls]
+Homepage = "https://github.com/NOAA-EMC/emcpy"
+Documentation = "https://noaa-emc.github.io/emcpy/"
+Issues = "https://github.com/NOAA-EMC/emcpy/issues"
+
+[tool.setuptools]
+# Use src/ layout to avoid accidental imports from the working tree
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["emcpy*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+# Ship typing marker if present
+"emcpy" = ["py.typed"]
+
+[tool.mypy]
+python_version = "3.9"
+strict = false
+warn_unused_ignores = true
+exclude = ["_build", "build", "dist"]

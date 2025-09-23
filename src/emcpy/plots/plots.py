@@ -1,21 +1,28 @@
 # This work developed by NOAA/NWS/EMC under the Apache 2.0 license.
+from __future__ import annotations
 import numpy as np
+from packaging.version import Version
+import matplotlib
+from ._mpl_compat import boxplot_kwargs
 
-__all__ = ['Scatter', 'Histogram', 'Density', 'LinePlot',
-           'VerticalLine', 'HorizontalLine', 'HorizontalSpan',
-           'BarPlot', 'HorizontalBar', 'SkewT']
+__all__ = [
+    'Scatter', 'Histogram', 'Density', 'LinePlot',
+    'VerticalLine', 'HorizontalLine', 'HorizontalSpan',
+    'BarPlot', 'HorizontalBar', 'SkewT',
+    'GriddedPlot', 'ContourPlot', 'FilledContourPlot',
+    'BoxandWhiskerPlot', 'FillBetween', 'ErrorBar',
+    'ViolinPlot', 'HexBin', 'Hist2D',
+]
 
 
 class Scatter:
-
     def __init__(self, x, y):
         """
-        Constructor for Scatter.
+        Scatter plot layer.
         Args:
-            x : (array type)
-            y : (array type)
+            x: array-like
+            y: array-like
         """
-
         super().__init__()
         self.plottype = 'scatter'
 
@@ -32,6 +39,9 @@ class Scatter:
         self.edgecolors = None
         self.label = f'n={np.count_nonzero(~np.isnan(x))}'
         self.do_linear_regression = False
+        # Optional style overrides for the regression line; initialized as an empty dictionary.
+        # The renderer will default to the scatter color if 'color' isn't provided.
+        self.linear_regression = {}
 
     def add_linear_regression(self):
         """
@@ -58,7 +68,6 @@ class Scatter:
 
 
 class Histogram:
-
     def __init__(self, data):
         """
         Constructor for Histogram.
@@ -89,7 +98,6 @@ class Histogram:
 
 
 class Density():
-
     def __init__(self, data):
         """
         Constructor for Density.
@@ -125,7 +133,6 @@ class Density():
 
 
 class LinePlot:
-
     def __init__(self, x, y):
         """
         Constructor for LinePlot.
@@ -149,7 +156,6 @@ class LinePlot:
 
 
 class GriddedPlot:
-
     def __init__(self, x, y, z):
         """
         Constructor for GriddedPlot.
@@ -176,7 +182,6 @@ class GriddedPlot:
 
 
 class ContourPlot:
-
     def __init__(self, x, y, z):
         """
         Constructor for ContourPlot.
@@ -208,7 +213,6 @@ class ContourPlot:
 
 
 class FilledContourPlot:
-
     def __init__(self, x, y, z):
         """
         Constructor for FilledContourPlot.
@@ -239,7 +243,6 @@ class FilledContourPlot:
 
 
 class VerticalLine:
-
     def __init__(self, x):
         """
         Constructor for VerticalLine
@@ -260,7 +263,6 @@ class VerticalLine:
 
 
 class HorizontalLine:
-
     def __init__(self, y):
         """
         Constructor for HorizontalLine
@@ -281,7 +283,6 @@ class HorizontalLine:
 
 
 class HorizontalSpan:
-
     def __init__(self, ymin, ymax):
         """
         Constructor for HorizontalSpan
@@ -301,7 +302,6 @@ class HorizontalSpan:
 
 
 class BarPlot:
-
     def __init__(self, x, height):
         """
         Constructor for BarPlot.
@@ -332,7 +332,6 @@ class BarPlot:
 
 
 class HorizontalBar:
-
     def __init__(self, y, width):
         """
         Constructor to create a horizontal bar plot.
@@ -363,7 +362,6 @@ class HorizontalBar:
 
 
 class SkewT:
-
     def __init__(self, x, y):
         """
         Constructor to create a Skew T plot.
@@ -388,22 +386,13 @@ class SkewT:
 
 
 class BoxandWhiskerPlot:
-
     def __init__(self, data):
-        """
-        Constructor to create a Box and Whisker
-        plot.
-        Args:
-            data : (array type)
-        """
-        super().__init__()
         self.plottype = 'boxandwhisker'
-
         self.data = data
 
+        # Core kwargs commonly supported by Matplotlib
         self.notch = False
         self.sym = None
-        self.vert = True
         self.whis = 1.5
         self.bootstrap = None
         self.usermedians = None
@@ -411,8 +400,173 @@ class BoxandWhiskerPlot:
         self.positions = None
         self.widths = None
         self.patch_artist = False
-        self.labels = None
         self.manage_ticks = True
         self.autorange = False
         self.meanline = False
         self.zorder = None
+
+        if not hasattr(self, "orientation"):
+            self.orientation = "vertical"
+        if not hasattr(self, "tick_labels"):
+            self.tick_labels = None
+        if not hasattr(self, "label"):
+            self.label = None  # legend label; NOT forwarded to mpl
+
+    def to_mpl_kwargs(self):
+        # Centralized Matplotlib compatibility handling
+        return boxplot_kwargs(self)
+
+
+class FillBetween:
+    def __init__(self, x, y1, y2):
+        """
+        Area fill between y1 and y2 across x.
+
+        Args:
+            x  : array-like
+            y1 : array-like
+            y2 : array-like
+        """
+        super().__init__()
+        self.plottype = 'fill_between'
+
+        self.x = x
+        self.y1 = y1
+        self.y2 = y2
+
+        self.where = None          # optional boolean mask
+        self.color = 'tab:blue'
+        self.alpha = None
+        self.label = None
+        self.linewidth = None
+        self.linestyle = None
+        self.step = None           # {'pre','post','mid'} or None
+        self.zorder = None
+
+
+class ErrorBar:
+    def __init__(self, x, y):
+        """
+        Error bar layer.
+
+        Args:
+            x : array-like
+            y : array-like
+        """
+        super().__init__()
+        self.plottype = 'errorbar'
+
+        self.x = x
+        self.y = y
+
+        # errors
+        self.yerr = None           # float, array-like, or (lower, upper)
+        self.xerr = None           # float, array-like, or (lower, upper)
+
+        # style / markers
+        self.fmt = 'o'
+        self.color = 'darkgray'
+        self.alpha = None
+        self.markersize = 5
+        self.ecolor = 'black'
+        self.elinewidth = 1.0
+        self.capthick = None
+        self.capsize = 0.0
+        self.barsabove = False
+        self.zorder = None
+
+        # label defaults to non-NaN x count (consistent with Scatter/Histogram)
+        self.label = f'n={np.count_nonzero(~np.isnan(x))}'
+
+
+class ViolinPlot:
+    def __init__(self, data):
+        """
+        Violin plot layer for 1-D distributions.
+
+        Args:
+            data : sequence of 1-D array-like datasets
+        """
+        super().__init__()
+        self.plottype = 'violin'
+
+        self.data = data
+
+        self.positions = None      # sequence of x positions
+        self.widths = 0.8
+        self.showmeans = False
+        self.showmedians = True
+        self.showextrema = True
+        self.alpha = None
+        self.zorder = None
+
+
+class HexBin:
+    def __init__(self, x, y, C=None):
+        """
+        Hexagonal binning layer.
+
+        Args:
+            x : array-like
+            y : array-like
+            C : optional array-like of values to reduce within bins
+        """
+        super().__init__()
+        self.plottype = 'hexbin'
+
+        self.x = x
+        self.y = y
+        self.C = C
+
+        self.gridsize = 30                      # int or (nx, ny)
+        self.reduce_C_function = None           # e.g., np.mean
+        self.extent = None                      # (xmin, xmax, ymin, ymax)
+        self.bins = None                        # None, 'log', or int
+        self.mincnt = None
+        self.linewidths = None
+        self.cmap = 'viridis'
+        self.norm = None                        # optional matplotlib Normalize
+        self.vmin = None
+        self.vmax = None
+        self.alpha = None
+        self.zorder = None
+        self.label = None
+
+        # colorbar controls
+        self.colorbar = False
+        self.colorbar_label = None
+        self.colorbar_location = 'right'
+
+
+class Hist2D:
+    def __init__(self, x, y):
+        """
+        2D histogram layer.
+
+        Args:
+            x : array-like
+            y : array-like
+        """
+        super().__init__()
+        self.plottype = 'hist2d'
+
+        self.x = x
+        self.y = y
+
+        self.bins = 30                            # int, (nx, ny), or (xbins, ybins)
+        self.range = None                         # ((xmin, xmax), (ymin, ymax))
+        self.density = False
+        self.cmap = 'viridis'
+        self.norm = None                          # optional matplotlib Normalize
+        self.vmin = None
+        self.vmax = None
+        self.cmin = None
+        self.cmax = None
+        self.alpha = None
+        self.zorder = None
+        self.label = None
+
+        # colorbar controls
+        self.colorbar = True
+        self.colorbar_label = None
+        self.colorbar_location = 'right'

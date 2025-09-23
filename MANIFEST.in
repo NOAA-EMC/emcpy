@@ -1,2 +1,7 @@
-include package/*.yaml
-recursive-include src *.yaml *.py *.png
+include LICENSE
+include README.md
+
+recursive-include docs *.md *.rst *.png *.svg *.jpg *.gif *.ico
+recursive-include src/emcpy *.py *.typed
+
+global-exclude *.py[cod] __pycache__ *.so *.dylib *.dll

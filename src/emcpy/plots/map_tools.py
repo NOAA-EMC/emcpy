@@ -1,17 +1,29 @@
 # This work developed by NOAA/NWS/EMC under the Apache 2.0 license.
+from typing import Optional, Mapping, Any
 import cartopy.crs as ccrs
 
 
 class Domain:
 
-    def __init__(self, domain='global', dd=dict()):
+    def __init__(self, domain='global', dd: Optional[Mapping[str, Any]] = None):
         """
-        Class constructor that stores extent, xticks, and
-        yticks for the domain given.
-        Args:
-            domain : (str; default='global') domain name to grab info
-            dd : (dict) dictionary to add custom xticks, yticks
+        Parameters
+        ----------
+        domain : str, default "global"
+            Name of the predefined region. Examples: "global", "conus", "europe", "custom".
+        dd : Mapping[str, Any] or None
+            Optional per-call overrides (e.g., {'xticks': (...), 'yticks': (...)}).
+            If `None`, an empty dict is used. If a mapping is provided, it is
+            copied into a new `dict` to avoid mutating caller-owned data.
+
+        Implementation detail
+        ---------------------
+        This method normalizes `dd` once and passes it to the selected region
+        helper as a keyword-only argument (`dd=...`). Doing it here centralizes
+        the logic and keeps all helpers free from repetitive checks.
         """
+        dd = {} if dd is None else dict(dd)
+
         domain = domain.lower()
 
         map_domains = {
@@ -30,10 +42,12 @@ class Domain:
             "central": self._central,
             "south central": self._south_central,
             "northwest": self._northwest,
+            "southwest": self._southwest,
             "colorado": self._colorado,
             "boston nyc": self._boston_nyc,
             "sf bay area": self._sf_bay_area,
             "la vegas": self._la_vegas,
+            "seattle portland": self._seattle_portland,
             "custom": self._custom
         }
 
@@ -44,7 +58,7 @@ class Domain:
                             'Current domains supported are:\n' +
                             f'{" | ".join(map_domains.keys())}"')
 
-    def _global(self, dd=dict()):
+    def _global(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a global domain.
@@ -55,7 +69,7 @@ class Domain:
         self.yticks = dd.get('yticks', (-90, -60, -30, 0,
                                         30, 60, 90))
 
-    def _north(self, dd=dict()):
+    def _north(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for arctic domain.
@@ -68,10 +82,10 @@ class Domain:
         self.cenlon = dd.get('cenlon', 0)
         self.cenlat = dd.get('cenlat', 90)
 
-    def _south(self, dd=dict()):
+    def _south(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
-        for arctic domain.
+        for antarctic domain.
         """
         self.extent = (-180, 180, -90, -50)
         self.xticks = dd.get('xticks', (-180, -90, -30, 0,
@@ -79,9 +93,9 @@ class Domain:
         self.yticks = dd.get('yticks', (-90, -75, -50))
 
         self.cenlon = dd.get('cenlon', 0)
-        self.cenlat = dd.get('cenlat', 90)
+        self.cenlat = dd.get('cenlat', -90)
 
-    def _north_america(self, dd=dict()):
+    def _north_america(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a north american domain.
@@ -94,7 +108,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', -100)
         self.cenlat = dd.get('cenlat', 41.25)
 
-    def _conus(self, dd=dict()):
+    def _conus(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a contiguous United States domain.
@@ -107,7 +121,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', -94.5)
         self.cenlat = dd.get('cenlat', 35.5)
 
-    def _northeast(self, dd=dict()):
+    def _northeast(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a Northeast region of U.S.
@@ -119,7 +133,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', -76)
         self.cenlat = dd.get('cenlat', 44)
 
-    def _mid_atlantic(self, dd=dict()):
+    def _mid_atlantic(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a Mid Atlantic region of U.S.
@@ -131,7 +145,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', -79)
         self.cenlat = dd.get('cenlat', 36.5)
 
-    def _southeast(self, dd=dict()):
+    def _southeast(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a Southeast region of U.S.
@@ -143,7 +157,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', -89)
         self.cenlat = dd.get('cenlat', 30.5)
 
-    def _ohio_valley(self, dd=dict()):
+    def _ohio_valley(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for an Ohio Valley region of U.S.
@@ -155,7 +169,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', -88)
         self.cenlat = dd.get('cenlat', 38.75)
 
-    def _upper_midwest(self, dd=dict()):
+    def _upper_midwest(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for an Upper Midwest region of U.S.
@@ -167,7 +181,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', -92)
         self.cenlat = dd.get('cenlat', 44.75)
 
-    def _north_central(self, dd=dict()):
+    def _north_central(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a North Central region of U.S.
@@ -179,7 +193,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', -103)
         self.cenlat = dd.get('cenlat', 44.25)
 
-    def _central(self, dd=dict()):
+    def _central(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a Central region of U.S.
@@ -191,7 +205,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', -99)
         self.cenlat = dd.get('cenlat', 37)
 
-    def _south_central(self, dd=dict()):
+    def _south_central(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a South Central region of U.S.
@@ -203,7 +217,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', -101)
         self.cenlat = dd.get('cenlat', 31.25)
 
-    def _northwest(self, dd=dict()):
+    def _northwest(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a Northwest region of U.S.
@@ -215,7 +229,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', -116)
         self.cenlat = dd.get('cenlat', 45)
 
-    def _southwest(self, dd=dict()):
+    def _southwest(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a Southwest region of U.S.
@@ -227,7 +241,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', -116)
         self.cenlat = dd.get('cenlat', 36.75)
 
-    def _colorado(self, dd=dict()):
+    def _colorado(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a Colorado region of U.S.
@@ -239,7 +253,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', -106)
         self.cenlat = dd.get('cenlat', 38.5)
 
-    def _boston_nyc(self, dd=dict()):
+    def _boston_nyc(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a Boston-NYC region.
@@ -251,7 +265,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', -76)
         self.cenlat = dd.get('cenlat', 41.5)
 
-    def _seattle_portland(self, dd=dict()):
+    def _seattle_portland(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a Seattle-Portland region of U.S.
@@ -263,7 +277,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', -121)
         self.cenlat = dd.get('cenlat', 47)
 
-    def _sf_bay_area(self, dd=dict()):
+    def _sf_bay_area(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a San Francisco Bay area region of U.S.
@@ -275,7 +289,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', -121)
         self.cenlat = dd.get('cenlat', 48.25)
 
-    def _la_vegas(self, dd=dict()):
+    def _la_vegas(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a Los Angeles and Las Vegas region of U.S.
@@ -287,7 +301,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', -114)
         self.cenlat = dd.get('cenlat', 34.5)
 
-    def _europe(self, dd=dict()):
+    def _europe(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a European domain.
@@ -299,7 +313,7 @@ class Domain:
         self.cenlon = dd.get('cenlon', 25)
         self.cenlat = dd.get('cenlat', 50)
 
-    def _custom(self, dd=dict()):
+    def _custom(self, *, dd: Mapping[str, Any]) -> None:
         """
         Sets extent, longitude xticks, and latitude yticks
         for a Custom domain.
@@ -374,17 +388,15 @@ class MapProjection:
         self.transform = self.projection
 
     def _lambertconformal(self):
-        """Creates projection using Lambert Conformal from Cartopy."""
-
         if self.cenlon is None or self.cenlat is None:
-            raise TypeError("Need 'cenlon' and cenlat to plot Lambert "
-                            "Conformal projection. This projection also "
-                            "does not work for a global domain.")
+            raise TypeError("Need 'cenlon' and cenlat to plot Lambert Conformal...")
 
-        self.projection = ccrs.LambertConformal(central_longitude=self.cenlon,
-                                                central_latitude=self.cenlat)
+        self.projection = ccrs.LambertConformal(
+            central_longitude=self.cenlon,
+            central_latitude=self.cenlat
+        )
 
-        self.transform = self.projection
+        self.transform = ccrs.PlateCarree()
 
     def _npstereo(self):
         """

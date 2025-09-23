@@ -1,4 +1,0 @@
-.. _installing:
-
-
-.. include:: ../INSTALL
