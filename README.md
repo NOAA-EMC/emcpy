@@ -1,7 +1,6 @@
 # EMCPy
 
-[![CI](https://github.com/NOAA-EMC/emcpy/actions/workflows/ci.yml/badge.svg)](https://github.com/NOAA-EMC/emcpy/actions/workflows/ci.yml)
-[![Docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://noaa-emc.github.io/emcpy/)
+[![CI][ci-badge]][ci-link] [![Docs][docs-badge]][docs-link]
 
 **EMCPy** (Environmental Modeling Center Python utilities) provides tools for visualization, diagnostics, and analysis in support of NOAA’s Environmental Modeling Center (EMC) workflows. It offers a lightweight, extensible framework for building plots, handling data fields, and automating workflows used in EMC’s operational and research environments.
 
@@ -19,9 +18,13 @@
   - Clear separation of plot layers, figure creation, and feature controls
 
 - **Documentation and examples**
-  - [Gallery of plot types](https://noaa-emc.github.io/emcpy/galleries/plot_types)
+  - [Gallery of plot types](https://noaa-emc.github.io/emcpy/plot_types/index.html)
   - Explanations of design choices, discrete fields, and troubleshooting
 
+[ci-badge]: https://github.com/NOAA-EMC/emcpy/actions/workflows/ci.yml/badge.svg
+[ci-link]:  https://github.com/NOAA-EMC/emcpy/actions/workflows/ci.yml
+[docs-badge]: https://img.shields.io/badge/docs-latest-blue.svg
+[docs-link]:  https://noaa-emc.github.io/emcpy/
 ---
 
 ## Installation
