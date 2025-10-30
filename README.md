@@ -21,8 +21,8 @@
   - [Gallery of plot types](https://noaa-emc.github.io/emcpy/plot_types/index.html)
   - Explanations of design choices, discrete fields, and troubleshooting
 
-[ci-badge]: https://github.com/NOAA-EMC/emcpy/actions/workflows/ci.yml/badge.svg
-[ci-link]:  https://github.com/NOAA-EMC/emcpy/actions/workflows/ci.yml
+[ci-badge]: https://github.com/NOAA-EMC/emcpy/actions/workflows/tests.yaml/badge.svg
+[ci-link]:  https://github.com/NOAA-EMC/emcpy/actions/workflows/tests.yaml
 [docs-badge]: https://img.shields.io/badge/docs-latest-blue.svg
 [docs-link]:  https://noaa-emc.github.io/emcpy/
 ---
