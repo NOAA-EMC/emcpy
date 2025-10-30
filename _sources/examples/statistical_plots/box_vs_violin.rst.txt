@@ -83,7 +83,7 @@ Compare distribution shape with a classic box-and-whisker vs. violin plot.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.154 seconds)
+   **Total running time of the script:** (0 minutes 0.131 seconds)
 
 
 .. _sphx_glr_download_examples_statistical_plots_box_vs_violin.py:

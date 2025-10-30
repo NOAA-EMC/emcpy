@@ -96,7 +96,7 @@ contour lines that are filled.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.273 seconds)
+   **Total running time of the script:** (0 minutes 0.237 seconds)
 
 
 .. _sphx_glr_download_examples_map_plots_filled_contour_map_plot.py:

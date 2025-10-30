@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:01.447** total execution time for 8 files **from plot_types/basic**:
+**00:01.547** total execution time for 8 files **from plot_types/basic**:
 
 .. container::
 
@@ -33,26 +33,26 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_plot_types_basic_bar.py` (``bar.py``)
-     - 00:00.987
+     - 00:01.152
      - 0.0
    * - :ref:`sphx_glr_plot_types_basic_errorbar.py` (``errorbar.py``)
-     - 00:00.090
+     - 00:00.076
      - 0.0
    * - :ref:`sphx_glr_plot_types_basic_fill_between.py` (``fill_between.py``)
-     - 00:00.087
+     - 00:00.074
      - 0.0
    * - :ref:`sphx_glr_plot_types_basic_line.py` (``line.py``)
-     - 00:00.067
+     - 00:00.058
      - 0.0
    * - :ref:`sphx_glr_plot_types_basic_horizontal_bar.py` (``horizontal_bar.py``)
-     - 00:00.055
+     - 00:00.047
      - 0.0
    * - :ref:`sphx_glr_plot_types_basic_scatter.py` (``scatter.py``)
-     - 00:00.055
-     - 0.0
-   * - :ref:`sphx_glr_plot_types_basic_horizontal_line.py` (``horizontal_line.py``)
-     - 00:00.053
+     - 00:00.047
      - 0.0
    * - :ref:`sphx_glr_plot_types_basic_vertical_line.py` (``vertical_line.py``)
-     - 00:00.053
+     - 00:00.046
+     - 0.0
+   * - :ref:`sphx_glr_plot_types_basic_horizontal_line.py` (``horizontal_line.py``)
+     - 00:00.046
      - 0.0

@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.253** total execution time for 3 files **from plot_types/gridded**:
+**00:00.222** total execution time for 3 files **from plot_types/gridded**:
 
 .. container::
 
@@ -33,11 +33,11 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_plot_types_gridded_contourf.py` (``contourf.py``)
-     - 00:00.095
+     - 00:00.082
      - 0.0
    * - :ref:`sphx_glr_plot_types_gridded_contour.py` (``contour.py``)
-     - 00:00.084
+     - 00:00.074
      - 0.0
    * - :ref:`sphx_glr_plot_types_gridded_gridded.py` (``gridded.py``)
-     - 00:00.075
+     - 00:00.065
      - 0.0

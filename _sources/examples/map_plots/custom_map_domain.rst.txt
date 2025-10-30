@@ -86,7 +86,7 @@ look at a specific domain that is not included in EMCPy.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.681 seconds)
+   **Total running time of the script:** (0 minutes 0.402 seconds)
 
 
 .. _sphx_glr_download_examples_map_plots_custom_map_domain.py:
