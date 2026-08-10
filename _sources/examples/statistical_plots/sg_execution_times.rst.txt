@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.620** total execution time for 5 files **from examples/statistical_plots**:
+**00:00.746** total execution time for 5 files **from examples/statistical_plots**:
 
 .. container::
 
@@ -33,17 +33,17 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_statistical_plots_hexbin_vs_hist2d_colorbar.py` (``hexbin_vs_hist2d_colorbar.py``)
-     - 00:00.202
-     - 0.0
-   * - :ref:`sphx_glr_examples_statistical_plots_histogram_kde_overlay.py` (``histogram_kde_overlay.py``)
-     - 00:00.138
+     - 00:00.237
      - 0.0
    * - :ref:`sphx_glr_examples_statistical_plots_box_vs_violin.py` (``box_vs_violin.py``)
-     - 00:00.131
+     - 00:00.164
+     - 0.0
+   * - :ref:`sphx_glr_examples_statistical_plots_histogram_kde_overlay.py` (``histogram_kde_overlay.py``)
+     - 00:00.158
      - 0.0
    * - :ref:`sphx_glr_examples_statistical_plots_scatter_with_regression.py` (``scatter_with_regression.py``)
-     - 00:00.090
+     - 00:00.111
      - 0.0
    * - :ref:`sphx_glr_examples_statistical_plots_layered_histogram.py` (``layered_histogram.py``)
-     - 00:00.059
+     - 00:00.076
      - 0.0

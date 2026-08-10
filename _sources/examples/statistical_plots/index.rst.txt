@@ -7,6 +7,10 @@
 Statistical Plots
 =================
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -23,7 +27,7 @@ Statistical Plots
   .. image:: /examples/statistical_plots/images/thumb/sphx_glr_box_vs_violin_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_statistical_plots_box_vs_violin.py`
+  :doc:`/examples/statistical_plots/box_vs_violin`
 
 .. raw:: html
 
@@ -40,7 +44,7 @@ Statistical Plots
   .. image:: /examples/statistical_plots/images/thumb/sphx_glr_hexbin_vs_hist2d_colorbar_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_statistical_plots_hexbin_vs_hist2d_colorbar.py`
+  :doc:`/examples/statistical_plots/hexbin_vs_hist2d_colorbar`
 
 .. raw:: html
 
@@ -57,7 +61,7 @@ Statistical Plots
   .. image:: /examples/statistical_plots/images/thumb/sphx_glr_histogram_kde_overlay_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_statistical_plots_histogram_kde_overlay.py`
+  :doc:`/examples/statistical_plots/histogram_kde_overlay`
 
 .. raw:: html
 
@@ -74,7 +78,7 @@ Statistical Plots
   .. image:: /examples/statistical_plots/images/thumb/sphx_glr_layered_histogram_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_statistical_plots_layered_histogram.py`
+  :doc:`/examples/statistical_plots/layered_histogram`
 
 .. raw:: html
 
@@ -91,7 +95,7 @@ Statistical Plots
   .. image:: /examples/statistical_plots/images/thumb/sphx_glr_scatter_with_regression_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_statistical_plots_scatter_with_regression.py`
+  :doc:`/examples/statistical_plots/scatter_with_regression`
 
 .. raw:: html
 

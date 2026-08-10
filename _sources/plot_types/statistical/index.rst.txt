@@ -8,6 +8,10 @@ Statistical distributions
 =========================
 
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -24,7 +28,7 @@ Statistical distributions
   .. image:: /plot_types/statistical/images/thumb/sphx_glr_boxplot_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_statistical_boxplot.py`
+  :doc:`/plot_types/statistical/boxplot`
 
 .. raw:: html
 
@@ -41,7 +45,7 @@ Statistical distributions
   .. image:: /plot_types/statistical/images/thumb/sphx_glr_density_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_statistical_density.py`
+  :doc:`/plot_types/statistical/density`
 
 .. raw:: html
 
@@ -58,7 +62,7 @@ Statistical distributions
   .. image:: /plot_types/statistical/images/thumb/sphx_glr_density_scatter_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_statistical_density_scatter.py`
+  :doc:`/plot_types/statistical/density_scatter`
 
 .. raw:: html
 
@@ -75,7 +79,7 @@ Statistical distributions
   .. image:: /plot_types/statistical/images/thumb/sphx_glr_hexbin_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_statistical_hexbin.py`
+  :doc:`/plot_types/statistical/hexbin`
 
 .. raw:: html
 
@@ -92,7 +96,7 @@ Statistical distributions
   .. image:: /plot_types/statistical/images/thumb/sphx_glr_hist2d_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_statistical_hist2d.py`
+  :doc:`/plot_types/statistical/hist2d`
 
 .. raw:: html
 
@@ -109,7 +113,7 @@ Statistical distributions
   .. image:: /plot_types/statistical/images/thumb/sphx_glr_histogram_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_statistical_histogram.py`
+  :doc:`/plot_types/statistical/histogram`
 
 .. raw:: html
 
@@ -126,7 +130,7 @@ Statistical distributions
   .. image:: /plot_types/statistical/images/thumb/sphx_glr_violin_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_statistical_violin.py`
+  :doc:`/plot_types/statistical/violin`
 
 .. raw:: html
 

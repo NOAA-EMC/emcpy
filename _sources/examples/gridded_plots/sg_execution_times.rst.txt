@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.513** total execution time for 4 files **from examples/gridded_plots**:
+**00:00.627** total execution time for 4 files **from examples/gridded_plots**:
 
 .. container::
 
@@ -33,14 +33,14 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_gridded_plots_single_shared_colorbar_two_panels.py` (``single_shared_colorbar_two_panels.py``)
-     - 00:00.140
+     - 00:00.168
      - 0.0
    * - :ref:`sphx_glr_examples_gridded_plots_contourf_with_contour.py` (``contourf_with_contour.py``)
-     - 00:00.129
+     - 00:00.160
      - 0.0
    * - :ref:`sphx_glr_examples_gridded_plots_contourf_discrete_levels.py` (``contourf_discrete_levels.py``)
-     - 00:00.122
+     - 00:00.150
      - 0.0
    * - :ref:`sphx_glr_examples_gridded_plots_pcolormesh_basic.py` (``pcolormesh_basic.py``)
-     - 00:00.122
+     - 00:00.149
      - 0.0

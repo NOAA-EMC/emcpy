@@ -8,6 +8,10 @@ Map Plots
 =========
 Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. See note in Explanations.
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -24,7 +28,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_custom_map_domain_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_custom_map_domain.py`
+  :doc:`/examples/map_plots/custom_map_domain`
 
 .. raw:: html
 
@@ -41,7 +45,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_filled_contour_map_plot_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_filled_contour_map_plot.py`
+  :doc:`/examples/map_plots/filled_contour_map_plot`
 
 .. raw:: html
 
@@ -58,7 +62,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_map_filled_contour_lambert_conus_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_map_filled_contour_lambert_conus.py`
+  :doc:`/examples/map_plots/map_filled_contour_lambert_conus`
 
 .. raw:: html
 
@@ -75,7 +79,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_map_gridded_global_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_map_gridded_global.py`
+  :doc:`/examples/map_plots/map_gridded_global`
 
 .. raw:: html
 
@@ -92,7 +96,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_map_plot_no_data_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_map_plot_no_data.py`
+  :doc:`/examples/map_plots/map_plot_no_data`
 
 .. raw:: html
 
@@ -109,7 +113,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_map_scatter_2D_example_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_map_scatter_2D_example.py`
+  :doc:`/examples/map_plots/map_scatter_2D_example`
 
 .. raw:: html
 
@@ -126,7 +130,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_map_scatter_basic_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_map_scatter_basic.py`
+  :doc:`/examples/map_plots/map_scatter_basic`
 
 .. raw:: html
 
@@ -143,7 +147,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_map_scatter_integer_categories_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_map_scatter_integer_categories.py`
+  :doc:`/examples/map_plots/map_scatter_integer_categories`
 
 .. raw:: html
 
@@ -160,7 +164,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_overlay_fc_contour_scatter_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_overlay_fc_contour_scatter.py`
+  :doc:`/examples/map_plots/overlay_fc_contour_scatter`
 
 .. raw:: html
 

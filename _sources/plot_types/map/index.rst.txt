@@ -8,6 +8,10 @@ Map Plots
 =========
 
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -24,7 +28,7 @@ Map Plots
   .. image:: /plot_types/map/images/thumb/sphx_glr_map_gridded_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_map_map_gridded.py`
+  :doc:`/plot_types/map/map_gridded`
 
 .. raw:: html
 
@@ -41,7 +45,7 @@ Map Plots
   .. image:: /plot_types/map/images/thumb/sphx_glr_map_scatter_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_map_map_scatter.py`
+  :doc:`/plot_types/map/map_scatter`
 
 .. raw:: html
 
@@ -58,7 +62,7 @@ Map Plots
   .. image:: /plot_types/map/images/thumb/sphx_glr_map_scatter_2D_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_map_map_scatter_2D.py`
+  :doc:`/plot_types/map/map_scatter_2D`
 
 .. raw:: html
 

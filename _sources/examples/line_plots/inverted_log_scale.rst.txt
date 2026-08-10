@@ -26,7 +26,7 @@ y-axis that also uses a log scale. This is useful
 if you are looking at a column of data throughout
 the atmosphere and the y-axis is pressure.
 
-.. GENERATED FROM PYTHON SOURCE LINES 11-52
+.. GENERATED FROM PYTHON SOURCE LINES 11-57
 
 
 
@@ -36,19 +36,8 @@ the atmosphere and the y-axis is pressure.
    :class: sphx-glr-single-img
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    /home/runner/work/emcpy/emcpy/src/emcpy/plots/create_plots.py:1746: UserWarning: set_ticklabels() should only be used with a fixed number of ticks, i.e. after set_ticks() or using a FixedLocator.
-      ax.set_yticklabels(labels, **kwargs)
 
 
-
-
-
-
-|
 
 .. code-block:: Python
 
@@ -79,8 +68,13 @@ the atmosphere and the y-axis is pressure.
         plot1.set_yscale('log')
         plot1.invert_yaxis()
 
-        # Set new y labels
-        ylabels = [0, 50, 100, 500, 1000, 2000]
+        # Set explicit y-ticks and matching labels.
+        # NOTE: 0 is intentionally omitted -- log(0) is undefined, so a tick
+        # at 0 has no valid position on a log-scaled axis. Relying on an
+        # implicit tick count from the auto LogLocator is what broke here;
+        # ticks are now set explicitly so label count always matches.
+        ylabels = [50, 100, 500, 1000, 2000]
+        plot1.set_yticks(ticks=ylabels)
         plot1.set_yticklabels(labels=ylabels)
 
         # Create figure
@@ -97,7 +91,7 @@ the atmosphere and the y-axis is pressure.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.081 seconds)
+   **Total running time of the script:** (0 minutes 0.064 seconds)
 
 
 .. _sphx_glr_download_examples_line_plots_inverted_log_scale.py:

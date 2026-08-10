@@ -8,6 +8,10 @@ Plot Types
 Here is a collection of the plot types that are currently available using EMCPy.
 
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -26,6 +30,10 @@ Basic
 =====
 
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -42,7 +50,7 @@ Basic
   .. image:: /plot_types/basic/images/thumb/sphx_glr_bar_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_basic_bar.py`
+  :doc:`/plot_types/basic/bar`
 
 .. raw:: html
 
@@ -59,7 +67,7 @@ Basic
   .. image:: /plot_types/basic/images/thumb/sphx_glr_errorbar_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_basic_errorbar.py`
+  :doc:`/plot_types/basic/errorbar`
 
 .. raw:: html
 
@@ -76,7 +84,7 @@ Basic
   .. image:: /plot_types/basic/images/thumb/sphx_glr_fill_between_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_basic_fill_between.py`
+  :doc:`/plot_types/basic/fill_between`
 
 .. raw:: html
 
@@ -93,7 +101,7 @@ Basic
   .. image:: /plot_types/basic/images/thumb/sphx_glr_horizontal_bar_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_basic_horizontal_bar.py`
+  :doc:`/plot_types/basic/horizontal_bar`
 
 .. raw:: html
 
@@ -110,7 +118,7 @@ Basic
   .. image:: /plot_types/basic/images/thumb/sphx_glr_horizontal_line_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_basic_horizontal_line.py`
+  :doc:`/plot_types/basic/horizontal_line`
 
 .. raw:: html
 
@@ -127,7 +135,7 @@ Basic
   .. image:: /plot_types/basic/images/thumb/sphx_glr_line_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_basic_line.py`
+  :doc:`/plot_types/basic/line`
 
 .. raw:: html
 
@@ -144,7 +152,7 @@ Basic
   .. image:: /plot_types/basic/images/thumb/sphx_glr_scatter_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_basic_scatter.py`
+  :doc:`/plot_types/basic/scatter`
 
 .. raw:: html
 
@@ -161,7 +169,7 @@ Basic
   .. image:: /plot_types/basic/images/thumb/sphx_glr_vertical_line_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_basic_vertical_line.py`
+  :doc:`/plot_types/basic/vertical_line`
 
 .. raw:: html
 
@@ -180,6 +188,10 @@ Statistical distributions
 =========================
 
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -196,7 +208,7 @@ Statistical distributions
   .. image:: /plot_types/statistical/images/thumb/sphx_glr_boxplot_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_statistical_boxplot.py`
+  :doc:`/plot_types/statistical/boxplot`
 
 .. raw:: html
 
@@ -213,7 +225,7 @@ Statistical distributions
   .. image:: /plot_types/statistical/images/thumb/sphx_glr_density_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_statistical_density.py`
+  :doc:`/plot_types/statistical/density`
 
 .. raw:: html
 
@@ -230,7 +242,7 @@ Statistical distributions
   .. image:: /plot_types/statistical/images/thumb/sphx_glr_density_scatter_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_statistical_density_scatter.py`
+  :doc:`/plot_types/statistical/density_scatter`
 
 .. raw:: html
 
@@ -247,7 +259,7 @@ Statistical distributions
   .. image:: /plot_types/statistical/images/thumb/sphx_glr_hexbin_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_statistical_hexbin.py`
+  :doc:`/plot_types/statistical/hexbin`
 
 .. raw:: html
 
@@ -264,7 +276,7 @@ Statistical distributions
   .. image:: /plot_types/statistical/images/thumb/sphx_glr_hist2d_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_statistical_hist2d.py`
+  :doc:`/plot_types/statistical/hist2d`
 
 .. raw:: html
 
@@ -281,7 +293,7 @@ Statistical distributions
   .. image:: /plot_types/statistical/images/thumb/sphx_glr_histogram_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_statistical_histogram.py`
+  :doc:`/plot_types/statistical/histogram`
 
 .. raw:: html
 
@@ -298,7 +310,7 @@ Statistical distributions
   .. image:: /plot_types/statistical/images/thumb/sphx_glr_violin_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_statistical_violin.py`
+  :doc:`/plot_types/statistical/violin`
 
 .. raw:: html
 
@@ -317,6 +329,10 @@ Gridded
 =======
 
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -333,7 +349,7 @@ Gridded
   .. image:: /plot_types/gridded/images/thumb/sphx_glr_contour_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_gridded_contour.py`
+  :doc:`/plot_types/gridded/contour`
 
 .. raw:: html
 
@@ -350,7 +366,7 @@ Gridded
   .. image:: /plot_types/gridded/images/thumb/sphx_glr_contourf_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_gridded_contourf.py`
+  :doc:`/plot_types/gridded/contourf`
 
 .. raw:: html
 
@@ -367,7 +383,7 @@ Gridded
   .. image:: /plot_types/gridded/images/thumb/sphx_glr_gridded_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_gridded_gridded.py`
+  :doc:`/plot_types/gridded/gridded`
 
 .. raw:: html
 
@@ -386,6 +402,10 @@ Map Plots
 =========
 
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -402,7 +422,7 @@ Map Plots
   .. image:: /plot_types/map/images/thumb/sphx_glr_map_gridded_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_map_map_gridded.py`
+  :doc:`/plot_types/map/map_gridded`
 
 .. raw:: html
 
@@ -419,7 +439,7 @@ Map Plots
   .. image:: /plot_types/map/images/thumb/sphx_glr_map_scatter_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_map_map_scatter.py`
+  :doc:`/plot_types/map/map_scatter`
 
 .. raw:: html
 
@@ -436,7 +456,7 @@ Map Plots
   .. image:: /plot_types/map/images/thumb/sphx_glr_map_scatter_2D_thumb.png
     :alt:
 
-  :ref:`sphx_glr_plot_types_map_map_scatter_2D.py`
+  :doc:`/plot_types/map/map_scatter_2D`
 
 .. raw:: html
 

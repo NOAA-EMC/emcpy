@@ -35,8 +35,13 @@ def main():
     plot1.set_yscale('log')
     plot1.invert_yaxis()
 
-    # Set new y labels
-    ylabels = [0, 50, 100, 500, 1000, 2000]
+    # Set explicit y-ticks and matching labels.
+    # NOTE: 0 is intentionally omitted -- log(0) is undefined, so a tick
+    # at 0 has no valid position on a log-scaled axis. Relying on an
+    # implicit tick count from the auto LogLocator is what broke here;
+    # ticks are now set explicitly so label count always matches.
+    ylabels = [50, 100, 500, 1000, 2000]
+    plot1.set_yticks(ticks=ylabels)
     plot1.set_yticklabels(labels=ylabels)
 
     # Create figure

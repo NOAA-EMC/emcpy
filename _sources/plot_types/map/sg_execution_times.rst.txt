@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:01.437** total execution time for 3 files **from plot_types/map**:
+**00:02.818** total execution time for 3 files **from plot_types/map**:
 
 .. container::
 
@@ -33,11 +33,11 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_plot_types_map_map_scatter.py` (``map_scatter.py``)
-     - 00:00.733
+     - 00:01.494
      - 0.0
    * - :ref:`sphx_glr_plot_types_map_map_gridded.py` (``map_gridded.py``)
-     - 00:00.631
+     - 00:01.233
      - 0.0
    * - :ref:`sphx_glr_plot_types_map_map_scatter_2D.py` (``map_scatter_2D.py``)
-     - 00:00.073
+     - 00:00.090
      - 0.0

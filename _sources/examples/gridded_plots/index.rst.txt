@@ -8,6 +8,10 @@ Gridded Plots
 =============
 Discrete fields `GriddedPlot`, `Contour`, and `Contourf` support `integer_field=True`. See note in Explanations.
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -24,7 +28,7 @@ Discrete fields `GriddedPlot`, `Contour`, and `Contourf` support `integer_field=
   .. image:: /examples/gridded_plots/images/thumb/sphx_glr_contourf_discrete_levels_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_gridded_plots_contourf_discrete_levels.py`
+  :doc:`/examples/gridded_plots/contourf_discrete_levels`
 
 .. raw:: html
 
@@ -41,7 +45,7 @@ Discrete fields `GriddedPlot`, `Contour`, and `Contourf` support `integer_field=
   .. image:: /examples/gridded_plots/images/thumb/sphx_glr_contourf_with_contour_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_gridded_plots_contourf_with_contour.py`
+  :doc:`/examples/gridded_plots/contourf_with_contour`
 
 .. raw:: html
 
@@ -58,7 +62,7 @@ Discrete fields `GriddedPlot`, `Contour`, and `Contourf` support `integer_field=
   .. image:: /examples/gridded_plots/images/thumb/sphx_glr_pcolormesh_basic_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_gridded_plots_pcolormesh_basic.py`
+  :doc:`/examples/gridded_plots/pcolormesh_basic`
 
 .. raw:: html
 
@@ -75,7 +79,7 @@ Discrete fields `GriddedPlot`, `Contour`, and `Contourf` support `integer_field=
   .. image:: /examples/gridded_plots/images/thumb/sphx_glr_single_shared_colorbar_two_panels_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_gridded_plots_single_shared_colorbar_two_panels.py`
+  :doc:`/examples/gridded_plots/single_shared_colorbar_two_panels`
 
 .. raw:: html
 

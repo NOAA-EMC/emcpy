@@ -89,7 +89,7 @@ All axis scaling done via EMCPy helpers.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.295 seconds)
+   **Total running time of the script:** (0 minutes 0.310 seconds)
 
 
 .. _sphx_glr_download_examples_line_plots_log_and_symlog.py:

@@ -10,6 +10,10 @@ give reference to what can be done with these collection of tools. Please
 do not hesitate to issue a pull request to add further examples!
 
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -27,6 +31,10 @@ do not hesitate to issue a pull request to add further examples!
 Line Plots
 ==========
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -43,7 +51,7 @@ Line Plots
   .. image:: /examples/line_plots/images/thumb/sphx_glr_SkewT_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_line_plots_SkewT.py`
+  :doc:`/examples/line_plots/SkewT`
 
 .. raw:: html
 
@@ -60,7 +68,7 @@ Line Plots
   .. image:: /examples/line_plots/images/thumb/sphx_glr_dual_y_axes_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_line_plots_dual_y_axes.py`
+  :doc:`/examples/line_plots/dual_y_axes`
 
 .. raw:: html
 
@@ -77,7 +85,7 @@ Line Plots
   .. image:: /examples/line_plots/images/thumb/sphx_glr_errorbars_fillbetween_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_line_plots_errorbars_fillbetween.py`
+  :doc:`/examples/line_plots/errorbars_fillbetween`
 
 .. raw:: html
 
@@ -94,7 +102,7 @@ Line Plots
   .. image:: /examples/line_plots/images/thumb/sphx_glr_inverted_log_scale_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_line_plots_inverted_log_scale.py`
+  :doc:`/examples/line_plots/inverted_log_scale`
 
 .. raw:: html
 
@@ -111,7 +119,7 @@ Line Plots
   .. image:: /examples/line_plots/images/thumb/sphx_glr_line_plot_options_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_line_plots_line_plot_options.py`
+  :doc:`/examples/line_plots/line_plot_options`
 
 .. raw:: html
 
@@ -128,7 +136,7 @@ Line Plots
   .. image:: /examples/line_plots/images/thumb/sphx_glr_line_styles_legend_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_line_plots_line_styles_legend.py`
+  :doc:`/examples/line_plots/line_styles_legend`
 
 .. raw:: html
 
@@ -145,7 +153,7 @@ Line Plots
   .. image:: /examples/line_plots/images/thumb/sphx_glr_log_and_symlog_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_line_plots_log_and_symlog.py`
+  :doc:`/examples/line_plots/log_and_symlog`
 
 .. raw:: html
 
@@ -162,7 +170,7 @@ Line Plots
   .. image:: /examples/line_plots/images/thumb/sphx_glr_multi_line_plot_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_line_plots_multi_line_plot.py`
+  :doc:`/examples/line_plots/multi_line_plot`
 
 .. raw:: html
 
@@ -179,7 +187,7 @@ Line Plots
   .. image:: /examples/line_plots/images/thumb/sphx_glr_time_axis_locators_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_line_plots_time_axis_locators.py`
+  :doc:`/examples/line_plots/time_axis_locators`
 
 .. raw:: html
 
@@ -197,6 +205,10 @@ Line Plots
 Statistical Plots
 =================
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -213,7 +225,7 @@ Statistical Plots
   .. image:: /examples/statistical_plots/images/thumb/sphx_glr_box_vs_violin_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_statistical_plots_box_vs_violin.py`
+  :doc:`/examples/statistical_plots/box_vs_violin`
 
 .. raw:: html
 
@@ -230,7 +242,7 @@ Statistical Plots
   .. image:: /examples/statistical_plots/images/thumb/sphx_glr_hexbin_vs_hist2d_colorbar_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_statistical_plots_hexbin_vs_hist2d_colorbar.py`
+  :doc:`/examples/statistical_plots/hexbin_vs_hist2d_colorbar`
 
 .. raw:: html
 
@@ -247,7 +259,7 @@ Statistical Plots
   .. image:: /examples/statistical_plots/images/thumb/sphx_glr_histogram_kde_overlay_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_statistical_plots_histogram_kde_overlay.py`
+  :doc:`/examples/statistical_plots/histogram_kde_overlay`
 
 .. raw:: html
 
@@ -264,7 +276,7 @@ Statistical Plots
   .. image:: /examples/statistical_plots/images/thumb/sphx_glr_layered_histogram_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_statistical_plots_layered_histogram.py`
+  :doc:`/examples/statistical_plots/layered_histogram`
 
 .. raw:: html
 
@@ -281,7 +293,7 @@ Statistical Plots
   .. image:: /examples/statistical_plots/images/thumb/sphx_glr_scatter_with_regression_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_statistical_plots_scatter_with_regression.py`
+  :doc:`/examples/statistical_plots/scatter_with_regression`
 
 .. raw:: html
 
@@ -300,6 +312,10 @@ Gridded Plots
 =============
 Discrete fields `GriddedPlot`, `Contour`, and `Contourf` support `integer_field=True`. See note in Explanations.
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -316,7 +332,7 @@ Discrete fields `GriddedPlot`, `Contour`, and `Contourf` support `integer_field=
   .. image:: /examples/gridded_plots/images/thumb/sphx_glr_contourf_discrete_levels_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_gridded_plots_contourf_discrete_levels.py`
+  :doc:`/examples/gridded_plots/contourf_discrete_levels`
 
 .. raw:: html
 
@@ -333,7 +349,7 @@ Discrete fields `GriddedPlot`, `Contour`, and `Contourf` support `integer_field=
   .. image:: /examples/gridded_plots/images/thumb/sphx_glr_contourf_with_contour_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_gridded_plots_contourf_with_contour.py`
+  :doc:`/examples/gridded_plots/contourf_with_contour`
 
 .. raw:: html
 
@@ -350,7 +366,7 @@ Discrete fields `GriddedPlot`, `Contour`, and `Contourf` support `integer_field=
   .. image:: /examples/gridded_plots/images/thumb/sphx_glr_pcolormesh_basic_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_gridded_plots_pcolormesh_basic.py`
+  :doc:`/examples/gridded_plots/pcolormesh_basic`
 
 .. raw:: html
 
@@ -367,7 +383,7 @@ Discrete fields `GriddedPlot`, `Contour`, and `Contourf` support `integer_field=
   .. image:: /examples/gridded_plots/images/thumb/sphx_glr_single_shared_colorbar_two_panels_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_gridded_plots_single_shared_colorbar_two_panels.py`
+  :doc:`/examples/gridded_plots/single_shared_colorbar_two_panels`
 
 .. raw:: html
 
@@ -386,6 +402,10 @@ Map Plots
 =========
 Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. See note in Explanations.
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
@@ -402,7 +422,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_custom_map_domain_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_custom_map_domain.py`
+  :doc:`/examples/map_plots/custom_map_domain`
 
 .. raw:: html
 
@@ -419,7 +439,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_filled_contour_map_plot_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_filled_contour_map_plot.py`
+  :doc:`/examples/map_plots/filled_contour_map_plot`
 
 .. raw:: html
 
@@ -436,7 +456,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_map_filled_contour_lambert_conus_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_map_filled_contour_lambert_conus.py`
+  :doc:`/examples/map_plots/map_filled_contour_lambert_conus`
 
 .. raw:: html
 
@@ -453,7 +473,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_map_gridded_global_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_map_gridded_global.py`
+  :doc:`/examples/map_plots/map_gridded_global`
 
 .. raw:: html
 
@@ -470,7 +490,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_map_plot_no_data_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_map_plot_no_data.py`
+  :doc:`/examples/map_plots/map_plot_no_data`
 
 .. raw:: html
 
@@ -487,7 +507,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_map_scatter_2D_example_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_map_scatter_2D_example.py`
+  :doc:`/examples/map_plots/map_scatter_2D_example`
 
 .. raw:: html
 
@@ -504,7 +524,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_map_scatter_basic_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_map_scatter_basic.py`
+  :doc:`/examples/map_plots/map_scatter_basic`
 
 .. raw:: html
 
@@ -521,7 +541,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_map_scatter_integer_categories_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_map_scatter_integer_categories.py`
+  :doc:`/examples/map_plots/map_scatter_integer_categories`
 
 .. raw:: html
 
@@ -538,7 +558,7 @@ Discrete fields in `MapGridded` and `MapScatter` support `integer_field=True`. S
   .. image:: /examples/map_plots/images/thumb/sphx_glr_overlay_fc_contour_scatter_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_map_plots_overlay_fc_contour_scatter.py`
+  :doc:`/examples/map_plots/overlay_fc_contour_scatter`
 
 .. raw:: html
 
