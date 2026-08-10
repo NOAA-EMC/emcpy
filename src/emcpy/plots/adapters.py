@@ -363,6 +363,33 @@ class Hist2DAdapter:
         return fig._hist2d(layer, st.ax)  # returns QuadMesh (ScalarMappable)
 
 
+@register
+class HeatMapAdapter:
+    plottype = "heatmap"
+
+    def render(self, fig, st: AxState, layer):
+        x = np.asarray(layer.x)
+        y = np.asarray(layer.y)
+        data = np.asarray(layer.data)
+
+        if x.ndim != 1 or y.ndim != 1:
+            raise ValueError(
+                f"HeatMap: x and y must be 1-D category labels; "
+                f"got x.ndim={x.ndim}, y.ndim={y.ndim}."
+            )
+        if data.ndim != 2:
+            raise ValueError(f"HeatMap: data must be 2-D; got {data.ndim}D.")
+        if data.shape != (len(y), len(x)):
+            raise ValueError(
+                "HeatMap: data.shape must be (len(y), len(x)); "
+                f"got data.shape={data.shape}, len(y)={len(y)}, len(x)={len(x)}."
+            )
+        if layer.center is not None and layer.integer_field:
+            raise ValueError("HeatMap: 'center' is not meaningful with integer_field=True.")
+
+        return fig._heatmap(layer, st.ax)  # returns QuadMesh (ScalarMappable)
+
+
 # Map variants
 @register
 class MapScatterAdapter:

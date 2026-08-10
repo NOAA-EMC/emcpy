@@ -11,7 +11,7 @@ __all__ = [
     'BarPlot', 'HorizontalBar', 'SkewT',
     'GriddedPlot', 'ContourPlot', 'FilledContourPlot',
     'BoxandWhiskerPlot', 'FillBetween', 'ErrorBar',
-    'ViolinPlot', 'HexBin', 'Hist2D',
+    'ViolinPlot', 'HexBin', 'Hist2D', 'HeatMap',
 ]
 
 
@@ -570,3 +570,45 @@ class Hist2D:
         self.colorbar = True
         self.colorbar_label = None
         self.colorbar_location = 'right'
+
+
+class HeatMap:
+    def __init__(self, x, y, data):
+        """
+        Categorical heatmap layer (e.g. variable x cycle matrix of a stat).
+
+        Args:
+            x: sequence of category labels for columns (e.g. cycle strings)
+            y: sequence of category labels for rows (e.g. variable names)
+            data: 2D array-like, shape (len(y), len(x))
+        """
+        super().__init__()
+        self.plottype = 'heatmap'
+
+        self.x = x
+        self.y = y
+        self.data = data
+
+        self.cmap = 'viridis'
+        self.vmin = None
+        self.vmax = None
+        self.center = None  # e.g. 0.0 for bias-type stats -> diverging norm
+        self.integer_field = False  # inherited knob; usually False for heatmaps
+
+        self.edgecolors = 'white'
+        self.linewidths = 0.5
+        self.alpha = None
+        self.zorder = None
+        self.label = None
+
+        # Cell annotation
+        self.annotate = True
+        self.annotate_fmt = '{:.2f}'
+        self.annotate_fontsize = 8
+        self.annotate_color = None  # None -> auto contrast per cell; else fixed color
+
+        # Missing-data handling
+        self.mask_color = 'lightgray'
+
+        self.colorbar = True
+        self.colorbar_label = None

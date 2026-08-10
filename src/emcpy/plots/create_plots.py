@@ -1274,6 +1274,64 @@ class CreateFigure:
 
         return img  # QuadMesh (ScalarMappable)
 
+    def _heatmap(self, plotobj, ax):
+        """
+        Render HeatMap layer: categorical pcolormesh with optional diverging norm,
+        NaN masking, and per-cell value annotations with auto text contrast.
+        """
+        skip = [
+            'plottype', 'x', 'y', 'data', 'colorbar', 'colorbar_label',
+            'annotate', 'annotate_fmt', 'annotate_fontsize', 'annotate_color',
+            'mask_color', 'center', 'integer_field',
+        ]
+        inputs = self._get_inputs_dict(skip, plotobj)
+        inputs.setdefault('shading', 'flat')
+
+        Z = np.ma.masked_invalid(np.asarray(plotobj.data, dtype=float))
+        nrows, ncols = Z.shape
+
+        self._apply_norm_from_layer(inputs, plotobj)
+
+        cmap_obj = _cmaps.get_cmap(inputs.get('cmap', 'viridis'))
+        cmap_obj = cmap_obj.copy()
+        cmap_obj.set_bad(plotobj.mask_color)
+        inputs['cmap'] = cmap_obj
+
+        # Cell edges so categories land on a clean grid
+        X = np.arange(ncols + 1) - 0.5
+        Y = np.arange(nrows + 1) - 0.5
+
+        qm = ax.pcolormesh(X, Y, Z, **inputs)
+
+        ax.set_xticks(np.arange(ncols))
+        ax.set_xticklabels(list(plotobj.x), rotation=45, ha='right')
+        ax.set_yticks(np.arange(nrows))
+        ax.set_yticklabels(list(plotobj.y))
+        ax.set_xlim(-0.5, ncols - 0.5)
+        ax.set_ylim(-0.5, nrows - 0.5)
+
+        if getattr(plotobj, 'annotate', True):
+            fmt = plotobj.annotate_fmt
+            fixed_color = plotobj.annotate_color
+            for i in range(nrows):
+                for j in range(ncols):
+                    if np.ma.is_masked(Z[i, j]) or not np.isfinite(Z[i, j]):
+                        continue
+                    val = float(Z[i, j])
+                    if fixed_color is not None:
+                        txt_color = fixed_color
+                    else:
+                        r, g, b, _ = qm.cmap(qm.norm(val))
+                        luminance = 0.299 * r + 0.587 * g + 0.114 * b
+                        txt_color = 'black' if luminance > 0.55 else 'white'
+                    ax.text(
+                        j, i, fmt.format(val),
+                        ha='center', va='center',
+                        color=txt_color, fontsize=plotobj.annotate_fontsize,
+                    )
+
+        return qm  # QuadMesh (ScalarMappable)
+
     def _supports_kw(self, func, name: str) -> bool:
         try:
             return name in inspect.signature(func).parameters
@@ -1349,60 +1407,57 @@ class CreateFigure:
         return None
 
     def _apply_norm_from_layer(self, inputs: dict[str, Any], layer: Any, *, keep_levels: bool = False) -> None:
-        """
-        Mutate `inputs` in-place to include a Matplotlib `norm` derived from the layer.
-
-        - Reads: layer.integer_field, layer.vmin, layer.vmax, layer.levels (if present)
-        - If integer_field and neither levels nor (vmin & vmax) are provided, infer
-          vmin/vmax from numeric data on the layer: c/data/z/C.
-        - If a norm is added, removes vmin/vmax from `inputs` to avoid double-specification.
-        - For contour/contourf, pass keep_levels=True to preserve 'levels' in `inputs`.
-        """
         if "norm" in inputs:
-            return  # caller already set a norm explicitly
+            return
 
         integer_field = bool(getattr(layer, "integer_field", False))
+        center = getattr(layer, "center", None)
         vmin = inputs.get("vmin", getattr(layer, "vmin", None))
         vmax = inputs.get("vmax", getattr(layer, "vmax", None))
         levels = inputs.get("levels", getattr(layer, "levels", None))
 
-        # If integer categories and nothing provided, try to infer from data
-        if integer_field and levels is None and (vmin is None or vmax is None):
-            # Candidate data arrays in priority order
+        def _infer_bounds_from_data():
             candidates = [
-                inputs.get("c", None),           # if caller passed through
-                getattr(layer, "c", None),       # scatter-style
-                getattr(layer, "data", None),    # map_scatter / map_gridded
-                getattr(layer, "z", None),       # gridded
-                getattr(layer, "C", None),       # hexbin w/ C
+                inputs.get("c", None),
+                getattr(layer, "c", None),
+                getattr(layer, "data", None),
+                getattr(layer, "z", None),
+                getattr(layer, "C", None),
             ]
-            arr = None
             for cand in candidates:
-                if cand is not None:
-                    try:
-                        arr = np.asarray(cand)
-                        break
-                    except Exception:
-                        arr = None
-            if arr is not None:
+                if cand is None:
+                    continue
+                try:
+                    arr = np.asarray(cand, dtype=float)
+                except Exception:
+                    continue
                 with np.errstate(invalid="ignore"):
                     arr = arr[np.isfinite(arr)]
                 if arr.size:
-                    vmin = float(np.floor(arr.min()))
-                    vmax = float(np.ceil(arr.max()))
+                    return float(arr.min()), float(arr.max())
+            return None, None
 
-        # If we inferred an integer range that collapses to a single value,
-        # widen it by 1 so we get at least one bin (three boundaries).
+        if integer_field and levels is None and (vmin is None or vmax is None):
+            inferred_min, inferred_max = _infer_bounds_from_data()
+            vmin = vmin if vmin is not None else inferred_min
+            vmax = vmax if vmax is not None else inferred_max
+
         if integer_field and levels is None and (vmin is not None) and (vmax is not None):
             if np.isclose(vmin, vmax):
                 vmax = vmin + 1.0
 
-        # Let the centralized policy build the norm (raises if still insufficient)
+        # Diverging/centered continuous data: infer missing bounds from data too
+        if (not integer_field) and center is not None and (vmin is None or vmax is None):
+            inferred_min, inferred_max = _infer_bounds_from_data()
+            vmin = vmin if vmin is not None else inferred_min
+            vmax = vmax if vmax is not None else inferred_max
+
         norm = compute_norm(
             integer_field=integer_field,
             vmin=vmin,
             vmax=vmax,
             levels=levels,
+            center=center,
         )
         if norm is not None:
             inputs["norm"] = norm
