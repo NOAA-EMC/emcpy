@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.756** total execution time for 7 files **from plot_types/statistical**:
+**00:00.761** total execution time for 7 files **from plot_types/statistical**:
 
 .. container::
 
@@ -33,23 +33,23 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_plot_types_statistical_density.py` (``density.py``)
-     - 00:00.171
+     - 00:00.177
      - 0.0
    * - :ref:`sphx_glr_plot_types_statistical_hexbin.py` (``hexbin.py``)
-     - 00:00.145
+     - 00:00.143
      - 0.0
    * - :ref:`sphx_glr_plot_types_statistical_hist2d.py` (``hist2d.py``)
-     - 00:00.122
+     - 00:00.125
      - 0.0
    * - :ref:`sphx_glr_plot_types_statistical_violin.py` (``violin.py``)
-     - 00:00.095
+     - 00:00.088
      - 0.0
    * - :ref:`sphx_glr_plot_types_statistical_density_scatter.py` (``density_scatter.py``)
-     - 00:00.086
+     - 00:00.087
      - 0.0
    * - :ref:`sphx_glr_plot_types_statistical_boxplot.py` (``boxplot.py``)
-     - 00:00.070
+     - 00:00.072
      - 0.0
    * - :ref:`sphx_glr_plot_types_statistical_histogram.py` (``histogram.py``)
-     - 00:00.067
+     - 00:00.068
      - 0.0

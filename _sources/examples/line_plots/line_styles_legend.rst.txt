@@ -95,7 +95,7 @@ outside the axes using EMCPy helpers only.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.118 seconds)
+   **Total running time of the script:** (0 minutes 0.124 seconds)
 
 
 .. _sphx_glr_download_examples_line_plots_line_styles_legend.py:

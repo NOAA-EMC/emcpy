@@ -70,6 +70,23 @@ Gridded
     </div>
 
 
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Below is an example of how to plot a categorical heatmap using EMCPy&#x27;s plotting method.">
+
+.. only:: html
+
+  .. image:: /plot_types/gridded/images/thumb/sphx_glr_heatmap_thumb.png
+    :alt:
+
+  :doc:`/plot_types/gridded/heatmap`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Heatmap</div>
+    </div>
+
+
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -83,4 +100,5 @@ Gridded
    /plot_types/gridded/contour
    /plot_types/gridded/contourf
    /plot_types/gridded/gridded
+   /plot_types/gridded/heatmap
 

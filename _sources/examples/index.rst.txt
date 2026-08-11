@@ -359,6 +359,23 @@ Discrete fields `GriddedPlot`, `Contour`, and `Contourf` support `integer_field=
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Categorical heatmap with a diverging colormap, cell annotations, and missing-data masking.">
+
+.. only:: html
+
+  .. image:: /examples/gridded_plots/images/thumb/sphx_glr_heatmap_basic_thumb.png
+    :alt:
+
+  :doc:`/examples/gridded_plots/heatmap_basic`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Heatmap</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Basic gridded heatmap with a per-axes colorbar.">
 
 .. only:: html

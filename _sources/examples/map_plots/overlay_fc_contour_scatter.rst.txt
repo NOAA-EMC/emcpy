@@ -90,7 +90,7 @@ Demonstrates layering multiple EMCPy map types.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.189 seconds)
+   **Total running time of the script:** (0 minutes 0.200 seconds)
 
 
 .. _sphx_glr_download_examples_map_plots_overlay_fc_contour_scatter.py:
